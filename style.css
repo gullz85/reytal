@@ -53,17 +53,30 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   nav.wrap.pill .logo-mark svg{height:28px;}
   nav ul{
     display:flex;gap:34px;list-style:none;
+    position:relative;
     transition:gap .5s cubic-bezier(.3,.7,.25,1);
   }
   nav.wrap.pill ul{gap:26px;}
   nav ul li a{
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
     color:var(--black);text-decoration:none;opacity:0.65;position:relative;
   }
   nav ul li a.active{opacity:1;}
   nav ul li a.active::after{
     content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
   }
+  /* strikið undir valmyndinni: eitt sameiginlegt strik sem skýst milli
+     hlekkja með teygju (overshoot) þegar sveimað er yfir */
+  .nav-underline{
+    position:absolute;bottom:-6px;height:1px;background:var(--black);
+    opacity:0;pointer-events:none;
+    transition:
+      left .5s cubic-bezier(.3,1.45,.4,.9),
+      width .45s cubic-bezier(.25,.8,.3,1),
+      opacity .25s ease;
+  }
+  nav ul.has-underline li a.active::after{display:none;}
+  @media (prefers-reduced-motion:reduce){ .nav-underline{transition:opacity .25s ease;} }
 
 .orb{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;will-change:transform;}
   .blob{
@@ -113,7 +126,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   @media (max-width:760px){ .blob2{width:min(60vw,340px);} }
 
 .eyebrow{
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
     color:var(--slate);margin-bottom:22px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;
   }
   .eyebrow::before{
@@ -128,7 +141,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
 
 .meta-row{display:flex;gap:12px;margin-top:44px;flex-wrap:wrap;position:relative;z-index:1;}
   .tag{
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
     border:1px solid rgba(11,12,13,0.25);border-radius:999px;padding:8px 16px;color:var(--navy);
   }
 
@@ -136,7 +149,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     background:var(--black);color:var(--cream);
     padding:15px 28px;border-radius:999px;font-weight:600;font-size:14px;
     text-decoration:none;display:inline-block;text-align:center;
-    font-family:'Space Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
     white-space:nowrap;border:none;cursor:pointer;
     transition:background .3s ease;
   }
@@ -211,7 +224,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
 /* ── FARSÍMAVALMYND: heilsíðu-yfirlag með stórum tenglum ─────── */
   .menu-btn{
     display:none;
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
     background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
   }
   body.on-dark .menu-btn{color:var(--cream);}
@@ -234,7 +247,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   .mobile-menu a.active{color:var(--navy);}
   .menu-close{
     position:absolute;top:26px;right:28px;
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
     background:none;border:none;color:var(--black);cursor:pointer;padding:8px;
   }
 
@@ -243,3 +256,29 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     .menu-btn{display:block;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
   }
+
+/* ── FÓTUR: stórt netfang, staðsetningar-pillur og botnlína ─────── */
+  .footer{
+    position:relative;z-index:1;
+    padding:clamp(56px,9vh,96px) 0 36px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
+  }
+  .footer-mail{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(32px,5.6vw,76px);line-height:1;letter-spacing:-0.03em;
+    color:var(--black);text-decoration:none;
+    transition:color .3s ease;
+  }
+  .footer-mail:hover{color:var(--navy);}
+  .footer-pills{display:flex;flex-wrap:wrap;gap:10px;}
+  .footer-pills .tag{margin:0;}
+  .footer-bottom{
+    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;
+    margin-top:clamp(48px,8vh,80px);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--slate);
+  }
+  .footer-bottom a{color:var(--slate);text-decoration:none;transition:color .3s ease;}
+  .footer-bottom a:hover{color:var(--navy);}

@@ -120,6 +120,46 @@
   }
 })();
 
+// valmyndarstrikið: eitt strik sem skýst milli hlekkja með teygju
+(function(){
+  var ul = document.querySelector('header nav ul');
+  if (!ul) return;
+  var links = [].slice.call(ul.querySelectorAll('a'));
+  if (!links.length) return;
+  var bar = document.createElement('span');
+  bar.className = 'nav-underline';
+  ul.appendChild(bar);
+  ul.classList.add('has-underline');
+  var activeLink = ul.querySelector('a.active');
+
+  function moveTo(a, instant){
+    if (!a){ bar.style.opacity = 0; return; }
+    if (instant) bar.style.transition = 'none';
+    // offsetLeft/offsetWidth i stad getBoundingClientRect: gefur endanlega
+    // stodu strax, lika a medan pillu-morphid er i gangi
+    bar.style.opacity = 1;
+    bar.style.left = a.offsetLeft + 'px';
+    bar.style.width = a.offsetWidth + 'px';
+    if (instant) requestAnimationFrame(function(){ bar.style.transition = ''; });
+  }
+
+  var current = activeLink;
+  moveTo(current, true);
+  // leturgerdin getur breytt breidd hlekkjanna eftir hledslu
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ moveTo(current, true); });
+  }
+  links.forEach(function(a){
+    a.addEventListener('mouseenter', function(){ current = a; moveTo(a); });
+  });
+  ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
+  window.addEventListener('resize', function(){ moveTo(current, true); });
+  // pillu-morphið breytir bilinu milli hlekkja - endurstilla strikið eftir á
+  ul.addEventListener('transitionend', function(e){
+    if (e.propertyName === 'gap') moveTo(current, true);
+  });
+})();
+
 // farsímavalmynd: opna/loka heilsíðu-yfirlagið
 (function(){
   var btn = document.getElementById('menuBtn');

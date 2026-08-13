@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#F3F0EA">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
 <script>
@@ -64,7 +64,7 @@
   .step{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid rgba(11,12,13,0.14);}
   .step:first-child{padding-top:0;}
   .step .num{
-    font-family:'Space Mono',monospace;font-size:12px;color:var(--slate);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate);
     padding-top:3px;flex-shrink:0;
   }
   .step h3{
@@ -80,7 +80,7 @@
     padding:14px 0;border-bottom:1px solid rgba(11,12,13,0.14);
   }
   .direct-row:last-child{border-bottom:none;}
-  .direct-row span{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);}
+  .direct-row span{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);}
   .direct-row a, .direct-row strong{
     font-family:'Instrument Sans',sans-serif;font-weight:500;font-size:16px;color:var(--black);text-decoration:none;
   }
@@ -93,7 +93,7 @@
   }
   .field{margin-bottom:26px;}
   .field label{
-    display:block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
     color:var(--slate);margin-bottom:10px;
   }
   .field input, .field select, .field textarea{
@@ -121,7 +121,7 @@
   }
   .faq-item summary::-webkit-details-marker{display:none;}
   .faq-item summary::after{
-    content:'+';font-family:'Space Mono',monospace;font-size:20px;color:var(--slate);flex-shrink:0;
+    content:'+';font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--slate);flex-shrink:0;
     transition:transform .3s ease;
   }
   .faq-item[open] summary::after{transform:rotate(45deg);}
@@ -326,6 +326,24 @@
     </div>
   </div>
 </section>
+
+<!-- FÓTUR -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+      <div class="footer-pills">
+        <span class="tag">Reykjavík</span>
+        <span class="tag">Tallinn</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Reytal © 2026</span>
+      <a href="/bokun">Bóka samtal →</a>
+    </div>
+  </div>
+</footer>
+
 </div><!-- /.site -->
 
 <script src="main.js"></script>
