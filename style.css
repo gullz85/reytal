@@ -87,6 +87,31 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   }
   @media (prefers-reduced-motion:reduce){ .blob{animation:none;} }
 
+/* ── auka bakgrunnshringir neðar á undirsíðum (ekki í haus) ──── */
+  .blob2{
+    position:absolute;z-index:-1;
+    width:min(38vw,460px);aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle at 38% 36%,
+                 rgba(13,70,89,0.16),
+                 rgba(76,124,147,0.09) 45%,
+                 rgba(190,191,166,0.05) 66%,
+                 transparent 74%);
+    filter:blur(46px);
+    pointer-events:none;
+    animation:roam2 46s ease-in-out infinite;
+    will-change:transform;
+  }
+  .blob2--a{top:4%;right:-6%;animation-duration:58s;}
+  .blob2--b{top:58%;left:-9%;animation-duration:50s;animation-delay:-14s;}
+  @keyframes roam2{
+    0%,100%{transform:translate(0,0) scale(1);}
+    30%    {transform:translate(-4vw,3vh) scale(1.1);}
+    60%    {transform:translate(3vw,-4vh) scale(0.92);}
+    82%    {transform:translate(2vw,4vh) scale(1.05);}
+  }
+  @media (prefers-reduced-motion:reduce){ .blob2{animation:none;} }
+  @media (max-width:760px){ .blob2{width:min(60vw,340px);} }
+
 .eyebrow{
     font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
     color:var(--slate);margin-bottom:22px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;
