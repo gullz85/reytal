@@ -91,7 +91,15 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
     color:var(--slate);margin-bottom:22px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;
   }
-  .eyebrow::before{content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;display:inline-block;}
+  .eyebrow::before{
+    content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;display:inline-block;
+    animation:eyebrowBreathe 2.6s ease-in-out infinite;
+  }
+  @keyframes eyebrowBreathe{
+    0%,100%{transform:scale(1);opacity:1;}
+    50%{transform:scale(1.35);opacity:0.6;}
+  }
+  @media (prefers-reduced-motion:reduce){ .eyebrow::before{animation:none;} }
 
 .meta-row{display:flex;gap:12px;margin-top:44px;flex-wrap:wrap;position:relative;z-index:1;}
   .tag{
