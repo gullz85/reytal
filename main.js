@@ -5,14 +5,16 @@
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var tx = 0, ty = 0, cx = 0, cy = 0;
-  var AMPX = 190, AMPY = 70;
+  var AMPX = 190, AMPY = 40;
   var raf = null;
 
   addEventListener('mousemove', function(e){
     var nx = (e.clientX / innerWidth  - 0.5) * 2;
     var ny = (e.clientY / innerHeight - 0.5) * 2;
     tx = nx * AMPX;
-    ty = ny * AMPY;
+    // hringurinn má reka upp á við, en aldrei niður fyrir kyrrstöðupunktinn
+    // svo hann skerist ekki af undir haus undirsíðnanna
+    ty = Math.min(0, ny * AMPY);
     if (!raf) raf = requestAnimationFrame(tick);
   }, {passive:true});
 

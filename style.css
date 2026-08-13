@@ -79,11 +79,11 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     will-change:transform;
   }
   @keyframes roam{
-    0%,100%{transform:translate(-50%,-50%) translate(-24vw,-14vh) scale(1);}
-    22%    {transform:translate(-50%,-50%) translate( 19vw,-10vh) scale(1.12);}
-    44%    {transform:translate(-50%,-50%) translate( 27vw, -2vh) scale(0.95);}
-    68%    {transform:translate(-50%,-50%) translate( -6vw,  7vh) scale(1.08);}
-    86%    {transform:translate(-50%,-50%) translate(-26vw, -3vh) scale(1.02);}
+    0%,100%{transform:translate(-50%,-50%) translate(-24vw,-16vh) scale(1);}
+    22%    {transform:translate(-50%,-50%) translate( 19vw,-14vh) scale(1.12);}
+    44%    {transform:translate(-50%,-50%) translate( 27vw, -9vh) scale(0.95);}
+    68%    {transform:translate(-50%,-50%) translate( -6vw, -4vh) scale(1.08);}
+    86%    {transform:translate(-50%,-50%) translate(-26vw,-10vh) scale(1.02);}
   }
   @media (prefers-reduced-motion:reduce){ .blob{animation:none;} }
 
