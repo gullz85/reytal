@@ -151,9 +151,29 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     text-decoration:none;display:inline-block;text-align:center;
     font-family:'IBM Plex Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
     white-space:nowrap;border:none;cursor:pointer;
-    transition:background .3s ease;
+    position:relative;
+    transition:transform .35s cubic-bezier(.25,.6,.25,1), box-shadow .35s ease;
   }
-  .btn-primary:hover{background:var(--navy);}
+  /* hover: navy-flötur rennur upp undir textann (textinn stendur kyrr)
+     og hnappurinn lyftist örlítið með mjúkum skugga */
+  .btn-primary{overflow:hidden;}
+  .btn-primary .btn-label{position:relative;z-index:1;display:block;}
+  .btn-primary::before{
+    content:'';position:absolute;inset:0;
+    background:var(--navy);
+    border-radius:inherit;
+    transform:translateY(101%);
+    transition:transform .4s cubic-bezier(.25,.7,.25,1);
+  }
+  .btn-primary:hover::before{transform:translateY(0);}
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(11,12,13,0.18);
+  }
+  @media (prefers-reduced-motion:reduce){
+    .btn-primary::before{transition:none;}
+    .btn-primary:hover{transform:none;box-shadow:none;}
+  }
 
 .splash{
     position:fixed;inset:0;z-index:200;
