@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verkefni: Reytal</title>
+<meta name="description" content="Öll verkefni Reytal: vefþróun, hönnun, leitarvélabestun og stafrænar lausnir fyrir fyrirtæki af öllum stærðum.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Verkefni: Reytal">
+<meta property="og:description" content="Öll verkefni Reytal: vefþróun, hönnun, leitarvélabestun og stafrænar lausnir fyrir fyrirtæki af öllum stærðum.">
+<meta property="og:locale" content="is_IS">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  
+  
+
+  /* NAV: fastur efst, morphast mjúklega í miðjusetta pillu þegar skrollað er */
+  
+
+  /* PAGE-HERO */
+  .top{position:relative;overflow:hidden;}
+  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
+  
+
+  
+
+  h1{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(38px,6vw,84px);line-height:1.0;letter-spacing:-0.03em;
+    max-width:900px;position:relative;z-index:1;
+  }
+  h1 .accent{color:var(--navy);}
+
+  .page-hero p.lede{
+    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:560px;
+    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
+  }
+
+  /* ── VERKEFNA-INDEX: sami stíll og á forsíðunni ─────────────── */
+  .work{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0 clamp(96px,13vh,150px);}
+  .work-index{border-top:1px solid rgba(11,12,13,0.14);}
+  .work-row{
+    display:grid;grid-template-columns:1fr auto;
+    gap:clamp(20px,3vw,48px);align-items:start;
+    padding:clamp(26px,4vh,40px) 0;
+    border-bottom:1px solid rgba(11,12,13,0.14);
+    text-decoration:none;color:inherit;
+  }
+  .work-row h3{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(26px,3.6vw,44px);line-height:1.05;letter-spacing:-0.03em;
+    display:flex;align-items:center;gap:0.35em;
+    transition:color .3s ease;
+  }
+  .work-row .arrow{
+    font-size:0.62em;
+    opacity:0;transform:translateX(-8px);
+    transition:opacity .3s ease, transform .3s cubic-bezier(.25,.6,.25,1);
+    color:var(--slate);
+  }
+  .work-row:hover h3{color:var(--navy);}
+  .work-row:hover .arrow{opacity:1;transform:translateX(0);}
+  .work-client{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--slate);display:block;margin-top:8px;
+  }
+  .work-row p{
+    font-size:15px;line-height:1.6;color:#2a2a2a;max-width:520px;margin-top:10px;
+  }
+  .work-tags{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;
+    max-width:220px;padding-top:12px;
+  }
+  .work-tag{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+    border:1px solid rgba(11,12,13,0.22);border-radius:999px;padding:6px 14px;color:var(--navy);
+    white-space:nowrap;
+  }
+
+  /* ── CTA ────────────────────────────────────────────────────── */
+  .cta{position:relative;z-index:1;padding:0 0 clamp(96px,13vh,150px);}
+  .cta-box{
+    border-top:1px solid rgba(11,12,13,0.12);
+    padding-top:clamp(48px,7vh,72px);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
+  }
+  .cta-box h2{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.02em;max-width:480px;
+  }
+  
+
+  @media (max-width:760px){
+    .work-row{grid-template-columns:1fr;gap:14px;}
+    .work-tags{justify-content:flex-start;max-width:none;padding-top:2px;}
+    .work-row{grid-template-columns:1fr;gap:8px;}
+    .work-tags{justify-content:flex-start;max-width:none;padding-top:6px;}
+    .cta-box{flex-direction:column;align-items:flex-start;}
+  }
+
+  /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
+  
+  
+
+  /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
+     fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
+  
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH: síðuskipta-skjár -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="index.html">Heim</a>
+  <a href="thjonusta.html">Þjónusta</a>
+  <a href="verkefni.html" class="active">Verkefni</a>
+  <a href="um-okkur.html">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb"><div class="blob"></div></div>
+<header>
+  <nav class="wrap">
+    <a href="index.html" class="logo-mark" aria-label="Reytal">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="index.html">Heim</a></li>
+      <li><a href="thjonusta.html">Þjónusta</a></li>
+      <li><a href="verkefni.html" class="active">Verkefni</a></li>
+      <li><a href="um-okkur.html">Um okkur</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">Verkefni</div>
+    <h1>Það sem við <span class="accent">gerum</span>, í verki.</h1>
+    <p class="lede">Vefþróun, hönnun, leitarvélabestun og stafrænar lausnir. Besta leiðin til að kynnast okkur er að skoða verkin sjálf: hér eru nokkur valin verkefni.</p>
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="work">
+  <div class="wrap">
+    <div class="work-index">
+
+      <a class="work-row" href="https://www.takkkronur.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Takk <span class="arrow">→</span></h3>
+          <span class="work-client">Hagar · takkkronur.is</span>
+          <p>Vefur vildarsamfélagsins Takk, þar sem viðskiptavinir Bónus, Hagkaups og Eldum rétt safna Takk krónum. Við forrituðum vefinn.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span></div>
+      </a>
+
+      <a class="work-row" href="https://kirkjan.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Kirkjan <span class="arrow">→</span></h3>
+          <span class="work-client">Þjóðkirkja Íslands · kirkjan.is</span>
+          <p>Heildaruppbygging á miðlægum upplýsingavef Þjóðkirkjunnar: veftré, wireframe, forritun og tæknileg uppsetning.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">UX</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://sigurros.com" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Sigur Rós <span class="arrow">→</span></h3>
+          <span class="work-client">Sigur Rós · sigurros.com</span>
+          <p>Forritun og tæknileg uppsetning á vef einnar þekktustu hljómsveitar Íslands.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span></div>
+      </a>
+
+      <a class="work-row" href="https://littupp.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Líttupp <span class="arrow">→</span></h3>
+          <span class="work-client">Netöryggismiðstöð Íslands · littupp.is</span>
+          <p>Vitundarvakning um skjánotkun. Uppsetning, forritun, sýnileikabestun og tækniráðgjöf í samstarfi við PiparTBWA og Skot.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://abyrgverslun.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Ábyrg Verslun <span class="arrow">→</span></h3>
+          <span class="work-client">Ábyrg Verslun · abyrgverslun.is</span>
+          <p>Fræðsluvefur um ábyrga sölu og vernd ungmenna gagnvart tóbaks- og nikótínvörum. Hönnun, uppsetning, forritun og SEO.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://netvis.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Netvís <span class="arrow">→</span></h3>
+          <span class="work-client">Netöryggismiðstöð Íslands · netvis.is</span>
+          <p>Fræðsluvefur um félagslegt netöryggi og miðlalæsi. Uppsetning, forritun, SEO og tækniráðgjöf.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.skjahaetta.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Skjáhætta <span class="arrow">→</span></h3>
+          <span class="work-client">Sjóvá og Samgöngustofa · skjahaetta.is</span>
+          <p>Fræðsluvefur um áhrif skjánotkunar undir stýri. Vefþróun og leitarvélabestun.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://ceedr.com" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Ceedr <span class="arrow">→</span></h3>
+          <span class="work-client">Ceedr · ceedr.com</span>
+          <p>Nútímaleg og notendavæn vefsíða sem styður vöxt fyrirtækisins í stafrænum markaðslausnum.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.bodega.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Bodega <span class="arrow">→</span></h3>
+          <span class="work-client">Bodega · bodega.is</span>
+          <p>Stílhrein lendingarsíða fyrir vínbarinn Bodega sem fangar anda staðarins.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span></div>
+      </a>
+
+      <a class="work-row" href="https://orkureiturinn.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Orkureiturinn <span class="arrow">→</span></h3>
+          <span class="work-client">Safír · orkureiturinn.is · Söluvefur ársins 2025</span>
+          <p>Vefþróun og leitarvélabestun fyrir nýtt íbúðahverfi við Laugardalinn. Valinn söluvefur ársins 2025.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span><span class="work-tag">Verðlaun</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.verkis.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Verkís <span class="arrow">→</span></h3>
+          <span class="work-client">Verkís · verkis.is</span>
+          <p>Full vefþróun og leitarvélabestun fyrir eina stærstu verkfræðistofu landsins.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://eau.org" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>EAÜ <span class="arrow">→</span></h3>
+          <span class="work-client">Eesti Autorite Ühing · eau.org</span>
+          <p>Ný vefsíða, sérsniðið bakendakerfi og leitarvélabestun fyrir höfundaréttarsamtök Eistlands.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">Bakendi</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.stolpigamar.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Stólpi Gámar <span class="arrow">→</span></h3>
+          <span class="work-client">Stólpi Gámar · stolpigamar.is</span>
+          <p>Hönnun og þróun með áherslu á leitarvélabestun og skýra framsetningu á fjölbreyttri gámaþjónustu.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://sjukast.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Sjúkást <span class="arrow">→</span></h3>
+          <span class="work-client">Stígamót · sjukast.is · Tilnefnt til PHNX 2024</span>
+          <p>Forvarnarátak um ofbeldi í nánum samböndum ungmenna. Öll vefþróun; verkefnið var tilnefnt til PHNX-verðlauna.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">Verðlaun</span></div>
+      </a>
+
+      <a class="work-row" href="https://redgatecapital.eu" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Red Gate Capital <span class="arrow">→</span></h3>
+          <span class="work-client">Red Gate Capital · redgatecapital.eu</span>
+          <p>Heildarhönnun, þróun og leitarvélabestun fyrir fjármálaráðgjöf í Eystrasaltsríkjunum.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://klasi.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Klasi <span class="arrow">→</span></h3>
+          <span class="work-client">Klasi · klasi.is</span>
+          <p>Hönnun og forritun á vef fasteignaþróunarfyrirtækis sem miðlar verkefnum, stefnu og framtíðarsýn.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://gevaliakaffi.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Gevalia kaffi <span class="arrow">→</span></h3>
+          <span class="work-client">Ölgerðin · gevaliakaffi.is</span>
+          <p>Einföld og falleg lendingarsíða sem kynnir vörur Gevalia í notendavænu umhverfi.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://linklaw.ee" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Linklaw <span class="arrow">→</span></h3>
+          <span class="work-client">Linklaw · linklaw.ee</span>
+          <p>Hönnun, forritun og leitarvélabestun með sérsniðnu bakendakerfi fyrir lögfræðiþjónustu.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">Bakendi</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.jorth.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Jörth <span class="arrow">→</span></h3>
+          <span class="work-client">Jörth · jorth.is</span>
+          <p>Netverslun með náttúruleg bætiefni: hönnun, forritun og einföld kaupupplifun.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Netverslun</span><span class="work-tag">Hönnun</span></div>
+      </a>
+
+      <a class="work-row" href="https://kjarkurendurhaefing.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Kjarkur endurhæfing <span class="arrow">→</span></h3>
+          <span class="work-client">Kjarkur endurhæfing · kjarkurendurhaefing.is</span>
+          <p>Hönnun og forritun á vef sem miðlar endurhæfingarþjónustu fyrir hreyfihamlaða einstaklinga.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://borgarhofdi.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Borgarhöfði <span class="arrow">→</span></h3>
+          <span class="work-client">Klasi · borgarhofdi.is</span>
+          <p>Hönnun og forritun fyrir fasteignaþróunarverkefni með áherslu á sjálfbærni og grænar lausnir.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://bonus.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Grísaðu á vinning <span class="arrow">→</span></h3>
+          <span class="work-client">Bónus · bonus.is</span>
+          <p>Stafrænn leikur í samvinnu við PiparTBWA fyrir vináttulandsleik Íslands og Englands á Wembley.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Leikur</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.arctictherapeutics.com" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Arctic Therapeutics <span class="arrow">→</span></h3>
+          <span class="work-client">Arctic Therapeutics · arctictherapeutics.com</span>
+          <p>Vefur, vörumerki, ásýnd og umbúðir fyrir lyfjaþróunarfyrirtæki í erfðamengisrannsóknum.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vörumerki</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.kjalki.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Kjálkaskurðlæknastofan <span class="arrow">→</span></h3>
+          <span class="work-client">Kjálkaskurðlæknastofan · kjalki.is</span>
+          <p>Uppsetning, forritun og leitarvélabestun fyrir sérhæfða læknastofu, starfrækta frá 2008.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.hardrock.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Hard Rock <span class="arrow">→</span></h3>
+          <span class="work-client">Hard Rock Ísland · hardrock.is</span>
+          <p>Lendingarsíða fyrir herferðir og upplýsingar um veitingastaðinn á Íslandi.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span></div>
+      </a>
+
+      <a class="work-row" href="https://www.noxhealth.com" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Nox Health <span class="arrow">→</span></h3>
+          <span class="work-client">Nox Health · noxhealth.com</span>
+          <p>Hönnun og forritun á vef sem miðlar svefnheilbrigðislausnum á heimsvísu.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Eigum við að bæta þínu verkefni á listann?</h2>
+      <a href="bokun.html" class="btn-primary">Bóka samtal</a>
+    </div>
+  </div>
+</section>
+</div><!-- /.site -->
+
+<script src="main.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Um okkur: Reytal</title>
+<meta name="description" content="Teymið á bakvið Reytal: fólkið sem hannar og byggir stafræna innviði fyrir fyrirtæki sem vilja vaxa.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Um okkur: Reytal">
+<meta property="og:description" content="Teymið á bakvið Reytal: fólkið sem hannar og byggir stafræna innviði fyrir fyrirtæki sem vilja vaxa.">
+<meta property="og:locale" content="is_IS">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  
+  
+
+  /* NAV: fastur efst, morphast mjúklega í miðjusetta pillu þegar skrollað er */
+  
+
+  /* PAGE-HERO: haus og inngangur deila fleti svo hringurinn gangi óslitið undir */
+  .top{position:relative;overflow:hidden;}
+  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
+  
+
+  
+
+  h1{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(38px,6vw,84px);line-height:1.0;letter-spacing:-0.03em;
+    max-width:900px;position:relative;z-index:1;
+  }
+  h1 .accent{color:var(--navy);}
+
+  .page-hero p.lede{
+    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:560px;
+    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
+  }
+
+  
+
+  /* ── TEYMIÐ: skýrir myndakassar, nafn, netfang, titill (aranja.com/studio) ── */
+  .team{position:relative;z-index:1;padding:clamp(88px,12vh,140px) 0 clamp(72px,10vh,120px);}
+  .section-head{max-width:620px;margin-bottom:clamp(48px,7vh,72px);}
+  .section-head h2{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.02em;
+    margin-top:14px;
+  }
+
+  /* þrjár í röð: við tvær í röð voru kortin breiðari en 768px myndirnar
+     þola án þess að verða upprennt/blörrí, þrjár heldur sér skarpt */
+  .team-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:clamp(32px,4vw,44px);
+  }
+  .person{position:relative;}
+  .avatar{
+    position:relative;
+    width:100%;aspect-ratio:4/5;border-radius:6px;
+    overflow:hidden;background:var(--sage);
+  }
+  .avatar .avatar-photo{
+    width:100%;height:100%;object-fit:cover;object-position:center top;display:block;
+    transition:transform .8s cubic-bezier(.25,.6,.25,1);
+  }
+  /* hover: myndin andar örlítið inn og upplýsingarnar lyftast */
+  .person:hover .avatar-photo{transform:scale(1.045);}
+  /* mjúk skyggja neðst svo textinn lesist á öllum myndum */
+  .avatar::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
+    background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
+    pointer-events:none;
+  }
+  .person-info{
+    position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
+    display:flex;flex-direction:column;gap:3px;
+    text-align:left;
+    transition:transform .5s cubic-bezier(.25,.6,.25,1);
+  }
+  .person:hover .person-info{transform:translateY(-5px);}
+  .person-info h3{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
+    color:#fff;
+  }
+  .person-info .role{
+    font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.45);border-radius:999px;
+    padding:6px 13px;
+    width:fit-content;
+    margin-top:4px;
+  }
+
+  /* ── CTA ────────────────────────────────────────────────────── */
+  .cta{position:relative;z-index:1;padding:0 0 clamp(96px,13vh,150px);}
+  .cta-box{
+    border-top:1px solid rgba(11,12,13,0.12);
+    padding-top:clamp(48px,7vh,72px);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
+  }
+  .cta-box h2{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.02em;max-width:480px;
+  }
+  
+
+  @media (max-width:760px){
+    .cta-box{flex-direction:column;align-items:flex-start;}
+    .team-grid{grid-template-columns:1fr;}
+  }
+
+  /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
+  
+  
+
+  /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
+     fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
+  
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH: síðuskipta-skjár -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="index.html">Heim</a>
+  <a href="thjonusta.html">Þjónusta</a>
+  <a href="verkefni.html">Verkefni</a>
+  <a href="um-okkur.html" class="active">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb"><div class="blob"></div></div>
+<header>
+  <nav class="wrap">
+    <a href="index.html" class="logo-mark" aria-label="Reytal">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="index.html">Heim</a></li>
+      <li><a href="thjonusta.html">Þjónusta</a></li>
+      <li><a href="verkefni.html">Verkefni</a></li>
+      <li><a href="um-okkur.html" class="active">Um okkur</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">Um okkur</div>
+    <h1><span class="accent">Fólkið</span> á bakvið kerfin.</h1>
+    <p class="lede">Reytal er lítið en þétt teymi sem hannar og byggir stafræna innviði fyrir fyrirtæki sem vilja vaxa. Við trúum á einfaldar lausnir, skýra hugsun og að standa alltaf við það sem við lofum.</p>
+    <div class="meta-row">
+      <div class="tag">Reykjavík</div>
+      <div class="tag">Tallinn</div>
+      <div class="tag">15+ ára reynsla</div>
+    </div>
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="team">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Teymið</div>
+      <h2>Fimm manns, einn metnaður</h2>
+    </div>
+
+    <div class="team-grid">
+      <!-- Titlar og netföng eru enn staðgenglar, breyttu eftir þörfum -->
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="https://pipar-tbwa.is/wp-content/uploads/gudlaugur_2025_Pipar_Staff_New_1368-768x1024.jpg" alt="Gunnlaugur">
+          <div class="person-info">
+            <h3>Gunnlaugur</h3>
+            <div class="role">Forritari</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="https://pipar-tbwa.is/wp-content/uploads/mikk_2025_Pipar_Staff_New_2122-768x1024.jpg" alt="Mikk">
+          <div class="person-info">
+            <h3>Mikk</h3>
+            <div class="role">Forritari</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="https://pipar-tbwa.is/wp-content/uploads/daniel_2025_Pipar_Staff_New_0707-768x1024.jpg" alt="Daníel">
+          <div class="person-info">
+            <h3>Daníel</h3>
+            <div class="role">Hönnuður</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="https://pipar-tbwa.is/wp-content/uploads/petur_2025_Pipar_Staff_New_1593-768x1024.jpg" alt="Pétur">
+          <div class="person-info">
+            <h3>Pétur</h3>
+            <div class="role">Forritari</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="https://pipar-tbwa.is/wp-content/uploads/isak-w_2025_Pipar_Staff_New_1500-768x1024.jpg" alt="Ísak">
+          <div class="person-info">
+            <h3>Ísak</h3>
+            <div class="role">Hönnuður</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Viltu vinna með okkur?</h2>
+      <a href="bokun.html" class="btn-primary">Bóka samtal</a>
+    </div>
+  </div>
+</section>
+</div><!-- /.site -->
+
+<script src="main.js"></script>
+
+
+</body>
+</html>

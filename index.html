@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reytal: vefkerfi og stafrænar lausnir</title>
+<meta name="description" content="Reytal hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni. 15+ ára reynsla, Reykjavík og Tallinn.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reytal: vefkerfi og stafrænar lausnir">
+<meta property="og:description" content="Reytal hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni.">
+<meta property="og:locale" content="is_IS">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<style>
+
+  :root{
+    --black:#0B0C0D;
+    --navy:#0D4659;
+    --slate:#4C7C93;
+    --grey:#9AA1A6;
+    --sage:#BEBFA6;
+    --cream:#F3F0EA;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Instrument Sans',sans-serif;
+    background:var(--cream);
+    color:var(--black);
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
+  /* hero-innihaldið stillist nákvæmlega á vinstri brún logosins. --align er
+     reiknað í JS (sjá neðst) svo þetta haldi sér á öllum skjástærðum. */
+  .hero .wrap{padding-left:calc(32px + var(--align, 0px));}
+  /* leturgerðin hefur innbyggt loft vinstra megin við V, dregið frá sjónrænt */
+  .hero h1{margin-left:-0.045em;}
+
+  /* NAV: fastur efst, morphast mjúklega í miðjusetta pillu þegar skrollað er */
+  header{height:92px;position:relative;z-index:2;background:transparent;}
+  nav.wrap{
+    position:fixed;top:0;left:50%;
+    transform:translateX(-50%);
+    width:100%;max-width:1240px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:28px 32px;
+    z-index:40;
+    border:1px solid rgba(11,12,13,0);
+    border-radius:999px;
+    background:rgba(243,240,234,0);
+    transition:
+      max-width .5s cubic-bezier(.3,.7,.25,1),
+      padding   .5s cubic-bezier(.3,.7,.25,1),
+      top       .5s cubic-bezier(.3,.7,.25,1),
+      border-color .4s ease,
+      background-color .4s ease,
+      box-shadow .4s ease;
+  }
+  nav.wrap.pill{
+    top:16px;
+    max-width:760px;
+    padding:15px 30px;
+    /* glass grunnur, en borderinn er sama einfalda línan og á pillunum (.tag) */
+    border-color:rgba(11,12,13,0.25);
+    background:rgba(243,240,234,0.45);
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+    box-shadow:0 8px 32px rgba(11,12,13,0.10);
+  }
+  .logo-mark{display:block;color:var(--navy);line-height:0;}
+  .logo-mark svg{
+    height:36px;width:auto;display:block;fill:currentColor;
+    transition:height .5s cubic-bezier(.3,.7,.25,1);
+  }
+  nav.wrap.pill .logo-mark svg{height:28px;}
+  nav ul{
+    display:flex;gap:34px;list-style:none;
+    transition:gap .5s cubic-bezier(.3,.7,.25,1);
+  }
+  nav.wrap.pill ul{gap:26px;}
+  nav ul li a{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--black);text-decoration:none;opacity:0.65;position:relative;
+  }
+  nav ul li a.active{opacity:1;}
+  nav ul li a.active::after{
+    content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
+  }
+
+  /* HERO */
+  /* haus og hero deila einum fleti svo hringurinn gangi óslitið undir hvoru tveggja */
+  .top{position:relative;overflow:hidden;}
+  /* hero fyllir alltaf skjáinn til að byrja með, sama hvaða skjástærð */
+  .hero{
+    position:relative;
+    min-height:calc(100vh - 92px);
+    display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(64px,9vh,104px) 0 72px;
+  }
+  /* ── ORB: glow + snúandi REYTAL hringir (gl. 22) ───────────── */
+  /* mjukur hringur sem reikar um allan hausinn, bakvid textann */
+  .orb{
+    position:absolute;inset:0;z-index:0;
+    pointer-events:none;
+    will-change:transform;
+  }
+  .blob{
+    position:absolute;left:50%;top:50%;
+    width:min(60vw,760px);aspect-ratio:1;
+    border-radius:50%;
+    background:radial-gradient(circle at 36% 34%,
+                 rgba(13,70,89,0.22),
+                 rgba(76,124,147,0.13) 45%,
+                 rgba(190,191,166,0.07) 66%,
+                 transparent 74%);
+    filter:blur(48px);
+    animation:roam 52s ease-in-out infinite;
+    will-change:transform;
+  }
+  /* lóðrétt svið takmarkað svo hringurinn síga aldrei niður í viðskiptavinaræmuna */
+  @keyframes roam{
+    0%,100%{transform:translate(-50%,-50%) translate(-27vw,-15vh) scale(1);}
+    22%    {transform:translate(-50%,-50%) translate( 21vw,-12vh) scale(1.14);}
+    44%    {transform:translate(-50%,-50%) translate( 31vw, -2vh) scale(0.94);}
+    68%    {transform:translate(-50%,-50%) translate( -6vw,  8vh) scale(1.10);}
+    86%    {transform:translate(-50%,-50%) translate(-29vw, -4vh) scale(1.02);}
+  }
+
+  /* ── INTRO: fullscreen nafnaafhjúpun (gl. 21) ──────────────── */
+  .intro{
+    position:fixed;inset:0;z-index:100;
+    background:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .5s ease, background-color .7s ease;
+  }
+  .intro.fly{background-color:transparent;}
+  .intro.done{opacity:0;pointer-events:none;}
+  /* allt liggur í sama reit og krossfadar */
+  .intro-stage{display:grid;place-items:center;}
+  .intro-stage > *{grid-area:1 / 1;}
+  .stack-wrap{display:flex;flex-direction:column;align-items:center;gap:6vh;}
+
+  /* gamla RVK Digital merkið: birtist fyrst, morphast svo */
+  .intro-old{
+    width:min(78vw,1100px);height:auto;
+    fill:var(--navy);opacity:0;
+    transform:scale(1);
+    transition:opacity .6s ease, transform .8s cubic-bezier(.4,0,.2,1);
+  }
+  .intro.logoin .intro-old{opacity:1;}
+  .intro.morph .intro-old{opacity:0;transform:scale(.965);}
+
+  /* staflaða REYTAL merkið: REY skellur inn að ofan, TAL að neðan */
+  .intro-svg{
+    fill:var(--navy);opacity:0;overflow:visible;
+    width:auto;height:min(34vw,46vh);
+    display:block;
+    transform-origin:top left;
+    transition:opacity 1.4s ease .45s;
+    will-change:transform;
+  }
+  .intro.morph .intro-svg{opacity:1;}
+
+  #gR,#gT{
+    transition:transform 1.8s cubic-bezier(.25,.6,.25,1) .45s;
+    will-change:transform;
+  }
+  #gR{transform:translateY(-2.4px);}   /* svg-einingar: mjúk hreyfing að ofan */
+  #gT{transform:translateY(2.4px);}    /* að neðan */
+  .intro.morph #gR,
+  .intro.morph #gT{transform:translateY(0);}
+
+  /* skilaboðin: fólk þarf að fatta að hér er nýtt nafn */
+  .intro-caption{
+    font-family:'Space Mono',monospace;
+    font-size:clamp(12px,1.05vw,15px);
+    letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--black);
+    display:flex;align-items:center;gap:14px;
+    opacity:0;transform:translateY(8px);
+    transition:opacity .8s ease 2s, transform .8s ease 2s;
+  }
+  .intro-caption .old-name{opacity:0.45;text-decoration:line-through;text-decoration-thickness:1px;}
+  .intro-caption .arrow{color:var(--slate);}
+  .intro.morph .intro-caption{opacity:1;transform:translateY(0);}
+  .intro.fly .intro-caption{opacity:0;transition:opacity .3s ease;}
+
+  .intro.fly .intro-svg{
+    transition:transform .95s cubic-bezier(.7,0,.25,1), opacity .25s ease .78s;
+    opacity:0;
+  }
+
+  /* site hidden until intro finishes */
+  body.locked{overflow:hidden;}
+  .site{opacity:0;transition:opacity .8s ease;}
+  body.ready .site{opacity:1;}
+
+  @media (prefers-reduced-motion:reduce){
+    .blob{animation:none;}
+    .intro{display:none;}
+    .site{opacity:1;}
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--slate);margin-bottom:26px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;
+  }
+  .eyebrow::before{content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;display:inline-block;}
+
+  .headline-wrap{position:relative;z-index:1;}
+  h1{
+    font-family:'Instrument Sans',sans-serif;
+    font-weight:500;
+    font-size:clamp(46px,7.9vw,116px);
+    line-height:0.98;
+    letter-spacing:-0.04em;
+    max-width:1140px;
+  }
+  h1 .accent{color:var(--navy);}
+
+  .hero-copy{
+    display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:start;
+    margin-top:clamp(96px,13vh,168px);position:relative;z-index:1;
+  }
+  .hero-cta{display:flex;flex-direction:column;gap:16px;}
+  .btn-primary{
+    background:var(--black);color:var(--cream);
+    padding:15px 28px;border-radius:999px;font-weight:600;font-size:14px;
+    text-decoration:none;display:inline-block;text-align:center;
+    font-family:'Space Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
+  }
+  .hero-copy p{font-size:19px;line-height:1.55;max-width:520px;color:#2a2a2a;}
+
+  .meta-row{
+    display:flex;gap:12px;margin-top:64px;flex-wrap:wrap;position:relative;z-index:1;
+  }
+  .tag{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
+    border:1px solid rgba(11,12,13,0.25);border-radius:999px;padding:8px 16px;color:var(--navy);
+  }
+
+  /* ── SPLASH / LOADING SKJÁIR ───────────────────────────────── */
+  .splash{
+    position:fixed;inset:0;z-index:200;
+    display:grid;place-items:center;
+    opacity:0;visibility:hidden;
+    /* út: hægt og mjúkt. inn: snöggt. */
+    transition:opacity .75s cubic-bezier(.4,0,.3,1), visibility 0s linear .75s;
+  }
+  .splash.on{
+    opacity:1;visibility:visible;
+    transition:opacity .3s ease, visibility 0s;
+  }
+  .splash > *{grid-area:1 / 1;}
+
+  /* A: hringurinn dregst saman utan af */
+  #splashA{background:var(--navy);}
+  #splashA .splash-rings{
+    width:min(152vh,152vw);aspect-ratio:1;
+    display:grid;place-items:center;
+    opacity:0;transform:scale(1.5) rotate(-14deg);
+  }
+  #splashA .splash-rings svg{width:100%;height:100%;overflow:visible;}
+  #splashA.on .splash-rings{
+    animation:ringsIn 1.15s cubic-bezier(.22,.7,.25,1) forwards;
+  }
+  @keyframes ringsIn{
+    0%  {opacity:0;   transform:scale(1.5) rotate(-14deg);}
+    45% {opacity:.55;}
+    100%{opacity:.4;  transform:scale(1)   rotate(0deg);}
+  }
+  #splashA .ring text{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    fill:var(--cream);
+    text-anchor:middle;dominant-baseline:central;
+  }
+  #splashA .ring g{transform-origin:50% 50%;}
+  #splashA .ring .g-outer{animation:spin 86s linear infinite;         opacity:0.85;}
+  #splashA .ring .g-mid  {animation:spin 66s linear infinite reverse; opacity:0.62;}
+  #splashA .ring .g-inner{animation:spin 50s linear infinite;         opacity:0.45;}
+  #splashA .ring .g-core {animation:spin 38s linear infinite reverse; opacity:0.32;}
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  #splashA .splash-mark{
+    width:min(26vw,190px);height:auto;fill:var(--cream);
+    opacity:0;transform:scale(.9);
+  }
+  #splashA.on .splash-mark{
+    animation:markIn .8s cubic-bezier(.25,.6,.25,1) .18s forwards;
+  }
+  @keyframes markIn{
+    from{opacity:0;transform:scale(.9);}
+    to  {opacity:1;transform:scale(1);}
+  }
+
+  /* B: merkið byggist upp á ljósum grunni */
+  #splashB{background:var(--cream);}
+  #splashB .splash-mark{
+    width:min(24vw,170px);height:auto;fill:var(--navy);
+  }
+  #splashB .splash-mark #sT{transform:translateY(3px);opacity:0;}
+  #splashB .splash-mark #sR{transform:translateY(-3px);opacity:0;}
+  #splashB.on .splash-mark #sR,
+  #splashB.on .splash-mark #sT{
+    animation:halvesIn .9s cubic-bezier(.25,.6,.25,1) .1s forwards;
+  }
+  @keyframes halvesIn{
+    to{transform:translateY(0);opacity:1;}
+  }
+  #splashB .splash-bar{
+    align-self:end;justify-self:center;
+    margin-bottom:11vh;
+    width:min(30vw,220px);height:1px;
+    background:rgba(13,70,89,0.18);
+    overflow:hidden;
+  }
+  #splashB .splash-bar span{
+    display:block;height:100%;width:100%;
+    background:var(--navy);
+    transform:scaleX(0);transform-origin:left;
+  }
+  #splashB.on .splash-bar span{
+    animation:barSweep 1.05s cubic-bezier(.4,0,.2,1) .1s forwards;
+  }
+  @keyframes barSweep{
+    0%  {transform:scaleX(0);   transform-origin:left;}
+    62% {transform:scaleX(1);   transform-origin:left;}
+    63% {transform:scaleX(1);   transform-origin:right;}
+    100%{transform:scaleX(0);   transform-origin:right;}
+  }
+
+  /* C: mynstrið (gl. 18-19): raðir af REYTAL sem skríða á móti hvor annarri */
+  #splashC{background:var(--cream);overflow:hidden;}
+  /* raðirnar fylla skjáinn og skerast af efst og neðst */
+  #splashC .c-rows{
+    position:absolute;left:0;right:0;top:50%;
+    transform:translateY(-50%);
+    display:flex;flex-direction:column;
+    gap:0.4vmin;
+  }
+  #splashC .c-row{
+    display:flex;overflow:hidden;
+    font-family:'Archivo',sans-serif;font-weight:900;
+    color:var(--navy);
+    line-height:1.04;letter-spacing:-0.02em;
+    white-space:nowrap;
+    opacity:0;transform:translateY(10px);
+    /* raðirnar dofna hver á sínum tíma þegar splashið lokast */
+    transition:opacity .6s ease var(--dout,0s), transform .6s ease var(--dout,0s);
+  }
+  #splashC.on .c-row{
+    animation:cRowIn .55s cubic-bezier(.25,.6,.25,1) var(--d) forwards;
+  }
+  @keyframes cRowIn{ to{opacity:1;transform:translateY(0);} }
+
+  #splashC .c-track{
+    display:flex;flex-shrink:0;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    will-change:transform;
+  }
+  #splashC .c-track.r-l{animation-name:cScrollL;}
+  #splashC .c-track.r-r{animation-name:cScrollR;}
+  @keyframes cScrollL{from{transform:translateX(0);}    to{transform:translateX(-50%);}}
+  @keyframes cScrollR{from{transform:translateX(-50%);} to{transform:translateX(0);}}
+
+  #splashC .w{display:inline-block;margin-right:.34em;}
+  #splashC .fl{display:inline-block;transform:rotate(180deg);font-style:normal;}
+
+  @media (prefers-reduced-motion:reduce){
+    .splash,.splash *{animation:none !important;}
+    #splashC .c-row{opacity:1;transform:none;}
+  }
+
+  /* ── CLIENTS: rúllandi ræma (upprunalega útgáfan) ──────────── */
+  .clients-section{padding-bottom:clamp(72px,10vh,120px);}
+  .clients{
+    margin-top:0;
+    border-top:1px solid rgba(11,12,13,0.1);
+    padding-top:36px;
+    position:relative;z-index:1;
+    overflow:hidden;
+  }
+  .clients .label{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--grey);margin-bottom:26px;
+  }
+  .marquee{
+    display:flex;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .marquee-track{
+    display:flex;align-items:center;gap:64px;
+    padding-right:64px;
+    flex-shrink:0;
+    animation:marquee 42s linear infinite;
+  }
+  .marquee:hover .marquee-track{animation-play-state:paused;}
+  /* merkin eru hvít SVG: brightness(0) þvingar þau í svart á ljósum grunni */
+  .marquee-track img{
+    height:28px;width:auto;max-width:120px;object-fit:contain;
+    filter:brightness(0);
+    opacity:0.45;
+    transition:opacity .3s ease;
+  }
+  .marquee-track img:hover{opacity:1;}
+  @keyframes marquee{
+    from{transform:translateX(0);}
+    to{transform:translateX(-100%);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .marquee-track{animation:none;}
+  }
+
+  /* ── VERKEFNI: valin verk, mynd + texti + pillur með því sem var gert ── */
+  /* ── SHOWCASE: hvert verkefni tekur yfir skjáinn með sínum lit ──
+     Ytri hlutinn er hár (130vh á verkefni); innri hlutinn límist við
+     skjáinn og bakgrunnsliturinn blandast mjúklega milli verkefna. */
+  .showcase{position:relative;z-index:1;height:calc(5 * 130vh);}
+  .show-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;}
+  .show-bg{
+    position:absolute;inset:0;opacity:0;
+    background-color:var(--navy);
+    will-change:opacity,background-color;
+  }
+  .show-slide{
+    position:absolute;inset:0;z-index:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+    text-align:center;
+    padding:96px 32px clamp(28px,6vh,56px);
+    opacity:0;
+    transition:opacity .5s ease;
+    pointer-events:none;
+  }
+  .show-slide.active{
+    opacity:1;pointer-events:auto;
+    transition-delay:.06s;
+  }
+  /* upplýsingalínan: lágstemmd lína sem rennur upp frá botninum,
+     nafn vinstra megin, pillur og hlekkur hægra megin */
+  .show-panel{
+    position:relative;z-index:2;
+    width:100%;max-width:1176px;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+    text-align:left;
+    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,0.3);
+    opacity:0;transform:translateY(56px);
+    transition:opacity .55s ease, transform .6s cubic-bezier(.22,.7,.25,1);
+  }
+  .show-slide.active .show-panel{
+    opacity:1;transform:none;
+    transition-delay:.14s;
+  }
+  .panel-info{display:flex;flex-direction:column;gap:10px;}
+  .panel-side{
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:flex-end;
+    padding-bottom:6px;
+  }
+  .panel-eyebrow{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:rgba(255,255,255,0.55);
+  }
+  .panel-eyebrow .count{color:rgba(255,255,255,0.35);margin-left:10px;}
+  .show-slide h3{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(34px,4.5vw,64px);line-height:1;letter-spacing:-0.03em;
+    color:#fff;position:relative;
+  }
+  /* ── LIFANDI BAKGRUNNUR: hvert verkefni fær hreyfingu á sínum fleti ──
+     Vörumerkjamynstrið (nafnið endurtekið, önnur hver röð á hvolfi) skríður
+     hægt þvert yfir skjáinn og mjúkir ljósblettir reika yfir litinn.
+     Síðar má skipta þessu út fyrir video eða lottie: setja
+     <video class="slide-media" autoplay muted loop playsinline src="...">
+     fremst í glæruna og bakgrunnurinn víkur. */
+  .slide-life{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+  .slide-media{
+    position:absolute;inset:0;
+    width:100%;height:100%;object-fit:cover;
+  }
+  /* lottie: stórt bakgrunnslag, miðjað á skjánum bakvið textann */
+  .slide-lottie{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    height:min(80vh,760px);aspect-ratio:151/203;width:auto;
+    z-index:1;
+    pointer-events:none;
+    background:transparent;
+    opacity:0.26;               /* dempaður svo textinn sé vel læsilegur yfir */
+  }
+  /* myrkvunarlag yfir video svo hvíti textinn haldist læsilegur */
+  .show-slide:has(.slide-media)::before{
+    content:'';position:absolute;inset:0;z-index:1;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.22), rgba(0,0,0,0.06) 40%, rgba(0,0,0,0.42));
+    pointer-events:none;
+  }
+  .show-slide h3,.show-slide .show-tags,.show-slide .show-link{position:relative;z-index:2;}
+  .life-rows{
+    position:absolute;inset:-4% 0;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .life-row{
+    display:flex;overflow:visible;
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:clamp(52px,10vmin,120px);line-height:1;
+    letter-spacing:-0.02em;white-space:nowrap;
+    color:rgba(255,255,255,0.045);
+    user-select:none;
+  }
+  .life-row.fl{transform:rotate(180deg);}
+  .life-track{
+    display:flex;flex-shrink:0;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    will-change:transform;
+  }
+  .life-track.r-l{animation-name:lifeL;}
+  .life-track.r-r{animation-name:lifeR;}
+  @keyframes lifeL{from{transform:translateX(0);}    to{transform:translateX(-50%);}}
+  @keyframes lifeR{from{transform:translateX(-50%);} to{transform:translateX(0);}}
+  .life-track span{display:inline-block;padding-right:.55em;}
+  /* aðeins virka glæran hreyfist, hinar í pásu */
+  .show-slide:not(.active) .life-track{animation-play-state:paused;}
+  /* reikandi ljós og skuggi gefa fletinum dýpt */
+  .life-glow{
+    position:absolute;
+    width:70vmax;aspect-ratio:1;border-radius:50%;
+    filter:blur(40px);
+    will-change:transform;
+  }
+  .life-glow.a{
+    left:-20vmax;top:-25vmax;
+    background:radial-gradient(circle at 45% 45%, rgba(255,255,255,0.12), transparent 62%);
+    animation:glowDrift 24s ease-in-out infinite alternate;
+  }
+  .life-glow.b{
+    right:-25vmax;bottom:-30vmax;
+    background:radial-gradient(circle at 55% 55%, rgba(0,0,0,0.22), transparent 62%);
+    animation:glowDrift 31s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes glowDrift{
+    from{transform:translate(0,0) scale(1);}
+    to  {transform:translate(9vmax,7vmax) scale(1.18);}
+  }
+  /* norðurljós fyrir Sigur Rós: hægar, eterískar litabylgjur á svörtum fleti */
+  .aurora{
+    position:absolute;
+    width:110vmax;height:52vmax;
+    border-radius:50%;
+    filter:blur(70px);
+    mix-blend-mode:screen;
+    will-change:transform,opacity;
+  }
+  .aurora.x1{
+    left:-30vmax;top:-14vmax;
+    background:radial-gradient(ellipse at center, rgba(64,201,162,0.24), transparent 62%);
+    animation:auroraDrift 26s ease-in-out infinite alternate;
+  }
+  .aurora.x2{
+    right:-36vmax;top:4vmax;
+    background:radial-gradient(ellipse at center, rgba(96,144,236,0.18), transparent 62%);
+    animation:auroraDrift 34s ease-in-out infinite alternate-reverse;
+  }
+  .aurora.x3{
+    left:-8vmax;bottom:-22vmax;
+    background:radial-gradient(ellipse at center, rgba(158,102,214,0.14), transparent 62%);
+    animation:auroraDrift 42s ease-in-out infinite alternate;
+  }
+  @keyframes auroraDrift{
+    0%  {transform:translate(0,0)        rotate(-6deg) scaleY(1);   opacity:.65;}
+    50% {transform:translate(7vmax,3vmax) rotate(3deg) scaleY(1.25);opacity:1;}
+    100%{transform:translate(-5vmax,-2vmax) rotate(-2deg) scaleY(.9);opacity:.55;}
+  }
+  .show-slide:not(.active) .aurora{animation-play-state:paused;}
+
+  @media (prefers-reduced-motion:reduce){
+    .life-track,.life-glow,.aurora{animation:none !important;}
+  }
+
+  .show-tags{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;
+  }
+  .show-tag{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+    border:1px solid rgba(255,255,255,0.4);border-radius:999px;padding:6px 14px;color:#fff;
+    white-space:nowrap;
+  }
+  .show-link{
+    display:inline-block;white-space:nowrap;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    color:#fff;text-decoration:none;
+    border-bottom:1px solid rgba(255,255,255,0.4);padding-bottom:4px;
+    transition:border-color .3s ease;
+  }
+  .show-link:hover{border-color:#fff;}
+
+  /* ── DÖKKUR HAMUR ──────────────────────────────────────────────
+     Þegar bakgrunnurinn er kominn nógu langt yfir í navy verður dökkur
+     texti ólæsilegur, svo efnið snýst yfir í ljóst. Kviknar í JS. */
+  body.on-dark{color:var(--cream);}
+  /* Merkin eru misjöfn: flest hvít SVG, en Regla, LBHÍ og Þjóðkirkjan eru með
+     sína eigin dökku vörumerkjaliti innbakaða. brightness(0) invert(1) þvingar
+     þau öll í hvítt, sama hvaða litur var fyrir. */
+  body.on-dark .marquee-track img{filter:brightness(0) invert(1);opacity:0.7;}
+  body.on-dark .marquee-track img:hover{opacity:1;}
+  /* pillan efst þarf líka að virka á dökkum grunni */
+  body.on-dark nav.wrap.pill{
+    border-color:rgba(243,240,234,0.3);
+    background:rgba(13,70,89,0.45);
+  }
+  body.on-dark nav ul li a{color:var(--cream);}
+  body.on-dark nav ul li a.active::after{background:var(--cream);}
+  body.on-dark .logo-mark{color:var(--cream);}
+  /* mjúk umskipti svo þetta stökkvi ekki */
+  .logo-mark, nav ul li a, .marquee-track img{
+    transition:color .45s ease, border-color .45s ease, opacity .3s ease, filter .45s ease;
+  }
+
+  /* ── FARSÍMAVALMYND: heilsíðu-yfirlag með stórum tenglum ─────── */
+  .menu-btn{
+    display:none;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
+  }
+  body.on-dark .menu-btn{color:var(--cream);}
+  .mobile-menu{
+    position:fixed;inset:0;z-index:150;
+    background:var(--cream);
+    display:flex;flex-direction:column;justify-content:center;
+    padding:0 28px;
+    opacity:0;visibility:hidden;
+    transition:opacity .35s ease, visibility 0s linear .35s;
+  }
+  .mobile-menu.open{opacity:1;visibility:visible;transition:opacity .35s ease, visibility 0s;}
+  .mobile-menu a{
+    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-size:clamp(32px,9vw,42px);letter-spacing:-0.02em;
+    color:var(--black);text-decoration:none;
+    padding:14px 0;border-bottom:1px solid rgba(11,12,13,0.12);
+  }
+  .mobile-menu a:first-of-type{border-top:1px solid rgba(11,12,13,0.12);}
+  .mobile-menu a.active{color:var(--navy);}
+  .menu-close{
+    position:absolute;top:26px;right:28px;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    background:none;border:none;color:var(--black);cursor:pointer;padding:8px;
+  }
+
+  @media (max-width:760px){
+    nav ul{display:none;}
+    .menu-btn{display:block;}
+    nav.wrap.pill{max-width:250px;padding:12px 24px;}
+    h1{font-size:clamp(30px,8vw,46px);}
+    .hero-copy{grid-template-columns:1fr;}
+    .show-slide h3{font-size:clamp(28px,8vw,40px);}
+    .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
+    .panel-side{justify-content:flex-start;padding-bottom:0;}
+    .show-tags{justify-content:flex-start;}
+  }
+
+  /* ── FARTÖLVUSKJÁIR (t.d. MacBook 14"): lægri skjár, allt andar betur ── */
+  @media (max-height:960px){
+    h1{font-size:clamp(42px,6.6vw,92px);}
+    .hero{padding:clamp(40px,6vh,72px) 0 56px;}
+    .hero-copy{margin-top:clamp(48px,7vh,88px);}
+    .hero-copy p{font-size:17px;max-width:480px;}
+    .meta-row{margin-top:44px;}
+    .clients{margin-top:0;}
+  }
+
+  /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
+     fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
+  .fx .fx-w{
+    display:inline-block;overflow:hidden;vertical-align:bottom;
+    padding-bottom:.14em;margin-bottom:-.14em;
+  }
+  .fx .fx-w > span{
+    display:inline-block;
+    transform:translateY(115%) rotate(2.5deg);
+    transform-origin:0 100%;
+    transition:transform .9s cubic-bezier(.19,.75,.22,1);
+    will-change:transform;
+  }
+  .fx.in .fx-w > span{transform:none;}
+  @media (prefers-reduced-motion:reduce){
+    .fx .fx-w > span{transform:none !important;transition:none !important;}
+  }
+</style>
+<script id="crossData" type="application/json">{"nm":"Tjodkirkjan_Lottie_151x203","ddd":0,"h":203,"w":151,"meta":{"g":"@lottiefiles/toolkit-js 0.64.0"},"layers":[{"ty":4,"nm":"Bot","sr":1,"st":0,"op":1500,"ip":0,"ln":"352","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0.597,-12.1],[2.515,-2.147],[2.768,0],[2.513,1.692],[0,2.965],[-1.676,2.336],[-0.705,3.166],[0.545,2.107],[0,0]],"o":[[0,4.396],[-2.516,2.147],[-2.768,0],[-2.513,-1.692],[0,-3.865],[1.676,-2.336],[0.795,-3.57],[-0.545,-2.107],[0,0]],"v":[[14.758,108.01],[10.419,117.8],[1.928,120.996],[-6.559,118.353],[-10.894,111.264],[-7.718,102.552],[-3.483,94.888],[-3.581,86.212],[-4.87,82.89]]}],"t":26},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":35},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":68.999},{"s":[{"c":true,"i":[[0.597,-12.1],[2.515,-2.147],[2.768,0],[2.513,1.692],[0,2.965],[-1.676,2.336],[-0.705,3.166],[0.545,2.107],[0,0]],"o":[[0,4.396],[-2.516,2.147],[-2.768,0],[-2.513,-1.692],[0,-3.865],[1.676,-2.336],[0.795,-3.57],[-0.545,-2.107],[0,0]],"v":[[14.758,108.01],[10.419,117.8],[1.928,120.996],[-6.559,118.353],[-10.894,111.264],[-7.718,102.552],[-3.483,94.888],[-3.581,86.212],[-4.87,82.89]]}],"t":77.999}]}},{"ty":"sh","nm":"Path 2","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.256,-3.84],[9.243,-4.157],[1.725,-2.437],[0,-2.397],[-5.248,-3.309],[-8.008,0],[0,10.1],[0,0]],"o":[[0,0],[-1.256,3.84],[-4.655,2.094],[-1.725,2.438],[0,5.05],[5.248,3.31],[16.016,0],[1.731,-20.615],[0,0]],"v":[[-1.274,68.975],[-1.476,75.616],[-15.542,88.491],[-24.81,95.384],[-27.096,102.732],[-18.602,115.663],[1.904,121.02],[30.904,102.732],[-1.276,68.975]]}],"t":26},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":35},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":68.999},{"s":[{"c":true,"i":[[0,0],[1.256,-3.84],[9.243,-4.157],[1.725,-2.437],[0,-2.397],[-5.248,-3.309],[-8.008,0],[0,10.1],[0,0]],"o":[[0,0],[-1.256,3.84],[-4.655,2.094],[-1.725,2.438],[0,5.05],[5.248,3.31],[16.016,0],[1.731,-20.615],[0,0]],"v":[[-1.274,68.975],[-1.476,75.616],[-15.542,88.491],[-24.81,95.384],[-27.096,102.732],[-18.602,115.663],[1.904,121.02],[30.904,102.732],[-1.276,68.975]]}],"t":77.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[16.034,0],[0,1.832],[-13.474,0.288],[-0.507,-0.024],[-1.306,0],[-1.374,0.308],[-0.472,-0.011],[0,-1.631]],"o":[[0,1.832],[-16.034,0],[0,-1.623],[0.498,-0.011],[0.903,0.039],[1.306,0],[0.468,-0.106],[13.571,0.277],[0,0]],"v":[[30.965,123.596],[1.932,126.912],[-27.101,123.596],[-3.427,120.336],[-1.653,120.717],[1.904,121.022],[5.595,120.656],[7.094,120.334],[30.965,123.598]]}],"t":26},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":35},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.721,54.43],[-21.197,60.905],[-21.336,131.783],[-14.861,138.259],[19.361,138.259],[25.836,131.783],[25.976,60.905],[19.5,54.43],[-14.721,54.43]]}],"t":68.999},{"s":[{"c":true,"i":[[0,0],[16.034,0],[0,1.832],[-13.474,0.288],[-0.507,-0.024],[-1.306,0],[-1.374,0.308],[-0.472,-0.011],[0,-1.631]],"o":[[0,1.832],[-16.034,0],[0,-1.623],[0.498,-0.011],[0.903,0.039],[1.306,0],[0.468,-0.106],[13.571,0.277],[0,0]],"v":[[30.965,123.596],[1.932,126.912],[-27.101,123.596],[-3.427,120.336],[-1.653,120.717],[1.904,121.022],[5.595,120.656],[7.094,120.334],[30.965,123.598]]}],"t":77.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":1},{"ty":4,"nm":"MidBot","sr":1,"st":0,"op":1500,"ip":0,"ln":"351","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0.353,-0.594],[1.207,-1.367],[0.636,-0.377],[1.41,2.37],[-0.002,0.655],[-0.364,-0.613],[-1.271,-0.754],[-1.41,2.37],[0.013,0.674]],"o":[[-0.705,1.185],[-1.206,1.367],[-1.271,-0.754],[-0.353,-0.594],[-0.013,0.674],[1.41,2.37],[1.272,-0.754],[0.364,-0.613],[0,0.655]],"v":[[8.121,32.506],[4.986,36.627],[1.954,39.535],[-4.213,32.506],[-4.724,30.582],[-4.213,32.571],[1.954,39.6],[8.121,32.571],[8.632,30.582]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.581,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.75,-5.82],[-21.226,0.655],[-21.25,77.033],[-14.774,83.509],[19.447,83.509],[25.922,77.033],[25.947,0.655],[19.471,-5.82],[-14.75,-5.82]]}],"t":31},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.581,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.75,-5.82],[-21.226,0.655],[-21.25,77.033],[-14.774,83.509],[19.447,83.509],[25.922,77.033],[25.947,0.655],[19.471,-5.82],[-14.75,-5.82]]}],"t":72.999},{"s":[{"c":true,"i":[[0.353,-0.594],[1.207,-1.367],[0.636,-0.377],[1.41,2.37],[-0.002,0.655],[-0.364,-0.613],[-1.271,-0.754],[-1.41,2.37],[0.013,0.674]],"o":[[-0.705,1.185],[-1.206,1.367],[-1.271,-0.754],[-0.353,-0.594],[-0.013,0.674],[1.41,2.37],[1.272,-0.754],[0.364,-0.613],[0,0.655]],"v":[[8.121,32.506],[4.986,36.627],[1.954,39.535],[-4.213,32.506],[-4.724,30.582],[-4.213,32.571],[1.954,39.6],[8.121,32.571],[8.632,30.582]]}],"t":81.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.272,-0.754],[1.41,2.37],[-0.013,0.674],[-1.362,0],[-1.313,-0.07],[-2.361,0],[-0.004,-1.494],[0.364,-0.613]],"o":[[-1.41,2.37],[-1.271,-0.754],[-0.364,-0.613],[0.004,-1.494],[2.364,0],[1.315,-0.07],[1.362,0],[0.013,0.674],[0,0]],"v":[[8.121,32.571],[1.954,39.6],[-4.213,32.571],[-4.724,30.582],[-2.504,27.71],[1.952,28.603],[6.408,27.71],[8.628,30.582],[8.117,32.571]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.581,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.75,-5.82],[-21.226,0.655],[-21.25,77.033],[-14.774,83.509],[19.447,83.509],[25.922,77.033],[25.947,0.655],[19.471,-5.82],[-14.75,-5.82]]}],"t":31},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.581,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.75,-5.82],[-21.226,0.655],[-21.25,77.033],[-14.774,83.509],[19.447,83.509],[25.922,77.033],[25.947,0.655],[19.471,-5.82],[-14.75,-5.82]]}],"t":72.999},{"s":[{"c":true,"i":[[0,0],[1.272,-0.754],[1.41,2.37],[-0.013,0.674],[-1.362,0],[-1.313,-0.07],[-2.361,0],[-0.004,-1.494],[0.364,-0.613]],"o":[[-1.41,2.37],[-1.271,-0.754],[-0.364,-0.613],[0.004,-1.494],[2.364,0],[1.315,-0.07],[1.362,0],[0.013,0.674],[0,0]],"v":[[8.121,32.571],[1.954,39.6],[-4.213,32.571],[-4.724,30.582],[-2.504,27.71],[1.952,28.603],[6.408,27.71],[8.628,30.582],[8.117,32.571]]}],"t":81.999}]}},{"ty":"sh","nm":"Path 2","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[-4.289,6.652],[-0.043,0.033],[0.054,0.019],[4.783,4.685],[2.543,-2.764],[0.201,-0.239],[0.007,-0.006],[0.135,-0.167],[0.578,0.344],[-0.581,0.949],[-0.189,0.301],[-0.078,0.133],[3.424,1.894],[5.147,6.017],[5.86,-3.238],[-1.921,-3.227],[-0.084,-0.139],[-0.221,-0.322],[0.54,-0.321],[0.535,0.6],[0.132,0.156],[0,0],[0.193,0.21],[2.796,-2.738],[7.239,-3.204],[0.06,-0.004],[-0.039,-0.054],[-1.424,-6.542],[-3.644,0.914],[-0.299,-0.864],[0.881,-0.334],[0.499,-0.184],[-1.478,-3.624],[-0.228,-7.913],[0,0],[-0.065,0.011],[-6.593,-1.159],[-0.533,3.717],[-0.087,0.914],[-0.394,0],[-0.039,-0.407],[-0.106,-0.741],[-3.856,0.678],[-7.783,-1.451],[0,0],[0,0.061],[-2.525,6.2],[3.52,1.306],[0.598,0.178],[-0.221,0.635],[0,0],[-0.831,3.825]],"o":[[0.037,-0.054],[-0.06,-0.004],[-7.239,-3.204],[-2.796,-2.738],[-0.191,0.208],[0,0],[-0.132,0.156],[-0.535,0.6],[-0.542,-0.321],[0.221,-0.322],[0.087,-0.137],[1.921,-3.227],[-5.86,-3.238],[-5.145,6.015],[-3.424,1.894],[0.078,0.133],[0.188,0.301],[0.581,0.949],[-0.58,0.344],[-0.137,-0.167],[-0.004,-0.004],[-0.201,-0.236],[-2.541,-2.764],[-4.783,4.685],[-0.054,0.019],[0.043,0.033],[4.289,6.654],[0.831,3.825],[0,0],[0.221,0.635],[-0.6,0.178],[-3.522,1.306],[2.525,6.2],[0,0.061],[0,0],[7.783,-1.451],[3.856,0.678],[0.106,-0.741],[0.039,-0.407],[0.394,0],[0.086,0.914],[0.533,3.717],[6.593,-1.159],[0.065,0.011],[0,0],[0.228,-7.913],[1.478,-3.624],[-0.5,-0.186],[-0.881,-0.334],[0.301,-0.864],[3.644,0.914],[1.423,-6.542]],"v":[[28.42,25.048],[28.515,24.944],[28.381,24.914],[24.354,14.408],[14.117,17.997],[13.526,18.669],[13.519,18.675],[13.118,19.158],[11.063,20.313],[11.806,17.674],[12.421,16.737],[12.668,16.331],[13.173,5.496],[1.952,4.65],[-9.269,5.496],[-8.764,16.331],[-8.517,16.737],[-7.902,17.674],[-7.159,20.313],[-9.214,19.158],[-9.615,18.675],[-9.622,18.669],[-10.213,17.997],[-20.45,14.408],[-24.477,24.914],[-24.611,24.944],[-24.516,25.048],[-26.92,36.039],[-16.395,38.662],[-11.896,38.311],[-14.064,39.834],[-15.722,40.38],[-22.917,48.496],[-14.716,56.199],[-14.716,56.307],[-14.608,56.288],[-5.344,62.674],[1.068,53.925],[1.302,51.412],[1.952,49.911],[2.602,51.412],[2.836,53.925],[9.248,62.674],[18.512,56.288],[18.62,56.307],[18.62,56.199],[26.821,48.496],[19.625,40.38],[17.968,39.834],[15.8,38.311],[20.299,38.662],[30.824,36.039]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.548,-0.151],[0.48,-0.281],[0.39,-0.39],[0.281,-0.48],[0.151,-0.548],[0,-0.597],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.151,-0.548],[-0.281,-0.48],[-0.39,-0.39],[-0.48,-0.281],[-0.548,-0.151],[-0.597,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.548,0.151],[-0.48,0.281],[-0.39,0.39],[-0.281,0.48],[-0.151,0.548],[0,0.597],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.151,0.548],[0.281,0.48],[0.39,0.39],[0.48,0.281],[0.548,0.151],[0.597,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[-0.597,0],[-0.548,0.151],[-0.48,0.281],[-0.391,0.39],[-0.281,0.48],[-0.151,0.548],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0.597],[0.151,0.548],[0.281,0.48],[0.39,0.39],[0.48,0.281],[0.548,0.151],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.597,0],[0.548,-0.151],[0.48,-0.281],[0.39,-0.39],[0.281,-0.48],[0.151,-0.548],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,-0.597],[-0.151,-0.548],[-0.281,-0.48],[-0.39,-0.39],[-0.48,-0.281],[-0.548,-0.151],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"v":[[-14.75,-5.82],[-16.473,-5.589],[-18.02,-4.937],[-19.33,-3.925],[-20.343,-2.615],[-20.995,-1.068],[-21.226,0.655],[-21.228,6.313],[-21.23,13.668],[-21.233,23.568],[-21.238,37.43],[-21.244,57.231],[-21.25,77.033],[-21.019,78.756],[-20.367,80.304],[-19.355,81.614],[-18.045,82.626],[-16.497,83.278],[-14.774,83.509],[-12.239,83.509],[-8.944,83.509],[-4.508,83.509],[1.703,83.509],[10.575,83.509],[19.447,83.509],[21.17,83.278],[22.717,82.626],[24.027,81.614],[25.039,80.304],[25.691,78.756],[25.922,77.033],[25.924,71.375],[25.926,64.02],[25.93,54.12],[25.934,40.258],[25.941,20.457],[25.947,0.655],[25.716,-1.068],[25.064,-2.615],[24.052,-3.925],[22.742,-4.937],[21.194,-5.589],[19.471,-5.82],[15.912,-5.82],[11.121,-5.82],[4.414,-5.82],[-5.168,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82]]}],"t":31},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.548,-0.151],[0.48,-0.281],[0.39,-0.39],[0.281,-0.48],[0.151,-0.548],[0,-0.597],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.151,-0.548],[-0.281,-0.48],[-0.39,-0.39],[-0.48,-0.281],[-0.548,-0.151],[-0.597,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.548,0.151],[-0.48,0.281],[-0.39,0.39],[-0.281,0.48],[-0.151,0.548],[0,0.597],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.151,0.548],[0.281,0.48],[0.39,0.39],[0.48,0.281],[0.548,0.151],[0.597,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[-0.597,0],[-0.548,0.151],[-0.48,0.281],[-0.391,0.39],[-0.281,0.48],[-0.151,0.548],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0.597],[0.151,0.548],[0.281,0.48],[0.39,0.39],[0.48,0.281],[0.548,0.151],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.597,0],[0.548,-0.151],[0.48,-0.281],[0.39,-0.39],[0.281,-0.48],[0.151,-0.548],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,-0.597],[-0.151,-0.548],[-0.281,-0.48],[-0.39,-0.39],[-0.48,-0.281],[-0.548,-0.151],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"v":[[-14.75,-5.82],[-16.473,-5.589],[-18.02,-4.937],[-19.33,-3.925],[-20.343,-2.615],[-20.995,-1.068],[-21.226,0.655],[-21.228,6.313],[-21.23,13.668],[-21.233,23.568],[-21.238,37.43],[-21.244,57.231],[-21.25,77.033],[-21.019,78.756],[-20.367,80.304],[-19.355,81.614],[-18.045,82.626],[-16.497,83.278],[-14.774,83.509],[-12.239,83.509],[-8.944,83.509],[-4.508,83.509],[1.703,83.509],[10.575,83.509],[19.447,83.509],[21.17,83.278],[22.717,82.626],[24.027,81.614],[25.039,80.304],[25.691,78.756],[25.922,77.033],[25.924,71.375],[25.926,64.02],[25.93,54.12],[25.934,40.258],[25.941,20.457],[25.947,0.655],[25.716,-1.068],[25.064,-2.615],[24.052,-3.925],[22.742,-4.937],[21.194,-5.589],[19.471,-5.82],[15.912,-5.82],[11.121,-5.82],[4.414,-5.82],[-5.168,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82],[-14.75,-5.82]]}],"t":72.999},{"s":[{"c":true,"i":[[-4.289,6.652],[-0.043,0.033],[0.054,0.019],[4.783,4.685],[2.543,-2.764],[0.201,-0.239],[0.007,-0.006],[0.135,-0.167],[0.578,0.344],[-0.581,0.949],[-0.189,0.301],[-0.078,0.133],[3.424,1.894],[5.147,6.017],[5.86,-3.238],[-1.921,-3.227],[-0.084,-0.139],[-0.221,-0.322],[0.54,-0.321],[0.535,0.6],[0.132,0.156],[0,0],[0.193,0.21],[2.796,-2.738],[7.239,-3.204],[0.06,-0.004],[-0.039,-0.054],[-1.424,-6.542],[-3.644,0.914],[-0.299,-0.864],[0.881,-0.334],[0.499,-0.184],[-1.478,-3.624],[-0.228,-7.913],[0,0],[-0.065,0.011],[-6.593,-1.159],[-0.533,3.717],[-0.087,0.914],[-0.394,0],[-0.039,-0.407],[-0.106,-0.741],[-3.856,0.678],[-7.783,-1.451],[0,0],[0,0.061],[-2.525,6.2],[3.52,1.306],[0.598,0.178],[-0.221,0.635],[0,0],[-0.831,3.825]],"o":[[0.037,-0.054],[-0.06,-0.004],[-7.239,-3.204],[-2.796,-2.738],[-0.191,0.208],[0,0],[-0.132,0.156],[-0.535,0.6],[-0.542,-0.321],[0.221,-0.322],[0.087,-0.137],[1.921,-3.227],[-5.86,-3.238],[-5.145,6.015],[-3.424,1.894],[0.078,0.133],[0.188,0.301],[0.581,0.949],[-0.58,0.344],[-0.137,-0.167],[-0.004,-0.004],[-0.201,-0.236],[-2.541,-2.764],[-4.783,4.685],[-0.054,0.019],[0.043,0.033],[4.289,6.654],[0.831,3.825],[0,0],[0.221,0.635],[-0.6,0.178],[-3.522,1.306],[2.525,6.2],[0,0.061],[0,0],[7.783,-1.451],[3.856,0.678],[0.106,-0.741],[0.039,-0.407],[0.394,0],[0.086,0.914],[0.533,3.717],[6.593,-1.159],[0.065,0.011],[0,0],[0.228,-7.913],[1.478,-3.624],[-0.5,-0.186],[-0.881,-0.334],[0.301,-0.864],[3.644,0.914],[1.423,-6.542]],"v":[[28.42,25.048],[28.515,24.944],[28.381,24.914],[24.354,14.408],[14.117,17.997],[13.526,18.669],[13.519,18.675],[13.118,19.158],[11.063,20.313],[11.806,17.674],[12.421,16.737],[12.668,16.331],[13.173,5.496],[1.952,4.65],[-9.269,5.496],[-8.764,16.331],[-8.517,16.737],[-7.902,17.674],[-7.159,20.313],[-9.214,19.158],[-9.615,18.675],[-9.622,18.669],[-10.213,17.997],[-20.45,14.408],[-24.477,24.914],[-24.611,24.944],[-24.516,25.048],[-26.92,36.039],[-16.395,38.662],[-11.896,38.311],[-14.064,39.834],[-15.722,40.38],[-22.917,48.496],[-14.716,56.199],[-14.716,56.307],[-14.608,56.288],[-5.344,62.674],[1.068,53.925],[1.302,51.412],[1.952,49.911],[2.602,51.412],[2.836,53.925],[9.248,62.674],[18.512,56.288],[18.62,56.307],[18.62,56.199],[26.821,48.496],[19.625,40.38],[17.968,39.834],[15.8,38.311],[20.299,38.662],[30.824,36.039]]}],"t":81.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":2},{"ty":4,"nm":"Right","sr":1,"st":0,"op":1500,"ip":0,"ln":"350","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.38,-0.181],[0,0],[-1.129,1.591],[-3.91,2.478],[-0.492,0.309],[-0.505,0.326],[3.589,-1.934]],"o":[[-1.983,1.069],[-1.38,0.181],[0,0],[1.129,-1.591],[0.465,-0.296],[0.493,-0.309],[0,1.599],[0,0]],"v":[[81.787,-22.15],[76.548,-20.451],[74.283,-20.356],[75.563,-22.918],[82.708,-29.198],[84.148,-30.104],[85.649,-31.055],[81.785,-22.15]]}],"t":18},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":27},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":77.999},{"s":[{"c":true,"i":[[0,0],[1.38,-0.181],[0,0],[-1.129,1.591],[-3.91,2.478],[-0.492,0.309],[-0.505,0.326],[3.589,-1.934]],"o":[[-1.983,1.069],[-1.38,0.181],[0,0],[1.129,-1.591],[0.465,-0.296],[0.493,-0.309],[0,1.599],[0,0]],"v":[[81.787,-22.15],[76.548,-20.451],[74.283,-20.356],[75.563,-22.918],[82.708,-29.198],[84.148,-30.104],[85.649,-31.055],[81.785,-22.15]]}],"t":86.999}]}},{"ty":"sh","nm":"Path 2","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[5.448,3.879],[0,5.083],[-7.395,0.026],[0,0],[-6.494,-0.024],[0,-3.878],[8.756,-6.234],[0.643,-4.945]],"o":[[-0.644,-4.943],[-8.755,-6.234],[0,-3.878],[6.492,-0.024],[0,0],[7.396,0.026],[0,5.083],[-5.447,3.879],[0,0]],"v":[[66.659,-16.841],[58.137,-31.031],[44.118,-44.974],[53.469,-52.924],[66.661,-45.585],[79.85,-52.924],[89.202,-44.974],[75.182,-31.031],[66.661,-16.841]]}],"t":18},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.171,-1.171],[0,-1.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-1.79,0],[-1.171,1.171],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[29.904,-52.359],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":27},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.171,-1.171],[0,-1.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-1.79,0],[-1.171,1.171],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[29.904,-52.359],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":77.999},{"s":[{"c":true,"i":[[0,0],[5.448,3.879],[0,5.083],[-7.395,0.026],[0,0],[-6.494,-0.024],[0,-3.878],[8.756,-6.234],[0.643,-4.945]],"o":[[-0.644,-4.943],[-8.755,-6.234],[0,-3.878],[6.492,-0.024],[0,0],[7.396,0.026],[0,5.083],[-5.447,3.879],[0,0]],"v":[[66.659,-16.841],[58.137,-31.031],[44.118,-44.974],[53.469,-52.924],[66.661,-45.585],[79.85,-52.924],[89.202,-44.974],[75.182,-31.031],[66.661,-16.841]]}],"t":86.999}]}},{"ty":"sh","nm":"Path 3","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.517,1.785],[0,0.799],[-0.492,-0.309],[-0.466,-0.296],[-1.128,-1.591],[0,0],[3.967,2.138]],"o":[[-1.795,-0.967],[-0.517,-1.785],[0.506,0.326],[0.492,0.309],[3.91,2.478],[1.129,1.591],[0,0],[0,0]],"v":[[51.533,-22.15],[48.254,-26.729],[47.668,-31.055],[49.169,-30.104],[50.61,-29.198],[57.754,-22.918],[59.034,-20.356],[51.53,-22.15]]}],"t":18},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":27},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0]],"o":[[-3.58,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0]],"v":[[34.484,-54.254],[28.009,-47.779],[28.009,-13.557],[34.484,-7.082],[96.016,-7.205],[102.491,-13.68],[102.491,-47.901],[96.016,-54.377]]}],"t":77.999},{"s":[{"c":true,"i":[[0,0],[0.517,1.785],[0,0.799],[-0.492,-0.309],[-0.466,-0.296],[-1.128,-1.591],[0,0],[3.967,2.138]],"o":[[-1.795,-0.967],[-0.517,-1.785],[0.506,0.326],[0.492,0.309],[3.91,2.478],[1.129,1.591],[0,0],[0,0]],"v":[[51.533,-22.15],[48.254,-26.729],[47.668,-31.055],[49.169,-30.104],[50.61,-29.198],[57.754,-22.918],[59.034,-20.356],[51.53,-22.15]]}],"t":86.999}]}},{"ty":"sh","nm":"Path 4","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.62,3.25],[0,0],[1.462,-1.984],[0.273,-1.168],[0.109,0.357],[0.762,0.598],[0,6.459],[6.492,0],[1.621,-1.62],[0.264,-1.118],[0.242,-0.574],[0.401,1.687],[1.871,1.871],[3.096,0],[0,-9.973],[-4.754,-3.091],[0.604,-1.984],[0.006,-0.232],[1.127,1.529],[0,0],[0.728,-3.799],[0.047,-2.803],[-11.367,0.284],[-0.929,6.546],[-8.907,-0.223],[0.061,3.606]],"o":[[-0.048,-2.803],[-0.726,-3.799],[0,0],[-1.126,1.529],[-0.006,-0.23],[-0.602,-1.987],[4.752,-3.091],[0,-9.973],[-3.096,0],[-1.871,1.871],[-0.401,1.685],[-0.237,-0.564],[-0.264,-1.116],[-1.62,-1.62],[-6.492,0],[0,6.459],[-0.762,0.598],[-0.109,0.355],[-0.271,-1.168],[-1.462,-1.984],[0,0],[-0.622,3.25],[-0.061,3.606],[8.908,-0.223],[0.93,6.546],[11.368,0.284],[0,0]],"v":[[95.694,-14.07],[93.967,-24.975],[95.694,-33.461],[91.396,-31.176],[89.355,-26.181],[89.199,-27.056],[85.97,-31.263],[95.691,-44.779],[80.195,-59.089],[70.408,-57.462],[68.981,-52.038],[66.657,-46.068],[64.332,-52.038],[62.905,-57.462],[53.118,-59.089],[37.622,-44.779],[47.343,-31.263],[44.114,-27.056],[43.958,-26.181],[41.917,-31.176],[37.62,-33.461],[39.346,-24.975],[37.62,-14.07],[52.234,-1.095],[66.654,-11.382],[81.072,-1.095],[95.687,-14.07]]}],"t":18},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.775,-0.327],[0.586,-0.586],[0.327,-0.775],[0,-0.895],[0,0],[0,0],[0,0],[0,0],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[-0.895,0],[0,0],[0,0],[0,0],[-0.959,0.561],[-0.561,0.959],[0,1.193],[0,0],[0,0],[0,0],[0.561,0.959],[0.959,0.562],[1.193,0],[0,0],[0,0]],"o":[[-0.895,0],[-0.775,0.327],[-0.586,0.586],[-0.327,0.775],[0,0],[0,0],[0,0],[0,0],[0,0.895],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0,0],[0,0],[0,0],[1.193,0],[0.959,-0.561],[0.561,-0.959],[0,0],[0,0],[0,0],[0,-1.194],[-0.561,-0.959],[-0.959,-0.562],[0,0],[0,0],[0,0]],"v":[[34.484,-54.254],[31.962,-53.746],[29.904,-52.359],[28.517,-50.301],[28.009,-47.779],[28.009,-42.432],[28.009,-34.946],[28.009,-24.251],[28.009,-13.557],[28.517,-11.035],[29.904,-8.977],[31.962,-7.59],[34.484,-7.082],[50.437,-7.114],[73.226,-7.159],[96.016,-7.205],[99.286,-8.088],[101.608,-10.41],[102.491,-13.68],[102.491,-22.552],[102.491,-35.227],[102.491,-47.901],[101.608,-51.172],[99.286,-53.494],[96.016,-54.377],[80.063,-54.345],[57.274,-54.3]]}],"t":27},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.775,-0.327],[0.586,-0.586],[0.327,-0.775],[0,-0.895],[0,0],[0,0],[0,0],[0,0],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[-0.895,0],[0,0],[0,0],[0,0],[-0.959,0.561],[-0.561,0.959],[0,1.193],[0,0],[0,0],[0,0],[0.561,0.959],[0.959,0.562],[1.193,0],[0,0],[0,0]],"o":[[-0.895,0],[-0.775,0.327],[-0.586,0.586],[-0.327,0.775],[0,0],[0,0],[0,0],[0,0],[0,0.895],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0,0],[0,0],[0,0],[1.193,0],[0.959,-0.561],[0.561,-0.959],[0,0],[0,0],[0,0],[0,-1.194],[-0.561,-0.959],[-0.959,-0.562],[0,0],[0,0],[0,0]],"v":[[34.484,-54.254],[31.962,-53.746],[29.904,-52.359],[28.517,-50.301],[28.009,-47.779],[28.009,-42.432],[28.009,-34.946],[28.009,-24.251],[28.009,-13.557],[28.517,-11.035],[29.904,-8.977],[31.962,-7.59],[34.484,-7.082],[50.437,-7.114],[73.226,-7.159],[96.016,-7.205],[99.286,-8.088],[101.608,-10.41],[102.491,-13.68],[102.491,-22.552],[102.491,-35.227],[102.491,-47.901],[101.608,-51.172],[99.286,-53.494],[96.016,-54.377],[80.063,-54.345],[57.274,-54.3]]}],"t":77.999},{"s":[{"c":true,"i":[[0,0],[0.62,3.25],[0,0],[1.462,-1.984],[0.273,-1.168],[0.109,0.357],[0.762,0.598],[0,6.459],[6.492,0],[1.621,-1.62],[0.264,-1.118],[0.242,-0.574],[0.401,1.687],[1.871,1.871],[3.096,0],[0,-9.973],[-4.754,-3.091],[0.604,-1.984],[0.006,-0.232],[1.127,1.529],[0,0],[0.728,-3.799],[0.047,-2.803],[-11.367,0.284],[-0.929,6.546],[-8.907,-0.223],[0.061,3.606]],"o":[[-0.048,-2.803],[-0.726,-3.799],[0,0],[-1.126,1.529],[-0.006,-0.23],[-0.602,-1.987],[4.752,-3.091],[0,-9.973],[-3.096,0],[-1.871,1.871],[-0.401,1.685],[-0.237,-0.564],[-0.264,-1.116],[-1.62,-1.62],[-6.492,0],[0,6.459],[-0.762,0.598],[-0.109,0.355],[-0.271,-1.168],[-1.462,-1.984],[0,0],[-0.622,3.25],[-0.061,3.606],[8.908,-0.223],[0.93,6.546],[11.368,0.284],[0,0]],"v":[[95.694,-14.07],[93.967,-24.975],[95.694,-33.461],[91.396,-31.176],[89.355,-26.181],[89.199,-27.056],[85.97,-31.263],[95.691,-44.779],[80.195,-59.089],[70.408,-57.462],[68.981,-52.038],[66.657,-46.068],[64.332,-52.038],[62.905,-57.462],[53.118,-59.089],[37.622,-44.779],[47.343,-31.263],[44.114,-27.056],[43.958,-26.181],[41.917,-31.176],[37.62,-33.461],[39.346,-24.975],[37.62,-14.07],[52.234,-1.095],[66.654,-11.382],[81.072,-1.095],[95.687,-14.07]]}],"t":86.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":3},{"ty":4,"nm":"Mid","sr":1,"st":0,"op":1500,"ip":0,"ln":"349","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[-1.318,-1.005],[-1.325,-1.137],[-1.693,-1.005],[-2.424,-0.607],[0.944,-0.055],[1.074,-0.056],[0.389,-0.004],[0.795,0.041],[0.529,0.044],[0,0],[-0.137,-0.397],[-0.312,-0.755],[-0.524,-1.073],[-0.605,-1.137],[-0.465,-0.851],[0,0],[2.882,1.528],[3.24,2.376],[1.072,2.542],[-0.609,1.529],[-1.766,0.391],[-2.401,-0.871],[0,0],[0,0]],"o":[[1.674,0.607],[1.318,1.005],[1.325,1.137],[1.693,1.005],[0,0],[-0.944,0.055],[-1.074,0.056],[-0.801,0.009],[-0.795,-0.041],[-0.529,-0.044],[0,0],[0.137,0.397],[0.312,0.755],[0.419,0.856],[0.605,1.137],[0.465,0.851],[0,0],[-2.882,-1.528],[-3.24,-2.376],[-1.072,-2.542],[0.609,-1.529],[1.766,-0.391],[0,0],[0,0],[0,0]],"v":[[12.031,-25.488],[16.429,-23.004],[20.303,-19.724],[24.739,-16.445],[30.824,-13.962],[29.204,-13.867],[25.973,-13.687],[23.576,-13.583],[21.116,-13.643],[19.065,-13.782],[18.207,-13.86],[18.403,-13.254],[19.066,-11.517],[20.31,-8.765],[21.926,-5.634],[23.612,-2.51],[24.391,-1.091],[19.437,-3.554],[9.623,-9.58],[2.524,-17.127],[1.959,-23.265],[5.652,-26.176],[12.033,-25.486],[12.032,-25.487],[12.032,-25.487]]}],"t":13},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":81.999},{"s":[{"c":true,"i":[[0,0],[-1.318,-1.005],[-1.325,-1.137],[-1.693,-1.005],[-2.424,-0.607],[0.944,-0.055],[1.074,-0.056],[0.389,-0.004],[0.795,0.041],[0.529,0.044],[0,0],[-0.137,-0.397],[-0.312,-0.755],[-0.524,-1.073],[-0.605,-1.137],[-0.465,-0.851],[0,0],[2.882,1.528],[3.24,2.376],[1.072,2.542],[-0.609,1.529],[-1.766,0.391],[-2.401,-0.871],[0,0],[0,0]],"o":[[1.674,0.607],[1.318,1.005],[1.325,1.137],[1.693,1.005],[0,0],[-0.944,0.055],[-1.074,0.056],[-0.801,0.009],[-0.795,-0.041],[-0.529,-0.044],[0,0],[0.137,0.397],[0.312,0.755],[0.419,0.856],[0.605,1.137],[0.465,0.851],[0,0],[-2.882,-1.528],[-3.24,-2.376],[-1.072,-2.542],[0.609,-1.529],[1.766,-0.391],[0,0],[0,0],[0,0]],"v":[[12.031,-25.488],[16.429,-23.004],[20.303,-19.724],[24.739,-16.445],[30.824,-13.962],[29.204,-13.867],[25.973,-13.687],[23.576,-13.583],[21.116,-13.643],[19.065,-13.782],[18.207,-13.86],[18.403,-13.254],[19.066,-11.517],[20.31,-8.765],[21.926,-5.634],[23.612,-2.51],[24.391,-1.091],[19.437,-3.554],[9.623,-9.58],[2.524,-17.127],[1.959,-23.265],[5.652,-26.176],[12.033,-25.486],[12.032,-25.487],[12.032,-25.487]]}],"t":90.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[-1.258,-0.407],[-1.115,-0.611],[-0.857,-0.611],[-0.486,-0.407],[0,0],[0.383,-0.998],[0.484,-1.566],[0.305,-1.704],[-0.155,-1.412],[-0.391,-1.308],[-0.412,-1.204],[-0.217,-1.1],[0.193,-0.997],[2.764,0.236],[3.589,1.082],[2.667,1.54],[-0.002,1.611],[-0.569,2.785],[-1.266,2.859],[-2.092,1.93],[-3.048,0],[0,0],[0,0],[0,0]],"o":[[1.287,0],[1.258,0.407],[1.115,0.611],[0.857,0.611],[0.486,0.407],[0,0],[-0.383,0.998],[-0.484,1.566],[-0.305,1.704],[0.155,1.412],[0.391,1.308],[0.411,1.204],[0.217,1.1],[-0.193,0.996],[-2.764,-0.236],[-3.589,-1.082],[-2.667,-1.54],[0.002,-1.71],[0.569,-2.785],[1.266,-2.859],[2.092,-1.93],[0,0],[0,0],[0,0],[0,0]],"v":[[17.955,-59.002],[21.8,-58.34],[25.387,-56.761],[28.373,-54.877],[30.416,-53.298],[31.173,-52.636],[30.529,-51.031],[29.158,-47.077],[27.903,-42.064],[27.608,-37.283],[28.48,-33.203],[29.737,-29.434],[30.734,-25.977],[30.824,-22.832],[25.952,-21.789],[15.985,-23.862],[6.164,-27.892],[1.729,-32.716],[2.552,-39.71],[5.272,-48.427],[10.277,-55.861],[17.955,-59.007],[17.955,-59.006],[17.955,-59.005],[17.955,-59.004]]}],"t":13},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":81.999},{"s":[{"c":true,"i":[[0,0],[-1.258,-0.407],[-1.115,-0.611],[-0.857,-0.611],[-0.486,-0.407],[0,0],[0.383,-0.998],[0.484,-1.566],[0.305,-1.704],[-0.155,-1.412],[-0.391,-1.308],[-0.412,-1.204],[-0.217,-1.1],[0.193,-0.997],[2.764,0.236],[3.589,1.082],[2.667,1.54],[-0.002,1.611],[-0.569,2.785],[-1.266,2.859],[-2.092,1.93],[-3.048,0],[0,0],[0,0],[0,0]],"o":[[1.287,0],[1.258,0.407],[1.115,0.611],[0.857,0.611],[0.486,0.407],[0,0],[-0.383,0.998],[-0.484,1.566],[-0.305,1.704],[0.155,1.412],[0.391,1.308],[0.411,1.204],[0.217,1.1],[-0.193,0.996],[-2.764,-0.236],[-3.589,-1.082],[-2.667,-1.54],[0.002,-1.71],[0.569,-2.785],[1.266,-2.859],[2.092,-1.93],[0,0],[0,0],[0,0],[0,0]],"v":[[17.955,-59.002],[21.8,-58.34],[25.387,-56.761],[28.373,-54.877],[30.416,-53.298],[31.173,-52.636],[30.529,-51.031],[29.158,-47.077],[27.903,-42.064],[27.608,-37.283],[28.48,-33.203],[29.737,-29.434],[30.734,-25.977],[30.824,-22.832],[25.952,-21.789],[15.985,-23.862],[6.164,-27.892],[1.729,-32.716],[2.552,-39.71],[5.272,-48.427],[10.277,-55.861],[17.955,-59.007],[17.955,-59.006],[17.955,-59.005],[17.955,-59.004]]}],"t":90.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 3","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.318,-1.005],[1.325,-1.137],[1.693,-1.005],[2.424,-0.607],[-0.944,-0.055],[-1.074,-0.056],[-0.388,-0.004],[-0.796,0.041],[-0.529,0.044],[0,0],[0.137,-0.397],[0.312,-0.755],[0.524,-1.073],[0.605,-1.137],[0.465,-0.851],[0,0],[-2.827,1.536],[-3.184,2.383],[-1.072,2.542],[0.553,1.521],[1.711,0.384],[2.401,-0.871],[0,0],[0,0]],"o":[[-1.674,0.607],[-1.318,1.005],[-1.325,1.137],[-1.693,1.005],[0,0],[0.944,0.055],[1.074,0.056],[0.801,0.009],[0.796,-0.041],[0.529,-0.044],[0,0],[-0.137,0.397],[-0.312,0.755],[-0.419,0.856],[-0.605,1.137],[-0.465,0.851],[0,0],[2.827,-1.536],[3.184,-2.383],[1.072,-2.542],[-0.553,-1.521],[-1.711,-0.384],[0,0],[0,0],[0,0]],"v":[[-8.179,-25.488],[-12.577,-23.004],[-16.451,-19.724],[-20.887,-16.445],[-26.972,-13.962],[-25.352,-13.867],[-22.122,-13.687],[-19.725,-13.583],[-17.265,-13.643],[-15.213,-13.782],[-14.355,-13.86],[-14.551,-13.254],[-15.214,-11.517],[-16.458,-8.765],[-18.074,-5.634],[-19.76,-2.51],[-20.539,-1.091],[-15.681,-3.566],[-6.047,-9.616],[0.956,-17.176],[1.617,-23.301],[-1.897,-26.187],[-8.181,-25.486],[-8.18,-25.487],[-8.18,-25.487]]}],"t":13},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":81.999},{"s":[{"c":true,"i":[[0,0],[1.318,-1.005],[1.325,-1.137],[1.693,-1.005],[2.424,-0.607],[-0.944,-0.055],[-1.074,-0.056],[-0.388,-0.004],[-0.796,0.041],[-0.529,0.044],[0,0],[0.137,-0.397],[0.312,-0.755],[0.524,-1.073],[0.605,-1.137],[0.465,-0.851],[0,0],[-2.827,1.536],[-3.184,2.383],[-1.072,2.542],[0.553,1.521],[1.711,0.384],[2.401,-0.871],[0,0],[0,0]],"o":[[-1.674,0.607],[-1.318,1.005],[-1.325,1.137],[-1.693,1.005],[0,0],[0.944,0.055],[1.074,0.056],[0.801,0.009],[0.796,-0.041],[0.529,-0.044],[0,0],[-0.137,0.397],[-0.312,0.755],[-0.419,0.856],[-0.605,1.137],[-0.465,0.851],[0,0],[2.827,-1.536],[3.184,-2.383],[1.072,-2.542],[-0.553,-1.521],[-1.711,-0.384],[0,0],[0,0],[0,0]],"v":[[-8.179,-25.488],[-12.577,-23.004],[-16.451,-19.724],[-20.887,-16.445],[-26.972,-13.962],[-25.352,-13.867],[-22.122,-13.687],[-19.725,-13.583],[-17.265,-13.643],[-15.213,-13.782],[-14.355,-13.86],[-14.551,-13.254],[-15.214,-11.517],[-16.458,-8.765],[-18.074,-5.634],[-19.76,-2.51],[-20.539,-1.091],[-15.681,-3.566],[-6.047,-9.616],[0.956,-17.176],[1.617,-23.301],[-1.897,-26.187],[-8.181,-25.486],[-8.18,-25.487],[-8.18,-25.487]]}],"t":90.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 4","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.235,-0.412],[1.081,-0.618],[0.824,-0.618],[0.463,-0.412],[0,0],[-0.35,-0.992],[-0.441,-1.558],[-0.272,-1.698],[0.155,-1.412],[0.391,-1.308],[0.412,-1.204],[0.217,-1.1],[-0.193,-0.997],[-2.764,0.236],[-3.589,1.082],[-2.667,1.54],[0.002,1.611],[0.569,2.785],[1.266,2.859],[2.092,1.93],[3.048,0],[0,0],[0,0],[0,0]],"o":[[-1.287,0],[-1.235,0.412],[-1.081,0.618],[-0.824,0.618],[-0.463,0.412],[0,0],[0.35,0.992],[0.441,1.558],[0.272,1.698],[-0.155,1.412],[-0.391,1.308],[-0.412,1.204],[-0.217,1.1],[0.193,0.996],[2.764,-0.236],[3.589,-1.082],[2.667,-1.54],[-0.001,-1.71],[-0.569,-2.785],[-1.266,-2.859],[-2.092,-1.93],[0,0],[0,0],[0,0],[0,0]],"v":[[-14.103,-59.002],[-17.912,-58.333],[-21.412,-56.738],[-24.295,-54.833],[-26.251,-53.238],[-26.972,-52.569],[-26.382,-50.975],[-25.132,-47.044],[-23.997,-42.054],[-23.756,-37.283],[-24.628,-33.203],[-25.886,-29.434],[-26.882,-25.977],[-26.972,-22.832],[-22.1,-21.789],[-12.133,-23.862],[-2.312,-27.892],[2.123,-32.716],[1.3,-39.71],[-1.42,-48.427],[-6.425,-55.861],[-14.103,-59.007],[-14.103,-59.006],[-14.103,-59.005],[-14.103,-59.004]]}],"t":13},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":22},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[5.791,0],[0,0],[0,-3.581],[0,0],[-3.58,0],[0,0],[0,-5.79],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[-5.791,0],[0,0],[0,3.58],[0,0],[3.58,0],[0,0],[0,5.79],[0,0],[3.58,0],[0,0]],"o":[[-3.581,0],[0,0],[0,5.79],[0,0],[-3.58,0],[0,0],[0,3.58],[0,0],[5.791,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0],[0,-5.79],[0,0],[3.58,0],[0,0],[0,-3.581],[0,0],[-5.791,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.899,-71.57],[-21.375,-65.095],[-21.336,-64.858],[-31.818,-54.377],[-32.016,-54.377],[-38.491,-47.901],[-38.491,-13.68],[-32.016,-7.205],[-31.818,-7.205],[-21.336,3.277],[-21.336,3.408],[-14.861,9.884],[19.361,9.884],[25.836,3.408],[25.836,3.277],[36.318,-7.205],[36.641,-7.205],[43.116,-13.68],[43.116,-47.901],[36.641,-54.377],[36.318,-54.377],[25.836,-64.858],[25.797,-65.095],[19.322,-71.57],[-14.899,-71.57]]}],"t":81.999},{"s":[{"c":true,"i":[[0,0],[1.235,-0.412],[1.081,-0.618],[0.824,-0.618],[0.463,-0.412],[0,0],[-0.35,-0.992],[-0.441,-1.558],[-0.272,-1.698],[0.155,-1.412],[0.391,-1.308],[0.412,-1.204],[0.217,-1.1],[-0.193,-0.997],[-2.764,0.236],[-3.589,1.082],[-2.667,1.54],[0.002,1.611],[0.569,2.785],[1.266,2.859],[2.092,1.93],[3.048,0],[0,0],[0,0],[0,0]],"o":[[-1.287,0],[-1.235,0.412],[-1.081,0.618],[-0.824,0.618],[-0.463,0.412],[0,0],[0.35,0.992],[0.441,1.558],[0.272,1.698],[-0.155,1.412],[-0.391,1.308],[-0.412,1.204],[-0.217,1.1],[0.193,0.996],[2.764,-0.236],[3.589,-1.082],[2.667,-1.54],[-0.001,-1.71],[-0.569,-2.785],[-1.266,-2.859],[-2.092,-1.93],[0,0],[0,0],[0,0],[0,0]],"v":[[-14.103,-59.002],[-17.912,-58.333],[-21.412,-56.738],[-24.295,-54.833],[-26.251,-53.238],[-26.972,-52.569],[-26.382,-50.975],[-25.132,-47.044],[-23.997,-42.054],[-23.756,-37.283],[-24.628,-33.203],[-25.886,-29.434],[-26.882,-25.977],[-26.972,-22.832],[-22.1,-21.789],[-12.133,-23.862],[-2.312,-27.892],[2.123,-32.716],[1.3,-39.71],[-1.42,-48.427],[-6.425,-55.861],[-14.103,-59.007],[-14.103,-59.006],[-14.103,-59.005],[-14.103,-59.004]]}],"t":90.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":4},{"ty":4,"nm":"Left","sr":1,"st":0,"op":1500,"ip":0,"ln":"348","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[5.539,7.053],[6.722,0],[2.748,-3.245],[2.749,-3.7],[3.242,-4.074],[-0.109,-0.154],[-1.021,0.897],[-5.175,4.772],[-3.158,2.623],[1.95,-2.356],[0,0],[-11.567,5.753],[-0.698,0.435],[3.204,3.201],[2.252,1.196],[-1.033,1.116],[-1.04,-1.165],[1.001,-1.001],[0,0],[-6.433,-0.999],[-2.85,-2.879],[0,0],[-3.201,-4.603],[2.3,-0.435],[7.876,-5.535],[4.163,-6.369],[-3.91,-3.91],[0,0],[-3.489,-0.198],[0,0],[-3.544,-1.779],[-2.855,4.757]],"o":[[9.535,-15.882],[-5.686,-7.243],[-6.721,0],[-1.995,2.356],[-3.008,4.046],[-0.815,1.025],[0.158,0.221],[1.969,-1.73],[3.841,-3.541],[0,0],[-6.884,8.331],[0,0],[9.41,-4.679],[1.709,-1.07],[-1.943,-1.943],[-1.872,-0.994],[1.04,-1.122],[0.916,1.027],[-1.733,1.733],[0,0],[1.755,0.273],[2.097,2.116],[0,0],[3.993,5.738],[-4.241,0.801],[-3.392,2.384],[-6.54,10.003],[3.396,3.396],[0,0],[4.018,0.225],[0,0],[2.369,1.187],[0,0]],"v":[[-40.017,-9.121],[-38.921,-49.45],[-59.222,-59.15],[-72.047,-55.155],[-77.069,-46.421],[-90.258,-28.956],[-91.612,-26.933],[-89.916,-28.302],[-79.142,-38.147],[-69.431,-46.943],[-76.59,-38.563],[-91.439,-23.694],[-75.505,-25.962],[-60.66,-35.911],[-59.246,-49.705],[-70.741,-48.291],[-71.257,-53.988],[-67.223,-54.237],[-67.514,-50.951],[-73.209,-50.147],[-67.109,-46.432],[-56.835,-47.459],[-55.799,-41.277],[-44.694,-43.883],[-45.105,-33.522],[-59.722,-36.903],[-69.842,-22.496],[-79.817,-1.881],[-65.428,-7.583],[-65.428,-1.138],[-53.479,-12.231],[-52.539,-1.138],[-40.019,-9.116]]}],"t":9},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.644,-0.214],[0.536,-0.393],[0.392,-0.536],[0.214,-0.644],[0,-0.716],[0,0],[0,0],[0,0],[0,0],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[-0.895,0],[0,0],[0,0],[0,0],[0,0],[-0.775,0.327],[-0.586,0.586],[-0.327,0.775],[0,0.895],[0,0],[0,0],[0,0],[0,0],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0.895,0],[0,0],[0,0],[0,0]],"o":[[-0.716,0],[-0.644,0.214],[-0.536,0.393],[-0.392,0.536],[-0.214,0.644],[0,0],[0,0],[0,0],[0,0],[0,0.895],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0,0],[0,0],[0,0],[0,0],[0.895,0],[0.775,-0.327],[0.586,-0.586],[0.327,-0.775],[0,0],[0,0],[0,0],[0,0],[0,-0.895],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[0,0],[0,0],[0,0],[0,0]],"v":[[-91.516,-54.377],[-93.564,-54.047],[-95.342,-53.129],[-96.743,-51.728],[-97.661,-49.95],[-97.991,-47.901],[-97.991,-42.554],[-97.991,-35.068],[-97.991,-24.374],[-97.991,-13.68],[-97.483,-11.158],[-96.096,-9.1],[-94.038,-7.713],[-91.516,-7.205],[-82.019,-7.186],[-68.723,-7.159],[-49.728,-7.12],[-30.734,-7.082],[-28.212,-7.59],[-26.154,-8.977],[-24.767,-11.035],[-24.259,-13.557],[-24.259,-18.904],[-24.259,-26.39],[-24.259,-37.085],[-24.259,-47.779],[-24.767,-50.301],[-26.154,-52.359],[-28.212,-53.746],[-30.734,-54.254],[-40.231,-54.273],[-53.527,-54.3],[-72.522,-54.339]]}],"t":18},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0.644,-0.214],[0.536,-0.393],[0.392,-0.536],[0.214,-0.644],[0,-0.716],[0,0],[0,0],[0,0],[0,0],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[-0.895,0],[0,0],[0,0],[0,0],[0,0],[-0.775,0.327],[-0.586,0.586],[-0.327,0.775],[0,0.895],[0,0],[0,0],[0,0],[0,0],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0.895,0],[0,0],[0,0],[0,0]],"o":[[-0.716,0],[-0.644,0.214],[-0.536,0.393],[-0.392,0.536],[-0.214,0.644],[0,0],[0,0],[0,0],[0,0],[0,0.895],[0.327,0.775],[0.586,0.586],[0.775,0.327],[0,0],[0,0],[0,0],[0,0],[0.895,0],[0.775,-0.327],[0.586,-0.586],[0.327,-0.775],[0,0],[0,0],[0,0],[0,0],[0,-0.895],[-0.327,-0.775],[-0.586,-0.586],[-0.775,-0.327],[0,0],[0,0],[0,0],[0,0]],"v":[[-91.516,-54.377],[-93.564,-54.047],[-95.342,-53.129],[-96.743,-51.728],[-97.661,-49.95],[-97.991,-47.901],[-97.991,-42.554],[-97.991,-35.068],[-97.991,-24.374],[-97.991,-13.68],[-97.483,-11.158],[-96.096,-9.1],[-94.038,-7.713],[-91.516,-7.205],[-82.019,-7.186],[-68.723,-7.159],[-49.728,-7.12],[-30.734,-7.082],[-28.212,-7.59],[-26.154,-8.977],[-24.767,-11.035],[-24.259,-13.557],[-24.259,-18.904],[-24.259,-26.39],[-24.259,-37.085],[-24.259,-47.779],[-24.767,-50.301],[-26.154,-52.359],[-28.212,-53.746],[-30.734,-54.254],[-40.231,-54.273],[-53.527,-54.3],[-72.522,-54.339]]}],"t":85.999},{"s":[{"c":true,"i":[[0,0],[5.539,7.053],[6.722,0],[2.748,-3.245],[2.749,-3.7],[3.242,-4.074],[-0.109,-0.154],[-1.021,0.897],[-5.175,4.772],[-3.158,2.623],[1.95,-2.356],[0,0],[-11.567,5.753],[-0.698,0.435],[3.204,3.201],[2.252,1.196],[-1.033,1.116],[-1.04,-1.165],[1.001,-1.001],[0,0],[-6.433,-0.999],[-2.85,-2.879],[0,0],[-3.201,-4.603],[2.3,-0.435],[7.876,-5.535],[4.163,-6.369],[-3.91,-3.91],[0,0],[-3.489,-0.198],[0,0],[-3.544,-1.779],[-2.855,4.757]],"o":[[9.535,-15.882],[-5.686,-7.243],[-6.721,0],[-1.995,2.356],[-3.008,4.046],[-0.815,1.025],[0.158,0.221],[1.969,-1.73],[3.841,-3.541],[0,0],[-6.884,8.331],[0,0],[9.41,-4.679],[1.709,-1.07],[-1.943,-1.943],[-1.872,-0.994],[1.04,-1.122],[0.916,1.027],[-1.733,1.733],[0,0],[1.755,0.273],[2.097,2.116],[0,0],[3.993,5.738],[-4.241,0.801],[-3.392,2.384],[-6.54,10.003],[3.396,3.396],[0,0],[4.018,0.225],[0,0],[2.369,1.187],[0,0]],"v":[[-40.017,-9.121],[-38.921,-49.45],[-59.222,-59.15],[-72.047,-55.155],[-77.069,-46.421],[-90.258,-28.956],[-91.612,-26.933],[-89.916,-28.302],[-79.142,-38.147],[-69.431,-46.943],[-76.59,-38.563],[-91.439,-23.694],[-75.505,-25.962],[-60.66,-35.911],[-59.246,-49.705],[-70.741,-48.291],[-71.257,-53.988],[-67.223,-54.237],[-67.514,-50.951],[-73.209,-50.147],[-67.109,-46.432],[-56.835,-47.459],[-55.799,-41.277],[-44.694,-43.883],[-45.105,-33.522],[-59.722,-36.903],[-69.842,-22.496],[-79.817,-1.881],[-65.428,-7.583],[-65.428,-1.138],[-53.479,-12.231],[-52.539,-1.138],[-40.019,-9.116]]}],"t":94.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":5},{"ty":4,"nm":"Top","sr":1,"st":0,"op":1500,"ip":0,"ln":"347","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[75,75,100]},"p":{"a":0,"k":[73.75,98,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[-1.725,0],[-0.925,0.44],[-0.542,0.751],[0,0.933],[1.131,0.918],[1.725,0],[1.13,-0.918],[0,-1.4],[-1.13,-0.918]],"o":[[1.15,0],[0.925,-0.44],[0.542,-0.751],[0,-1.4],[-1.131,-0.918],[-1.725,0],[-1.13,0.918],[0,1.4],[1.13,0.918]],"v":[[2.483,-112.644],[5.636,-113.336],[7.877,-115.156],[8.73,-117.715],[6.9,-121.301],[2.483,-122.786],[-1.935,-121.301],[-3.764,-117.715],[-1.935,-114.129]]}],"t":5},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":14},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":89.999},{"s":[{"c":true,"i":[[-1.725,0],[-0.925,0.44],[-0.542,0.751],[0,0.933],[1.131,0.918],[1.725,0],[1.13,-0.918],[0,-1.4],[-1.13,-0.918]],"o":[[1.15,0],[0.925,-0.44],[0.542,-0.751],[0,-1.4],[-1.131,-0.918],[-1.725,0],[-1.13,0.918],[0,1.4],[1.13,0.918]],"v":[[2.483,-112.644],[5.636,-113.336],[7.877,-115.156],[8.73,-117.715],[6.9,-121.301],[2.483,-122.786],[-1.935,-121.301],[-3.764,-117.715],[-1.935,-114.129]]}],"t":98.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[-0.665,1.91],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.166,1.136]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.166,-1.136]],"v":[[31.173,-109.963],[27.041,-109.958],[21.138,-109.952],[15.235,-109.945],[9.404,-106.727],[3.574,-103.51],[17.374,-103.51],[31.173,-103.51],[30.674,-105.304]]}],"t":5},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":14},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":89.999},{"s":[{"c":true,"i":[[-0.665,1.91],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.166,1.136]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.166,-1.136]],"v":[[31.173,-109.963],[27.041,-109.958],[21.138,-109.952],[15.235,-109.945],[9.404,-106.727],[3.574,-103.51],[17.374,-103.51],[31.173,-103.51],[30.674,-105.304]]}],"t":98.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 3","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.095,1.21],[0.379,1.613]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.095,-1.21],[0,0]],"v":[[-26.905,-109.948],[-13.05,-109.956],[0.804,-109.965],[-5.395,-106.738],[-11.595,-103.512],[-19.251,-103.503],[-26.907,-103.495],[-26.623,-105.512],[-26.907,-109.948]]}],"t":5},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":14},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":89.999},{"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[-0.095,1.21],[0.379,1.613]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0.095,-1.21],[0,0]],"v":[[-26.905,-109.948],[-13.05,-109.956],[0.804,-109.965],[-5.395,-106.738],[-11.595,-103.512],[-19.251,-103.503],[-26.907,-103.495],[-26.623,-105.512],[-26.907,-109.948]]}],"t":98.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 4","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0,0],[-2.377,1.219],[-4.121,2.38],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[2.377,-1.219],[0,0],[0,0],[0,0],[0,0]],"v":[[-1.759,-109.577],[-2.56,-100.882],[-3.704,-88.46],[-4.848,-76.039],[-1.125,-77.881],[8.78,-83.293],[7.162,-98.587],[5.543,-113.881],[1.892,-111.729]]}],"t":5},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":14},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,-3.58],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-3.58,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-21.336,-122.595],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":89.999},{"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0,0],[-2.377,1.219],[-4.121,2.38],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[2.377,-1.219],[0,0],[0,0],[0,0],[0,0]],"v":[[-1.759,-109.577],[-2.56,-100.882],[-3.704,-88.46],[-4.848,-76.039],[-1.125,-77.881],[8.78,-83.293],[7.162,-98.587],[5.543,-113.881],[1.892,-111.729]]}],"t":98.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 5","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":1,"k":[{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0.6,0.113],[-11.773,-1.562],[0,0],[-14.191,2.772],[0,12.817],[0,0],[0,0],[18.263,0]],"o":[[-16.142,0],[0,0],[0,0],[0,12.817],[12.906,1.711],[0,0],[7.854,-1.536],[-0.73,0.054],[0,0],[0,0],[0,0]],"v":[[2.338,-77.683],[-23.68,-85.236],[-17.227,-96.927],[-26.907,-96.927],[-10.774,-71.187],[2.327,-64.792],[17.607,-72.499],[31.171,-96.927],[21.49,-96.91],[27.194,-85.234],[2.335,-77.681]]}],"t":5},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.171,-1.171],[0,-1.79],[0,0],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-1.79,0],[-1.171,1.171],[0,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-19.441,-127.175],[-21.336,-122.595],[-21.379,-92.531],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":14},{"o":{"x":0.6,"y":0},"i":{"x":0.4,"y":1},"s":[{"c":true,"i":[[0,0],[1.171,-1.171],[0,-1.79],[0,0],[0,0],[-3.58,0],[0,0],[0,3.581],[0,0],[3.58,0],[0,0]],"o":[[-1.79,0],[-1.171,1.171],[0,0],[0,0],[0,3.581],[0,0],[3.581,0],[0,0],[0,-3.58],[0,0],[0,0]],"v":[[-14.861,-129.07],[-19.441,-127.175],[-21.336,-122.595],[-21.379,-92.531],[-21.422,-62.467],[-14.947,-55.991],[19.274,-55.991],[25.75,-62.467],[25.836,-122.595],[19.361,-129.07],[-14.861,-129.07]]}],"t":89.999},{"s":[{"c":true,"i":[[0,0],[0,0],[0,0],[0.6,0.113],[-11.773,-1.562],[0,0],[-14.191,2.772],[0,12.817],[0,0],[0,0],[18.263,0]],"o":[[-16.142,0],[0,0],[0,0],[0,12.817],[12.906,1.711],[0,0],[7.854,-1.536],[-0.73,0.054],[0,0],[0,0],[0,0]],"v":[[2.338,-77.683],[-23.68,-85.236],[-17.227,-96.927],[-26.907,-96.927],[-10.774,-71.187],[2.327,-64.792],[17.607,-72.499],[31.171,-96.927],[21.49,-96.91],[27.194,-85.234],[2.335,-77.681]]}],"t":98.999}]}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.7804,0.8902,0.9961]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[0,0]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":6}],"v":"5.7.0","fr":25,"op":105,"ip":0,"assets":[]}</script>
+</head>
+<body class="locked">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH A: hringurinn -->
+<div class="splash" id="splashA" aria-hidden="true">
+  <div class="splash-rings">
+<svg class="ring" viewBox="0 0 800 800" aria-hidden="true">
+      <g class="g-outer" style="font-size:34px">
+        <text transform="rotate(0.000 400 400) translate(400 28)">R</text>
+        <text transform="rotate(3.956 400 400) translate(400 28)">E</text>
+        <text transform="rotate(7.912 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(11.868 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(15.824 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(19.780 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(27.692 400 400) translate(400 28)">R</text>
+        <text transform="rotate(31.648 400 400) translate(400 28)">E</text>
+        <text transform="rotate(35.604 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(39.560 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(43.516 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(47.473 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(55.385 400 400) translate(400 28)">R</text>
+        <text transform="rotate(59.341 400 400) translate(400 28)">E</text>
+        <text transform="rotate(63.297 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(67.253 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(71.209 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(75.165 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(83.077 400 400) translate(400 28)">R</text>
+        <text transform="rotate(87.033 400 400) translate(400 28)">E</text>
+        <text transform="rotate(90.989 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(94.945 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(98.901 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(102.857 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(110.769 400 400) translate(400 28)">R</text>
+        <text transform="rotate(114.725 400 400) translate(400 28)">E</text>
+        <text transform="rotate(118.681 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(122.637 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(126.593 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(130.549 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(138.462 400 400) translate(400 28)">R</text>
+        <text transform="rotate(142.418 400 400) translate(400 28)">E</text>
+        <text transform="rotate(146.374 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(150.330 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(154.286 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(158.242 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(166.154 400 400) translate(400 28)">R</text>
+        <text transform="rotate(170.110 400 400) translate(400 28)">E</text>
+        <text transform="rotate(174.066 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(178.022 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(181.978 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(185.934 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(193.846 400 400) translate(400 28)">R</text>
+        <text transform="rotate(197.802 400 400) translate(400 28)">E</text>
+        <text transform="rotate(201.758 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(205.714 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(209.670 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(213.626 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(221.538 400 400) translate(400 28)">R</text>
+        <text transform="rotate(225.495 400 400) translate(400 28)">E</text>
+        <text transform="rotate(229.451 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(233.407 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(237.363 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(241.319 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(249.231 400 400) translate(400 28)">R</text>
+        <text transform="rotate(253.187 400 400) translate(400 28)">E</text>
+        <text transform="rotate(257.143 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(261.099 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(265.055 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(269.011 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(276.923 400 400) translate(400 28)">R</text>
+        <text transform="rotate(280.879 400 400) translate(400 28)">E</text>
+        <text transform="rotate(284.835 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(288.791 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(292.747 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(296.703 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(304.615 400 400) translate(400 28)">R</text>
+        <text transform="rotate(308.571 400 400) translate(400 28)">E</text>
+        <text transform="rotate(312.527 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(316.484 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(320.440 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(324.396 400 400) translate(400 28) rotate(180)">L</text>
+        <text transform="rotate(332.308 400 400) translate(400 28)">R</text>
+        <text transform="rotate(336.264 400 400) translate(400 28)">E</text>
+        <text transform="rotate(340.220 400 400) translate(400 28)">Y</text>
+        <text transform="rotate(344.176 400 400) translate(400 28) rotate(180)">T</text>
+        <text transform="rotate(348.132 400 400) translate(400 28) rotate(180)">A</text>
+        <text transform="rotate(352.088 400 400) translate(400 28) rotate(180)">L</text>
+      </g>
+      <g class="g-mid" style="font-size:28px">
+        <text transform="rotate(0.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(4.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(8.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(12.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(17.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(21.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(30.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(34.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(38.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(42.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(47.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(51.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(60.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(64.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(68.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(72.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(77.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(81.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(90.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(94.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(98.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(102.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(107.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(111.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(120.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(124.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(128.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(132.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(137.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(141.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(150.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(154.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(158.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(162.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(167.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(171.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(180.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(184.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(188.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(192.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(197.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(201.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(210.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(214.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(218.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(222.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(227.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(231.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(240.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(244.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(248.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(252.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(257.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(261.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(270.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(274.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(278.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(282.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(287.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(291.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(300.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(304.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(308.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(312.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(317.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(321.429 400 400) translate(400 100) rotate(180)">L</text>
+        <text transform="rotate(330.000 400 400) translate(400 100)">R</text>
+        <text transform="rotate(334.286 400 400) translate(400 100)">E</text>
+        <text transform="rotate(338.571 400 400) translate(400 100)">Y</text>
+        <text transform="rotate(342.857 400 400) translate(400 100) rotate(180)">T</text>
+        <text transform="rotate(347.143 400 400) translate(400 100) rotate(180)">A</text>
+        <text transform="rotate(351.429 400 400) translate(400 100) rotate(180)">L</text>
+      </g>
+      <g class="g-inner" style="font-size:22px">
+        <text transform="rotate(0.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(4.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(8.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(12.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(17.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(21.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(30.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(34.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(38.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(42.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(47.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(51.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(60.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(64.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(68.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(72.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(77.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(81.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(90.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(94.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(98.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(102.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(107.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(111.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(120.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(124.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(128.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(132.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(137.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(141.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(150.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(154.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(158.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(162.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(167.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(171.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(180.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(184.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(188.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(192.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(197.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(201.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(210.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(214.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(218.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(222.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(227.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(231.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(240.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(244.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(248.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(252.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(257.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(261.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(270.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(274.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(278.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(282.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(287.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(291.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(300.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(304.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(308.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(312.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(317.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(321.429 400 400) translate(400 170) rotate(180)">L</text>
+        <text transform="rotate(330.000 400 400) translate(400 170)">R</text>
+        <text transform="rotate(334.286 400 400) translate(400 170)">E</text>
+        <text transform="rotate(338.571 400 400) translate(400 170)">Y</text>
+        <text transform="rotate(342.857 400 400) translate(400 170) rotate(180)">T</text>
+        <text transform="rotate(347.143 400 400) translate(400 170) rotate(180)">A</text>
+        <text transform="rotate(351.429 400 400) translate(400 170) rotate(180)">L</text>
+      </g>
+      <g class="g-core" style="font-size:16px">
+        <text transform="rotate(0.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(4.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(8.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(12.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(17.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(21.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(30.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(34.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(38.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(42.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(47.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(51.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(60.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(64.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(68.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(72.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(77.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(81.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(90.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(94.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(98.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(102.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(107.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(111.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(120.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(124.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(128.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(132.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(137.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(141.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(150.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(154.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(158.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(162.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(167.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(171.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(180.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(184.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(188.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(192.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(197.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(201.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(210.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(214.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(218.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(222.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(227.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(231.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(240.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(244.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(248.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(252.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(257.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(261.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(270.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(274.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(278.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(282.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(287.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(291.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(300.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(304.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(308.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(312.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(317.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(321.429 400 400) translate(400 236) rotate(180)">L</text>
+        <text transform="rotate(330.000 400 400) translate(400 236)">R</text>
+        <text transform="rotate(334.286 400 400) translate(400 236)">E</text>
+        <text transform="rotate(338.571 400 400) translate(400 236)">Y</text>
+        <text transform="rotate(342.857 400 400) translate(400 236) rotate(180)">T</text>
+        <text transform="rotate(347.143 400 400) translate(400 236) rotate(180)">A</text>
+        <text transform="rotate(351.429 400 400) translate(400 236) rotate(180)">L</text>
+      </g>
+    </svg>
+  </div>
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+</div>
+
+<!-- SPLASH B: merkið byggist upp -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+<div class="splash" id="splashC" aria-hidden="true">
+  <div class="c-rows" id="cRows"></div>
+</div>
+
+<div class="intro" id="intro">
+  <div class="intro-stage">
+    <svg class="intro-old" id="svgOld" viewBox="127 200 1666 672" aria-hidden="true">
+      <path id="kR" d="M515.4 255.8C515.4 261.7 514.2 266.7 511.9 271C509.6 275.2 506.3 278.2 502.1 279.9L521.3 315.4H492.6L479.7 284.7H470.8V315.4H446.2V227.2H479.9C491.8 227.2 500.7 229.5 506.7 234C512.6 238.6 515.6 245.8 515.6 255.8H515.4ZM489.8 256.7C489.8 252.8 489.1 250.2 487.7 248.8C486.3 247.5 483.7 246.8 480.1 246.8H470.8V267H479.9C481.7 267 483.3 266.9 484.5 266.6C485.8 266.3 486.8 265.8 487.6 265.1C488.4 264.4 489 263.3 489.3 261.9C489.7 260.5 489.8 258.8 489.8 256.7Z"/>
+      <path id="kE" d="M634.8 294.8L634.3 315.4H572.1V227.2H632.8L633.2 248H596.7V260.9H626.8V279.7H596.7V294.8H634.8Z"/>
+      <path id="kY" d="M709.9 227.2L721.9 257L725.3 265.8H725.7L728.9 256.9L740.4 227.2H767.2L737.7 288.1V315.4H712.5V288.1L682.4 227.2H709.9Z"/>
+      <path d="M867.5 315.4L849.3 280H842.7V315.4H818.1V227.2H842.7V261H849.6L867.7 227.2H895.6L871.8 269.2L896.9 315.4H867.5Z"/>
+      <path d="M1002.3 281.7C1002.3 288.3 1001.4 293.9 999.7 298.4C997.9 303 995.4 306.6 992.2 309.3C989 312 985.1 314 980.4 315.2C975.8 316.4 970.6 317 964.9 317C959.2 317 958.1 316.7 955.2 316.2C952.3 315.6 949.7 314.9 947.4 313.8L948.7 293.9C950 294.6 951.8 295.2 953.9 295.6C956 296 958.4 296.2 961 296.2C966.5 296.2 970.6 295 973.3 292.7C976 290.4 977.4 286.5 977.4 281.1V227H1002.5V281.5L1002.3 281.7Z"/>
+      <path d="M1106.4 300.3H1079.1L1075.2 315.5H1049.2L1078.5 227.3H1107.9L1137.7 315.5H1110.3L1106.4 300.3ZM1090.5 255.9L1084.1 280.6H1101.4L1095.2 256L1093.1 246.6H1092.7L1090.5 255.9Z"/>
+      <path d="M1259 227.2L1229.8 315.4H1202.4L1173.3 227.2H1200.4L1214.4 281.4L1216.6 290.6H1217L1219.1 281.4L1233.5 227.2H1259Z"/>
+      <path d="M1310.9 227.2H1336.1V315.4H1310.9V227.2ZM1347.9 208.1L1331 222.5H1313L1319.7 208.1H1347.9Z"/>
+      <path d="M1444.5 315.4L1426.3 280H1419.7V315.4H1395.1V227.2H1419.7V261H1426.6L1444.7 227.2H1472.6L1448.8 269.2L1473.9 315.4H1444.5Z"/>
+      <path d="M151.3 847.5H1768.7V295.3H1553.1V271.8H1792.5V871.9H127.5V271.8H367.1V294.8H151.3V847.5Z"/>
+      <path id="kA" d="M1485.3 651.1H1508.5C1509.2 675.1 1496.7 692.4 1474.1 699.2C1445.2 707.8 1417.6 700.2 1399.2 678C1380.4 698 1356.7 704.1 1330.2 702.1C1304.8 700.2 1287.8 685 1283.6 660.6C1279.4 636 1290.3 613.3 1313.3 604.8C1330.9 598.3 1349.9 595.2 1368.1 590.3C1393.5 583.4 1396.6 569.6 1396.6 566.2C1396.4 545.5 1383.3 535.5 1363.2 540.8C1354.7 543 1349.9 548.3 1348.2 557.3C1344.3 577.9 1331.7 585.4 1311.1 580.2C1296.8 576.5 1289.6 563.6 1296.6 550.5C1300.7 542.8 1307.4 535 1314.9 530.9C1353.2 509.8 1393.3 509.1 1433.3 525.2C1453.6 533.4 1462.3 550.5 1462.4 572.1C1462.5 599.9 1462.4 627.8 1462.4 655.6C1462.4 658.7 1464.8 672 1473.5 672C1482.2 672 1485.3 651.3 1485.3 651.3V651.1ZM1396.5 606.8C1383.2 613 1370.7 617.9 1359.2 624.6C1348.5 630.8 1345.4 643.8 1350 655.3C1353.8 665 1362.8 670 1374.5 668.9C1386.2 667.8 1395.8 661.5 1396.3 652.7C1397.1 638.1 1396.5 623.5 1396.5 606.8Z"/>
+      <path id="kT" d="M1136.8 546.8H1110.1V522.5C1143.7 522.5 1173.9 504.4 1173.9 449.3H1204.8V522.1H1248.3L1248 546.7H1205.8C1205.8 546.7 1204.8 615.7 1204.9 647.2C1204.9 654.5 1207.7 664.8 1219.5 664.8C1231.3 664.8 1239.3 645.9 1242.5 640C1249.7 643 1256.8 646 1263.9 649C1255 684.2 1223.5 703.4 1185.1 697.6C1153.4 692.8 1137.9 676.1 1137.2 644.1C1136.5 615.3 1136.9 546.7 1136.9 546.7L1136.8 546.8Z"/>
+      <path d="M651.6 494.4C630.7 494.4 614.3 477.6 614.6 456.8C614.9 436.5 631.3 420.1 651.6 420C672.3 419.9 689 436.5 689 457.3C689 478.2 672.6 494.4 651.6 494.4Z"/>
+      <path d="M267 456V430.6C321.8 431 381.7 430.3 436.4 432.4C477.4 433.9 515 447 541.7 480.4C574.9 521.9 577 568.7 559.3 616.6C542.4 662.4 506.6 685.7 459.6 692.7C442.4 695.3 424.9 695.9 407.5 696.1C364 696.6 271 696.3 267.3 696.3V669.3H279.7C293.1 669.3 304 658.4 304.1 645C304.1 607.2 304.2 520.3 304.2 478.9C304.2 466.3 294 456.1 281.4 456.1H267.1L267 456ZM377.5 456.5C377.5 456.5 377.5 638.8 377.5 645.9C377.5 653 379.3 664.9 392.1 667C410.5 670 465.1 667.2 482 626.9C498.3 588.2 499.3 548.3 485 508.7C477.2 487.2 463.1 470.4 441.1 462C420.9 454.3 377.5 456.5 377.5 456.5Z"/>
+      <path d="M944.9 516.9C933.6 512.6 923.2 514.9 913.7 521.9C909.1 525.3 905 529.3 900.8 532.9C869.8 516 853 512 818.6 514.8C795.1 516.7 773.7 524.3 757.4 542.5C732.9 570 739 609.6 770.5 628.3C774.6 630.7 778.9 632.8 784.3 635.8C780.8 637 778.6 637.8 776.4 638.5C757.9 644.4 748.7 655 747.8 671.3C746.9 688.6 755.1 701.5 773.4 708.3C783.9 712.2 795.1 714.5 806.2 716.6C830.2 721.2 854.4 724.9 878.4 729.7C891.9 732.4 896.9 745.8 888 756.3C882.9 762.3 875.4 767.1 868 769.9C849.8 776.8 830.8 776.8 811.9 772.9C785.3 767.3 777.7 753 787.2 727.5C789 722.6 788 719.3 783.2 717.1C770.7 711.3 747.4 717 738.5 728.2C729.8 739.1 729.9 757.2 741.1 768.7C749 776.8 759 784.1 769.5 787.9C804.8 800.9 841.3 802.1 877.8 792.9C895.9 788.3 912 779.7 924.5 765.3C951.7 733.6 941.2 691.1 902.2 676.6C892.8 673.1 882.8 670.9 872.9 669.2C852.7 665.8 832.3 663.4 812.1 660.3C806.9 659.5 801 658.1 801.3 651.4C801.6 644.3 807.8 643.2 813.4 642.9C824.7 642.2 836 642.1 847.3 641.3C867.3 639.9 885.7 634.1 901.6 621.5C912.1 613.2 918.7 602.6 921 589.3C923.1 577.4 921.4 566.2 916.3 555.3C914.6 551.7 910.4 548 916 544.3C921.7 540.6 923.3 545.7 925.7 549.1C926.4 550.1 927.1 551.2 927.9 552C936.8 561.4 954.5 558.1 958.5 546.3C962.6 534.3 956.6 521.4 944.8 516.9H944.9ZM854.3 603.9C850.9 613.4 844 618.9 833.6 619.2C823.7 619.5 815.9 614.1 811.8 604.1C810.5 601 809.4 597.8 808.9 594.5C808.2 589.7 803.2 540.3 835.8 540.3C868.4 540.3 859.8 588.2 854.2 604L854.3 603.9Z"/>
+      <path d="M977.5 550.7V527.6C1009.6 523.6 1041.6 519.6 1074.5 515.4C1074.5 518.1 1074.5 621.4 1074.5 658.5C1074.5 665.7 1080.4 671.6 1087.6 671.6H1102.8V695.5H977.8V671.6H993.4C1000.7 671.6 1006.5 665.7 1006.5 658.5C1006.5 635.7 1006.5 589.1 1006.4 566.2C1006.4 557.9 1002 553.1 993.8 552C988.7 551.3 983.5 551.1 977.5 550.7Z"/>
+      <path d="M1037.1 494.5C1016.2 494.5 999.8 477.7 1000.1 456.9C1000.4 436.6 1016.8 420.2 1037.1 420.1C1057.8 420 1074.5 436.6 1074.5 457.4C1074.5 478.3 1058.1 494.5 1037.1 494.5Z"/>
+      <path id="kL" d="M1525.2 458V434.9C1557.3 430.9 1589.3 426.9 1622.2 422.7C1622.2 425.4 1622.2 621.6 1622.2 658.7C1622.2 665.9 1628.1 671.8 1635.3 671.8H1650.5V695.7H1525.5V671.8H1541.1C1548.4 671.8 1554.2 665.9 1554.2 658.7C1554.2 635.9 1554.2 496.3 1554.1 473.5C1554.1 465.2 1549.7 460.4 1541.5 459.3C1536.4 458.6 1531.2 458.4 1525.2 458Z"/>
+      <path d="M592 550.5V527.4C624.1 523.4 656.1 519.4 689 515.2C689 517.9 689 621.2 689 658.3C689 665.5 694.9 671.4 702.1 671.4H717.3V695.3H592.3V671.4H607.9C615.2 671.4 621 665.5 621 658.3C621 635.5 621 588.9 620.9 566C620.9 557.7 616.5 552.9 608.3 551.8C603.2 551.1 598 550.9 592 550.5Z"/>
+    </svg>
+
+    <div class="stack-wrap">
+    <svg class="intro-svg" id="svgStack" viewBox="0 0 23.19 18.89" aria-hidden="true">
+      <g id="gT">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+      </g>
+      <g id="gR">
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </g>
+    </svg>
+    <div class="intro-caption">
+      <span class="old-name">Reykjavík Digital</span>
+      <span class="arrow">→</span>
+      <span>Reytal</span>
+    </div>
+    </div><!-- /.stack-wrap -->
+  </div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="index.html" class="active">Heim</a>
+  <a href="thjonusta.html">Þjónusta</a>
+  <a href="verkefni.html">Verkefni</a>
+  <a href="um-okkur.html">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb">
+    <div class="blob"></div>
+  </div>
+<header>
+  <nav class="wrap">
+    <a href="index.html" class="logo-mark" id="logoTarget" aria-label="Reytal">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="index.html" class="active">Heim</a></li>
+      <li><a href="thjonusta.html">Þjónusta</a></li>
+      <li><a href="verkefni.html">Verkefni</a></li>
+      <li><a href="um-okkur.html">Um okkur</a></li>
+      <li><a href="#" id="splashBtn">Splash</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="headline-wrap">
+      <h1><span class="accent">Vefkerfi</span> og stafrænar<br>lausnir fyrir fyrirtæki<br>sem vaxa.</h1>
+    </div>
+    <div class="hero-copy">
+      <div class="hero-cta">
+        <a href="bokun.html" class="btn-primary">Bóka samtal</a>
+      </div>
+      <p>Reytal hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni, byggt á áratugareynslu Reykjavík Digital.</p>
+    </div>
+    <div class="meta-row">
+      <div class="tag">Reykjavík</div>
+      <div class="tag">Tallinn</div>
+      <div class="tag">15+ ára reynsla</div>
+      <div class="tag">Vefir í umsjón</div>
+    </div>
+
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="showcase" id="work">
+  <div class="show-sticky" id="showSticky">
+    <div class="show-bg" id="showBg"></div>
+
+    <div class="show-slide" data-color="#2E1A47">
+      <div class="slide-life" data-name="TAKK">
+        <div class="life-glow a"></div>
+        <div class="life-glow b"></div>
+        <div class="life-rows"></div>
+      </div>
+      <img class="slide-media" src="https://images.prismic.io/project-takk/aM1kaZ5xUNkB06Pg_Hero.avif?auto=format,compress&w=2400" alt="">
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Takk</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
+          <a class="show-link" href="https://www.takkkronur.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Takk">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FALIÐ Í BILI (Kirkjan): fjarlægðu þetta comment til að sýna aftur
+    <div class="show-slide" data-color="#481E35">
+      <div class="slide-lottie" id="lottieCross"></div>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Þjóðkirkjan</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">UX</span><span class="show-tag">SEO</span></div>
+          <a class="show-link" href="https://kirkjan.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Þjóðkirkjan">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+    -->
+    <div class="show-slide" data-color="#B5121B">
+      <div class="slide-life" data-name="VERKÍS">
+        <div class="life-glow a"></div>
+        <div class="life-glow b"></div>
+        <div class="life-rows"></div>
+      </div>
+      <video class="slide-media" muted loop playsinline preload="metadata"
+             src="verkis.mp4"></video>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Verkís</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
+          <a class="show-link" href="https://verkis.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Verkís">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+    <div class="show-slide" data-color="#22372B">
+      <div class="slide-life" data-name="ORKUREITURINN">
+        <div class="life-glow a"></div>
+        <div class="life-glow b"></div>
+        <div class="life-rows"></div>
+      </div>
+      <video class="slide-media" muted loop playsinline preload="metadata"
+             src="orkureiturinn.mp4"></video>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Orkureiturinn</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span><span class="show-tag">Söluvefur ársins 2025</span></div>
+          <a class="show-link" href="https://orkureiturinn.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Orkureiturinn">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+    <!-- FALIÐ Í BILI (Sigur Rós): fjarlægðu þetta comment til að sýna aftur
+    <div class="show-slide" data-color="#101014">
+      <div class="slide-life">
+        <div class="aurora x1"></div>
+        <div class="aurora x2"></div>
+        <div class="aurora x3"></div>
+      </div>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Sigur Rós</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
+          <a class="show-link" href="https://sigurros.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: Sigur Rós">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+    -->
+    <div class="show-slide" data-color="#E4572E">
+      <div class="slide-life" data-name="LÍTTUPP">
+        <div class="life-glow a"></div>
+        <div class="life-glow b"></div>
+        <div class="life-rows"></div>
+      </div>
+      <video class="slide-media" muted loop playsinline preload="metadata"
+             src="https://littupp.is/videos/Littupp-Desktop-Party.mp4"></video>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Líttupp</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
+          <a class="show-link" href="https://littupp.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Líttupp">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+    <div class="show-slide" data-color="#0B4F7A">
+      <div class="slide-life" data-name="SKJÁHÆTTA">
+        <div class="life-glow a"></div>
+        <div class="life-glow b"></div>
+        <div class="life-rows"></div>
+      </div>
+      <video class="slide-media" muted loop playsinline preload="metadata"
+             src="https://skjahaetta.is/videos/Sjova_Skjahaetta26_1920x1080_Gudmundur_web.mp4"></video>
+      <div class="show-panel">
+        <div class="panel-info">
+          <span class="panel-eyebrow">Valin verkefni</span>
+          <h3>Skjáhætta</h3>
+        </div>
+        <div class="panel-side">
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
+          <a class="show-link" href="https://skjahaetta.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Skjáhætta">Skoða verkefni →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="clients-section">
+  <div class="wrap">
+    <div class="clients">
+      <div class="label">Meðal viðskiptavina</div>
+      <div class="marquee">
+        <div class="marquee-track">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgzIiBoZWlnaHQ9IjU2IiB2aWV3Qm94PSIwIDAgMjgzIDU2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMjczLjQ3NCA0MS44MjQyQzI3My44MTkgNDEuNTY1NyAyNzQuMDc4IDQxLjA0ODggMjc0LjI1IDQwLjI3MzRDMjc0LjQyMiAzOS40OTggMjc0LjUwOCAzOC4zMzQ5IDI3NC41MDggMzYuNzg0MlYyOC40MjcyQzI3NC41MDggMjYuNjYxMSAyNzQuMTIxIDI1LjMyNTcgMjczLjM4OCAyNC40NjQyQzI3Mi42MTMgMjMuNjAyNiAyNzEuNTc5IDIzLjEyODggMjcwLjIwMSAyMy4xMjg4QzI2OS4wODEgMjMuMTI4OCAyNjcuOTE4IDIzLjQzMDMgMjY2Ljc5OCAyNC4wMzM0QzI2NS42MzQgMjQuNjM2NSAyNjQuNjAxIDI1LjQxMTkgMjYzLjY5NiAyNi4zNTk1VjM2Ljg3MDNDMjYzLjY5NiAzOC41MDcyIDI2My43MzkgMzkuNjcwMyAyNjMuODY4IDQwLjM1OTVDMjYzLjk5OCA0MS4wOTE5IDI2NC4yNTYgNDEuNjA4OCAyNjQuNjQ0IDQxLjg2NzJDMjY1LjAzMSA0Mi4xMjU3IDI2NS42NzggNDIuMjU0OSAyNjYuNTM5IDQyLjI1NDlWNDMuMDczNEgyNTUuNjQxVjQyLjI1NDlDMjU2LjQ1OSA0Mi4yNTQ5IDI1Ny4wNjIgNDIuMTI1NyAyNTcuNDkzIDQxLjg2NzJDMjU3Ljg4MSA0MS42MDg4IDI1OC4xMzkgNDEuMDkxOSAyNTguMzExIDQwLjMxNjVDMjU4LjQ0MSAzOS41ODQyIDI1OC41MjcgMzguNDIxMSAyNTguNTI3IDM2Ljg3MDNWMjQuMjkxOUgyNTUuNjQxVjIzLjUxNjVDMjU3LjEwNSAyMy41MTY1IDI1OC41NyAyMy4yMTQ5IDI1OS45OTEgMjIuNjExOUMyNjEuMzcgMjIuMDA4OCAyNjIuMzYxIDIxLjE0NzIgMjYyLjkyMSAyMC4wNzAzSDI2My42OTZWMjUuMTEwM0gyNjMuNzM5QzI2NC44NTkgMjMuNzc0OSAyNjYuMjM4IDIyLjY1NDkgMjY3Ljg3NCAyMS43MDcyQzI2OS41MTEgMjAuODAyNiAyNzEuMTkxIDIwLjMyODggMjcyLjkxNCAyMC4zMjg4QzI3NS4wMjUgMjAuMzI4OCAyNzYuNjYyIDIwLjk3NDkgMjc3Ljg2OCAyMi4yNjcyQzI3OS4wNzQgMjMuNTU5NSAyNzkuNjc4IDI1LjYyNzIgMjc5LjY3OCAyOC40MjcyVjM2Ljc4NDJDMjc5LjY3OCAzOC40MjExIDI3OS43MjEgMzkuNjI3MiAyNzkuODUgNDAuMzU5NUMyNzkuOTc5IDQxLjA5MTkgMjgwLjIzOCA0MS42MDg4IDI4MC42NjggNDEuODY3MkMyODEuMDU2IDQyLjEyNTcgMjgxLjcwMiA0Mi4yNTQ5IDI4Mi42MDcgNDIuMjU0OVY0My4wNzM0SDI3MS43OTRWNDIuMjU0OUMyNzIuNTI3IDQyLjI1NDkgMjczLjA4NyA0Mi4xMjU3IDI3My40NzQgNDEuODI0MloiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTIzNC43NTQgNDIuNDY5N0MyMzMuNzIgNDEuNTY1IDIzMy4yMDMgNDAuMzE1OCAyMzMuMjAzIDM4LjcyMkMyMzMuMjAzIDM0LjMyODEgMjM3LjcyNiAzMS4zOTg5IDI0Ni43NzIgMjkuODQ4MVYyNi45NjJDMjQ2Ljc3MiAyNC44OTQzIDI0Ni41MTQgMjMuNDI5NyAyNDUuOTk3IDIyLjQ4MkMyNDUuNDggMjEuNTc3NCAyNDQuNjE4IDIxLjEwMzUgMjQzLjQ1NSAyMS4xMDM1QzI0Mi41MDggMjEuMTAzNSAyNDEuNzMyIDIxLjQwNSAyNDEuMTI5IDIxLjk2NUMyNDAuNTI2IDIyLjUyNSAyMzkuODggMjMuMzQzNSAyMzkuMjM0IDI0LjQyMDRDMjM4LjY3NCAyNS4zNjgxIDIzOC4xNTcgMjYuMTAwNCAyMzcuNjgzIDI2LjU3NDNDMjM3LjIwOSAyNy4wNDgxIDIzNi42MDYgMjcuMjYzNSAyMzUuOTE3IDI3LjI2MzVDMjM1LjMxNCAyNy4yNjM1IDIzNC44ODMgMjcuMDkxMiAyMzQuNTM4IDI2Ljc0NjZDMjM0LjE5NCAyNi40MDIgMjM0LjAyMiAyNS45MjgxIDIzNC4wMjIgMjUuMzI1QzIzNC4wMjIgMjQuNDYzNSAyMzQuNDA5IDIzLjY4ODEgMjM1LjI3MSAyMi45MTI3QzIzNi4xMzIgMjIuMTM3NCAyMzcuMjk1IDIxLjUzNDMgMjM4Ljc2IDIxLjA2MDRDMjQwLjIyNSAyMC41ODY2IDI0MS45MDUgMjAuMzI4MSAyNDMuNzE0IDIwLjMyODFDMjQ2LjQ3MSAyMC4zMjgxIDI0OC40OTUgMjAuOTMxMiAyNDkuODc0IDIyLjEzNzRDMjUxLjI1MiAyMy4zNDM1IDI1MS45NDIgMjUuMjgyIDI1MS45NDIgMjguMDM4OVYzNy44MTc0QzI1MS45NDIgMzkuMDY2NiAyNTIuMDI4IDM5Ljk3MTIgMjUyLjI0MyA0MC41MzEyQzI1Mi40NTggNDEuMDkxMiAyNTIuODQ2IDQxLjM0OTcgMjUzLjM2MyA0MS4zNDk3QzI1My44MzcgNDEuMzQ5NyAyNTQuMzExIDQxLjEzNDMgMjU0Ljc0MiA0MC42NjA0TDI1NS4yNTkgNDEuMTc3NEMyNTMuNzk0IDQyLjk4NjYgMjUyLjE1NyA0My44NDgxIDI1MC40MzQgNDMuODQ4MUMyNDkuMjI4IDQzLjg0ODEgMjQ4LjMyMyA0My40NjA0IDI0Ny43MiA0Mi42ODVDMjQ3LjExNyA0MS45MDk3IDI0Ni44MTUgNDAuOTE4OSAyNDYuODE1IDM5LjY2OTdWMzkuNTQwNEgyNDYuNjQzQzI0NS41MjMgNDEuMDA1IDI0NC4zMTcgNDIuMDgyIDI0My4wNjggNDIuNzcxMkMyNDEuNzc1IDQzLjUwMzUgMjQwLjM5NyA0My44NDgxIDIzOC44ODkgNDMuODQ4MUMyMzcuMTY2IDQzLjg0ODEgMjM1Ljc4OCA0My40MTc0IDIzNC43NTQgNDIuNDY5N1pNMjQ2Ljc3MiAzOC4yMDVWMzAuNzA5N0MyNDQuNDg5IDMxLjE0MDQgMjQyLjUwOCAzMS45MTU4IDI0MC44NzEgMzMuMDM1OEMyMzkuMTkxIDM0LjE1NTggMjM4LjM3MiAzNS42MjA0IDIzOC4zNzIgMzcuMzQzNUMyMzguMzcyIDM4LjQ2MzUgMjM4LjY3NCAzOS4zMjUgMjM5LjI3NyAzOS45NzEyQzIzOS44OCA0MC42MTc0IDI0MC43NDIgNDAuOTE4OSAyNDEuODE5IDQwLjkxODlDMjQzLjU4NSA0MC45MTg5IDI0NS4yMjIgNDAuMDE0MyAyNDYuNzcyIDM4LjIwNVoiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTIxNy41MDMgNTMuNTg1MkMyMTYuNzI4IDUzLjA2ODIgMjE2LjM0IDUyLjM3OSAyMTYuMzQgNTEuNTYwNkMyMTYuMzQgNTAuOTU3NSAyMTYuNTEyIDUwLjQ4MzYgMjE2Ljk0MyA1MC4wNTI5QzIxNy4zMzEgNDkuNjY1MiAyMTcuODQ4IDQ5LjQ0OTggMjE4LjQ1MSA0OS40NDk4QzIxOS4wMTEgNDkuNDQ5OCAyMTkuNDg0IDQ5LjYyMjEgMjE5Ljg3MiA0OS45NjY3QzIyMC4yNiA1MC4zMTEzIDIyMC42OTEgNTAuODI4MiAyMjEuMTIxIDUxLjQ3NDRDMjIxLjQ2NiA1Mi4wMzQ0IDIyMS43NjggNTIuNDY1MiAyMjIuMDY5IDUyLjcyMzZDMjIyLjMyOCA1Mi45ODIxIDIyMi42NzIgNTMuMTExMyAyMjMuMDYgNTMuMTExM0MyMjMuNjIgNTMuMTExMyAyMjQuMDUxIDUyLjcyMzYgMjI0LjM1MiA1MS44NjIxQzIyNC42NTQgNTEuMDQzNiAyMjQuODI2IDQ5Ljg4MDYgMjI0LjgyNiA0OC4zMjk4VjI0LjMzNTlIMjIxLjk0VjIzLjUxNzVDMjIzLjQwNCAyMy41MTc1IDIyNC44NjkgMjMuMjE1OSAyMjYuMjQ4IDIyLjYxMjlDMjI3LjYyNiAyMi4wMDk4IDIyOC42MTcgMjEuMTQ4MiAyMjkuMTc3IDIwLjA3MTNIMjI5Ljk5NVY0NC4wMjIxQzIyOS45OTUgNDcuMjA5OCAyMjkuMTc3IDQ5Ljc1MTMgMjI3LjU0IDUxLjYwMzZDMjI1LjkwMyA1My40NTU5IDIyMy43NDkgNTQuMzYwNiAyMjEuMDM1IDU0LjM2MDZDMjE5LjQ0MSA1NC4zNjA2IDIxOC4yNzggNTQuMTAyMSAyMTcuNTAzIDUzLjU4NTJaTTIyNS4xMjggMTUuNjc3NUMyMjQuNTI0IDE1LjA3NDQgMjI0LjIyMyAxNC4zNDIxIDIyNC4yMjMgMTMuNDgwNkMyMjQuMjIzIDEyLjYxOSAyMjQuNTI0IDExLjg0MzYgMjI1LjEyOCAxMS4yNDA2QzIyNS43MzEgMTAuNjM3NSAyMjYuNDIgMTAuMzM1OSAyMjcuMjgxIDEwLjMzNTlDMjI4LjEgMTAuMzM1OSAyMjguODMyIDEwLjYzNzUgMjI5LjQzNSAxMS4yNDA2QzIzMC4wMzggMTEuODQzNiAyMzAuMzQgMTIuNjE5IDIzMC4zNCAxMy40ODA2QzIzMC4zNCAxNC4zNDIxIDIzMC4wMzggMTUuMDc0NCAyMjkuNDM1IDE1LjY3NzVDMjI4LjgzMiAxNi4yODA2IDIyOC4xNDMgMTYuNTgyMSAyMjcuMjgxIDE2LjU4MjFDMjI2LjQyIDE2LjU4MjEgMjI1LjczMSAxNi4yODA2IDIyNS4xMjggMTUuNjc3NVoiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTE5OS4zMjkgNDEuODY2M0MxOTkuNzE3IDQxLjYwNzggMTk5Ljk3NSA0MS4wOTA5IDIwMC4xNDcgNDAuMzU4NkMyMDAuMjc3IDM5LjYyNjMgMjAwLjM2MyAzOC40NjMyIDIwMC4zNjMgMzYuODY5NFYxMi4xODYzSDE5Ny40NzdWMTEuNDEwOUMxOTguOTQxIDExLjQxMDkgMjAwLjQwNiAxMS4xMDk0IDIwMS43ODQgMTAuNTA2M0MyMDMuMTYzIDkuOTAzMiAyMDQuMTU0IDkuMDQxNjYgMjA0LjcxNCA4LjAwNzgxSDIwNS41MzJWMzIuMjYwMUwyMTIuODk4IDI1LjU0MDFDMjE0LjAxOCAyNC41MDYzIDIxNC41NzggMjMuNjg3OCAyMTQuNTc4IDIyLjk5ODZDMjE0LjU3OCAyMi4yMjMyIDIxMy42NzQgMjEuNzkyNCAyMTEuOTUxIDIxLjc5MjRWMjEuMTAzMkgyMjEuNjQzVjIxLjc5MjRDMjIwLjM5NCAyMS43OTI0IDIxOS4yMzEgMjIuMDk0IDIxOC4xNTQgMjIuNjU0QzIxNy4wNzcgMjMuMjE0IDIxNS43ODQgMjQuMTYxNyAyMTQuMzIgMjUuNTQwMUwyMTEuNTIgMjguMDgxN0wyMTguNTQxIDM4LjU0OTRDMjE5LjQ0NiAzOS45Mjc4IDIyMC4yMjEgNDAuODc1NSAyMjAuODI0IDQxLjQzNTVDMjIxLjQyNyA0MS45OTU1IDIyMi4yMDMgNDIuMjU0IDIyMy4xNTEgNDIuMjU0VjQzLjA3MjRIMjE1LjI2N0MyMTQuMjc3IDQxLjUyMTcgMjEzLjExNCAzOS43NTU1IDIxMS44MjEgMzcuNzMwOUwyMDcuNjQzIDMxLjYxNEwyMDUuNTMyIDMzLjUwOTRWMzYuODY5NEMyMDUuNTMyIDM4LjUwNjMgMjA1LjU3NSAzOS42Njk0IDIwNS43MDQgNDAuMzU4NkMyMDUuODM0IDQxLjA5MDkgMjA2LjA5MiA0MS42MDc4IDIwNi40OCA0MS44NjYzQzIwNi44NjcgNDIuMTI0NyAyMDcuNTE0IDQyLjI1NCAyMDguNDE4IDQyLjI1NFY0My4wNzI0SDE5Ny40MzRWNDIuMjU0QzE5OC4yOTUgNDIuMjU0IDE5OC44OTggNDIuMTI0NyAxOTkuMzI5IDQxLjg2NjNaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik0xODIuMjc0IDQxLjgyNDJDMTgyLjY2MiA0MS41NjU3IDE4Mi45MiA0MS4wNDg4IDE4My4wOTMgNDAuMjczNEMxODMuMjIyIDM5LjU0MTEgMTgzLjMwOCAzOC4zNzggMTgzLjMwOCAzNi43ODQyVjI0LjI5MTlIMTgwLjQyMlYyMy41MTY1QzE4MS44ODYgMjMuNTE2NSAxODMuMzUxIDIzLjIxNDkgMTg0Ljc3MyAyMi42MTE5QzE4Ni4xOTQgMjIuMDA4OCAxODcuMTg1IDIxLjE0NzIgMTg3LjcwMiAyMC4wNzAzSDE4OC40NzdWMjYuMjMwM0gxODguNjA2QzE4OS4zODIgMjQuNTA3MiAxOTAuMjg2IDIzLjA4NTcgMTkxLjQwNiAyMS45NjU3QzE5Mi41MjYgMjAuODg4OCAxOTMuNjkgMjAuMzI4OCAxOTQuOTM5IDIwLjMyODhDMTk1LjggMjAuMzI4OCAxOTYuNDkgMjAuNjMwMyAxOTcuMDA2IDIxLjE0NzJDMTk3LjUyMyAyMS42NjQyIDE5Ny44MjUgMjIuMzk2NSAxOTcuODI1IDIzLjI1OEMxOTcuODI1IDI0LjExOTUgMTk3LjYxIDI0Ljc2NTcgMTk3LjE3OSAyNS4xOTY1QzE5Ni43NDggMjUuNjcwMyAxOTYuMjMxIDI1Ljg4NTcgMTk1LjYyOCAyNS44ODU3QzE5NS4yODMgMjUuODg1NyAxOTQuOTM5IDI1Ljg0MjYgMTk0LjY4IDI1LjY3MDNDMTk0LjQyMiAyNS41NDExIDE5NC4wNzcgMjUuMzI1NyAxOTMuNjQ2IDI0Ljk4MTFDMTkzLjMwMiAyNC43MjI2IDE5My4wNDMgMjQuNTUwMyAxOTIuODI4IDI0LjQyMTFDMTkyLjU3IDI0LjMzNDkgMTkyLjM1NCAyNC4yNDg4IDE5Mi4wOTYgMjQuMjQ4OEMxOTAuNzE3IDI0LjI0ODggMTg5LjUxMSAyNS42MjcyIDE4OC40NzcgMjguMjk4VjM2Ljc4NDJDMTg4LjQ3NyAzOC4zMzQ5IDE4OC41MiAzOS40OTggMTg4LjY5MyA0MC4yNzM0QzE4OC44NjUgNDEuMDQ4OCAxODkuMTIzIDQxLjU2NTcgMTg5LjU1NCA0MS44MjQyQzE4OS45NDIgNDIuMTI1NyAxOTAuNTg4IDQyLjI1NDkgMTkxLjQ1IDQyLjI1NDlIMTkyLjEzOVY0My4wNzM0SDE4MC40MjJWNDIuMjU0OUMxODEuMjQgNDIuMjU0OSAxODEuODQzIDQyLjEyNTcgMTgyLjI3NCA0MS44MjQyWiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTcwLjQ3MyA0MS44NjgyQzE3MC44NjEgNDEuNjA5OCAxNzEuMTIgNDEuMDkyOSAxNzEuMjkyIDQwLjMxNzVDMTcxLjQyMSAzOS41ODUyIDE3MS41MDcgMzguNDIyMSAxNzEuNTA3IDM2Ljg3MTNWMjQuMzM1OUgxNjguNjIxVjIzLjUxNzVDMTcwLjA4NiAyMy41MTc1IDE3MS41MDcgMjMuMjE1OSAxNzIuOTI5IDIyLjYxMjlDMTc0LjM1IDIyLjAwOTggMTc1LjM0MSAyMS4xNDgyIDE3NS45MDEgMjAuMDcxM0gxNzYuNjc2VjM2Ljg3MTNDMTc2LjY3NiAzOC41NTEzIDE3Ni43MiAzOS43MTQ0IDE3Ni44MDYgNDAuNDAzNkMxNzYuODkyIDQxLjA5MjkgMTc3LjE1IDQxLjYwOTggMTc3LjU4MSA0MS44NjgyQzE3Ny45NjkgNDIuMTI2NyAxNzguNjU4IDQyLjI1NTkgMTc5LjYwNiA0Mi4yNTU5VjQzLjA3NDRIMTY4LjYyMVY0Mi4yNTU5QzE2OS40NCA0Mi4yNTU5IDE3MC4wNDMgNDIuMTI2NyAxNzAuNDczIDQxLjg2ODJaTTE3MS44MDkgMTUuNjc3NUMxNzEuMjA2IDE1LjA3NDQgMTcwLjkwNCAxNC4zNDIxIDE3MC45MDQgMTMuNDgwNkMxNzAuOTA0IDEyLjYxOSAxNzEuMjA2IDExLjg0MzYgMTcxLjgwOSAxMS4yNDA2QzE3Mi40MTIgMTAuNjM3NSAxNzMuMTAxIDEwLjMzNTkgMTczLjk2MyAxMC4zMzU5QzE3NC43ODEgMTAuMzM1OSAxNzUuNTEzIDEwLjYzNzUgMTc2LjExNiAxMS4yNDA2QzE3Ni43MiAxMS44NDM2IDE3Ny4wMjEgMTIuNjE5IDE3Ny4wMjEgMTMuNDgwNkMxNzcuMDIxIDE0LjM0MjEgMTc2LjcyIDE1LjA3NDQgMTc2LjExNiAxNS42Nzc1QzE3NS41MTMgMTYuMjgwNiAxNzQuODI0IDE2LjU4MjEgMTczLjk2MyAxNi41ODIxQzE3My4xMDEgMTYuNTgyMSAxNzIuNDEyIDE2LjI4MDYgMTcxLjgwOSAxNS42Nzc1WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTQ0LjcgNDEuODY2M0MxNDUuMDg4IDQxLjYwNzggMTQ1LjM0NiA0MS4wOTA5IDE0NS41MTkgNDAuMzU4NkMxNDUuNjQ4IDM5LjYyNjMgMTQ1LjczNCAzOC40NjMyIDE0NS43MzQgMzYuODY5NFYxMi4xODYzSDE0Mi44NDhWMTEuNDEwOUMxNDQuMzEyIDExLjQxMDkgMTQ1Ljc3NyAxMS4xMDk0IDE0Ny4xNTUgMTAuNTA2M0MxNDguNTM0IDkuOTAzMiAxNDkuNTI1IDkuMDQxNjYgMTUwLjA4NSA4LjAwNzgxSDE1MC45MDNWMzIuMjYwMUwxNTguMjY5IDI1LjU0MDFDMTU5LjM4OSAyNC41MDYzIDE1OS45NDkgMjMuNjg3OCAxNTkuOTQ5IDIyLjk5ODZDMTU5Ljk0OSAyMi4yMjMyIDE1OS4wNDUgMjEuNzkyNCAxNTcuMzIyIDIxLjc5MjRWMjEuMTAzMkgxNjcuMDE0VjIxLjc5MjRDMTY1Ljc2NSAyMS43OTI0IDE2NC42MDIgMjIuMDk0IDE2My41MjUgMjIuNjU0QzE2Mi40NDggMjMuMjE0IDE2MS4xNTUgMjQuMTYxNyAxNTkuNjkxIDI1LjU0MDFMMTU2Ljg5MSAyOC4wODE3TDE2My45MTIgMzguNTQ5NEMxNjQuODE3IDM5LjkyNzggMTY1LjU5MiA0MC44NzU1IDE2Ni4xOTUgNDEuNDM1NUMxNjYuNzk5IDQxLjk5NTUgMTY3LjU3NCA0Mi4yNTQgMTY4LjUyMiA0Mi4yNTRWNDMuMDcyNEgxNjAuNjM5QzE1OS42NDggNDEuNTIxNyAxNTguNDg1IDM5Ljc1NTUgMTU3LjE5MiAzNy43MzA5TDE1My4wMTQgMzEuNjE0TDE1MC45MDMgMzMuNTA5NFYzNi44Njk0QzE1MC45MDMgMzguNTA2MyAxNTAuOTQ2IDM5LjY2OTQgMTUxLjA3NSA0MC4zNTg2QzE1MS4yMDUgNDEuMDkwOSAxNTEuNDYzIDQxLjYwNzggMTUxLjg1MSA0MS44NjYzQzE1Mi4yMzkgNDIuMTI0NyAxNTIuODg1IDQyLjI1NCAxNTMuNzg5IDQyLjI1NFY0My4wNzI0SDE0Mi44MDVWNDIuMjU0QzE0My42NjYgNDIuMjU0IDE0NC4yNjkgNDIuMTI0NyAxNDQuNyA0MS44NjYzWiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTI0Ljg4NiA0Mi44MTI3QzEyMy4xNjMgNDIuMTIzNCAxMjEuNzg0IDQwLjkxNzMgMTIwLjY2NCAzOS4xOTQyQzExOS41NDQgMzcuNTE0MiAxMTguOTg0IDM1LjI3NDIgMTE4Ljk4NCAzMi41MTczQzExOC45ODQgMzAuMDYxOSAxMTkuNDU4IDI3Ljk1MTEgMTIwLjQ5MiAyNi4xNDE5QzEyMS40ODMgMjQuMzc1NyAxMjIuODE4IDIzLjA0MDQgMTI0LjU0MSAyMi4wOTI3QzEyNi4yNjQgMjEuMTg4MSAxMjguMTE3IDIwLjcxNDIgMTMwLjE4NCAyMC43MTQyQzEzMi4wMzcgMjAuNzE0MiAxMzMuNjMxIDIxLjI3NDIgMTM1LjAwOSAyMi4zMDgxQzEzMy44ODkgMTguOTkxMSAxMzIuMDggMTYuMTkxMSAxMjkuNjI0IDEzLjkwODFMMTIzLjM3OCAxNy41MjY1TDEyMi43NzUgMTYuNTM1N0wxMjguNjc3IDEzLjEzMjdDMTI2LjY5NSAxMS41ODE5IDEyNC40MTIgMTAuMzMyNyAxMjEuODI3IDkuMzg0OTdMMTIyLjMwMSA4LjUyMzQ0QzEyNS4xNDQgOS4zNDE5IDEyNy44NTggMTAuNTQ4MSAxMzAuMzU3IDEyLjE0MTlMMTM2LjA4NiA4LjgyNDk4TDEzNi43MzIgOS44MTU3NUwxMzEuNDM0IDEyLjg3NDJDMTM0LjQ5MiAxNS4wNzExIDEzNi45NDcgMTcuNjk4OCAxMzguODQzIDIwLjgwMDRDMTQwLjY5NSAyMy45MDE5IDE0MS42NDMgMjcuMzA1IDE0MS42NDMgMzAuOTY2NUMxNDEuNjQzIDMzLjcyMzQgMTQxLjEyNiAzNi4wNDk2IDE0MC4xMzUgMzcuOTg4MUMxMzkuMTQ0IDM5LjkyNjUgMTM3Ljc2NiA0MS4zOTExIDEzNi4wNDMgNDIuMzgxOUMxMzQuMzIgNDMuMzcyNyAxMzIuMzM4IDQzLjg0NjUgMTMwLjE0MSA0My44NDY1QzEyOC4zMzIgNDMuODQ2NSAxMjYuNTY2IDQzLjUwMTkgMTI0Ljg4NiA0Mi44MTI3Wk0xMjUuOTYzIDQwLjIyODFDMTI3LjA4MyA0Mi4wMzczIDEyOC41NDcgNDIuOTQxOSAxMzAuMzU3IDQyLjk0MTlDMTM0LjMyIDQyLjk0MTkgMTM2LjMwMSAzOS4wNjUgMTM2LjMwMSAzMS4yNjgxQzEzNi4zMDEgMjguODEyNyAxMzYuMDQzIDI2LjU3MjcgMTM1LjYxMiAyNC41NDgxQzEzNS4wMDkgMjMuNjQzNCAxMzQuMjM0IDIyLjkxMTEgMTMzLjMyOSAyMi4zOTQyQzEzMi40MjQgMjEuODc3MyAxMzEuMzkxIDIxLjYxODggMTMwLjI3MSAyMS42MTg4QzEyOC4yMDMgMjEuNjE4OCAxMjYuNjk1IDIyLjU2NjUgMTI1Ljc0NyAyNC4zNzU3QzEyNC43NTcgMjYuMjI4MSAxMjQuMjgzIDI4LjgxMjcgMTI0LjI4MyAzMi4xMjk2QzEyNC4yODMgMzUuNzA1IDEyNC44NDMgMzguNDE4OCAxMjUuOTYzIDQwLjIyODFaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik05OC45OTEyIDQyLjUwNjdDOTcuMTgxOSA0MS42NDUxIDk1Ljc2MDQgNDAuMzA5OCA5NC43MjY2IDM4LjU4NjdDOTMuNjkyNyAzNi44NjM2IDkzLjE3NTggMzQuNzUyOCA5My4xNzU4IDMyLjI5NzVDOTMuMTc1OCAyOS43OTkgOTMuNjkyNyAyNy42NDUxIDk0LjgxMjcgMjUuODM1OUM5NS45MzI3IDI0LjAyNjcgOTcuMzk3MyAyMi42OTEzIDk5LjI5MjcgMjEuNzQzNkMxMDEuMTg4IDIwLjc5NTkgMTAzLjI1NiAyMC4zMjIxIDEwNS41ODIgMjAuMzIyMUMxMDcuODIyIDIwLjMyMjEgMTA5LjgwMyAyMC43OTU5IDExMS42MTMgMjEuNjU3NUMxMTMuNDIyIDIyLjU2MjEgMTE0Ljg0MyAyMy44OTc1IDExNS44NzcgMjUuNjIwNUMxMTYuOTExIDI3LjM4NjcgMTE3LjQ3MSAyOS40NTQ0IDExNy40NzEgMzEuODY2N0MxMTcuNDcxIDM0LjM2NTEgMTE2LjkxMSAzNi41MTkgMTE1Ljc5MSAzOC4zMjgyQzExNC42NzEgNDAuMTM3NSAxMTMuMjA3IDQxLjUxNTkgMTExLjMxMSA0Mi40NjM2QzEwOS40MTYgNDMuNDExMyAxMDcuMzQ4IDQzLjg0MjEgMTA1LjEwOCA0My44NDIxQzEwMi44MjUgNDMuODQyMSAxMDAuOCA0My40MTEzIDk4Ljk5MTIgNDIuNTA2N1pNMTEwLjE0OCA0MC4xODA1QzExMS4zNTQgMzguMjg1MSAxMTEuOTU3IDM1LjcwMDUgMTExLjk1NyAzMi4zODM2QzExMS45NTcgMjguNzY1MSAxMTEuMzExIDI2LjAwODIgMTEwLjEwNSAyNC4wNjk4QzEwOC44OTkgMjIuMTMxMyAxMDcuMjYyIDIxLjE0MDUgMTA1LjI4IDIxLjE0MDVDMTAzLjI5OSAyMS4xNDA1IDEwMS43MDUgMjIuMDg4MiAxMDAuNDk5IDIzLjk4MzZDOTkuMjkyNyAyNS44NzkgOTguNzMyNyAyOC41MDY3IDk4LjczMjcgMzEuNzgwNUM5OC43MzI3IDM1LjM5OSA5OS4zMzU4IDM4LjE1NTkgMTAwLjU0MiA0MC4wOTQ0QzEwMS43NDggNDIuMDMyOCAxMDMuMzg1IDQyLjk4MDUgMTA1LjQxIDQyLjk4MDVDMTA3LjM5MSA0Mi45ODA1IDEwOC45NDIgNDIuMDc1OSAxMTAuMTQ4IDQwLjE4MDVaTTEwMy4zODUgMTcuMzkyOEwxMDguNzI3IDkuNjgyMDdDMTA5LjExNCA5LjA3ODk5IDEwOS42MzEgOC43MzQzOCAxMTAuMjc3IDguNzM0MzhDMTEwLjcwOCA4LjczNDM4IDExMS4wOTYgOC45MDY2OCAxMTEuNDQgOS4yMDgyMkMxMTEuNzg1IDkuNTUyODQgMTExLjk1NyA5Ljg5NzQ1IDExMS45NTcgMTAuMzI4MkMxMTEuOTU3IDEwLjgwMjEgMTExLjY1NiAxMS4yNzU5IDExMS4xMzkgMTEuNzkyOEwxMDMuOTQ1IDE3LjkwOThMMTAzLjM4NSAxNy4zOTI4WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNNzcuNDM2NSA1My41ODUyQzc2LjY2MTEgNTMuMDY4MiA3Ni4yNzM0IDUyLjM3OSA3Ni4yNzM0IDUxLjU2MDZDNzYuMjczNCA1MC45NTc1IDc2LjQ0NTcgNTAuNDgzNiA3Ni44NzY1IDUwLjA1MjlDNzcuMjY0MiA0OS42NjUyIDc3Ljc4MTEgNDkuNDQ5OCA3OC4zODQyIDQ5LjQ0OThDNzguOTQ0MiA0OS40NDk4IDc5LjQxODEgNDkuNjIyMSA3OS44MDU3IDQ5Ljk2NjdDODAuMTkzNCA1MC4zMTEzIDgwLjYyNDIgNTAuODI4MiA4MS4wNTUgNTEuNDc0NEM4MS4zOTk2IDUyLjAzNDQgODEuNzAxMSA1Mi40NjUyIDgyLjAwMjcgNTIuNzIzNkM4Mi4yNjExIDUyLjk4MjEgODIuNjA1NyA1My4xMTEzIDgyLjk5MzQgNTMuMTExM0M4My41NTM0IDUzLjExMTMgODMuOTg0MiA1Mi43MjM2IDg0LjI4NTcgNTEuODYyMUM4NC41ODczIDUxLjA0MzYgODQuNzU5NiA0OS44ODA2IDg0Ljc1OTYgNDguMzI5OFYyNC4zMzU5SDgxLjg3MzRWMjMuNTE3NUM4My4zMzgxIDIzLjUxNzUgODQuODAyNyAyMy4yMTU5IDg2LjE4MTEgMjIuNjEyOUM4Ny41NTk2IDIyLjAwOTggODguNTUwNCAyMS4xNDgyIDg5LjExMDQgMjAuMDcxM0g4OS45Mjg4VjQ0LjAyMjFDODkuOTI4OCA0Ny4yMDk4IDg5LjExMDQgNDkuNzUxMyA4Ny40NzM0IDUxLjYwMzZDODUuODM2NSA1My40NTU5IDgzLjY4MjcgNTQuMzYwNiA4MC45Njg4IDU0LjM2MDZDNzkuMzc1IDU0LjM2MDYgNzguMjExOSA1NC4xMDIxIDc3LjQzNjUgNTMuNTg1MlpNODUuMDYxMSAxNS42Nzc1Qzg0LjQ1ODEgMTUuMDc0NCA4NC4xNTY1IDE0LjM0MjEgODQuMTU2NSAxMy40ODA2Qzg0LjE1NjUgMTIuNjE5IDg0LjQ1ODEgMTEuODQzNiA4NS4wNjExIDExLjI0MDZDODUuNjY0MiAxMC42Mzc1IDg2LjM1MzQgMTAuMzM1OSA4Ny4yMTUgMTAuMzM1OUM4OC4wMzM0IDEwLjMzNTkgODguNzY1NyAxMC42Mzc1IDg5LjM2ODggMTEuMjQwNkM4OS45NzE5IDExLjg0MzYgOTAuMjczNCAxMi42MTkgOTAuMjczNCAxMy40ODA2QzkwLjI3MzQgMTQuMzQyMSA4OS45NzE5IDE1LjA3NDQgODkuMzY4OCAxNS42Nzc1Qzg4Ljc2NTcgMTYuMjgwNiA4OC4wNzY1IDE2LjU4MjEgODcuMjE1IDE2LjU4MjFDODYuMzUzNCAxNi41ODIxIDg1LjY2NDIgMTYuMjgwNiA4NS4wNjExIDE1LjY3NzVaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik01OS4wMTY4IDQxLjkxMjZDNTkuNDQ3NiA0MS42OTczIDU5Ljc5MjIgNDEuMjIzNCA2MC4wNTA2IDQwLjQ5MTFDNjAuMjY2IDM5LjgwMTkgNjAuMzk1MyAzOC42ODE5IDYwLjM5NTMgMzcuMTc0MlYxOC42MDhDNjAuMzk1MyAxNy4yMjk2IDYwLjI2NiAxNi4xNTI2IDYwLjA1MDYgMTUuNDYzNEM1OS43OTIyIDE0Ljc3NDIgNTkuNDQ3NiAxNC4zNDM0IDU5LjAxNjggMTQuMDg1QzU4LjU0MyAxMy44Njk2IDU3Ljg1MzcgMTMuNzQwMyA1Ni45OTIyIDEzLjc0MDNWMTIuOTIxOUg2OS4yNjkxVjEzLjc0MDNDNjguMzY0NSAxMy43NDAzIDY3LjY3NTMgMTMuODY5NiA2Ny4yNDQ1IDE0LjA4NUM2Ni43NzA2IDE0LjM0MzQgNjYuNDI2IDE0Ljc3NDIgNjYuMjEwNyAxNS40NjM0QzY1Ljk1MjIgMTYuMTUyNiA2NS44NjYgMTcuMjI5NiA2NS44NjYgMTguNjA4VjE4LjY5NDJINjkuMTM5OUM3My4wMTY4IDE4LjY5NDIgNzUuOTg5MSAxOS40Njk2IDc4LjA1NjggMjAuOTc3M0M4MC4xMjQ1IDIyLjUyOCA4MS4xNTgzIDI0LjYzODggODEuMTU4MyAyNy4zOTU3QzgxLjE1ODMgMjkuNDYzNCA4MC41NTUzIDMxLjE4NjUgNzkuNDM1MyAzMi41NjVDNzguMzE1MyAzMy45NDM0IDc2Ljg1MDcgMzQuOTc3MyA3NS4wNDE0IDM1LjYyMzRDNzMuMjMyMiAzNi4zMTI2IDcxLjI5MzcgMzYuNjE0MiA2OS4yNjkxIDM2LjYxNDJDNjguMTkyMiAzNi42MTQyIDY3LjA3MjIgMzYuNTI4IDY1Ljg2NiAzNi4zMTI2VjM3LjE3NDJDNjUuODY2IDM4LjY4MTkgNjUuOTUyMiAzOS44MDE5IDY2LjE2NzYgNDAuNDkxMUM2Ni4zODMgNDEuMjIzNCA2Ni43Mjc2IDQxLjY5NzMgNjcuMjAxNCA0MS45MTI2QzY3LjY3NTMgNDIuMTcxMSA2OC4zNjQ1IDQyLjI1NzMgNjkuMjY5MSA0Mi4yNTczVjQzLjA3NTdINTYuOTkyMlY0Mi4yNTczQzU3Ljg1MzcgNDIuMjU3MyA1OC41NDMgNDIuMTcxMSA1OS4wMTY4IDQxLjkxMjZaTTY4Ljg4MTQgMzUuNjIzNEM3MC4wODc2IDM1LjYyMzQgNzEuMjA3NiAzNS4yNzg4IDcyLjE5ODMgMzQuNTg5NkM3My4xODkxIDMzLjkwMDMgNzMuOTY0NSAzMi45NTI2IDc0LjU2NzYgMzEuNzAzNEM3NS4xMjc2IDMwLjQ5NzMgNzUuNDI5MSAyOS4wNzU3IDc1LjQyOTEgMjcuNTI1Qzc1LjQyOTEgMjQuODk3MyA3NC43Mzk5IDIyLjkxNTcgNzMuNDA0NSAyMS42MjM0QzcyLjA2OTEgMjAuMzMxMSA3MC4zNDYgMTkuNjg1IDY4LjE5MjIgMTkuNjg1SDY1Ljg2NlYzNS4xMDY1QzY2Ljg5OTkgMzUuNDUxMSA2Ny44OTA3IDM1LjYyMzQgNjguODgxNCAzNS42MjM0WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMjMuNzM2MyAwQzI0Ljk1MzkgMCAyNS45NDE0IDAuOTg3NDY1IDI1Ljk0MTQgMi4yMDUwOFYxMi4wNzk4QzI1Ljk0MTQgMTQuMDUwNyAyNy41MzkxIDE1LjY0ODQgMjkuNTEgMTUuNjQ4NEgzOS43OTQ5QzQxLjAxMjUgMTUuNjQ4NCA0MiAxNi42MzU5IDQyIDE3Ljg1MzVWMjMuMzI2MkM0MiAyNC41NDM4IDQxLjAxMjUgMjUuNTMxMiAzOS43OTQ5IDI1LjUzMTJIMjkuNTFDMjcuNTM5MSAyNS41MzEyIDI1Ljk0MTQgMjcuMTI5IDI1Ljk0MTQgMjkuMDk5OVY1My43OTQ5QzI1Ljk0MTQgNTUuMDEyNSAyNC45NTM5IDU2IDIzLjczNjMgNTZIMTguMjYzN0MxNy4wNDYxIDU2IDE2LjA1ODYgNTUuMDEyNSAxNi4wNTg2IDUzLjc5NDlWMjkuMDk5OUMxNi4wNTg2IDI3LjEyOSAxNC40NjA5IDI1LjUzMTIgMTIuNDkgMjUuNTMxMkgyLjIwNTA4QzAuOTg3NDc5IDI1LjUzMTIgMi4yODE0NWUtMDUgMjQuNTQzOCAwIDIzLjMyNjJWMTcuODUzNUMwIDE2LjYzNTkgMC45ODc0NjUgMTUuNjQ4NCAyLjIwNTA4IDE1LjY0ODRIMTIuNDlDMTQuNDYwOSAxNS42NDg0IDE2LjA1ODYgMTQuMDUwNyAxNi4wNTg2IDEyLjA3OThWMi4yMDUwOEMxNi4wNTg2IDAuOTg3NDY1IDE3LjA0NjEgMCAxOC4yNjM3IDBIMjMuNzM2M1oiIGZpbGw9IiM0ODFFMzUiLz4KPC9zdmc+Cg==" alt="Þjóðkirkjan" style="height:22px;">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODQ3IiBoZWlnaHQ9IjMyNyIgdmlld0JveD0iMCAwIDg0NyAzMjciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wIDMyNi45NlY4Mi44NTcySDc4LjQyODVWMjYyLjEzOUgxODUuMDRWMzI3SDBWMzI2Ljk2Wk0yMTYuODQ2IDMyNi45NlY4Mi44NTcySDMxNy4wMTVDMzM4LjM5NCA4Mi44NTcyIDM1NC4wMTUgODMuMTc5MyAzNjQuMjAxIDg0LjIyNjFDMzczLjcwMyA4NS41OTQ5IDM4Mi4xOTggODcuNjA4IDM4OS4zMjQgODkuOTgzNEM0MTQuMTI1IDk5LjE2MjkgNDI3LjY5MyAxMTkuMTczIDQyNy42OTMgMTQ3LjM1NUM0MjcuNjkzIDE2OS43ODEgNDE3LjgyOSAxODYuMDQ2IDM5OC4xNDIgMTk2LjU5NUM0MjQuMjcxIDIwNS43NzQgNDM2LjE4OCAyMjQuMDkzIDQzNi4xODggMjUzLjY0NEM0MzYuMTg4IDI4My4xOTYgNDIzLjk0OSAzMDQuNTc1IDQwMC44NzkgMzE2LjEzQzM5My4wNjkgMzIwLjE5NiAzODQuMjUxIDMyMi45MzQgMzc0LjM4NyAzMjQuMjYyQzM2NC41MjMgMzI1Ljk1MyAzNDcuODk2IDMyNi45NiAzMjQuODI2IDMyNi45NkgyMTYuODQ2Wk0yOTIuODk5IDE4MC4yODlIMzI1LjE0OEMzNDYuODg5IDE4MC4yODkgMzU0LjcgMTc0LjUzMiAzNTQuNyAxNTkuMjMyQzM1NC43IDE1MS4xIDM1Mi4zMjQgMTQ1LjY2NCAzNDcuNTc0IDE0Mi42MDVDMzQyLjgyMyAxMzkuNTQ1IDMzMS42MyAxMzguMTc2IDMxNC42NCAxMzguMTc2SDI5Mi44OTlWMTgwLjI4OVpNMjkyLjg5OSAyNjkuOTFIMzI5LjIxNUMzNTMuMzMxIDI2OS45MSAzNjIuNDcgMjYzLjQ2OCAzNjIuNDcgMjQ3LjE2MkMzNjIuNDcgMjMwLjg1NyAzNTIuOTY5IDIyNC43MzcgMzI4LjUzIDIyNC43MzdIMjkyLjg5OVYyNjkuOTFaTTQ3OC40NjIgMzI2Ljk2VjgyLjg1NzJINTU2Ljg5MVYxNjUuNzE0SDYyOS44ODRWODIuODU3Mkg3MDguMzEyVjMyNi45Nkg2MjkuODg0VjIzMi4yMjZINTU2Ljg5MVYzMjYuOTZINDc4LjQ2MlpNNzY3LjIxNCA2MS40MzgzTDc5OS4xNDEgMEg4NDYuNjlMNzkyLjcgNjEuNDM4M0g3NjcuMjU1SDc2Ny4yMTRaTTc1Ni4wMjIgMzI2Ljk2VjgyLjg1NzJIODM1LjgxOVYzMjYuOTZINzU2LjAyMloiIGZpbGw9IiMzODY4MzIiLz4KPC9zdmc+Cg==" alt="LBHÍ" style="height:22px;">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/verkis.svg" alt="Verkís">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Olis.svg" alt="Olís">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sjo%CC%81va%CC%81.svg" alt="Sjóvá">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/O%CC%88lgerdin.svg" alt="Ölgerðin">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Arnarlax.svg" alt="Arnarlax">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Samgo%CC%88ngustofa.svg" alt="Samgöngustofa">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Nox-medical.svg" alt="Nox Medical">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sto%CC%81lpi.svg" alt="Stólpi Gámar">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Klasi.svg" alt="Klasi">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Safi%CC%81r.svg" alt="Safír">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Kjarkur.svg" alt="Kjarkur endurhæfing">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Pipar.svg" alt="Pipar\TBWA">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0IiBoZWlnaHQ9IjQ3IiB2aWV3Qm94PSIwIDAgMTQ0IDQ3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMzUuNDk2OCAyMy42MDYzQzM1LjQ5NjggMTUuMjc1NyA0MS45NzY0IDguNTYzNzIgNTAuNDgxOSA4LjU2MzcyQzU4LjM1MDMgOC41NjM3MiA2NC41NDAxIDE1LjI3NTcgNjQuNTQwMSAyMy40OTE0QzY0LjU0MDEgMjQuODgwMyA2NC4zNjc4IDI2LjI2OTEgNjQuMzY3OCAyNi4yNjkxSDQzLjM2NzlDNDQuMjk0NyAzMC4yNjA4IDQ3LjU5MTkgMzIuMTY5MiA1MS40MDg2IDMyLjE2OTJDNTQuMTg2MyAzMi4xNjkyIDU3LjA3ODkgMzEuMzU5OSA1OS4yMTk3IDI5LjkxMzZMNjIuMTEyMiAzNS40NjY1QzU4Ljg3MjQgMzcuNjA3MiA1NS4xMTMxIDM4LjY0ODggNTEuMzUxMiAzOC42NDg4QzQyLjkwNTggMzguNjQ4OCAzNS40OTk0IDMzLjE1MzQgMzUuNDk5NCAyMy42MDYzSDM1LjQ5NjhaTTU3LjI1MTIgMjEuMTE4M0M1Ni42NzE3IDE3LjQ3MzkgNTMuNzc5MSAxNS4wNDM0IDUwLjI1MjEgMTUuMDQzNEM0Ni43MjUyIDE1LjA0MzQgNDQuMDA0OSAxNy40NzM5IDQzLjI1MDQgMjEuMTE4M0g1Ny4yNTEyWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNNjkuOTc4MSA0Mi45ODY3TDcyLjg3MDYgMzguMTI1N0M3NS4xODM3IDM5LjkxOTIgNzguNTQwOSA0MC43Mjg1IDgxLjI1ODYgNDAuNzI4NUM4Ni42MzkxIDQwLjcyODUgODkuMzU5NCAzNy40ODg3IDg5LjU4OTIgMzIuODZDODkuNjQ2NiAzMi42ODc3IDg5LjY0NjYgMzIuNDU1MyA4OS42NDY2IDMyLjIyM0M4OC4zNzI2IDM0LjQ3ODYgODUuMjUwMyAzNi41MDQ1IDgwLjk2ODggMzYuNTA0NUM3Mi45MjgxIDM2LjUwNDUgNjcuODk0OCAzMC4yNTcyIDY3Ljg5NDggMjIuNTYxQzY3Ljg5NDggMTQuODY0OCA3Mi45MjgxIDguNTYwMDYgODAuOTY4OCA4LjU2MDA2Qzg0LjY3MDcgOC41NjAwNiA4OC40OTAxIDEwLjE4MTMgOTAuMDUxMiAxMy4wNzM5VjkuMTM5NjJIOTcuMzk3NlYzMS4wNjY1Qzk3LjM5NzYgNDAuNTUzNiA5MS42Njk4IDQ2LjU3MTEgODIuMDY1MyA0Ni41NzExQzc2Ljg1NzEgNDYuNTcxMSA3Mi42MzU3IDQ1LjE4MjMgNjkuOTcyOCA0Mi45ODQxTDY5Ljk3ODEgNDIuOTg2N1pNODkuNzA2NiAyMi4zODg3Qzg5LjcwNjYgMTguMzM5NiA4Ni42OTkyIDE1LjI3MiA4Mi43MDc1IDE1LjI3MkM3OC43MTU5IDE1LjI3MiA3NS43NjU4IDE4LjMzOTYgNzUuNzY1OCAyMi41NjFDNzUuNzY1OCAyNi43ODI0IDc4Ljc3MzMgMjkuNzM1IDgyLjcwNzUgMjkuNzM1Qzg2LjY0MTcgMjkuNzM1IDg5LjcwNjYgMjYuNzI3NiA4OS43MDY2IDIyLjM4ODdaIiBmaWxsPSIjMDQ1NjRDIi8+CjxwYXRoIGQ9Ik0xMDIuMzc2IDBIMTEwLjEzVjM4LjA2ODVIMTAyLjM3NlYwWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNMTE0LjMyMiAyMy42MDYzQzExNC4zMjIgMTUuMjc1NyAxMTkuNDEzIDguNTYzNzIgMTI3LjM5NiA4LjU2MzcyQzEzMC43NTEgOC41NjM3MiAxMzQuMzM4IDkuODk1MTUgMTM2LjQyMSAxMi42NzAzVjkuMTQwNjdIMTQ0VjM4LjA2OTNIMTM2LjQyMVYzNC41OTcxQzEzNC4zOTUgMzcuMzc0OSAxMzAuNzUxIDM4LjY0NjIgMTI3LjM5NiAzOC42NDYyQzExOS40MTMgMzguNjQ2MiAxMTQuMzIyIDMxLjkzNDMgMTE0LjMyMiAyMy42MDM3VjIzLjYwNjNaTTEzNi4yNDkgMjMuNjA2M0MxMzYuMjQ5IDE5LjA5MjUgMTMzLjM1NiAxNS43Mzc4IDEyOS4zNjUgMTUuNzM3OEMxMjUuMzczIDE1LjczNzggMTIyLjE5MSAxOS4wOTI1IDEyMi4xOTEgMjMuNjA2M0MxMjIuMTkxIDI4LjEyMDEgMTI1LjE5OCAzMS40NzQ4IDEyOS4zNjUgMzEuNDc0OEMxMzMuNTMxIDMxLjQ3NDggMTM2LjI0OSAyOC4yMzUgMTM2LjI0OSAyMy42MDYzWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNMjYuMTYxMiAyNy4wMTc0QzMwLjc4OTggMjQuNTI5NCAzMy4yNzc4IDE5LjkwMDggMzMuMjc3OCAxNS4wOTk4QzMzLjI3NzggNy4wNTg5OCAyNy40OTI2IDAuNTc5MzQ2IDE2LjQ0MTggMC41NzkzNDZIMEw0LjUyNjg0IDcuNDYzNjNIOC40NTU4NEgxNi43Mjg5QzIxLjQxNSA3LjQ2MzYzIDI0LjcxMjMgMTAuODE4MyAyNC43MTIzIDE1LjA5OThDMjQuNzEyMyAxOS4zODEyIDIxLjQxNSAyMi42MjExIDE2LjY3MTUgMjIuNjIxMUgxNC40OTQyTDE4Ljg2OTcgMjkuMjczTDI0LjY1NDggMzguMDY1N0gzMy45Njk2TDI2LjE1ODYgMjcuMDE0OEwyNi4xNjEyIDI3LjAxNzRaIiBmaWxsPSIjMDQ1NjRDIi8+CjxwYXRoIGQ9Ik0zLjMzNjUgMTkuNzkxMkwwLjIzNzY3MSAxNS4wNzY0VjM4LjE3ODFMNS41NTI5MyAzMi44MjFMMTIuOTMwNiAzNC4zNzdMMy4zMzY1IDE5Ljc5MTJaIiBmaWxsPSIjODhDOTNDIi8+Cjwvc3ZnPgo=" alt="Regla" style="height:24px;">
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgzIiBoZWlnaHQ9IjU2IiB2aWV3Qm94PSIwIDAgMjgzIDU2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMjczLjQ3NCA0MS44MjQyQzI3My44MTkgNDEuNTY1NyAyNzQuMDc4IDQxLjA0ODggMjc0LjI1IDQwLjI3MzRDMjc0LjQyMiAzOS40OTggMjc0LjUwOCAzOC4zMzQ5IDI3NC41MDggMzYuNzg0MlYyOC40MjcyQzI3NC41MDggMjYuNjYxMSAyNzQuMTIxIDI1LjMyNTcgMjczLjM4OCAyNC40NjQyQzI3Mi42MTMgMjMuNjAyNiAyNzEuNTc5IDIzLjEyODggMjcwLjIwMSAyMy4xMjg4QzI2OS4wODEgMjMuMTI4OCAyNjcuOTE4IDIzLjQzMDMgMjY2Ljc5OCAyNC4wMzM0QzI2NS42MzQgMjQuNjM2NSAyNjQuNjAxIDI1LjQxMTkgMjYzLjY5NiAyNi4zNTk1VjM2Ljg3MDNDMjYzLjY5NiAzOC41MDcyIDI2My43MzkgMzkuNjcwMyAyNjMuODY4IDQwLjM1OTVDMjYzLjk5OCA0MS4wOTE5IDI2NC4yNTYgNDEuNjA4OCAyNjQuNjQ0IDQxLjg2NzJDMjY1LjAzMSA0Mi4xMjU3IDI2NS42NzggNDIuMjU0OSAyNjYuNTM5IDQyLjI1NDlWNDMuMDczNEgyNTUuNjQxVjQyLjI1NDlDMjU2LjQ1OSA0Mi4yNTQ5IDI1Ny4wNjIgNDIuMTI1NyAyNTcuNDkzIDQxLjg2NzJDMjU3Ljg4MSA0MS42MDg4IDI1OC4xMzkgNDEuMDkxOSAyNTguMzExIDQwLjMxNjVDMjU4LjQ0MSAzOS41ODQyIDI1OC41MjcgMzguNDIxMSAyNTguNTI3IDM2Ljg3MDNWMjQuMjkxOUgyNTUuNjQxVjIzLjUxNjVDMjU3LjEwNSAyMy41MTY1IDI1OC41NyAyMy4yMTQ5IDI1OS45OTEgMjIuNjExOUMyNjEuMzcgMjIuMDA4OCAyNjIuMzYxIDIxLjE0NzIgMjYyLjkyMSAyMC4wNzAzSDI2My42OTZWMjUuMTEwM0gyNjMuNzM5QzI2NC44NTkgMjMuNzc0OSAyNjYuMjM4IDIyLjY1NDkgMjY3Ljg3NCAyMS43MDcyQzI2OS41MTEgMjAuODAyNiAyNzEuMTkxIDIwLjMyODggMjcyLjkxNCAyMC4zMjg4QzI3NS4wMjUgMjAuMzI4OCAyNzYuNjYyIDIwLjk3NDkgMjc3Ljg2OCAyMi4yNjcyQzI3OS4wNzQgMjMuNTU5NSAyNzkuNjc4IDI1LjYyNzIgMjc5LjY3OCAyOC40MjcyVjM2Ljc4NDJDMjc5LjY3OCAzOC40MjExIDI3OS43MjEgMzkuNjI3MiAyNzkuODUgNDAuMzU5NUMyNzkuOTc5IDQxLjA5MTkgMjgwLjIzOCA0MS42MDg4IDI4MC42NjggNDEuODY3MkMyODEuMDU2IDQyLjEyNTcgMjgxLjcwMiA0Mi4yNTQ5IDI4Mi42MDcgNDIuMjU0OVY0My4wNzM0SDI3MS43OTRWNDIuMjU0OUMyNzIuNTI3IDQyLjI1NDkgMjczLjA4NyA0Mi4xMjU3IDI3My40NzQgNDEuODI0MloiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTIzNC43NTQgNDIuNDY5N0MyMzMuNzIgNDEuNTY1IDIzMy4yMDMgNDAuMzE1OCAyMzMuMjAzIDM4LjcyMkMyMzMuMjAzIDM0LjMyODEgMjM3LjcyNiAzMS4zOTg5IDI0Ni43NzIgMjkuODQ4MVYyNi45NjJDMjQ2Ljc3MiAyNC44OTQzIDI0Ni41MTQgMjMuNDI5NyAyNDUuOTk3IDIyLjQ4MkMyNDUuNDggMjEuNTc3NCAyNDQuNjE4IDIxLjEwMzUgMjQzLjQ1NSAyMS4xMDM1QzI0Mi41MDggMjEuMTAzNSAyNDEuNzMyIDIxLjQwNSAyNDEuMTI5IDIxLjk2NUMyNDAuNTI2IDIyLjUyNSAyMzkuODggMjMuMzQzNSAyMzkuMjM0IDI0LjQyMDRDMjM4LjY3NCAyNS4zNjgxIDIzOC4xNTcgMjYuMTAwNCAyMzcuNjgzIDI2LjU3NDNDMjM3LjIwOSAyNy4wNDgxIDIzNi42MDYgMjcuMjYzNSAyMzUuOTE3IDI3LjI2MzVDMjM1LjMxNCAyNy4yNjM1IDIzNC44ODMgMjcuMDkxMiAyMzQuNTM4IDI2Ljc0NjZDMjM0LjE5NCAyNi40MDIgMjM0LjAyMiAyNS45MjgxIDIzNC4wMjIgMjUuMzI1QzIzNC4wMjIgMjQuNDYzNSAyMzQuNDA5IDIzLjY4ODEgMjM1LjI3MSAyMi45MTI3QzIzNi4xMzIgMjIuMTM3NCAyMzcuMjk1IDIxLjUzNDMgMjM4Ljc2IDIxLjA2MDRDMjQwLjIyNSAyMC41ODY2IDI0MS45MDUgMjAuMzI4MSAyNDMuNzE0IDIwLjMyODFDMjQ2LjQ3MSAyMC4zMjgxIDI0OC40OTUgMjAuOTMxMiAyNDkuODc0IDIyLjEzNzRDMjUxLjI1MiAyMy4zNDM1IDI1MS45NDIgMjUuMjgyIDI1MS45NDIgMjguMDM4OVYzNy44MTc0QzI1MS45NDIgMzkuMDY2NiAyNTIuMDI4IDM5Ljk3MTIgMjUyLjI0MyA0MC41MzEyQzI1Mi40NTggNDEuMDkxMiAyNTIuODQ2IDQxLjM0OTcgMjUzLjM2MyA0MS4zNDk3QzI1My44MzcgNDEuMzQ5NyAyNTQuMzExIDQxLjEzNDMgMjU0Ljc0MiA0MC42NjA0TDI1NS4yNTkgNDEuMTc3NEMyNTMuNzk0IDQyLjk4NjYgMjUyLjE1NyA0My44NDgxIDI1MC40MzQgNDMuODQ4MUMyNDkuMjI4IDQzLjg0ODEgMjQ4LjMyMyA0My40NjA0IDI0Ny43MiA0Mi42ODVDMjQ3LjExNyA0MS45MDk3IDI0Ni44MTUgNDAuOTE4OSAyNDYuODE1IDM5LjY2OTdWMzkuNTQwNEgyNDYuNjQzQzI0NS41MjMgNDEuMDA1IDI0NC4zMTcgNDIuMDgyIDI0My4wNjggNDIuNzcxMkMyNDEuNzc1IDQzLjUwMzUgMjQwLjM5NyA0My44NDgxIDIzOC44ODkgNDMuODQ4MUMyMzcuMTY2IDQzLjg0ODEgMjM1Ljc4OCA0My40MTc0IDIzNC43NTQgNDIuNDY5N1pNMjQ2Ljc3MiAzOC4yMDVWMzAuNzA5N0MyNDQuNDg5IDMxLjE0MDQgMjQyLjUwOCAzMS45MTU4IDI0MC44NzEgMzMuMDM1OEMyMzkuMTkxIDM0LjE1NTggMjM4LjM3MiAzNS42MjA0IDIzOC4zNzIgMzcuMzQzNUMyMzguMzcyIDM4LjQ2MzUgMjM4LjY3NCAzOS4zMjUgMjM5LjI3NyAzOS45NzEyQzIzOS44OCA0MC42MTc0IDI0MC43NDIgNDAuOTE4OSAyNDEuODE5IDQwLjkxODlDMjQzLjU4NSA0MC45MTg5IDI0NS4yMjIgNDAuMDE0MyAyNDYuNzcyIDM4LjIwNVoiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTIxNy41MDMgNTMuNTg1MkMyMTYuNzI4IDUzLjA2ODIgMjE2LjM0IDUyLjM3OSAyMTYuMzQgNTEuNTYwNkMyMTYuMzQgNTAuOTU3NSAyMTYuNTEyIDUwLjQ4MzYgMjE2Ljk0MyA1MC4wNTI5QzIxNy4zMzEgNDkuNjY1MiAyMTcuODQ4IDQ5LjQ0OTggMjE4LjQ1MSA0OS40NDk4QzIxOS4wMTEgNDkuNDQ5OCAyMTkuNDg0IDQ5LjYyMjEgMjE5Ljg3MiA0OS45NjY3QzIyMC4yNiA1MC4zMTEzIDIyMC42OTEgNTAuODI4MiAyMjEuMTIxIDUxLjQ3NDRDMjIxLjQ2NiA1Mi4wMzQ0IDIyMS43NjggNTIuNDY1MiAyMjIuMDY5IDUyLjcyMzZDMjIyLjMyOCA1Mi45ODIxIDIyMi42NzIgNTMuMTExMyAyMjMuMDYgNTMuMTExM0MyMjMuNjIgNTMuMTExMyAyMjQuMDUxIDUyLjcyMzYgMjI0LjM1MiA1MS44NjIxQzIyNC42NTQgNTEuMDQzNiAyMjQuODI2IDQ5Ljg4MDYgMjI0LjgyNiA0OC4zMjk4VjI0LjMzNTlIMjIxLjk0VjIzLjUxNzVDMjIzLjQwNCAyMy41MTc1IDIyNC44NjkgMjMuMjE1OSAyMjYuMjQ4IDIyLjYxMjlDMjI3LjYyNiAyMi4wMDk4IDIyOC42MTcgMjEuMTQ4MiAyMjkuMTc3IDIwLjA3MTNIMjI5Ljk5NVY0NC4wMjIxQzIyOS45OTUgNDcuMjA5OCAyMjkuMTc3IDQ5Ljc1MTMgMjI3LjU0IDUxLjYwMzZDMjI1LjkwMyA1My40NTU5IDIyMy43NDkgNTQuMzYwNiAyMjEuMDM1IDU0LjM2MDZDMjE5LjQ0MSA1NC4zNjA2IDIxOC4yNzggNTQuMTAyMSAyMTcuNTAzIDUzLjU4NTJaTTIyNS4xMjggMTUuNjc3NUMyMjQuNTI0IDE1LjA3NDQgMjI0LjIyMyAxNC4zNDIxIDIyNC4yMjMgMTMuNDgwNkMyMjQuMjIzIDEyLjYxOSAyMjQuNTI0IDExLjg0MzYgMjI1LjEyOCAxMS4yNDA2QzIyNS43MzEgMTAuNjM3NSAyMjYuNDIgMTAuMzM1OSAyMjcuMjgxIDEwLjMzNTlDMjI4LjEgMTAuMzM1OSAyMjguODMyIDEwLjYzNzUgMjI5LjQzNSAxMS4yNDA2QzIzMC4wMzggMTEuODQzNiAyMzAuMzQgMTIuNjE5IDIzMC4zNCAxMy40ODA2QzIzMC4zNCAxNC4zNDIxIDIzMC4wMzggMTUuMDc0NCAyMjkuNDM1IDE1LjY3NzVDMjI4LjgzMiAxNi4yODA2IDIyOC4xNDMgMTYuNTgyMSAyMjcuMjgxIDE2LjU4MjFDMjI2LjQyIDE2LjU4MjEgMjI1LjczMSAxNi4yODA2IDIyNS4xMjggMTUuNjc3NVoiIGZpbGw9IiM0ODFFMzUiLz4KPHBhdGggZD0iTTE5OS4zMjkgNDEuODY2M0MxOTkuNzE3IDQxLjYwNzggMTk5Ljk3NSA0MS4wOTA5IDIwMC4xNDcgNDAuMzU4NkMyMDAuMjc3IDM5LjYyNjMgMjAwLjM2MyAzOC40NjMyIDIwMC4zNjMgMzYuODY5NFYxMi4xODYzSDE5Ny40NzdWMTEuNDEwOUMxOTguOTQxIDExLjQxMDkgMjAwLjQwNiAxMS4xMDk0IDIwMS43ODQgMTAuNTA2M0MyMDMuMTYzIDkuOTAzMiAyMDQuMTU0IDkuMDQxNjYgMjA0LjcxNCA4LjAwNzgxSDIwNS41MzJWMzIuMjYwMUwyMTIuODk4IDI1LjU0MDFDMjE0LjAxOCAyNC41MDYzIDIxNC41NzggMjMuNjg3OCAyMTQuNTc4IDIyLjk5ODZDMjE0LjU3OCAyMi4yMjMyIDIxMy42NzQgMjEuNzkyNCAyMTEuOTUxIDIxLjc5MjRWMjEuMTAzMkgyMjEuNjQzVjIxLjc5MjRDMjIwLjM5NCAyMS43OTI0IDIxOS4yMzEgMjIuMDk0IDIxOC4xNTQgMjIuNjU0QzIxNy4wNzcgMjMuMjE0IDIxNS43ODQgMjQuMTYxNyAyMTQuMzIgMjUuNTQwMUwyMTEuNTIgMjguMDgxN0wyMTguNTQxIDM4LjU0OTRDMjE5LjQ0NiAzOS45Mjc4IDIyMC4yMjEgNDAuODc1NSAyMjAuODI0IDQxLjQzNTVDMjIxLjQyNyA0MS45OTU1IDIyMi4yMDMgNDIuMjU0IDIyMy4xNTEgNDIuMjU0VjQzLjA3MjRIMjE1LjI2N0MyMTQuMjc3IDQxLjUyMTcgMjEzLjExNCAzOS43NTU1IDIxMS44MjEgMzcuNzMwOUwyMDcuNjQzIDMxLjYxNEwyMDUuNTMyIDMzLjUwOTRWMzYuODY5NEMyMDUuNTMyIDM4LjUwNjMgMjA1LjU3NSAzOS42Njk0IDIwNS43MDQgNDAuMzU4NkMyMDUuODM0IDQxLjA5MDkgMjA2LjA5MiA0MS42MDc4IDIwNi40OCA0MS44NjYzQzIwNi44NjcgNDIuMTI0NyAyMDcuNTE0IDQyLjI1NCAyMDguNDE4IDQyLjI1NFY0My4wNzI0SDE5Ny40MzRWNDIuMjU0QzE5OC4yOTUgNDIuMjU0IDE5OC44OTggNDIuMTI0NyAxOTkuMzI5IDQxLjg2NjNaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik0xODIuMjc0IDQxLjgyNDJDMTgyLjY2MiA0MS41NjU3IDE4Mi45MiA0MS4wNDg4IDE4My4wOTMgNDAuMjczNEMxODMuMjIyIDM5LjU0MTEgMTgzLjMwOCAzOC4zNzggMTgzLjMwOCAzNi43ODQyVjI0LjI5MTlIMTgwLjQyMlYyMy41MTY1QzE4MS44ODYgMjMuNTE2NSAxODMuMzUxIDIzLjIxNDkgMTg0Ljc3MyAyMi42MTE5QzE4Ni4xOTQgMjIuMDA4OCAxODcuMTg1IDIxLjE0NzIgMTg3LjcwMiAyMC4wNzAzSDE4OC40NzdWMjYuMjMwM0gxODguNjA2QzE4OS4zODIgMjQuNTA3MiAxOTAuMjg2IDIzLjA4NTcgMTkxLjQwNiAyMS45NjU3QzE5Mi41MjYgMjAuODg4OCAxOTMuNjkgMjAuMzI4OCAxOTQuOTM5IDIwLjMyODhDMTk1LjggMjAuMzI4OCAxOTYuNDkgMjAuNjMwMyAxOTcuMDA2IDIxLjE0NzJDMTk3LjUyMyAyMS42NjQyIDE5Ny44MjUgMjIuMzk2NSAxOTcuODI1IDIzLjI1OEMxOTcuODI1IDI0LjExOTUgMTk3LjYxIDI0Ljc2NTcgMTk3LjE3OSAyNS4xOTY1QzE5Ni43NDggMjUuNjcwMyAxOTYuMjMxIDI1Ljg4NTcgMTk1LjYyOCAyNS44ODU3QzE5NS4yODMgMjUuODg1NyAxOTQuOTM5IDI1Ljg0MjYgMTk0LjY4IDI1LjY3MDNDMTk0LjQyMiAyNS41NDExIDE5NC4wNzcgMjUuMzI1NyAxOTMuNjQ2IDI0Ljk4MTFDMTkzLjMwMiAyNC43MjI2IDE5My4wNDMgMjQuNTUwMyAxOTIuODI4IDI0LjQyMTFDMTkyLjU3IDI0LjMzNDkgMTkyLjM1NCAyNC4yNDg4IDE5Mi4wOTYgMjQuMjQ4OEMxOTAuNzE3IDI0LjI0ODggMTg5LjUxMSAyNS42MjcyIDE4OC40NzcgMjguMjk4VjM2Ljc4NDJDMTg4LjQ3NyAzOC4zMzQ5IDE4OC41MiAzOS40OTggMTg4LjY5MyA0MC4yNzM0QzE4OC44NjUgNDEuMDQ4OCAxODkuMTIzIDQxLjU2NTcgMTg5LjU1NCA0MS44MjQyQzE4OS45NDIgNDIuMTI1NyAxOTAuNTg4IDQyLjI1NDkgMTkxLjQ1IDQyLjI1NDlIMTkyLjEzOVY0My4wNzM0SDE4MC40MjJWNDIuMjU0OUMxODEuMjQgNDIuMjU0OSAxODEuODQzIDQyLjEyNTcgMTgyLjI3NCA0MS44MjQyWiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTcwLjQ3MyA0MS44NjgyQzE3MC44NjEgNDEuNjA5OCAxNzEuMTIgNDEuMDkyOSAxNzEuMjkyIDQwLjMxNzVDMTcxLjQyMSAzOS41ODUyIDE3MS41MDcgMzguNDIyMSAxNzEuNTA3IDM2Ljg3MTNWMjQuMzM1OUgxNjguNjIxVjIzLjUxNzVDMTcwLjA4NiAyMy41MTc1IDE3MS41MDcgMjMuMjE1OSAxNzIuOTI5IDIyLjYxMjlDMTc0LjM1IDIyLjAwOTggMTc1LjM0MSAyMS4xNDgyIDE3NS45MDEgMjAuMDcxM0gxNzYuNjc2VjM2Ljg3MTNDMTc2LjY3NiAzOC41NTEzIDE3Ni43MiAzOS43MTQ0IDE3Ni44MDYgNDAuNDAzNkMxNzYuODkyIDQxLjA5MjkgMTc3LjE1IDQxLjYwOTggMTc3LjU4MSA0MS44NjgyQzE3Ny45NjkgNDIuMTI2NyAxNzguNjU4IDQyLjI1NTkgMTc5LjYwNiA0Mi4yNTU5VjQzLjA3NDRIMTY4LjYyMVY0Mi4yNTU5QzE2OS40NCA0Mi4yNTU5IDE3MC4wNDMgNDIuMTI2NyAxNzAuNDczIDQxLjg2ODJaTTE3MS44MDkgMTUuNjc3NUMxNzEuMjA2IDE1LjA3NDQgMTcwLjkwNCAxNC4zNDIxIDE3MC45MDQgMTMuNDgwNkMxNzAuOTA0IDEyLjYxOSAxNzEuMjA2IDExLjg0MzYgMTcxLjgwOSAxMS4yNDA2QzE3Mi40MTIgMTAuNjM3NSAxNzMuMTAxIDEwLjMzNTkgMTczLjk2MyAxMC4zMzU5QzE3NC43ODEgMTAuMzM1OSAxNzUuNTEzIDEwLjYzNzUgMTc2LjExNiAxMS4yNDA2QzE3Ni43MiAxMS44NDM2IDE3Ny4wMjEgMTIuNjE5IDE3Ny4wMjEgMTMuNDgwNkMxNzcuMDIxIDE0LjM0MjEgMTc2LjcyIDE1LjA3NDQgMTc2LjExNiAxNS42Nzc1QzE3NS41MTMgMTYuMjgwNiAxNzQuODI0IDE2LjU4MjEgMTczLjk2MyAxNi41ODIxQzE3My4xMDEgMTYuNTgyMSAxNzIuNDEyIDE2LjI4MDYgMTcxLjgwOSAxNS42Nzc1WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTQ0LjcgNDEuODY2M0MxNDUuMDg4IDQxLjYwNzggMTQ1LjM0NiA0MS4wOTA5IDE0NS41MTkgNDAuMzU4NkMxNDUuNjQ4IDM5LjYyNjMgMTQ1LjczNCAzOC40NjMyIDE0NS43MzQgMzYuODY5NFYxMi4xODYzSDE0Mi44NDhWMTEuNDEwOUMxNDQuMzEyIDExLjQxMDkgMTQ1Ljc3NyAxMS4xMDk0IDE0Ny4xNTUgMTAuNTA2M0MxNDguNTM0IDkuOTAzMiAxNDkuNTI1IDkuMDQxNjYgMTUwLjA4NSA4LjAwNzgxSDE1MC45MDNWMzIuMjYwMUwxNTguMjY5IDI1LjU0MDFDMTU5LjM4OSAyNC41MDYzIDE1OS45NDkgMjMuNjg3OCAxNTkuOTQ5IDIyLjk5ODZDMTU5Ljk0OSAyMi4yMjMyIDE1OS4wNDUgMjEuNzkyNCAxNTcuMzIyIDIxLjc5MjRWMjEuMTAzMkgxNjcuMDE0VjIxLjc5MjRDMTY1Ljc2NSAyMS43OTI0IDE2NC42MDIgMjIuMDk0IDE2My41MjUgMjIuNjU0QzE2Mi40NDggMjMuMjE0IDE2MS4xNTUgMjQuMTYxNyAxNTkuNjkxIDI1LjU0MDFMMTU2Ljg5MSAyOC4wODE3TDE2My45MTIgMzguNTQ5NEMxNjQuODE3IDM5LjkyNzggMTY1LjU5MiA0MC44NzU1IDE2Ni4xOTUgNDEuNDM1NUMxNjYuNzk5IDQxLjk5NTUgMTY3LjU3NCA0Mi4yNTQgMTY4LjUyMiA0Mi4yNTRWNDMuMDcyNEgxNjAuNjM5QzE1OS42NDggNDEuNTIxNyAxNTguNDg1IDM5Ljc1NTUgMTU3LjE5MiAzNy43MzA5TDE1My4wMTQgMzEuNjE0TDE1MC45MDMgMzMuNTA5NFYzNi44Njk0QzE1MC45MDMgMzguNTA2MyAxNTAuOTQ2IDM5LjY2OTQgMTUxLjA3NSA0MC4zNTg2QzE1MS4yMDUgNDEuMDkwOSAxNTEuNDYzIDQxLjYwNzggMTUxLjg1MSA0MS44NjYzQzE1Mi4yMzkgNDIuMTI0NyAxNTIuODg1IDQyLjI1NCAxNTMuNzg5IDQyLjI1NFY0My4wNzI0SDE0Mi44MDVWNDIuMjU0QzE0My42NjYgNDIuMjU0IDE0NC4yNjkgNDIuMTI0NyAxNDQuNyA0MS44NjYzWiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMTI0Ljg4NiA0Mi44MTI3QzEyMy4xNjMgNDIuMTIzNCAxMjEuNzg0IDQwLjkxNzMgMTIwLjY2NCAzOS4xOTQyQzExOS41NDQgMzcuNTE0MiAxMTguOTg0IDM1LjI3NDIgMTE4Ljk4NCAzMi41MTczQzExOC45ODQgMzAuMDYxOSAxMTkuNDU4IDI3Ljk1MTEgMTIwLjQ5MiAyNi4xNDE5QzEyMS40ODMgMjQuMzc1NyAxMjIuODE4IDIzLjA0MDQgMTI0LjU0MSAyMi4wOTI3QzEyNi4yNjQgMjEuMTg4MSAxMjguMTE3IDIwLjcxNDIgMTMwLjE4NCAyMC43MTQyQzEzMi4wMzcgMjAuNzE0MiAxMzMuNjMxIDIxLjI3NDIgMTM1LjAwOSAyMi4zMDgxQzEzMy44ODkgMTguOTkxMSAxMzIuMDggMTYuMTkxMSAxMjkuNjI0IDEzLjkwODFMMTIzLjM3OCAxNy41MjY1TDEyMi43NzUgMTYuNTM1N0wxMjguNjc3IDEzLjEzMjdDMTI2LjY5NSAxMS41ODE5IDEyNC40MTIgMTAuMzMyNyAxMjEuODI3IDkuMzg0OTdMMTIyLjMwMSA4LjUyMzQ0QzEyNS4xNDQgOS4zNDE5IDEyNy44NTggMTAuNTQ4MSAxMzAuMzU3IDEyLjE0MTlMMTM2LjA4NiA4LjgyNDk4TDEzNi43MzIgOS44MTU3NUwxMzEuNDM0IDEyLjg3NDJDMTM0LjQ5MiAxNS4wNzExIDEzNi45NDcgMTcuNjk4OCAxMzguODQzIDIwLjgwMDRDMTQwLjY5NSAyMy45MDE5IDE0MS42NDMgMjcuMzA1IDE0MS42NDMgMzAuOTY2NUMxNDEuNjQzIDMzLjcyMzQgMTQxLjEyNiAzNi4wNDk2IDE0MC4xMzUgMzcuOTg4MUMxMzkuMTQ0IDM5LjkyNjUgMTM3Ljc2NiA0MS4zOTExIDEzNi4wNDMgNDIuMzgxOUMxMzQuMzIgNDMuMzcyNyAxMzIuMzM4IDQzLjg0NjUgMTMwLjE0MSA0My44NDY1QzEyOC4zMzIgNDMuODQ2NSAxMjYuNTY2IDQzLjUwMTkgMTI0Ljg4NiA0Mi44MTI3Wk0xMjUuOTYzIDQwLjIyODFDMTI3LjA4MyA0Mi4wMzczIDEyOC41NDcgNDIuOTQxOSAxMzAuMzU3IDQyLjk0MTlDMTM0LjMyIDQyLjk0MTkgMTM2LjMwMSAzOS4wNjUgMTM2LjMwMSAzMS4yNjgxQzEzNi4zMDEgMjguODEyNyAxMzYuMDQzIDI2LjU3MjcgMTM1LjYxMiAyNC41NDgxQzEzNS4wMDkgMjMuNjQzNCAxMzQuMjM0IDIyLjkxMTEgMTMzLjMyOSAyMi4zOTQyQzEzMi40MjQgMjEuODc3MyAxMzEuMzkxIDIxLjYxODggMTMwLjI3MSAyMS42MTg4QzEyOC4yMDMgMjEuNjE4OCAxMjYuNjk1IDIyLjU2NjUgMTI1Ljc0NyAyNC4zNzU3QzEyNC43NTcgMjYuMjI4MSAxMjQuMjgzIDI4LjgxMjcgMTI0LjI4MyAzMi4xMjk2QzEyNC4yODMgMzUuNzA1IDEyNC44NDMgMzguNDE4OCAxMjUuOTYzIDQwLjIyODFaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik05OC45OTEyIDQyLjUwNjdDOTcuMTgxOSA0MS42NDUxIDk1Ljc2MDQgNDAuMzA5OCA5NC43MjY2IDM4LjU4NjdDOTMuNjkyNyAzNi44NjM2IDkzLjE3NTggMzQuNzUyOCA5My4xNzU4IDMyLjI5NzVDOTMuMTc1OCAyOS43OTkgOTMuNjkyNyAyNy42NDUxIDk0LjgxMjcgMjUuODM1OUM5NS45MzI3IDI0LjAyNjcgOTcuMzk3MyAyMi42OTEzIDk5LjI5MjcgMjEuNzQzNkMxMDEuMTg4IDIwLjc5NTkgMTAzLjI1NiAyMC4zMjIxIDEwNS41ODIgMjAuMzIyMUMxMDcuODIyIDIwLjMyMjEgMTA5LjgwMyAyMC43OTU5IDExMS42MTMgMjEuNjU3NUMxMTMuNDIyIDIyLjU2MjEgMTE0Ljg0MyAyMy44OTc1IDExNS44NzcgMjUuNjIwNUMxMTYuOTExIDI3LjM4NjcgMTE3LjQ3MSAyOS40NTQ0IDExNy40NzEgMzEuODY2N0MxMTcuNDcxIDM0LjM2NTEgMTE2LjkxMSAzNi41MTkgMTE1Ljc5MSAzOC4zMjgyQzExNC42NzEgNDAuMTM3NSAxMTMuMjA3IDQxLjUxNTkgMTExLjMxMSA0Mi40NjM2QzEwOS40MTYgNDMuNDExMyAxMDcuMzQ4IDQzLjg0MjEgMTA1LjEwOCA0My44NDIxQzEwMi44MjUgNDMuODQyMSAxMDAuOCA0My40MTEzIDk4Ljk5MTIgNDIuNTA2N1pNMTEwLjE0OCA0MC4xODA1QzExMS4zNTQgMzguMjg1MSAxMTEuOTU3IDM1LjcwMDUgMTExLjk1NyAzMi4zODM2QzExMS45NTcgMjguNzY1MSAxMTEuMzExIDI2LjAwODIgMTEwLjEwNSAyNC4wNjk4QzEwOC44OTkgMjIuMTMxMyAxMDcuMjYyIDIxLjE0MDUgMTA1LjI4IDIxLjE0MDVDMTAzLjI5OSAyMS4xNDA1IDEwMS43MDUgMjIuMDg4MiAxMDAuNDk5IDIzLjk4MzZDOTkuMjkyNyAyNS44NzkgOTguNzMyNyAyOC41MDY3IDk4LjczMjcgMzEuNzgwNUM5OC43MzI3IDM1LjM5OSA5OS4zMzU4IDM4LjE1NTkgMTAwLjU0MiA0MC4wOTQ0QzEwMS43NDggNDIuMDMyOCAxMDMuMzg1IDQyLjk4MDUgMTA1LjQxIDQyLjk4MDVDMTA3LjM5MSA0Mi45ODA1IDEwOC45NDIgNDIuMDc1OSAxMTAuMTQ4IDQwLjE4MDVaTTEwMy4zODUgMTcuMzkyOEwxMDguNzI3IDkuNjgyMDdDMTA5LjExNCA5LjA3ODk5IDEwOS42MzEgOC43MzQzOCAxMTAuMjc3IDguNzM0MzhDMTEwLjcwOCA4LjczNDM4IDExMS4wOTYgOC45MDY2OCAxMTEuNDQgOS4yMDgyMkMxMTEuNzg1IDkuNTUyODQgMTExLjk1NyA5Ljg5NzQ1IDExMS45NTcgMTAuMzI4MkMxMTEuOTU3IDEwLjgwMjEgMTExLjY1NiAxMS4yNzU5IDExMS4xMzkgMTEuNzkyOEwxMDMuOTQ1IDE3LjkwOThMMTAzLjM4NSAxNy4zOTI4WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNNzcuNDM2NSA1My41ODUyQzc2LjY2MTEgNTMuMDY4MiA3Ni4yNzM0IDUyLjM3OSA3Ni4yNzM0IDUxLjU2MDZDNzYuMjczNCA1MC45NTc1IDc2LjQ0NTcgNTAuNDgzNiA3Ni44NzY1IDUwLjA1MjlDNzcuMjY0MiA0OS42NjUyIDc3Ljc4MTEgNDkuNDQ5OCA3OC4zODQyIDQ5LjQ0OThDNzguOTQ0MiA0OS40NDk4IDc5LjQxODEgNDkuNjIyMSA3OS44MDU3IDQ5Ljk2NjdDODAuMTkzNCA1MC4zMTEzIDgwLjYyNDIgNTAuODI4MiA4MS4wNTUgNTEuNDc0NEM4MS4zOTk2IDUyLjAzNDQgODEuNzAxMSA1Mi40NjUyIDgyLjAwMjcgNTIuNzIzNkM4Mi4yNjExIDUyLjk4MjEgODIuNjA1NyA1My4xMTEzIDgyLjk5MzQgNTMuMTExM0M4My41NTM0IDUzLjExMTMgODMuOTg0MiA1Mi43MjM2IDg0LjI4NTcgNTEuODYyMUM4NC41ODczIDUxLjA0MzYgODQuNzU5NiA0OS44ODA2IDg0Ljc1OTYgNDguMzI5OFYyNC4zMzU5SDgxLjg3MzRWMjMuNTE3NUM4My4zMzgxIDIzLjUxNzUgODQuODAyNyAyMy4yMTU5IDg2LjE4MTEgMjIuNjEyOUM4Ny41NTk2IDIyLjAwOTggODguNTUwNCAyMS4xNDgyIDg5LjExMDQgMjAuMDcxM0g4OS45Mjg4VjQ0LjAyMjFDODkuOTI4OCA0Ny4yMDk4IDg5LjExMDQgNDkuNzUxMyA4Ny40NzM0IDUxLjYwMzZDODUuODM2NSA1My40NTU5IDgzLjY4MjcgNTQuMzYwNiA4MC45Njg4IDU0LjM2MDZDNzkuMzc1IDU0LjM2MDYgNzguMjExOSA1NC4xMDIxIDc3LjQzNjUgNTMuNTg1MlpNODUuMDYxMSAxNS42Nzc1Qzg0LjQ1ODEgMTUuMDc0NCA4NC4xNTY1IDE0LjM0MjEgODQuMTU2NSAxMy40ODA2Qzg0LjE1NjUgMTIuNjE5IDg0LjQ1ODEgMTEuODQzNiA4NS4wNjExIDExLjI0MDZDODUuNjY0MiAxMC42Mzc1IDg2LjM1MzQgMTAuMzM1OSA4Ny4yMTUgMTAuMzM1OUM4OC4wMzM0IDEwLjMzNTkgODguNzY1NyAxMC42Mzc1IDg5LjM2ODggMTEuMjQwNkM4OS45NzE5IDExLjg0MzYgOTAuMjczNCAxMi42MTkgOTAuMjczNCAxMy40ODA2QzkwLjI3MzQgMTQuMzQyMSA4OS45NzE5IDE1LjA3NDQgODkuMzY4OCAxNS42Nzc1Qzg4Ljc2NTcgMTYuMjgwNiA4OC4wNzY1IDE2LjU4MjEgODcuMjE1IDE2LjU4MjFDODYuMzUzNCAxNi41ODIxIDg1LjY2NDIgMTYuMjgwNiA4NS4wNjExIDE1LjY3NzVaIiBmaWxsPSIjNDgxRTM1Ii8+CjxwYXRoIGQ9Ik01OS4wMTY4IDQxLjkxMjZDNTkuNDQ3NiA0MS42OTczIDU5Ljc5MjIgNDEuMjIzNCA2MC4wNTA2IDQwLjQ5MTFDNjAuMjY2IDM5LjgwMTkgNjAuMzk1MyAzOC42ODE5IDYwLjM5NTMgMzcuMTc0MlYxOC42MDhDNjAuMzk1MyAxNy4yMjk2IDYwLjI2NiAxNi4xNTI2IDYwLjA1MDYgMTUuNDYzNEM1OS43OTIyIDE0Ljc3NDIgNTkuNDQ3NiAxNC4zNDM0IDU5LjAxNjggMTQuMDg1QzU4LjU0MyAxMy44Njk2IDU3Ljg1MzcgMTMuNzQwMyA1Ni45OTIyIDEzLjc0MDNWMTIuOTIxOUg2OS4yNjkxVjEzLjc0MDNDNjguMzY0NSAxMy43NDAzIDY3LjY3NTMgMTMuODY5NiA2Ny4yNDQ1IDE0LjA4NUM2Ni43NzA2IDE0LjM0MzQgNjYuNDI2IDE0Ljc3NDIgNjYuMjEwNyAxNS40NjM0QzY1Ljk1MjIgMTYuMTUyNiA2NS44NjYgMTcuMjI5NiA2NS44NjYgMTguNjA4VjE4LjY5NDJINjkuMTM5OUM3My4wMTY4IDE4LjY5NDIgNzUuOTg5MSAxOS40Njk2IDc4LjA1NjggMjAuOTc3M0M4MC4xMjQ1IDIyLjUyOCA4MS4xNTgzIDI0LjYzODggODEuMTU4MyAyNy4zOTU3QzgxLjE1ODMgMjkuNDYzNCA4MC41NTUzIDMxLjE4NjUgNzkuNDM1MyAzMi41NjVDNzguMzE1MyAzMy45NDM0IDc2Ljg1MDcgMzQuOTc3MyA3NS4wNDE0IDM1LjYyMzRDNzMuMjMyMiAzNi4zMTI2IDcxLjI5MzcgMzYuNjE0MiA2OS4yNjkxIDM2LjYxNDJDNjguMTkyMiAzNi42MTQyIDY3LjA3MjIgMzYuNTI4IDY1Ljg2NiAzNi4zMTI2VjM3LjE3NDJDNjUuODY2IDM4LjY4MTkgNjUuOTUyMiAzOS44MDE5IDY2LjE2NzYgNDAuNDkxMUM2Ni4zODMgNDEuMjIzNCA2Ni43Mjc2IDQxLjY5NzMgNjcuMjAxNCA0MS45MTI2QzY3LjY3NTMgNDIuMTcxMSA2OC4zNjQ1IDQyLjI1NzMgNjkuMjY5MSA0Mi4yNTczVjQzLjA3NTdINTYuOTkyMlY0Mi4yNTczQzU3Ljg1MzcgNDIuMjU3MyA1OC41NDMgNDIuMTcxMSA1OS4wMTY4IDQxLjkxMjZaTTY4Ljg4MTQgMzUuNjIzNEM3MC4wODc2IDM1LjYyMzQgNzEuMjA3NiAzNS4yNzg4IDcyLjE5ODMgMzQuNTg5NkM3My4xODkxIDMzLjkwMDMgNzMuOTY0NSAzMi45NTI2IDc0LjU2NzYgMzEuNzAzNEM3NS4xMjc2IDMwLjQ5NzMgNzUuNDI5MSAyOS4wNzU3IDc1LjQyOTEgMjcuNTI1Qzc1LjQyOTEgMjQuODk3MyA3NC43Mzk5IDIyLjkxNTcgNzMuNDA0NSAyMS42MjM0QzcyLjA2OTEgMjAuMzMxMSA3MC4zNDYgMTkuNjg1IDY4LjE5MjIgMTkuNjg1SDY1Ljg2NlYzNS4xMDY1QzY2Ljg5OTkgMzUuNDUxMSA2Ny44OTA3IDM1LjYyMzQgNjguODgxNCAzNS42MjM0WiIgZmlsbD0iIzQ4MUUzNSIvPgo8cGF0aCBkPSJNMjMuNzM2MyAwQzI0Ljk1MzkgMCAyNS45NDE0IDAuOTg3NDY1IDI1Ljk0MTQgMi4yMDUwOFYxMi4wNzk4QzI1Ljk0MTQgMTQuMDUwNyAyNy41MzkxIDE1LjY0ODQgMjkuNTEgMTUuNjQ4NEgzOS43OTQ5QzQxLjAxMjUgMTUuNjQ4NCA0MiAxNi42MzU5IDQyIDE3Ljg1MzVWMjMuMzI2MkM0MiAyNC41NDM4IDQxLjAxMjUgMjUuNTMxMiAzOS43OTQ5IDI1LjUzMTJIMjkuNTFDMjcuNTM5MSAyNS41MzEyIDI1Ljk0MTQgMjcuMTI5IDI1Ljk0MTQgMjkuMDk5OVY1My43OTQ5QzI1Ljk0MTQgNTUuMDEyNSAyNC45NTM5IDU2IDIzLjczNjMgNTZIMTguMjYzN0MxNy4wNDYxIDU2IDE2LjA1ODYgNTUuMDEyNSAxNi4wNTg2IDUzLjc5NDlWMjkuMDk5OUMxNi4wNTg2IDI3LjEyOSAxNC40NjA5IDI1LjUzMTIgMTIuNDkgMjUuNTMxMkgyLjIwNTA4QzAuOTg3NDc5IDI1LjUzMTIgMi4yODE0NWUtMDUgMjQuNTQzOCAwIDIzLjMyNjJWMTcuODUzNUMwIDE2LjYzNTkgMC45ODc0NjUgMTUuNjQ4NCAyLjIwNTA4IDE1LjY0ODRIMTIuNDlDMTQuNDYwOSAxNS42NDg0IDE2LjA1ODYgMTQuMDUwNyAxNi4wNTg2IDEyLjA3OThWMi4yMDUwOEMxNi4wNTg2IDAuOTg3NDY1IDE3LjA0NjEgMCAxOC4yNjM3IDBIMjMuNzM2M1oiIGZpbGw9IiM0ODFFMzUiLz4KPC9zdmc+Cg==" alt="" style="height:22px;">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODQ3IiBoZWlnaHQ9IjMyNyIgdmlld0JveD0iMCAwIDg0NyAzMjciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wIDMyNi45NlY4Mi44NTcySDc4LjQyODVWMjYyLjEzOUgxODUuMDRWMzI3SDBWMzI2Ljk2Wk0yMTYuODQ2IDMyNi45NlY4Mi44NTcySDMxNy4wMTVDMzM4LjM5NCA4Mi44NTcyIDM1NC4wMTUgODMuMTc5MyAzNjQuMjAxIDg0LjIyNjFDMzczLjcwMyA4NS41OTQ5IDM4Mi4xOTggODcuNjA4IDM4OS4zMjQgODkuOTgzNEM0MTQuMTI1IDk5LjE2MjkgNDI3LjY5MyAxMTkuMTczIDQyNy42OTMgMTQ3LjM1NUM0MjcuNjkzIDE2OS43ODEgNDE3LjgyOSAxODYuMDQ2IDM5OC4xNDIgMTk2LjU5NUM0MjQuMjcxIDIwNS43NzQgNDM2LjE4OCAyMjQuMDkzIDQzNi4xODggMjUzLjY0NEM0MzYuMTg4IDI4My4xOTYgNDIzLjk0OSAzMDQuNTc1IDQwMC44NzkgMzE2LjEzQzM5My4wNjkgMzIwLjE5NiAzODQuMjUxIDMyMi45MzQgMzc0LjM4NyAzMjQuMjYyQzM2NC41MjMgMzI1Ljk1MyAzNDcuODk2IDMyNi45NiAzMjQuODI2IDMyNi45NkgyMTYuODQ2Wk0yOTIuODk5IDE4MC4yODlIMzI1LjE0OEMzNDYuODg5IDE4MC4yODkgMzU0LjcgMTc0LjUzMiAzNTQuNyAxNTkuMjMyQzM1NC43IDE1MS4xIDM1Mi4zMjQgMTQ1LjY2NCAzNDcuNTc0IDE0Mi42MDVDMzQyLjgyMyAxMzkuNTQ1IDMzMS42MyAxMzguMTc2IDMxNC42NCAxMzguMTc2SDI5Mi44OTlWMTgwLjI4OVpNMjkyLjg5OSAyNjkuOTFIMzI5LjIxNUMzNTMuMzMxIDI2OS45MSAzNjIuNDcgMjYzLjQ2OCAzNjIuNDcgMjQ3LjE2MkMzNjIuNDcgMjMwLjg1NyAzNTIuOTY5IDIyNC43MzcgMzI4LjUzIDIyNC43MzdIMjkyLjg5OVYyNjkuOTFaTTQ3OC40NjIgMzI2Ljk2VjgyLjg1NzJINTU2Ljg5MVYxNjUuNzE0SDYyOS44ODRWODIuODU3Mkg3MDguMzEyVjMyNi45Nkg2MjkuODg0VjIzMi4yMjZINTU2Ljg5MVYzMjYuOTZINDc4LjQ2MlpNNzY3LjIxNCA2MS40MzgzTDc5OS4xNDEgMEg4NDYuNjlMNzkyLjcgNjEuNDM4M0g3NjcuMjU1SDc2Ny4yMTRaTTc1Ni4wMjIgMzI2Ljk2VjgyLjg1NzJIODM1LjgxOVYzMjYuOTZINzU2LjAyMloiIGZpbGw9IiMzODY4MzIiLz4KPC9zdmc+Cg==" alt="" style="height:22px;">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/verkis.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Olis.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sjo%CC%81va%CC%81.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/O%CC%88lgerdin.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Arnarlax.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Samgo%CC%88ngustofa.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Nox-medical.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sto%CC%81lpi.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Klasi.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Safi%CC%81r.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Kjarkur.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Pipar.svg" alt="">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0IiBoZWlnaHQ9IjQ3IiB2aWV3Qm94PSIwIDAgMTQ0IDQ3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMzUuNDk2OCAyMy42MDYzQzM1LjQ5NjggMTUuMjc1NyA0MS45NzY0IDguNTYzNzIgNTAuNDgxOSA4LjU2MzcyQzU4LjM1MDMgOC41NjM3MiA2NC41NDAxIDE1LjI3NTcgNjQuNTQwMSAyMy40OTE0QzY0LjU0MDEgMjQuODgwMyA2NC4zNjc4IDI2LjI2OTEgNjQuMzY3OCAyNi4yNjkxSDQzLjM2NzlDNDQuMjk0NyAzMC4yNjA4IDQ3LjU5MTkgMzIuMTY5MiA1MS40MDg2IDMyLjE2OTJDNTQuMTg2MyAzMi4xNjkyIDU3LjA3ODkgMzEuMzU5OSA1OS4yMTk3IDI5LjkxMzZMNjIuMTEyMiAzNS40NjY1QzU4Ljg3MjQgMzcuNjA3MiA1NS4xMTMxIDM4LjY0ODggNTEuMzUxMiAzOC42NDg4QzQyLjkwNTggMzguNjQ4OCAzNS40OTk0IDMzLjE1MzQgMzUuNDk5NCAyMy42MDYzSDM1LjQ5NjhaTTU3LjI1MTIgMjEuMTE4M0M1Ni42NzE3IDE3LjQ3MzkgNTMuNzc5MSAxNS4wNDM0IDUwLjI1MjEgMTUuMDQzNEM0Ni43MjUyIDE1LjA0MzQgNDQuMDA0OSAxNy40NzM5IDQzLjI1MDQgMjEuMTE4M0g1Ny4yNTEyWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNNjkuOTc4MSA0Mi45ODY3TDcyLjg3MDYgMzguMTI1N0M3NS4xODM3IDM5LjkxOTIgNzguNTQwOSA0MC43Mjg1IDgxLjI1ODYgNDAuNzI4NUM4Ni42MzkxIDQwLjcyODUgODkuMzU5NCAzNy40ODg3IDg5LjU4OTIgMzIuODZDODkuNjQ2NiAzMi42ODc3IDg5LjY0NjYgMzIuNDU1MyA4OS42NDY2IDMyLjIyM0M4OC4zNzI2IDM0LjQ3ODYgODUuMjUwMyAzNi41MDQ1IDgwLjk2ODggMzYuNTA0NUM3Mi45MjgxIDM2LjUwNDUgNjcuODk0OCAzMC4yNTcyIDY3Ljg5NDggMjIuNTYxQzY3Ljg5NDggMTQuODY0OCA3Mi45MjgxIDguNTYwMDYgODAuOTY4OCA4LjU2MDA2Qzg0LjY3MDcgOC41NjAwNiA4OC40OTAxIDEwLjE4MTMgOTAuMDUxMiAxMy4wNzM5VjkuMTM5NjJIOTcuMzk3NlYzMS4wNjY1Qzk3LjM5NzYgNDAuNTUzNiA5MS42Njk4IDQ2LjU3MTEgODIuMDY1MyA0Ni41NzExQzc2Ljg1NzEgNDYuNTcxMSA3Mi42MzU3IDQ1LjE4MjMgNjkuOTcyOCA0Mi45ODQxTDY5Ljk3ODEgNDIuOTg2N1pNODkuNzA2NiAyMi4zODg3Qzg5LjcwNjYgMTguMzM5NiA4Ni42OTkyIDE1LjI3MiA4Mi43MDc1IDE1LjI3MkM3OC43MTU5IDE1LjI3MiA3NS43NjU4IDE4LjMzOTYgNzUuNzY1OCAyMi41NjFDNzUuNzY1OCAyNi43ODI0IDc4Ljc3MzMgMjkuNzM1IDgyLjcwNzUgMjkuNzM1Qzg2LjY0MTcgMjkuNzM1IDg5LjcwNjYgMjYuNzI3NiA4OS43MDY2IDIyLjM4ODdaIiBmaWxsPSIjMDQ1NjRDIi8+CjxwYXRoIGQ9Ik0xMDIuMzc2IDBIMTEwLjEzVjM4LjA2ODVIMTAyLjM3NlYwWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNMTE0LjMyMiAyMy42MDYzQzExNC4zMjIgMTUuMjc1NyAxMTkuNDEzIDguNTYzNzIgMTI3LjM5NiA4LjU2MzcyQzEzMC43NTEgOC41NjM3MiAxMzQuMzM4IDkuODk1MTUgMTM2LjQyMSAxMi42NzAzVjkuMTQwNjdIMTQ0VjM4LjA2OTNIMTM2LjQyMVYzNC41OTcxQzEzNC4zOTUgMzcuMzc0OSAxMzAuNzUxIDM4LjY0NjIgMTI3LjM5NiAzOC42NDYyQzExOS40MTMgMzguNjQ2MiAxMTQuMzIyIDMxLjkzNDMgMTE0LjMyMiAyMy42MDM3VjIzLjYwNjNaTTEzNi4yNDkgMjMuNjA2M0MxMzYuMjQ5IDE5LjA5MjUgMTMzLjM1NiAxNS43Mzc4IDEyOS4zNjUgMTUuNzM3OEMxMjUuMzczIDE1LjczNzggMTIyLjE5MSAxOS4wOTI1IDEyMi4xOTEgMjMuNjA2M0MxMjIuMTkxIDI4LjEyMDEgMTI1LjE5OCAzMS40NzQ4IDEyOS4zNjUgMzEuNDc0OEMxMzMuNTMxIDMxLjQ3NDggMTM2LjI0OSAyOC4yMzUgMTM2LjI0OSAyMy42MDYzWiIgZmlsbD0iIzA0NTY0QyIvPgo8cGF0aCBkPSJNMjYuMTYxMiAyNy4wMTc0QzMwLjc4OTggMjQuNTI5NCAzMy4yNzc4IDE5LjkwMDggMzMuMjc3OCAxNS4wOTk4QzMzLjI3NzggNy4wNTg5OCAyNy40OTI2IDAuNTc5MzQ2IDE2LjQ0MTggMC41NzkzNDZIMEw0LjUyNjg0IDcuNDYzNjNIOC40NTU4NEgxNi43Mjg5QzIxLjQxNSA3LjQ2MzYzIDI0LjcxMjMgMTAuODE4MyAyNC43MTIzIDE1LjA5OThDMjQuNzEyMyAxOS4zODEyIDIxLjQxNSAyMi42MjExIDE2LjY3MTUgMjIuNjIxMUgxNC40OTQyTDE4Ljg2OTcgMjkuMjczTDI0LjY1NDggMzguMDY1N0gzMy45Njk2TDI2LjE1ODYgMjcuMDE0OEwyNi4xNjEyIDI3LjAxNzRaIiBmaWxsPSIjMDQ1NjRDIi8+CjxwYXRoIGQ9Ik0zLjMzNjUgMTkuNzkxMkwwLjIzNzY3MSAxNS4wNzY0VjM4LjE3ODFMNS41NTI5MyAzMi44MjFMMTIuOTMwNiAzNC4zNzdMMy4zMzY1IDE5Ljc5MTJaIiBmaWxsPSIjODhDOTNDIi8+Cjwvc3ZnPgo=" alt="" style="height:24px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.site -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<script>
+(function(){
+  var intro = document.getElementById('intro');
+  var stack = document.getElementById('svgStack');
+  var logo  = document.getElementById('logoTarget');
+  var body  = document.body;
+  var finished = false;
+
+  // ── Introið spilast einu sinni á meðan flipinn er opinn ────────
+  // Fyrsta heimsókn í þessum flipa -> intro spilast.
+  // Endurhlaðning, "Heim" úr Um okkur o.s.frv. í sama flipa -> ekkert intro.
+  // Nýr flipi eða vafrinn opnaður aftur -> sessionStorage tæmist, intro spilast á ný.
+  // (Áður reyndum við líka að greina hart refresh sérstaklega með transferSize,
+  // en það er of ótryggt milli hýsingaraðila og olli því að introið sýndi sig alltaf.)
+  var SEEN = 'reytal-intro-seen';
+  var seen = false;
+  try { seen = sessionStorage.getItem(SEEN) === '1'; } catch(e){}
+
+  if (seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    intro.remove();
+    body.classList.remove('locked');
+    body.classList.add('ready');
+    return;
+  }
+  try { sessionStorage.setItem(SEEN, '1'); } catch(e){}
+
+  function finish(){
+    if (finished) return;
+    finished = true;
+    intro.classList.add('done');
+    body.classList.remove('locked');
+    body.classList.add('ready');
+    setTimeout(function(){ intro.remove(); }, 600);
+  }
+
+  // 1: gamla RVK Digital merkið birtist
+  setTimeout(function(){ intro.classList.add('logoin'); }, 150);
+
+  // 2: krossfeid beint yfir í staflaða REYTAL merkið, stórt og miðjusett
+  setTimeout(function(){ intro.classList.add('morph'); }, 1600);
+
+  // 3: merkið flýgur á sinn stað í nav, vefurinn birtist undir
+  setTimeout(function(){
+    var e = stack.getBoundingClientRect();
+    var l = logo.querySelector('svg').getBoundingClientRect();
+    var s = l.width / e.width;
+    var dx = l.left - e.left;
+    var dy = l.top  - e.top;
+    intro.classList.add('fly');
+    stack.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+s+')';
+    body.classList.add('ready');
+    setTimeout(finish, 1050);
+  }, 5600);
+
+  // click to skip
+  intro.addEventListener('click', finish);
+})();
+
+// ── Hringurinn rekur hægt undan músinni, eltir hana ekki ───────
+(function(){
+  var orb = document.querySelector('.orb');
+  if (!orb) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var tx = 0, ty = 0;              // markmið
+  var cx = 0, cy = 0;              // núverandi
+  var AMPX = 190;                  // hversu langt hann berst lárétt
+  var AMPY = 70;                   // og lóðrétt (takmarkað svo hann fari ekki niður í lógóin)
+  var raf = null;
+
+  addEventListener('mousemove', function(e){
+    var nx = (e.clientX / innerWidth  - 0.5) * 2;   // -1 .. 1
+    var ny = (e.clientY / innerHeight - 0.5) * 2;
+    tx = nx * AMPX;                 // berst í sömu átt og músin
+    ty = ny * AMPY;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, {passive:true});
+
+  function tick(){
+    // mjög lágt lerp-hlutfall: hann sígur á eftir, snappar aldrei
+    cx += (tx - cx) * 0.026;
+    cy += (ty - cy) * 0.026;
+    orb.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0)';
+
+    if (Math.abs(tx-cx) < 0.15 && Math.abs(ty-cy) < 0.15){
+      raf = null;                   // kyrrt, hættum lykkjunni
+      return;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+})();
+
+// ── SPLASH: loading-skjáir milli síðna ─────────────────────────
+(function(){
+  var A = document.getElementById('splashA');
+  var B = document.getElementById('splashB');
+  var C = document.getElementById('splashC');
+  var all = [A, B, C];
+  var HOLD = 1250;                 // hversu lengi splashið situr
+  var busy = false, next = 0;
+
+  // ── Splash C: raðirnar byggðar í JS svo þær fylli alltaf skjáinn ──
+  // [leturstærð í vmin, sekúndur (lágt = hratt), átt]
+  var C_ROWS = [
+    [ 9.5,  95, 'L'], [ 2.2,  46, 'R'], [ 5.8, 175, 'L'], [ 3.4,  62, 'R'],
+    [12.0, 130, 'L'], [ 2.0,  38, 'R'], [ 7.2, 205, 'L'], [ 2.8,  54, 'R'],
+    [ 4.4,  78, 'L'], [10.5, 155, 'R'], [ 2.2,  50, 'L'], [ 5.0, 230, 'R'],
+    [ 8.6, 110, 'L'], [ 2.4,  42, 'R'], [ 6.2, 190, 'L'], [ 3.0,  58, 'R'],
+    [11.0, 145, 'L'], [ 2.2,  52, 'R'], [ 7.8, 218, 'L']
+  ];
+  var WORD = '<span class="w">REY<i class="fl">TAL</i></span>';
+
+  function buildC(){
+    var host = document.getElementById('cRows');
+    if (!host) return;
+    var vmin = Math.min(innerWidth, innerHeight) / 100;
+    var need = innerWidth * 2.2;               // hver track þarf að þekja 2x skjáinn
+    var html = '';
+    C_ROWS.forEach(function(r, i){
+      var px   = r[0] * vmin;
+      var wordW = px * 4.06;                   // ~breidd á "REYTAL " í Archivo 900
+      var reps  = Math.max(3, Math.ceil(need / wordW));
+      var track = new Array(reps + 1).join(WORD);
+      html += '<div class="c-row" style="font-size:' + r[0] + 'vmin;--d:' +
+              (i * 0.035).toFixed(3) + 's;--dout:' +
+              ((C_ROWS.length - 1 - i) * 0.022).toFixed(3) + 's">' +
+                '<div class="c-track ' + (r[2] === 'L' ? 'r-l' : 'r-r') +
+                '" style="animation-duration:' + r[1] + 's">' + track + track + '</div>' +
+              '</div>';
+    });
+    host.innerHTML = html;
+  }
+
+  buildC();
+  var rt;
+  addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(buildC, 250);
+  });
+
+  function play(el){
+    if (busy) return;
+    busy = true;
+    el.classList.add('on');
+    setTimeout(function(){
+      el.classList.remove('on');           // feidar út á 0,75s
+      setTimeout(function(){ busy = false; }, 850);
+    }, HOLD);
+  }
+
+  // nav-tenglar spila splash. Hreinir síðu-akkerar (t.d. #work) fá að
+  // skrolla eðlilega án hjálpar. Tenglar á aðra síðu (t.d. Um okkur) spila
+  // splash og flakka svo þangað um leið og skjárinn er hulinn. Tenglar sem
+  // eiga sér ekki síðu ennþá (t.d. Þjónusta, bara "#") spila bara demóið.
+  document.querySelectorAll('nav a, .mobile-menu a').forEach(function(a){
+    if (a.id === 'splashBtn') return;
+    var dest = a.getAttribute('href');
+    if (dest && dest.charAt(0) === '#' && dest.length > 1) return; // hreint akkeri, láttu vera
+    var isRealPage = dest && dest !== '#';
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var el = all[next++ % all.length];
+      play(el);
+      if (isRealPage){
+        setTimeout(function(){ window.location.href = dest; }, 550);
+      }
+    });
+  });
+
+  // Splash-hnappurinn sýnir alla þrjá í röð
+  var btn = document.getElementById('splashBtn');
+  if (btn) btn.addEventListener('click', function(e){
+    e.preventDefault();
+    all.forEach(function(el, i){
+      setTimeout(function(){ play(el); }, i * (HOLD + 950));
+    });
+  });
+})();
+
+// stillir hero-innihaldið nákvæmlega á vinstri brún logosins í headernum
+(function(){
+  var logo = document.getElementById('logoTarget');
+  var heroWrap = document.querySelector('.hero .wrap');
+  if (!logo || !heroWrap) return;
+
+  var nav = document.querySelector('header nav');
+
+  function align(){
+    heroWrap.style.setProperty('--align', '0px');   // núllstillum fyrst
+
+    // navið þarf að vera í fullri breidd meðan mælt er. Ef notandinn hleður
+    // síðunni miðja vegu er það í pillu-formi, svo við slökkvum tímabundið
+    // á umbreytingunni og mælum, í stað þess að skrolla honum upp.
+    var wasPill = nav && nav.classList.contains('pill');
+    if (wasPill){
+      nav.style.transition = 'none';
+      nav.classList.remove('pill');
+    }
+
+    var logoLeft = logo.getBoundingClientRect().left;
+    var wrapBox  = heroWrap.getBoundingClientRect();
+    var cs = getComputedStyle(heroWrap);
+    var contentLeft = wrapBox.left + parseFloat(cs.paddingLeft);
+    var delta = logoLeft - contentLeft;             // jákvætt: færa til hægri
+    heroWrap.style.setProperty('--align', delta.toFixed(2) + 'px');
+
+    if (wasPill){
+      nav.classList.add('pill');
+      void nav.offsetWidth;                          // þvingum reflow
+      nav.style.transition = '';
+    }
+  }
+
+  align();
+  window.addEventListener('resize', align);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
+})();
+
+// lottie-krossinn: gögnin liggja í skjalinu sjálfu svo þetta virkar líka beint af diski
+(function(){
+  var host = document.getElementById('lottieCross');
+  var data = document.getElementById('crossData');
+  if (!host || !data || typeof lottie === 'undefined') return;
+  window.crossAnim = lottie.loadAnimation({
+    container: host,
+    renderer: 'svg',
+    loop: true,
+    autoplay: false,
+    animationData: JSON.parse(data.textContent)
+  });
+})();
+
+// skroll-hegðun: pillan + showcase (verkefnin taka yfir skjáinn hvert með sínum lit)
+(function(){
+  var body = document.body;
+  var mainNav = document.querySelector('header nav');
+  var wrapEl = document.querySelector('.showcase');
+  var sticky = document.getElementById('showSticky');
+  var bg = document.getElementById('showBg');
+  var slides = wrapEl ? [].slice.call(wrapEl.querySelectorAll('.show-slide')) : [];
+  var N = slides.length;
+  var colors = slides.map(function(sl){
+    var c = sl.getAttribute('data-color');
+    return [parseInt(c.substr(1,2),16), parseInt(c.substr(3,2),16), parseInt(c.substr(5,2),16)];
+  });
+  var active = -1, ticking = false;
+
+  // lifandi bakgrunnsraðirnar byggðar einu sinni: nafnið skríður hægt,
+  // önnur hver röð á hvolfi og í gagnstæða átt (flip-mótíf vörumerkisins)
+  slides.forEach(function(sl){
+    var life = sl.querySelector('.slide-life');
+    if (!life || !life.getAttribute('data-name')) return;
+    var name = life.getAttribute('data-name') + ' ';
+    var rows = life.querySelector('.life-rows');
+    if (!rows) return;
+    var html = '';
+    for (var i = 0; i < 5; i++){
+      var dur = 70 + i * 26;                    // hver röð á sínum hraða
+      var word = new Array(9).join('<span>' + name.trim() + '</span>');
+      html += '<div class="life-row' + (i % 2 ? ' fl' : '') + '">' +
+                '<div class="life-track ' + (i % 2 ? 'r-r' : 'r-l') + '" style="animation-duration:' + dur + 's">' +
+                  word + word +
+                '</div>' +
+              '</div>';
+    }
+    rows.innerHTML = html;
+  });
+
+  function mix(a, b, f){ return Math.round(a + (b - a) * f); }
+
+  function update(){
+    var scrollY = window.scrollY;
+    var vh = window.innerHeight;
+
+    // navið dregst mjúklega saman í miðjusetta pillu þegar byrjað er að skrolla
+    if (mainNav) mainNav.classList.toggle('pill', scrollY > 60);
+
+    if (wrapEl && N){
+      var rect = wrapEl.getBoundingClientRect();
+      var total = wrapEl.offsetHeight - vh;
+      var y = Math.min(Math.max(-rect.top, 0), total);
+      var p = total > 0 ? y / total : 0;      // 0..1 gegnum allan kaflann
+      var local = p * N;                       // 0..N
+
+      // virka glæran
+      var idx = Math.min(N - 1, Math.floor(local));
+      if (idx !== active){
+        // teljarinn í upplýsingalínunni: 01 / 05, alltaf réttur þó glærum fjölgi
+        slides.forEach(function(sl, i){
+          var eb = sl.querySelector('.panel-eyebrow');
+          if (eb && !eb.querySelector('.count')){
+            var c = document.createElement('span');
+            c.className = 'count';
+            c.textContent = ('0' + (i + 1)).slice(-2) + ' / ' + ('0' + N).slice(-2);
+            eb.appendChild(c);
+          }
+        });
+        slides.forEach(function(sl, i){
+          var on = i === idx;
+          sl.classList.toggle('active', on);
+          var vid = sl.querySelector('.slide-media');
+          if (vid && vid.play){                 // video, ekki mynd
+            vid.muted = true;                   // alltaf án hljóðs
+            if (on){ vid.play().catch(function(){}); }
+            else { vid.pause(); }
+          }
+          if (sl.querySelector('#lottieCross') && window.crossAnim){
+            if (on){ window.crossAnim.play(); }
+            else { window.crossAnim.pause(); }
+          }
+        });
+        active = idx;
+      }
+
+      // hver glæra heldur sínum lit stöðugum; blandast aðeins stutt (18%)
+      // yfir í næsta lit alveg við skilin svo skiptingin sé mjúk en skýr
+      var frac = local - idx;
+      var BAND = 0.18;
+      var c;
+      if (idx < N - 1 && frac > 1 - BAND){
+        var f = (frac - (1 - BAND)) / BAND;
+        var c0 = colors[idx], c1 = colors[idx + 1];
+        c = [mix(c0[0],c1[0],f), mix(c0[1],c1[1],f), mix(c0[2],c1[2],f)];
+      } else {
+        c = colors[idx];
+      }
+      bg.style.backgroundColor = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+      bg.style.opacity = 1;
+
+      // ljóst efni í nav á meðan sýningin þekur skjáinn
+      var covering = rect.top <= 100 && rect.bottom >= vh - 100;
+      body.classList.toggle('on-dark', covering);
+    }
+
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if (!ticking){
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+
+// fyrirsagnir: orðin rísa upp úr ósýnilegri línu, hvert á fætur öðru
+(function(){
+  if (!('IntersectionObserver' in window)) return;
+  var STAG = 0.05;   // sekúndur milli orða
+
+  // skiptir texta fyrirsagnar í orð og pakkar hverju í yfirfalls-maska,
+  // heldur innri elementum (accent, br) og sleppir örvum/teljurum
+  function splitWords(el, state){
+    var nodes = [].slice.call(el.childNodes);
+    nodes.forEach(function(node){
+      if (node.nodeType === 3){
+        var parts = node.textContent.split(/(\s+)/);
+        var frag = document.createDocumentFragment();
+        parts.forEach(function(p){
+          if (!p) return;
+          if (/^\s+$/.test(p)){ frag.appendChild(document.createTextNode(p)); return; }
+          var mask = document.createElement('span');
+          mask.className = 'fx-w';
+          var word = document.createElement('span');
+          word.textContent = p;
+          word.style.transitionDelay = (state.i++ * STAG).toFixed(2) + 's';
+          mask.appendChild(word);
+          frag.appendChild(mask);
+        });
+        el.replaceChild(frag, node);
+      } else if (node.nodeType === 1 && node.tagName !== 'BR' &&
+                 !node.classList.contains('arrow') && !node.classList.contains('count')){
+        splitWords(node, state);
+      }
+    });
+  }
+
+  // orðin eru falin STRAX við hleðslu (áður en nokkuð sést á skjánum),
+  // aðeins birtingin sjálf bíður eftir að introið sleppi síðunni
+  var els = [].slice.call(document.querySelectorAll('h1, h2, h3')).filter(function(el){
+    return !el.closest('.show-slide') && !el.closest('.intro') && !el.closest('.splash');
+  });
+  els.forEach(function(el){
+    splitWords(el, {i:0});
+    el.classList.add('fx');
+  });
+
+  function startObserve(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.2});
+    els.forEach(function(el){ io.observe(el); });
+  }
+  if (document.body.classList.contains('locked')){
+    var t = setInterval(function(){
+      if (!document.body.classList.contains('locked')){ clearInterval(t); startObserve(); }
+    }, 120);
+  } else {
+    startObserve();
+  }
+})();
+</script>
+
+
+<script>
+// farsímavalmynd: opna/loka heilsíðu-yfirlagið
+(function(){
+  var btn = document.getElementById('menuBtn');
+  var menu = document.getElementById('mobileMenu');
+  var close = document.getElementById('menuClose');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function(){ menu.classList.add('open'); });
+  if (close) close.addEventListener('click', function(){ menu.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>
