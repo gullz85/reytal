@@ -99,8 +99,11 @@
   }
 
   /* HERO */
-  /* haus og hero deila einum fleti svo hringurinn gangi óslitið undir hvoru tveggja */
-  .top{position:relative;overflow:hidden;}
+  /* haus og hero deila einum fleti svo hringurinn gangi óslitið undir hvoru tveggja.
+     Athugið: klippingin er á .orb, EKKI á .top - ef .top er með overflow:hidden
+     og nav (position:fixed) er innan þess, klippir Safari á iOS burt navið um leið
+     og .top skrollast úr sýn (þekktur WebKit-galli). */
+  .top{position:relative;}
   /* hero fyllir alltaf skjáinn til að byrja með, sama hvaða skjástærð */
   .hero{
     position:relative;
@@ -112,6 +115,7 @@
   /* mjukur hringur sem reikar um allan hausinn, bakvid textann */
   .orb{
     position:absolute;inset:0;z-index:0;
+    overflow:hidden;
     pointer-events:none;
     will-change:transform;
   }

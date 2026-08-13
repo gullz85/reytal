@@ -65,7 +65,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
   }
 
-.orb{position:absolute;inset:0;z-index:0;pointer-events:none;will-change:transform;}
+.orb{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;will-change:transform;}
   .blob{
     position:absolute;left:50%;top:50%;
     width:min(56vw,700px);aspect-ratio:1;border-radius:50%;
