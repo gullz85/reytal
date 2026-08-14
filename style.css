@@ -9,12 +9,17 @@
 
 *{box-sizing:border-box;margin:0;padding:0;}
   body{
-    font-family:'Instrument Sans',sans-serif;
+    font-family:'DM Sans',sans-serif;
     background:var(--cream);
     color:var(--black);
     overflow-x:hidden;
   }
   .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
+  h1,h2{text-transform:uppercase;}
+  /* flip: seinni lína fyrirsagnarinnar er á hvolfi/speglað til að byrja
+     með og réttist úr sér við skroll (sama og á forsíðunni) */
+  .flip-word{display:block;transform:scaleX(-1) scaleY(-1);transform-origin:center;will-change:transform;}
+  @media (prefers-reduced-motion:reduce){ .flip-word{transform:none !important;} }
 
 header{height:92px;position:relative;z-index:2;background:transparent;}
   nav.wrap{
@@ -45,12 +50,12 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     -webkit-backdrop-filter:blur(22px) saturate(180%);
     box-shadow:0 8px 32px rgba(11,12,13,0.10);
   }
-  .logo-mark{display:block;color:var(--navy);line-height:0;}
+  .logo-mark{display:block;color:var(--black);line-height:0;}
   .logo-mark svg{
-    height:36px;width:auto;display:block;fill:currentColor;
+    height:40px;width:auto;display:block;fill:currentColor;
     transition:height .5s cubic-bezier(.3,.7,.25,1);
   }
-  nav.wrap.pill .logo-mark svg{height:28px;}
+  nav.wrap.pill .logo-mark svg{height:32px;}
   nav ul{
     display:flex;gap:34px;list-style:none;
     position:relative;
@@ -58,9 +63,11 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   }
   nav.wrap.pill ul{gap:26px;}
   nav ul li a{
-    font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-weight:500;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
     color:var(--black);text-decoration:none;opacity:0.65;position:relative;
+    transition:font-size .5s cubic-bezier(.3,.7,.25,1);
   }
+  nav.wrap.pill ul li a{font-size:12px;}
   nav ul li a.active{opacity:1;}
   nav ul li a.active::after{
     content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
@@ -78,14 +85,40 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   nav ul.has-underline li a.active::after{display:none;}
   @media (prefers-reduced-motion:reduce){ .nav-underline{transition:opacity .25s ease;} }
 
+/* litatónn hringjanna: sjálfgefið sama daufa bláa og á forsíðunni, en
+   hver undirsíða getur skipt um tón með einum bekk á <body> (sjá neðar) */
+:root{
+  --blob-c1:rgba(13,70,89,0.20);
+  --blob-c2:rgba(76,124,147,0.12);
+  --blob-c3:rgba(190,191,166,0.06);
+  --blob2-c1:rgba(13,70,89,0.16);
+  --blob2-c2:rgba(76,124,147,0.09);
+  --blob2-c3:rgba(190,191,166,0.05);
+}
+body.tone-orange{
+  --blob-c1:rgba(196,109,58,0.20); --blob-c2:rgba(224,158,110,0.14); --blob-c3:rgba(232,196,158,0.07);
+  --blob2-c1:rgba(196,109,58,0.16); --blob2-c2:rgba(224,158,110,0.10); --blob2-c3:rgba(232,196,158,0.06);
+}
+body.tone-sage{
+  --blob-c1:rgba(103,122,80,0.20); --blob-c2:rgba(148,160,120,0.13); --blob-c3:rgba(190,191,166,0.08);
+  --blob2-c1:rgba(103,122,80,0.16); --blob2-c2:rgba(148,160,120,0.10); --blob2-c3:rgba(190,191,166,0.06);
+}
+body.tone-rose{
+  --blob-c1:rgba(168,101,110,0.19); --blob-c2:rgba(201,150,155,0.13); --blob-c3:rgba(224,196,190,0.07);
+  --blob2-c1:rgba(168,101,110,0.15); --blob2-c2:rgba(201,150,155,0.10); --blob2-c3:rgba(224,196,190,0.06);
+}
+body.tone-amber{
+  --blob-c1:rgba(191,140,58,0.19); --blob-c2:rgba(214,176,122,0.13); --blob-c3:rgba(232,209,168,0.07);
+  --blob2-c1:rgba(191,140,58,0.15); --blob2-c2:rgba(214,176,122,0.10); --blob2-c3:rgba(232,209,168,0.06);
+}
 .orb{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;will-change:transform;}
   .blob{
     position:absolute;left:50%;top:50%;
     width:min(56vw,700px);aspect-ratio:1;border-radius:50%;
     background:radial-gradient(circle at 36% 34%,
-                 rgba(13,70,89,0.20),
-                 rgba(76,124,147,0.12) 45%,
-                 rgba(190,191,166,0.06) 66%,
+                 var(--blob-c1),
+                 var(--blob-c2) 45%,
+                 var(--blob-c3) 66%,
                  transparent 74%);
     filter:blur(48px);
     animation:roam 52s ease-in-out infinite;
@@ -105,9 +138,9 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     position:absolute;z-index:-1;
     width:min(38vw,460px);aspect-ratio:1;border-radius:50%;
     background:radial-gradient(circle at 38% 36%,
-                 rgba(13,70,89,0.16),
-                 rgba(76,124,147,0.09) 45%,
-                 rgba(190,191,166,0.05) 66%,
+                 var(--blob2-c1),
+                 var(--blob2-c2) 45%,
+                 var(--blob2-c3) 66%,
                  transparent 74%);
     filter:blur(46px);
     pointer-events:none;
@@ -126,7 +159,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   @media (max-width:760px){ .blob2{width:min(60vw,340px);} }
 
 .eyebrow{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
     color:var(--slate);margin-bottom:22px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;
   }
   .eyebrow::before{
@@ -141,7 +174,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
 
 .meta-row{display:flex;gap:12px;margin-top:44px;flex-wrap:wrap;position:relative;z-index:1;}
   .tag{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
     border:1px solid rgba(11,12,13,0.25);border-radius:999px;padding:8px 16px;color:var(--navy);
   }
 
@@ -149,7 +182,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     background:var(--black);color:var(--cream);
     padding:15px 28px;border-radius:999px;font-weight:600;font-size:14px;
     text-decoration:none;display:inline-block;text-align:center;
-    font-family:'IBM Plex Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;letter-spacing:0.03em;text-transform:uppercase;
     white-space:nowrap;border:none;cursor:pointer;
     position:relative;
     transition:transform .35s cubic-bezier(.25,.6,.25,1), box-shadow .35s ease;
@@ -227,7 +260,9 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
 
 .fx .fx-w{
     display:inline-block;overflow:hidden;vertical-align:bottom;
-    padding-bottom:.14em;margin-bottom:-.14em;
+    padding-bottom:.16em;margin-bottom:-.16em;
+    padding-right:.08em;margin-right:-.08em;
+    padding-top:.16em;margin-top:-.16em;
   }
   .fx .fx-w > span{
     display:inline-block;
@@ -244,7 +279,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
 /* ── FARSÍMAVALMYND: heilsíðu-yfirlag með stórum tenglum ─────── */
   .menu-btn{
     display:none;
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
     background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
   }
   body.on-dark .menu-btn{color:var(--cream);}
@@ -258,7 +293,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   }
   .mobile-menu.open{opacity:1;visibility:visible;transition:opacity .35s ease, visibility 0s;}
   .mobile-menu a{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-family:'DM Sans',sans-serif;font-weight:500;
     font-size:clamp(32px,9vw,42px);letter-spacing:-0.02em;
     color:var(--black);text-decoration:none;
     padding:14px 0;border-bottom:1px solid rgba(11,12,13,0.12);
@@ -267,7 +302,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   .mobile-menu a.active{color:var(--navy);}
   .menu-close{
     position:absolute;top:26px;right:28px;
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
     background:none;border:none;color:var(--black);cursor:pointer;padding:8px;
   }
 
@@ -286,7 +321,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
     display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
   }
   .footer-mail{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
+    font-family:'DM Sans',sans-serif;font-weight:500;
     font-size:clamp(32px,5.6vw,76px);line-height:1;letter-spacing:-0.03em;
     color:var(--black);text-decoration:none;
     transition:color .3s ease;
@@ -297,7 +332,7 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   .footer-bottom{
     display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;
     margin-top:clamp(48px,8vh,80px);
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
     color:var(--slate);
   }
   .footer-bottom a{color:var(--slate);text-decoration:none;transition:color .3s ease;}

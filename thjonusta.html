@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#F3F0EA">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
 <script>
@@ -35,15 +35,18 @@
 
   /* PAGE-HERO */
   .top{position:relative;}
+  h1,h2{text-transform:uppercase;}
   .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
   
 
   
 
   h1{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(38px,6vw,84px);line-height:1.0;letter-spacing:-0.03em;
-    max-width:900px;position:relative;z-index:1;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:flex-start;
+    margin-top:clamp(36px,6vw,88px);
   }
   h1 .accent{color:var(--navy);}
 
@@ -63,8 +66,8 @@
     text-decoration:none;color:inherit;
   }
   .work-row h3{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(26px,3.6vw,44px);line-height:1.05;letter-spacing:-0.03em;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(26px,3.6vw,44px);line-height:1.05;letter-spacing:-0.02em;
     display:flex;align-items:center;gap:0.35em;
     transition:color .3s ease;
   }
@@ -77,18 +80,18 @@
   .work-row:hover h3{color:var(--navy);}
   .work-row:hover .arrow{opacity:1;transform:translateX(0);}
   .work-client{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
     color:var(--slate);display:block;margin-top:8px;
   }
   .work-row p{
     font-size:15px;line-height:1.6;color:#2a2a2a;max-width:520px;margin-top:10px;
   }
   .work-tags{
-    display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;
-    max-width:220px;padding-top:12px;
+    display:flex;flex-wrap:nowrap;gap:8px;justify-content:flex-end;
+    padding-top:12px;
   }
   .work-tag{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
     border:1px solid rgba(11,12,13,0.22);border-radius:999px;padding:6px 14px;color:var(--navy);
     white-space:nowrap;
   }
@@ -101,16 +104,14 @@
     display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
   }
   .cta-box h2{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.02em;max-width:480px;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.01em;max-width:480px;
   }
   
 
   @media (max-width:760px){
-    .work-row{grid-template-columns:1fr;gap:14px;}
-    .work-tags{justify-content:flex-start;max-width:none;padding-top:2px;}
     .work-row{grid-template-columns:1fr;gap:8px;}
-    .work-tags{justify-content:flex-start;max-width:none;padding-top:6px;}
+    .work-tags{flex-wrap:wrap;justify-content:flex-start;padding-top:6px;}
     .cta-box{flex-direction:column;align-items:flex-start;}
   }
 
@@ -123,7 +124,7 @@
   
 </style>
 </head>
-<body>
+<body class="tone-orange">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="markStack" viewBox="0 0 23.19 18.89">
@@ -184,9 +185,8 @@
 
 <section class="page-hero">
   <div class="wrap">
-    <div class="eyebrow">Þjónusta</div>
-    <h1>Allt sem <span class="accent">vefurinn</span> þinn þarf.</h1>
-    <p class="lede">Frá fyrstu skissu að daglegum rekstri: við hönnum, byggjum og rekum stafræna innviði svo þú getir einbeitt þér að þínum rekstri.</p>
+    <h1><span>Þjónusta</span><span class="flip-word">Í boði</span></h1>
+    <p class="lede">Frá stefnu til afhendingar, allt undir einu þaki.</p>
   </div>
 </section>
 </div><!-- /.top -->
@@ -199,17 +199,15 @@
 
       <a class="work-row" href="mailto:hallo@reytal.is?subject=Vef%C3%BEr%C3%B3un">
         <div class="work-main">
-          <h3>Vefþróun <span class="arrow">→</span></h3>
-          <span class="work-client">Vefkerfi · vefsíður · netverslanir</span>
+          <h3>Vefþróun <span class="arrow">↗</span></h3>
           <p>Sérsniðnir vefir og vefkerfi frá grunni: hraðir, öruggir og byggðir til að vaxa með fyrirtækinu. WordPress, sérlausnir og allt þar á milli.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">WordPress</span><span class="work-tag">Sérlausnir</span></div>
+        <div class="work-tags"><span class="work-tag">Vefsíður</span><span class="work-tag">Vefkerfi</span><span class="work-tag">Sérlausnir</span><span class="work-tag">Netverslanir</span></div>
       </a>
 
       <a class="work-row" href="mailto:hallo@reytal.is?subject=H%C3%B6nnun">
         <div class="work-main">
-          <h3>Hönnun og vörumerki <span class="arrow">→</span></h3>
-          <span class="work-client">Útlit · ásýnd · notendaupplifun</span>
+          <h3>Hönnun og vörumerki <span class="arrow">↗</span></h3>
           <p>Vefhönnun, vörumerki og ásýnd sem endurspegla fyrirtækið þitt: frá wireframe að fullkláruðu útliti með notendaupplifun í forgrunni.</p>
         </div>
         <div class="work-tags"><span class="work-tag">UX / UI</span><span class="work-tag">Vörumerki</span></div>
@@ -217,8 +215,7 @@
 
       <a class="work-row" href="mailto:hallo@reytal.is?subject=SEO">
         <div class="work-main">
-          <h3>Leitarvélabestun <span class="arrow">→</span></h3>
-          <span class="work-client">SEO · sýnileiki · mælingar</span>
+          <h3>Leitarvélabestun <span class="arrow">↗</span></h3>
           <p>Sýnileikabestun sem skilar raunverulegri umferð: tæknileg SEO, efnisstefna og mælingar svo þú sjáir hvað virkar.</p>
         </div>
         <div class="work-tags"><span class="work-tag">SEO</span><span class="work-tag">Greiningar</span></div>
@@ -226,8 +223,7 @@
 
       <a class="work-row" href="mailto:hallo@reytal.is?subject=H%C3%BDsing%20og%20rekstur">
         <div class="work-main">
-          <h3>Hýsing og rekstur <span class="arrow">→</span></h3>
-          <span class="work-client">Umsjón · öryggi · uppfærslur</span>
+          <h3>Hýsing og rekstur <span class="arrow">↗</span></h3>
           <p>Við gætum, verndum og viðhöldum vefjum dag eftir dag: hýsing, öryggisuppfærslur, afritun og vöktun í öruggum höndum.</p>
         </div>
         <div class="work-tags"><span class="work-tag">Hýsing</span><span class="work-tag">Umsjón</span></div>
@@ -235,8 +231,7 @@
 
       <a class="work-row" href="mailto:hallo@reytal.is?subject=Gervigreind%20og%20sj%C3%A1lfvirkni">
         <div class="work-main">
-          <h3>Gervigreind og sjálfvirkni <span class="arrow">→</span></h3>
-          <span class="work-client">AI · sjálfvirkni · samþættingar</span>
+          <h3>Gervigreind og sjálfvirkni <span class="arrow">↗</span></h3>
           <p>Snjallar lausnir sem spara tíma: gervigreind í þjónustu og efnisvinnslu, sjálfvirkni í ferlum og samþættingar milli kerfa.</p>
         </div>
         <div class="work-tags"><span class="work-tag">AI</span><span class="work-tag">Sjálfvirkni</span></div>
@@ -267,7 +262,7 @@
     </div>
     <div class="footer-bottom">
       <span>Reytal © 2026</span>
-      <a href="/bokun">Hafa samband →</a>
+      <a href="/bokun">Hafa samband ↗</a>
     </div>
   </div>
 </footer>

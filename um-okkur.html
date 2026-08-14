@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#F3F0EA">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
 <script>
@@ -35,15 +35,18 @@
 
   /* PAGE-HERO: haus og inngangur deila fleti svo hringurinn gangi óslitið undir */
   .top{position:relative;}
+  h1,h2{text-transform:uppercase;}
   .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
   
 
   
 
   h1{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(38px,6vw,84px);line-height:1.0;letter-spacing:-0.03em;
-    max-width:900px;position:relative;z-index:1;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:flex-start;
+    margin-top:clamp(36px,6vw,88px);
   }
   h1 .accent{color:var(--navy);}
 
@@ -58,8 +61,8 @@
   .team{position:relative;z-index:1;padding:clamp(88px,12vh,140px) 0 clamp(72px,10vh,120px);}
   .section-head{max-width:620px;margin-bottom:clamp(48px,7vh,72px);}
   .section-head h2{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.02em;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.01em;
     margin-top:14px;
   }
 
@@ -95,11 +98,11 @@
   }
   .person:hover .person-info{transform:translateY(-5px);}
   .person-info h3{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
+    font-family:'DM Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
     color:#fff;
   }
   .person-info .role{
-    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
     color:#fff;
     border:1px solid rgba(255,255,255,0.45);border-radius:999px;
     padding:6px 13px;
@@ -115,8 +118,8 @@
     display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
   }
   .cta-box h2{
-    font-family:'Instrument Sans',sans-serif;font-weight:500;
-    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.02em;max-width:480px;
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.01em;max-width:480px;
   }
   
 
@@ -134,7 +137,7 @@
   
 </style>
 </head>
-<body>
+<body class="tone-rose">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="markStack" viewBox="0 0 23.19 18.89">
@@ -195,9 +198,8 @@
 
 <section class="page-hero">
   <div class="wrap">
-    <div class="eyebrow">Um okkur</div>
-    <h1><span class="accent">Fólkið</span> á bakvið kerfin.</h1>
-    <p class="lede">Reytal er lítið en þétt teymi sem hannar og byggir stafræna innviði fyrir fyrirtæki sem vilja vaxa. Við trúum á einfaldar lausnir, skýra hugsun og að standa alltaf við það sem við lofum.</p>
+    <h1><span>Um</span><span class="flip-word">Okkur</span></h1>
+    <p class="lede">Vefir, netverslanir og leitarvélabestun. Sama teymið í yfir tíu ár.</p>
     <div class="meta-row">
       <div class="tag">Reykjavík</div>
       <div class="tag">Tallinn</div>
@@ -323,7 +325,7 @@
     </div>
     <div class="footer-bottom">
       <span>Reytal © 2026</span>
-      <a href="/bokun">Hafa samband →</a>
+      <a href="/bokun">Hafa samband ↗</a>
     </div>
   </div>
 </footer>

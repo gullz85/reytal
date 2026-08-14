@@ -31,10 +31,30 @@
 // (enginn litamorph á þessari síðu, bara pillan)
 (function(){
   var mainNav = document.querySelector('header nav');
-  if (!mainNav) return;
+  // flip-orðin: byrja á hvolfi/speglað og réttast úr sér við skroll
+  // (sama hreyfing og á forsíðunni - hrein 2D-skölun, engin þrívídd)
+  var flipWords = [].slice.call(document.querySelectorAll('.flip-word')).map(function(el){
+    return { el: el, top0: null };
+  });
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!mainNav && !flipWords.length) return;
   var ticking = false;
   function update(){
-    mainNav.classList.toggle('pill', window.scrollY > 60);
+    if (mainNav) mainNav.classList.toggle('pill', window.scrollY > 60);
+    if (!reduceMotion && flipWords.length){
+      // page-hero á undirsíðunum er mun styttri en heilskjás-hetjan á
+      // forsíðunni, svo fyrirsögnin skrollast fljótt upp úr glugganum -
+      // styttra flipRange svo hreyfingin klárist meðan hún er enn sýnileg
+      var vh = window.innerHeight;
+      var flipRange = vh * 0.32;
+      flipWords.forEach(function(fw){
+        var hf = fw.el.getBoundingClientRect();
+        if (fw.top0 === null) fw.top0 = hf.top;
+        var ref = Math.min(fw.top0, vh * 0.92);
+        var fp = Math.min(1, Math.max(0, (ref - hf.top) / flipRange));
+        fw.el.style.transform = 'scaleX(' + (fp < 0.5 ? -1 : 1) + ') scaleY(' + (-1 + 2 * fp).toFixed(4) + ')';
+      });
+    }
     ticking = false;
   }
   window.addEventListener('scroll', function(){
@@ -124,6 +144,7 @@
 (function(){
   var ul = document.querySelector('header nav ul');
   if (!ul) return;
+  var navWrap = document.querySelector('header nav.wrap');
   var links = [].slice.call(ul.querySelectorAll('a'));
   if (!links.length) return;
   var bar = document.createElement('span');
@@ -154,10 +175,18 @@
   });
   ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
   window.addEventListener('resize', function(){ moveTo(current, true); });
-  // pillu-morphið breytir bilinu milli hlekkja - endurstilla strikið eftir á
+  // pillu-morphið hnikar hlekkjunum til (bæði gap á ul-inu og padding/
+  // max-width á nav.wrap sjálfu) - þessar tvær hreyfingar enda ekki alltaf
+  // á nákvæmlega sömu millisekúndu, svo strikið var stundum mælt of snemma
+  // og lenti því örlítið skakkt. Hlustum á bæði til að vera viss.
   ul.addEventListener('transitionend', function(e){
     if (e.propertyName === 'gap') moveTo(current, true);
   });
+  if (navWrap){
+    navWrap.addEventListener('transitionend', function(e){
+      if (e.propertyName === 'max-width' || e.propertyName === 'padding') moveTo(current, true);
+    });
+  }
 })();
 
 // farsímavalmynd: opna/loka heilsíðu-yfirlagið
