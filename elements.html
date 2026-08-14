@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elements (einkasafn): Reytal</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --black:#0B0C0D;
+    --navy:#0D4659;
+    --slate:#4C7C93;
+    --grey:#9AA1A6;
+    --sage:#BEBFA6;
+    --cream:#F3F0EA;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--cream);
+    color:var(--black);
+    overflow-x:hidden;
+  }
+  a{color:inherit;}
+  h1,h2,h3{text-transform:uppercase;}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+
+  header.top{padding:clamp(28px,5vw,48px) 0 clamp(8px,2vw,16px);}
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--slate);text-decoration:none;
+  }
+  .back:hover{color:var(--navy);}
+
+  .intro{padding:clamp(24px,5vw,40px) 0 clamp(40px,7vw,72px);border-bottom:1px solid rgba(11,12,13,0.1);}
+  .intro .eyebrow{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--slate);margin-bottom:22px;display:flex;align-items:center;gap:10px;
+  }
+  .intro .eyebrow::before{
+    content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;display:inline-block;
+    animation:eyebrowBreathe 2.6s ease-in-out infinite;
+  }
+  @keyframes eyebrowBreathe{
+    0%,100%{transform:scale(1);opacity:1;}
+    50%{transform:scale(1.35);opacity:0.6;}
+  }
+  .intro h1{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:clamp(32px,5.6vw,64px);line-height:0.98;letter-spacing:-0.01em;
+    max-width:16ch;margin-bottom:18px;
+  }
+  .intro p{font-size:clamp(15px,1.6vw,18px);line-height:1.6;color:var(--black);opacity:.72;max-width:56ch;}
+  .intro p.priv{margin-top:10px;font-size:13px;color:var(--slate);opacity:1;}
+
+  .grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,28px);
+    padding:clamp(40px,7vw,72px) 0 clamp(80px,10vw,140px);
+  }
+  @media (max-width:920px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:#fff;
+    border:1px solid rgba(11,12,13,0.08);
+    border-radius:20px;overflow:hidden;
+    box-shadow:0 10px 28px rgba(11,12,13,0.05);
+    display:flex;flex-direction:column;
+  }
+  .stage{
+    position:relative;aspect-ratio:1/1;width:100%;
+    overflow:hidden;background:var(--cream);
+  }
+  .card-meta{padding:16px 20px 20px;border-top:1px solid rgba(11,12,13,0.06);}
+  .card-meta .num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--slate);}
+  .card-meta h3{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:18px;letter-spacing:-0.01em;margin:4px 0 6px;
+  }
+  .card-meta p{font-size:13px;line-height:1.5;color:var(--black);opacity:.65;}
+
+  footer.note{
+    padding:0 0 clamp(40px,7vw,72px);font-size:12px;color:var(--slate);
+    border-top:1px solid rgba(11,12,13,0.08);padding-top:20px;
+  }
+
+  /* ── 01 reikandi ljós ─────────────────────────────────── */
+  .el-roam{position:absolute;inset:0;pointer-events:none;}
+  .el-roam .blob{
+    position:absolute;left:50%;top:50%;
+    width:78%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle at 36% 34%,
+                 rgba(13,70,89,0.34),
+                 rgba(76,124,147,0.20) 45%,
+                 rgba(190,191,166,0.12) 66%,
+                 transparent 74%);
+    filter:blur(28px);
+    will-change:transform;
+  }
+
+  /* ── 02 andandi hringir ──────────────────────────────── */
+  .el-rings{width:60%;height:60%;}
+  .el-rings circle{fill:none;}
+  .el-rings .r1{stroke:var(--navy);stroke-width:1.1;opacity:.5;transform-origin:center;animation:ringSpin 26s linear infinite;}
+  .el-rings .r2{stroke:var(--slate);stroke-width:1.1;stroke-dasharray:2 7;opacity:.55;transform-origin:center;animation:ringSpin 18s linear infinite reverse;}
+  .el-rings .r3{stroke:var(--sage);stroke-width:1.4;opacity:.7;transform-origin:center;animation:ringBreathe 4.5s ease-in-out infinite;}
+  @keyframes ringSpin{to{transform:rotate(360deg);}}
+  @keyframes ringBreathe{0%,100%{opacity:.35;transform:scale(.97);}50%{opacity:.85;transform:scale(1.03);}}
+
+  /* ── 03 stjörnumerki ─────────────────────────────────── */
+  .el-const{position:relative;width:100%;height:100%;}
+  .el-const svg{position:absolute;inset:0;width:100%;height:100%;}
+  .el-const line{stroke:var(--navy);stroke-width:.6;opacity:.18;}
+  .el-const .dot{
+    position:absolute;border-radius:50%;
+    animation:dotDrift 7s ease-in-out infinite, dotBreathe 3.2s ease-in-out infinite;
+  }
+  @keyframes dotDrift{
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(var(--dx,6px),var(--dy,-6px));}
+  }
+  @keyframes dotBreathe{0%,100%{opacity:.45;}50%{opacity:1;}}
+
+  /* ── 04 speglað form ─────────────────────────────────── */
+  .el-flip{width:34%;height:34%;transform-origin:center;animation:flipLoop 5.5s cubic-bezier(.4,0,.2,1) infinite;}
+  .el-flip .diamond{
+    width:100%;height:100%;border:2px solid var(--navy);
+    transform:rotate(45deg);
+    background:linear-gradient(160deg, rgba(190,191,166,0.4), rgba(76,124,147,0.15));
+  }
+  @keyframes flipLoop{
+    0%,54%{transform:scaleX(-1) scaleY(-1);}
+    68%{transform:scaleX(-1) scaleY(0.02);}
+    84%,100%{transform:scaleX(1) scaleY(1);}
+  }
+
+  /* ── 05 hallandi línur ───────────────────────────────── */
+  .el-lines{display:flex;align-items:flex-end;gap:9px;height:52%;}
+  .el-lines span{
+    display:block;width:9px;border-radius:5px;
+    background:linear-gradient(180deg,var(--navy),var(--slate));
+    transform-origin:bottom center;
+    animation:sway 3.6s ease-in-out infinite;
+  }
+  @keyframes sway{
+    0%,100%{transform:rotate(-5deg);}
+    50%{transform:rotate(5deg);}
+  }
+
+  /* ── 06 birtupanel (aurora) ─────────────────────────── */
+  .el-aurora{position:absolute;inset:0;}
+  .el-aurora span{
+    position:absolute;border-radius:50%;filter:blur(30px);
+    will-change:transform;
+  }
+  @keyframes auroraA{
+    0%,100%{transform:translate(-18%,-14%) scale(1);}
+    50%{transform:translate(14%,10%) scale(1.18);}
+  }
+  @keyframes auroraB{
+    0%,100%{transform:translate(16%,14%) scale(1);}
+    50%{transform:translate(-12%,-10%) scale(1.1);}
+  }
+  @keyframes auroraC{
+    0%,100%{transform:translate(0,18%) scale(0.9);}
+    50%{transform:translate(6%,-16%) scale(1.05);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .el-roam .blob,.el-rings *,.el-const .dot,.el-flip,.el-lines span,.el-aurora span{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header class="top">
+      <a class="back" href="/">&larr; Til baka á vefinn</a>
+    </header>
+
+    <section class="intro">
+      <div class="eyebrow">Elements &middot; einkasafn</div>
+      <h1>Hreyfð element</h1>
+      <p>Mjúk, róleg element í sama myndmáli og vefurinn sjálfur, sami litapallettan, sama blur/roam-hreyfing og hringurinn í hausnum og sama flip-hreyfing og fyrirsagnirnar. Hugsuð sem uppfyllingarefni: bakgrunnur á bak við tilvitnun, skraut við tölur, eða autt horn sem vantar líf.</p>
+      <p class="priv">Þessi síða er ekki tengd í valmyndinni og er eingöngu til að skoða og velja úr.</p>
+    </section>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="stage">
+          <div class="el-roam"><div class="blob" id="roamBlob"></div></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">01</div>
+          <h3>Reikandi ljós</h3>
+          <p>Sama tækni og hringurinn í hausnum á forsíðunni - mjúkur, blurraður birtublettur sem reikar hægt um. Gott sem lifandi bakgrunnur á bak við texta eða tölur.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage" style="display:flex;align-items:center;justify-content:center;">
+          <svg class="el-rings" viewBox="0 0 100 100">
+            <circle class="r1" cx="50" cy="50" r="46"/>
+            <circle class="r2" cx="50" cy="50" r="34"/>
+            <circle class="r3" cx="50" cy="50" r="20"/>
+          </svg>
+        </div>
+        <div class="card-meta">
+          <div class="num">02</div>
+          <h3>Andandi hringir</h3>
+          <p>Grannar línur sem snúast hægt hvor í sína átt, innsti hringurinn andar. Hentar vel bakvið tölfræði eða sem stakur punktur í horni.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage el-const" id="constStage"></div>
+        <div class="card-meta">
+          <div class="num">03</div>
+          <h3>Stjörnumerki</h3>
+          <p>Punktar sem tengjast grönnum línum, hver með sinn takt - reikar og andar. Sama punktalógík og eyebrow-merkin annars staðar á vefnum.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage" style="display:flex;align-items:center;justify-content:center;">
+          <div class="el-flip"><div class="diamond"></div></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">04</div>
+          <h3>Speglað form</h3>
+          <p>Sama scaleX/scaleY-flip og fyrirsagnirnar á vefnum nota, en á formi í stað texta - endurtekur sig hægt og rólega. Gæti verið skraut við hlið eyebrow-merkis.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage" style="display:flex;align-items:center;justify-content:center;">
+          <div class="el-lines">
+            <span style="height:38%;animation-delay:0s;"></span>
+            <span style="height:70%;animation-delay:.3s;"></span>
+            <span style="height:52%;animation-delay:.6s;"></span>
+            <span style="height:88%;animation-delay:.15s;"></span>
+            <span style="height:46%;animation-delay:.45s;"></span>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">05</div>
+          <h3>Hallandi línur</h3>
+          <p>Grannar stikur sem vagga rólega fram og til baka á víxl. Passar sem lítið, kvikt element við hlið tölfræði eða þjónustulista.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage el-aurora">
+          <span style="width:60%;aspect-ratio:1;left:-8%;top:6%;background:radial-gradient(circle,rgba(13,70,89,0.32),transparent 70%);animation:auroraA 11s ease-in-out infinite;"></span>
+          <span style="width:56%;aspect-ratio:1;right:-10%;bottom:0%;background:radial-gradient(circle,rgba(190,191,166,0.38),transparent 70%);animation:auroraB 13s ease-in-out infinite;"></span>
+          <span style="width:44%;aspect-ratio:1;left:30%;top:32%;background:radial-gradient(circle,rgba(76,124,147,0.30),transparent 70%);animation:auroraC 9s ease-in-out infinite;"></span>
+        </div>
+        <div class="card-meta">
+          <div class="num">06</div>
+          <h3>Birtupanel</h3>
+          <p>Þrjú lagskipt birtuský sem reika hvert í sína átt og skarast mjúklega. Sterkara element, gott sem heilt spjald á bak við tilvitnun eða mynd.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="note">Reytal &middot; einkasíða, ekki opinber</footer>
+  </div>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 01 - reikandi ljós: sama uppskrift og hringurinn í hausnum,
+  // en eltir músina innan síns korts í stað þess að vera skroll-bundið
+  var roamCard = document.getElementById('roamBlob');
+  if (roamCard && !reduceMotion){
+    var stage = roamCard.closest('.stage');
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+    var t = 0;
+    function idle(){
+      t += 0.006;
+      tx = Math.sin(t) * 16 + Math.sin(t * 1.7) * 6;
+      ty = Math.cos(t * 0.8) * 12;
+      cx += (tx - cx) * 0.04;
+      cy += (ty - cy) * 0.04;
+      roamCard.style.transform = 'translate(-50%,-50%) translate(' + cx.toFixed(2) + '%,' + cy.toFixed(2) + '%)';
+      raf = requestAnimationFrame(idle);
+    }
+    idle();
+    stage.addEventListener('mousemove', function(e){
+      var r = stage.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 28;
+      ty = ((e.clientY - r.top) / r.height - 0.5) * 28;
+    }, {passive: true});
+  }
+
+  // 03 - stjörnumerki: fá punkta með línum á milli, hver með sinn ræktartakt
+  var constStage = document.getElementById('constStage');
+  if (constStage){
+    var pts = [
+      {x: 22, y: 28, r: 5, c: 'var(--navy)', dx: 8, dy: -6},
+      {x: 62, y: 18, r: 4, c: 'var(--slate)', dx: -6, dy: 8},
+      {x: 78, y: 55, r: 6, c: 'var(--sage)', dx: -10, dy: -4},
+      {x: 38, y: 68, r: 4, c: 'var(--navy)', dx: 6, dy: 6},
+      {x: 58, y: 46, r: 3, c: 'var(--slate)', dx: -5, dy: -8}
+    ];
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    var pairs = [[0,1],[1,4],[4,2],[0,3],[3,4]];
+    pairs.forEach(function(p){
+      var a = pts[p[0]], b = pts[p[1]];
+      var line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+      line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+      svg.appendChild(line);
+    });
+    constStage.appendChild(svg);
+    pts.forEach(function(p, i){
+      var dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.left = p.x + '%';
+      dot.style.top = p.y + '%';
+      dot.style.width = dot.style.height = (p.r * 2) + 'px';
+      dot.style.marginLeft = -p.r + 'px';
+      dot.style.marginTop = -p.r + 'px';
+      dot.style.background = p.c;
+      dot.style.setProperty('--dx', p.dx + 'px');
+      dot.style.setProperty('--dy', p.dy + 'px');
+      dot.style.animationDelay = (i * 0.4) + 's, ' + (i * 0.5) + 's';
+      constStage.appendChild(dot);
+    });
+  }
+})();
+</script>
+</body>
+</html>

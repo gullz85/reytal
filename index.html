@@ -448,9 +448,15 @@
   .clients-section{padding-bottom:clamp(72px,10vh,120px);}
 
   /* ── FÓTUR: stórt netfang, staðsetningar-pillur og botnlína ─────── */
+  html,body{overscroll-behavior-y:none;}
   .footer{
     position:relative;z-index:1;
     padding:clamp(56px,9vh,96px) 0 36px;
+  }
+  @media (max-width:760px){
+    .footer{padding:clamp(40px,7vh,64px) 0 28px;}
+    .footer-top{flex-direction:column;align-items:flex-start;gap:20px;}
+    .footer-bottom{margin-top:clamp(28px,5vh,48px);}
   }
   .footer-top{
     display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
@@ -883,6 +889,11 @@
   @media (max-width:760px){
     nav ul{display:none;}
     .menu-btn{display:block;}
+    /* navið er þéttara strax frá byrjun í mobile - ekki bara eftir skroll -
+       svo það verði aldrei hærra en header-plássið sem er frátekið (92px)
+       og skerist því ekki inn í fyrirsögnina fyrir neðan */
+    nav.wrap{padding:16px 20px;}
+    .logo-mark svg{height:32px;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
     h1{font-size:clamp(48px,14.5vw,76px);}
     .hero-copy{grid-template-columns:1fr;}
@@ -1303,7 +1314,7 @@
     </svg>
     <div class="intro-caption">
       <span class="old-name">Reykjavík Digital</span>
-      <span class="arrow">↗</span>
+      <span class="arrow">↗︎</span>
       <span>Reytal</span>
     </div>
     </div><!-- /.stack-wrap -->
@@ -1405,7 +1416,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">UX</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://kirkjan.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Þjóðkirkjan">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://kirkjan.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Þjóðkirkjan">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1424,7 +1435,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
-          <a class="show-link" href="https://www.takkkronur.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Takk">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://www.takkkronur.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Takk">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1450,7 +1461,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span><span class="show-tag">Söluvefur ársins 2025</span></div>
-          <a class="show-link" href="https://orkureiturinn.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Orkureiturinn">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://orkureiturinn.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Orkureiturinn">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1469,7 +1480,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://verkis.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Verkís">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://verkis.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Verkís">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1487,7 +1498,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
-          <a class="show-link" href="https://sigurros.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: Sigur Rós">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://sigurros.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: Sigur Rós">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1507,7 +1518,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://littupp.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Líttupp">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://littupp.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Líttupp">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1526,7 +1537,7 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://skjahaetta.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Skjáhætta">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://skjahaetta.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Skjáhætta">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
@@ -1546,14 +1557,14 @@
         </div>
         <div class="panel-side">
           <div class="show-tags"><span class="show-tag">Herferð</span><span class="show-tag">UN Women</span><span class="show-tag">Pipar\TBWA</span><span class="show-tag">PHNX tilnefning</span></div>
-          <a class="show-link" href="https://marchforward2025.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: March Forward 2025">Skoða verkefni ↗</a>
+          <a class="show-link" href="https://marchforward2025.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: March Forward 2025">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
 
     <div class="show-slide show-outro" data-color="#F3F0EA">
       <div class="outro-headline" id="outroHeadline">
-        <h2><a href="/verkefni">Skoða öll <span class="accent">verkefnin</span> <span class="outro-arrow">↗</span></a></h2>
+        <h2><a href="/verkefni">Skoða öll <span class="accent">verkefnin</span> <span class="outro-arrow">↗︎</span></a></h2>
       </div>
     </div>
   </div>
@@ -1616,7 +1627,7 @@
     </div>
     <div class="footer-bottom">
       <span>Reytal © 2026</span>
-      <a href="/bokun">Hafa samband ↗</a>
+      <a href="/bokun">Hafa samband ↗︎</a>
     </div>
   </div>
 </footer>

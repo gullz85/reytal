@@ -309,13 +309,24 @@ body.tone-amber{
   @media (max-width:760px){
     nav ul{display:none;}
     .menu-btn{display:block;}
+    /* navið er þéttara strax frá byrjun í mobile - ekki bara eftir skroll -
+       svo það verði aldrei hærra en header-plássið sem er frátekið (92px)
+       og skerist því ekki inn í fyrirsögnina fyrir neðan */
+    nav.wrap{padding:16px 20px;}
+    .logo-mark svg{height:32px;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
   }
 
 /* ── FÓTUR: stórt netfang, staðsetningar-pillur og botnlína ─────── */
+  html,body{overscroll-behavior-y:none;}
   .footer{
     position:relative;z-index:1;
     padding:clamp(56px,9vh,96px) 0 36px;
+  }
+  @media (max-width:760px){
+    .footer{padding:clamp(40px,7vh,64px) 0 28px;}
+    .footer-top{flex-direction:column;align-items:flex-start;gap:20px;}
+    .footer-bottom{margin-top:clamp(28px,5vh,48px);}
   }
   .footer-top{
     display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
