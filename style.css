@@ -300,10 +300,17 @@ body.tone-amber{
   }
   .mobile-menu a:first-of-type{border-top:1px solid rgba(11,12,13,0.12);}
   .mobile-menu a.active{color:var(--navy);}
+  /* "Loka" á að sitja NÁKVÆMLEGA ofan í "Valmynd" svo hnappurinn hreyfist
+     ekki þegar valmyndin opnast:
+       - lóðrétt: 16px (padding-top á nav.wrap í mobile) + 32px/2 (hálft merki)
+       - lárétt:  20px (padding-right á nav.wrap í mobile)
+       - sama padding og .menu-btn svo textareiturinn sé eins */
   .menu-close{
-    position:absolute;top:26px;right:28px;
+    position:absolute;
+    top:32px;transform:translateY(-50%);
+    right:20px;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:8px;
+    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
   }
 
   @media (max-width:760px){

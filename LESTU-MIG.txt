@@ -1,0 +1,57 @@
+REYTAL VEFUR - uppfaerdur pakki (utgafa 5)
+==========================================
+
+UPPSETNING
+----------
+Setjid ALLAR skrarnar i rot vefsins (thar sem index.html a ad vera).
+Mappan sjalf a EKKI ad fara med - innihaldid a ad liggja i rotinni.
+
+Haegt er ad henda thessari skra (LESTU-MIG.txt) eftir uppsetningu.
+
+
+SKRARNAR
+--------
+index.html         Forsida (sjalfstaed - allt CSS/JS innbyggt)
+thjonusta.html     Thjonusta
+verkefni.html      Verkefni
+um-okkur.html      Um okkur
+bokun.html         Hafa samband
+404.html           Villusida (birtist sjalfkrafa - sja nedar)
+elements.html      EINKASIDA - ekki tengd i valmynd, adeins til ad skoda
+
+style.css          Sameiginlegt CSS fyrir undirsidurnar
+main.js            Sameiginlegt JS fyrir undirsidurnar
+_redirects         Slodastillingar OG villusidan (mikilvaegt!)
+
+favicon.svg / favicon.png / apple-touch-icon.png    Vafraikon
+einar-2025.jpg, svef-2025-b.jpg, svef-trofea.png    Myndir
+orkureiturinn.mp4, verkis.mp4, march-forward.mp4    Myndbond
+
+
+MIKILVAEGT: _redirects
+----------------------
+Thessi skra ma ekki gleymast. Hun ser um:
+  1. Fallegar slodir (/thjonusta i stad /thjonusta.html)
+  2. Villusiduna - sidasta reglan (/* -> /404.html 404)
+
+Rodin skiptir mali: villusidu-reglan VERDUR ad vera nedst.
+Reglur eru lesnar ofan fra og fyrsta regla sem passar er notud.
+
+
+BREYTT I THESSARI UTGAFU
+------------------------
+- Ny 404-villusida med hreyfingu (merkid fellur saman, 404 opnast upp ur thvi)
+- Flugeldar springa upp undan verdlaunamyndinni a forsidunni
+- Splash-skjairnir thrir birtast nu af handahofi (adur sast adeins sa fyrsti)
+- Splash-hnappurinn tekinn ur valmyndinni
+- "Loka" og "Valmynd" sitja nu a nakvaemlega sama stad i mobile
+- Valmyndarstrikid heldur ser rett vid skroll (var ad hrokkva til)
+- Forsiduhausinn staekkadur i mobile og hvitt pláss minnkad
+- Krossinn i Thjodkirkjunni passar nu innan skjas i mobile
+- Fotur lagadur i mobile
+- Orvar birtast ekki lengur sem emoji
+- Merkid svart i staed blatt (favicon)
+- "Pipar\TBWA" rett skrifad allsstadar
+
+ATH: einar.jpg og svef-2025.jpg fylgja ekki med - thaer voru onotadar
+(sparar 1,6 MB).

@@ -892,10 +892,17 @@
   }
   .mobile-menu a:first-of-type{border-top:1px solid rgba(11,12,13,0.12);}
   .mobile-menu a.active{color:var(--navy);}
+  /* "Loka" á að sitja NÁKVÆMLEGA ofan í "Valmynd" svo hnappurinn hreyfist
+     ekki þegar valmyndin opnast:
+       - lóðrétt: 16px (padding-top á nav.wrap í mobile) + 32px/2 (hálft merki)
+       - lárétt:  20px (padding-right á nav.wrap í mobile)
+       - sama padding og .menu-btn svo textareiturinn sé eins */
   .menu-close{
-    position:absolute;top:26px;right:28px;
+    position:absolute;
+    top:32px;transform:translateY(-50%);
+    right:20px;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:8px;
+    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
   }
 
   @media (max-width:760px){
@@ -1375,7 +1382,6 @@
       <li><a href="/thjonusta">Þjónusta</a></li>
       <li><a href="/verkefni">Verkefni</a></li>
       <li><a href="/um-okkur">Um okkur</a></li>
-      <li><a href="#" id="splashBtn">Splash</a></li>
     </ul>
     <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
   </nav>
@@ -1756,7 +1762,23 @@
   var C = document.getElementById('splashC');
   var all = [A, B, C];
   var HOLD = 1250;                 // hversu lengi splashið situr
-  var busy = false, next = 0;
+  var busy = false;
+
+  // Splashið er valið af handahófi.
+  // ATH: Áður var hlaupið hringinn með teljara (next++ % 3). Það virkaði
+  // aldrei því teljarinn núllstillist við hverja síðuhleðslu - og þar sem
+  // hver smellur flakkar á nýja síðu byrjaði hann alltaf á 0 og því sást
+  // bara splash A. Splash C sást aldrei nema í gegnum demó-hnappinn.
+  // Sami splash er ekki sýndur tvisvar í röð (geymt í sessionStorage).
+  var LASTKEY = 'reytal-splash-last';
+  function pick(){
+    var last = -1;
+    try { last = parseInt(sessionStorage.getItem(LASTKEY), 10); } catch(e){}
+    var i = Math.floor(Math.random() * all.length);
+    if (all.length > 1 && i === last) i = (i + 1 + Math.floor(Math.random() * (all.length - 1))) % all.length;
+    try { sessionStorage.setItem(LASTKEY, String(i)); } catch(e){}
+    return all[i];
+  }
 
   // ── Splash C: raðirnar byggðar í JS svo þær fylli alltaf skjáinn ──
   // [leturstærð í vmin, sekúndur (lágt = hratt), átt]
@@ -1812,26 +1834,15 @@
   // splash og flakka svo þangað um leið og skjárinn er hulinn. Tenglar sem
   // eiga sér ekki síðu ennþá (t.d. Þjónusta, bara "#") spila bara demóið.
   document.querySelectorAll('nav a, .mobile-menu a').forEach(function(a){
-    if (a.id === 'splashBtn') return;
     var dest = a.getAttribute('href');
     if (dest && dest.charAt(0) === '#' && dest.length > 1) return; // hreint akkeri, láttu vera
     var isRealPage = dest && dest !== '#';
     a.addEventListener('click', function(e){
       e.preventDefault();
-      var el = all[next++ % all.length];
-      play(el);
+      play(pick());
       if (isRealPage){
         setTimeout(function(){ window.location.href = dest; }, 550);
       }
-    });
-  });
-
-  // Splash-hnappurinn sýnir alla þrjá í röð
-  var btn = document.getElementById('splashBtn');
-  if (btn) btn.addEventListener('click', function(e){
-    e.preventDefault();
-    all.forEach(function(el, i){
-      setTimeout(function(){ play(el); }, i * (HOLD + 950));
     });
   });
 })();
