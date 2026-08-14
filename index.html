@@ -535,12 +535,20 @@
     font-size:17px;line-height:1.65;color:#2a2a2a;max-width:520px;
     margin-top:clamp(20px,3vh,28px);
   }
+  /* myndin liggur OFAN Á flugeldunum svo neistarnir virðist koma upp
+     undan henni - þess vegna hærra z-index hér en á .award-fx */
   .award-photo{
-    position:relative;border-radius:10px;overflow:hidden;
+    position:relative;z-index:2;border-radius:10px;overflow:hidden;
     background:var(--sage);
   }
   .award-photo img{
     width:100%;height:auto;display:block;
+  }
+  /* flugeldarnir: teiknaðir á canvas sem nær yfir allan verðlaunakaflann en
+     liggur BAKVIÐ myndina - neistarnir skjótast upp fyrir efri brún hennar */
+  .award-fx{
+    position:absolute;left:0;top:0;
+    pointer-events:none;z-index:1;
   }
   @media (max-width:760px){
     .award-grid{grid-template-columns:1fr;gap:32px;}
@@ -899,16 +907,15 @@
     nav.wrap{padding:16px 20px;}
     .logo-mark svg{height:32px;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
-    /* Stafrænar Lausnir á að fylla vel út mobile-skjáinn - stærra letur,
-       þrengra bil á milli stafa og minni spássía svo það rúmist.
-       19vw er stillt þannig að "STAFRÆNAR" nái nánast brún í brún. */
-    .hero .wrap{padding:0 18px;}
-    h1{font-size:clamp(56px,19vw,110px);letter-spacing:-0.025em;line-height:0.88;}
-    /* minna dautt pláss: hetjan þarf ekki að fylla heilan skjá í mobile og
-       bilið niður á textann var margfalt of stórt */
-    .hero{min-height:auto;padding:clamp(24px,4vh,40px) 0 clamp(32px,5vh,48px);}
-    .hero-copy{grid-template-columns:1fr;margin-top:clamp(28px,4vh,44px);gap:24px;}
-    .meta-row{margin-top:28px;}
+    /* Stafrænar Lausnir fyllir vel út mobile-skjáinn. ATH: 16vw er efri
+       mörkin sem "STAFRÆNAR" (lengsta orðið) kemst fyrir í - hærra gildi
+       flæðir út fyrir hægri brún og þvingar notandann til að þysja út. */
+    .hero .wrap{padding:0 20px;}
+    h1{font-size:clamp(46px,16vw,92px);letter-spacing:-0.02em;line-height:0.92;}
+    /* meira loft milli merkis og hnapps, en samt ekki heilskjás-hetja */
+    .hero{min-height:auto;padding:clamp(48px,8vh,80px) 0 clamp(36px,5vh,52px);}
+    .hero-copy{grid-template-columns:1fr;margin-top:clamp(44px,7vh,72px);gap:26px;}
+    .meta-row{margin-top:32px;}
     .show-slide h3{font-size:clamp(28px,8vw,40px);}
     .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
     .panel-side{justify-content:flex-start;padding-bottom:0;}
@@ -2083,6 +2090,126 @@
   }, {passive:true});
   window.addEventListener('resize', update);
   update();
+})();
+
+// verðlaunin: flugeldar springa út úr myndinni þegar kaflinn kemur í sjónmál
+(function(){
+  var section = document.querySelector('.award');
+  var photo   = section && section.querySelector('.award-photo');
+  if (!section || !photo) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var canvas = document.createElement('canvas');
+  canvas.className = 'award-fx';
+  canvas.setAttribute('aria-hidden', 'true');
+  section.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0;
+
+  function resize(){
+    var r = section.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // vörumerkjalitirnir + mildur gulllitur sem gefur verðlaunatilfinninguna
+  var COLORS = ['#0D4659','#4C7C93','#BEBFA6','#C6A15B','#0B0C0D'];
+  var parts = [];
+  var raf = null;
+
+  // upptökin: rétt INNAN við efri brún myndarinnar. Þar sem myndin liggur
+  // ofan á canvasinu sjást neistarnir ekki fyrr en þeir skjótast upp fyrir
+  // brúnina - þannig virðist sprengingin koma upp undan myndinni
+  function origin(){
+    var pr = photo.getBoundingClientRect();
+    var sr = section.getBoundingClientRect();
+    return {
+      x: pr.left - sr.left + pr.width * 0.5,
+      y: pr.top  - sr.top  + pr.height * 0.06
+    };
+  }
+
+  function burst(ox, oy, n, power){
+    for (var i = 0; i < n; i++){
+      // stefnan er að mestu upp á við (efri hálfhringur, örlítið breiddur út)
+      // svo neistarnir komist upp fyrir myndina í stað þess að hverfa á bakvið
+      var a  = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.15;
+      var sp = power * (0.45 + Math.random() * 0.8);
+      parts.push({
+        x: ox + (Math.random() - 0.5) * 30,
+        y: oy,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp - power * 0.35,   // aukakraftur upp
+        life: 1,
+        decay: 0.007 + Math.random() * 0.010,
+        size: 1.4 + Math.random() * 2.6,
+        col: COLORS[(Math.random() * COLORS.length) | 0],
+        rot: Math.random() * Math.PI,
+        spin: (Math.random() - 0.5) * 0.28
+      });
+    }
+  }
+
+  function tick(){
+    ctx.clearRect(0, 0, W, H);
+    var alive = 0;
+    for (var i = 0; i < parts.length; i++){
+      var p = parts[i];
+      if (p.life <= 0) continue;
+      alive++;
+      p.vy += 0.045;              // þyngdarafl
+      p.vx *= 0.985; p.vy *= 0.985;
+      p.x += p.vx; p.y += p.vy;
+      p.rot += p.spin;
+      p.life -= p.decay;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.col;
+      ctx.fillRect(-p.size / 2, -p.size * 0.8, p.size, p.size * 1.6);
+      ctx.restore();
+    }
+    if (alive > 0){
+      raf = requestAnimationFrame(tick);
+    } else {
+      raf = null; parts.length = 0;
+      ctx.clearRect(0, 0, W, H);
+    }
+  }
+
+  // þrjár sprengingar með smá töf á milli - eins og alvöru flugeldasýning
+  function fire(){
+    resize();
+    var o = origin();
+    burst(o.x, o.y, 48, 4.6);
+    setTimeout(function(){ burst(o.x - W * 0.10, o.y, 34, 3.8); }, 230);
+    setTimeout(function(){ burst(o.x + W * 0.09, o.y, 30, 3.4); }, 450);
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  // spilast þegar myndin kemur í sjónmál, og aftur ef skrollað er til baka
+  // (en aldrei oftar en á ~3ja sekúndna fresti)
+  var last = 0;
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting && Date.now() - last > 3000){
+          last = Date.now();
+          fire();
+        }
+      });
+    }, {threshold: 0.45}).observe(photo);
+  }
 })();
 
 // valmyndarstrikið: eitt strik sem skýst milli hlekkja með teygju
