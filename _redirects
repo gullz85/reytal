@@ -2,3 +2,9 @@
 /verkefni    /verkefni.html    200
 /um-okkur    /um-okkur.html    200
 /bokun       /bokun.html       200
+
+# Villusida: verdur ad vera SIDASTA reglan (reglur eru lesnar ofan fra og
+# fyrsta regla sem passar er notud - ef thessi vaeri ofar myndi hun gleypa
+# allar hinar). Skilar 404.html med rettum 404-statuskoda fyrir allar
+# slodir sem finnast ekki.
+/*   /404.html   404

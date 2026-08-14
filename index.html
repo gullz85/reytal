@@ -900,18 +900,26 @@
     .logo-mark svg{height:32px;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
     /* Stafrænar Lausnir á að fylla vel út mobile-skjáinn - stærra letur,
-       þrengra bil á milli stafa og minni spássía svo það rúmist */
-    .hero .wrap{padding:0 20px;}
-    h1{font-size:clamp(52px,18vw,100px);letter-spacing:-0.02em;}
-    .hero-copy{grid-template-columns:1fr;}
+       þrengra bil á milli stafa og minni spássía svo það rúmist.
+       19vw er stillt þannig að "STAFRÆNAR" nái nánast brún í brún. */
+    .hero .wrap{padding:0 18px;}
+    h1{font-size:clamp(56px,19vw,110px);letter-spacing:-0.025em;line-height:0.88;}
+    /* minna dautt pláss: hetjan þarf ekki að fylla heilan skjá í mobile og
+       bilið niður á textann var margfalt of stórt */
+    .hero{min-height:auto;padding:clamp(24px,4vh,40px) 0 clamp(32px,5vh,48px);}
+    .hero-copy{grid-template-columns:1fr;margin-top:clamp(28px,4vh,44px);gap:24px;}
+    .meta-row{margin-top:28px;}
     .show-slide h3{font-size:clamp(28px,8vw,40px);}
     .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
     .panel-side{justify-content:flex-start;padding-bottom:0;}
     .show-tags{justify-content:flex-start;}
   }
 
-  /* ── FARTÖLVUSKJÁIR (t.d. MacBook 14"): lægri skjár, allt andar betur ── */
-  @media (max-height:960px){
+  /* ── FARTÖLVUSKJÁIR (t.d. MacBook 14"): lægri skjár, allt andar betur ──
+     ATH: min-width:761px er nauðsynlegt. Símar eru líka undir 960px á hæð,
+     svo án þess yfirskrifaði þessi regla mobile-stærðina á h1 (hún kemur
+     neðar í skránni og hefur sömu sérhæfni) og fyrirsögnin varð pínulítil. */
+  @media (max-height:960px) and (min-width:761px){
     h1{font-size:clamp(42px,6.6vw,92px);}
     .hero{padding:clamp(40px,6vh,72px) 0 56px;}
     .hero-copy{margin-top:clamp(48px,7vh,88px);}
@@ -2112,10 +2120,39 @@
   });
   ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
   window.addEventListener('resize', function(){ moveTo(current, true); });
-  // pillu-morphið hnikar hlekkjunum til (bæði gap á ul-inu og padding/
-  // max-width á nav.wrap sjálfu) - þessar tvær hreyfingar enda ekki alltaf
-  // á nákvæmlega sömu millisekúndu, svo strikið var stundum mælt of snemma
-  // og lenti því örlítið skakkt. Hlustum á bæði til að vera viss.
+
+  // ── Pillu-morphið og strikið ──────────────────────────────────
+  // Þrennt hreyfist samtímis þegar navið morphast: gap á ul-inu, padding/
+  // max-width á nav.wrap og leturstærðin á hlekkjunum sjálfum. Það þýðir að
+  // hlekkirnir renna til ALLAN tímann sem morphið tekur (~0.5s).
+  //
+  // Áður var strikið aðeins endurmælt við transitionend, þ.e. EFTIR á. Fyrir
+  // "Heim" sást það ekki (fremsti hlekkur, offsetLeft er alltaf 0 og breiddin
+  // breytist varla) en fyrir "Um okkur" - aftasta hlekkinn - safnast öll
+  // gap-breytingin upp, svo strikið sat kyrrt á gamla staðnum og hrökk svo
+  // til í lokin. Þess vegna virtist það "færast til og frá".
+  //
+  // Lausn: elta hlekkinn í hverjum ramma á meðan morphið stendur yfir.
+  var trackRaf = null, trackUntil = 0;
+  function trackMorph(){
+    moveTo(current, true);
+    if (performance.now() < trackUntil){
+      trackRaf = requestAnimationFrame(trackMorph);
+    } else {
+      trackRaf = null;
+      moveTo(current, true);   // lokamæling þegar allt er kyrrt
+    }
+  }
+  function startTracking(){
+    trackUntil = performance.now() + 750;   // aðeins lengur en 0.5s morphið
+    if (!trackRaf) trackRaf = requestAnimationFrame(trackMorph);
+  }
+  if (navWrap && 'MutationObserver' in window){
+    new MutationObserver(startTracking).observe(navWrap, {
+      attributes: true, attributeFilter: ['class']
+    });
+  }
+  // öryggisnet ef MutationObserver er ekki til staðar
   ul.addEventListener('transitionend', function(e){
     if (e.propertyName === 'gap') moveTo(current, true);
   });

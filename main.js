@@ -175,10 +175,39 @@
   });
   ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
   window.addEventListener('resize', function(){ moveTo(current, true); });
-  // pillu-morphið hnikar hlekkjunum til (bæði gap á ul-inu og padding/
-  // max-width á nav.wrap sjálfu) - þessar tvær hreyfingar enda ekki alltaf
-  // á nákvæmlega sömu millisekúndu, svo strikið var stundum mælt of snemma
-  // og lenti því örlítið skakkt. Hlustum á bæði til að vera viss.
+
+  // ── Pillu-morphið og strikið ──────────────────────────────────
+  // Þrennt hreyfist samtímis þegar navið morphast: gap á ul-inu, padding/
+  // max-width á nav.wrap og leturstærðin á hlekkjunum sjálfum. Það þýðir að
+  // hlekkirnir renna til ALLAN tímann sem morphið tekur (~0.5s).
+  //
+  // Áður var strikið aðeins endurmælt við transitionend, þ.e. EFTIR á. Fyrir
+  // "Heim" sást það ekki (fremsti hlekkur, offsetLeft er alltaf 0 og breiddin
+  // breytist varla) en fyrir "Um okkur" - aftasta hlekkinn - safnast öll
+  // gap-breytingin upp, svo strikið sat kyrrt á gamla staðnum og hrökk svo
+  // til í lokin. Þess vegna virtist það "færast til og frá".
+  //
+  // Lausn: elta hlekkinn í hverjum ramma á meðan morphið stendur yfir.
+  var trackRaf = null, trackUntil = 0;
+  function trackMorph(){
+    moveTo(current, true);
+    if (performance.now() < trackUntil){
+      trackRaf = requestAnimationFrame(trackMorph);
+    } else {
+      trackRaf = null;
+      moveTo(current, true);   // lokamæling þegar allt er kyrrt
+    }
+  }
+  function startTracking(){
+    trackUntil = performance.now() + 750;   // aðeins lengur en 0.5s morphið
+    if (!trackRaf) trackRaf = requestAnimationFrame(trackMorph);
+  }
+  if (navWrap && 'MutationObserver' in window){
+    new MutationObserver(startTracking).observe(navWrap, {
+      attributes: true, attributeFilter: ['class']
+    });
+  }
+  // öryggisnet ef MutationObserver er ekki til staðar
   ul.addEventListener('transitionend', function(e){
     if (e.propertyName === 'gap') moveTo(current, true);
   });
