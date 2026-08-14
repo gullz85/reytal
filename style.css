@@ -219,6 +219,51 @@ body.tone-amber{
     transition:opacity .3s ease, visibility 0s;
   }
   .splash > *{grid-area:1 / 1;}
+
+  /* A: hringirnir dragast saman utan af (merkið hvítt á navy grunni).
+     Markupið er byggt í main.js svo undirsíðurnar þyngist ekki af
+     mörg hundruð SVG-stöfum - sama útlit og á forsíðunni. */
+  #splashA{background:var(--navy);}
+  #splashA .splash-rings{
+    width:min(152vh,152vw);aspect-ratio:1;
+    display:grid;place-items:center;
+    opacity:0;transform:scale(1.5) rotate(-14deg);
+  }
+  #splashA .splash-rings svg{width:100%;height:100%;overflow:visible;}
+  #splashA.on .splash-rings{
+    animation:ringsIn 1.15s cubic-bezier(.22,.7,.25,1) forwards;
+  }
+  @keyframes ringsIn{
+    0%  {opacity:0;   transform:scale(1.5) rotate(-14deg);}
+    45% {opacity:.55;}
+    100%{opacity:.4;  transform:scale(1)   rotate(0deg);}
+  }
+  #splashA .ring text{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    fill:var(--cream);
+    text-anchor:middle;dominant-baseline:central;
+  }
+  #splashA .ring g{transform-origin:50% 50%;}
+  #splashA .ring .g-outer{animation:spin 86s linear infinite;         opacity:0.85;}
+  #splashA .ring .g-mid  {animation:spin 66s linear infinite reverse; opacity:0.62;}
+  #splashA .ring .g-inner{animation:spin 50s linear infinite;         opacity:0.45;}
+  #splashA .ring .g-core {animation:spin 38s linear infinite reverse; opacity:0.32;}
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  #splashA .splash-mark{
+    width:min(26vw,190px);height:auto;fill:var(--cream);
+    opacity:0;transform:scale(.9);
+  }
+  #splashA.on .splash-mark{
+    animation:markIn .8s cubic-bezier(.25,.6,.25,1) .18s forwards;
+  }
+  @keyframes markIn{
+    from{opacity:0;transform:scale(.9);}
+    to  {opacity:1;transform:scale(1);}
+  }
+
   #splashB{background:var(--cream);}
   #splashB .splash-mark{
     width:min(24vw,170px);height:auto;fill:var(--black);
@@ -254,8 +299,49 @@ body.tone-amber{
     100%{transform:scaleX(0);   transform-origin:right;}
   }
 
+  /* C: mynstrið - raðir af REYTAL sem skríða á móti hvor annarri.
+     Raðirnar eru byggðar í main.js svo þær fylli alltaf skjáinn. */
+  #splashC{background:var(--cream);overflow:hidden;}
+  #splashC .c-rows{
+    position:absolute;left:0;right:0;top:50%;
+    transform:translateY(-50%);
+    display:flex;flex-direction:column;
+    gap:0.4vmin;
+  }
+  #splashC .c-row{
+    display:flex;overflow:hidden;
+    font-family:'Archivo',sans-serif;font-weight:900;
+    color:var(--navy);
+    line-height:1.04;letter-spacing:-0.02em;
+    white-space:nowrap;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .6s ease var(--dout,0s), transform .6s ease var(--dout,0s);
+  }
+  #splashC.on .c-row{
+    animation:cRowIn .55s cubic-bezier(.25,.6,.25,1) var(--d) forwards;
+  }
+  @keyframes cRowIn{ to{opacity:1;transform:translateY(0);} }
+  #splashC .c-track{
+    display:flex;flex-shrink:0;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    will-change:transform;
+  }
+  #splashC .c-track.r-l{animation-name:cScrollL;}
+  #splashC .c-track.r-r{animation-name:cScrollR;}
+  @keyframes cScrollL{from{transform:translateX(0);}    to{transform:translateX(-50%);}}
+  @keyframes cScrollR{from{transform:translateX(-50%);} to{transform:translateX(0);}}
+  /* merkid sjalft i stad texta: haedin fylgir leturstaerd radarinnar svo
+     rakirnar halda somu stigskiptingu og adur */
+  #splashC .w{
+    display:inline-block;height:.78em;width:auto;
+    margin-right:.30em;vertical-align:-.02em;
+    fill:var(--black);
+  }
+
 @media (prefers-reduced-motion:reduce){
     .splash,.splash *{animation:none !important;}
+    #splashC .c-row{opacity:1;transform:none;}
   }
 
 .fx .fx-w{

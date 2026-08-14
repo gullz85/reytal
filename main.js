@@ -64,15 +64,125 @@
 })();
 
 // síðuskipti: splash spilast og svo er flakkað þegar skjárinn er hulinn
+//
+// Undirsíðurnar höfðu áður EINGÖNGU splash B, svo leiðin "undirsíða -> forsíða"
+// sýndi alltaf sama skjáinn á meðan "forsíða -> undirsíða" sýndi handahófskennt.
+// Hér eru A og C byggð í JS (í stað þess að afrita mörg hundruð SVG-stafi og
+// raðir inn í hverja einustu undirsíðu) svo allar leiðir hafi sama úrvalið.
 (function(){
-  var splash = document.getElementById('splashB');
-  if (!splash) return;
+  var B = document.getElementById('splashB');
+  if (!B) return;
+
+  // ── Splash A: fjórir hringir af REYTAL sem snúast hvor á móti öðrum ──
+  // [fjöldi orða í hring, gráður milli stafa, fjarlægð frá miðju, leturstærð]
+  var RINGS = [
+    ['g-outer', 13, 3.956,  28, 34],
+    ['g-mid',   12, 4.286, 100, 28],
+    ['g-inner', 12, 4.286, 170, 22],
+    ['g-core',  12, 4.286, 236, 16]
+  ];
+  function buildA(){
+    if (document.getElementById('splashA')) return;
+    var svg = '';
+    RINGS.forEach(function(r){
+      var cls = r[0], words = r[1], step = r[2], rad = r[3], fs = r[4];
+      var per = 360 / words;
+      var letters = 'REYTAL';
+      var g = '<g class="' + cls + '" style="font-size:' + fs + 'px">';
+      for (var w = 0; w < words; w++){
+        for (var i = 0; i < letters.length; i++){
+          var ang = (w * per + i * step).toFixed(3);
+          // seinni helmingur orðsins (TAL) er á hvolfi - flip-mótíf merkisins
+          var flip = i >= 3 ? ' rotate(180)' : '';
+          g += '<text transform="rotate(' + ang + ' 400 400) translate(400 ' +
+               rad + ')' + flip + '">' + letters[i] + '</text>';
+        }
+      }
+      svg += g + '</g>';
+    });
+    var el = document.createElement('div');
+    el.className = 'splash';
+    el.id = 'splashA';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML =
+      '<div class="splash-rings"><svg class="ring" viewBox="0 0 800 800" aria-hidden="true">' +
+      svg + '</svg></div>' +
+      '<svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  // ── Splash C: raðir af REYTAL sem skríða í sitt hvora áttina ──
+  // [leturstærð í vmin, sekúndur (lágt = hratt), átt]
+  var C_ROWS = [
+    [ 9.5,  95, 'L'], [ 2.2,  46, 'R'], [ 5.8, 175, 'L'], [ 3.4,  62, 'R'],
+    [12.0, 130, 'L'], [ 2.0,  38, 'R'], [ 7.2, 205, 'L'], [ 2.8,  54, 'R'],
+    [ 4.4,  78, 'L'], [10.5, 155, 'R'], [ 2.2,  50, 'L'], [ 5.0, 230, 'R'],
+    [ 8.6, 110, 'L'], [ 2.4,  42, 'R'], [ 6.2, 190, 'L'], [ 3.0,  58, 'R'],
+    [11.0, 145, 'L'], [ 2.2,  52, 'R'], [ 7.8, 218, 'L']
+  ];
+  // alvoru merkid (einlinu-utgafan med (R)-merkinu), ekki velritadur texti
+  var WORD = '<svg class="w" viewBox="0 0 46.38 8.54" aria-hidden="true"><use href="#markWide"/></svg>';
+
+  function rowsHTML(){
+    var vmin = Math.min(innerWidth, innerHeight) / 100;
+    var need = innerWidth * 2.2;                 // hver rák þarf að þekja 2x skjáinn
+    var html = '';
+    C_ROWS.forEach(function(r, i){
+      var wordW = r[0] * vmin * 4.54;            // breidd merkisins (.78em x 5.43) + bil
+      var reps  = Math.max(3, Math.ceil(need / wordW));
+      var track = new Array(reps + 1).join(WORD);
+      html += '<div class="c-row" style="font-size:' + r[0] + 'vmin;--d:' +
+              (i * 0.035).toFixed(3) + 's;--dout:' +
+              ((C_ROWS.length - 1 - i) * 0.022).toFixed(3) + 's">' +
+                '<div class="c-track ' + (r[2] === 'L' ? 'r-l' : 'r-r') +
+                '" style="animation-duration:' + r[1] + 's">' + track + track + '</div>' +
+              '</div>';
+    });
+    return html;
+  }
+  function buildC(){
+    var el = document.getElementById('splashC');
+    if (!el){
+      el = document.createElement('div');
+      el.className = 'splash';
+      el.id = 'splashC';
+      el.setAttribute('aria-hidden', 'true');
+      el.innerHTML = '<div class="c-rows"></div>';
+      document.body.appendChild(el);
+    }
+    el.querySelector('.c-rows').innerHTML = rowsHTML();
+    return el;
+  }
+
+  var A = buildA();
+  var C = buildC();
+  var rt;
+  addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(buildC, 250);
+  });
+
+  var all = [A, B, C].filter(Boolean);
+
+  // Sami lykill og forsíðan notar, svo sami splash birtist ekki tvisvar í röð
+  // þó flakkað sé fram og til baka milli forsíðu og undirsíðna.
+  var LASTKEY = 'reytal-splash-last';
+  function pick(){
+    var last = -1;
+    try { last = parseInt(sessionStorage.getItem(LASTKEY), 10); } catch(e){}
+    var i = Math.floor(Math.random() * all.length);
+    if (all.length > 1 && i === last) i = (i + 1 + Math.floor(Math.random() * (all.length - 1))) % all.length;
+    try { sessionStorage.setItem(LASTKEY, String(i)); } catch(e){}
+    return all[i];
+  }
+
   document.querySelectorAll('nav a, a.logo-mark, .mobile-menu a').forEach(function(a){
     var dest = a.getAttribute('href');
     if (!dest || dest === '#' || dest.charAt(0) === '#' || dest.indexOf('mailto:') === 0) return;
     a.addEventListener('click', function(e){
       e.preventDefault();
-      splash.classList.add('on');
+      pick().classList.add('on');
       setTimeout(function(){ window.location.href = dest; }, 550);
     });
   });
