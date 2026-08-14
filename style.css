@@ -221,7 +221,7 @@ body.tone-amber{
   .splash > *{grid-area:1 / 1;}
   #splashB{background:var(--cream);}
   #splashB .splash-mark{
-    width:min(24vw,170px);height:auto;fill:var(--navy);
+    width:min(24vw,170px);height:auto;fill:var(--black);
   }
   #splashB .splash-mark #sT{transform:translateY(3px);opacity:0;}
   #splashB .splash-mark #sR{transform:translateY(-3px);opacity:0;}

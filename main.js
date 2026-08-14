@@ -46,7 +46,7 @@
       // forsíðunni, svo fyrirsögnin skrollast fljótt upp úr glugganum -
       // styttra flipRange svo hreyfingin klárist meðan hún er enn sýnileg
       var vh = window.innerHeight;
-      var flipRange = vh * 0.32;
+      var flipRange = vh * 0.10;
       flipWords.forEach(function(fw){
         var hf = fw.el.getBoundingClientRect();
         if (fw.top0 === null) fw.top0 = hf.top;

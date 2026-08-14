@@ -368,7 +368,7 @@
   /* B: merkið byggist upp á ljósum grunni */
   #splashB{background:var(--cream);}
   #splashB .splash-mark{
-    width:min(24vw,170px);height:auto;fill:var(--navy);
+    width:min(24vw,170px);height:auto;fill:var(--black);
   }
   #splashB .splash-mark #sT{transform:translateY(3px);opacity:0;}
   #splashB .splash-mark #sR{transform:translateY(-3px);opacity:0;}
@@ -512,7 +512,7 @@
   }
 
   /* ── VERÐLAUN: Söluvefur ársins 2025 hjá SVEF ─────────────────── */
-  .award{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0;}
+  .award{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0 clamp(32px,4vh,56px);}
   .award-grid{
     display:grid;grid-template-columns:1.1fr 0.9fr;
     gap:clamp(40px,6vw,88px);align-items:center;
@@ -645,8 +645,13 @@
      sticky-stöðunni of snemma, sem skilur eftir hvítan/rjómalitan skjá
      neðst rétt áður en útgangsglæran nær að taka við (mest áberandi á
      mobile þar sem address-barið stækkar/minnkar sýnilega hæð skjásins) */
-  .showcase{position:relative;z-index:1;height:calc(6.5 * 130vh);height:calc(6.5 * 130svh);}
-  .show-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;}
+  /* dvh í stað svh: fylgir sýnilegri skjáhæð á hverri stundu, líka þegar
+     address-barið á mobile rennur burt - annars myndaðist hvít rönd neðst
+     því sticky-glæran (svh = minnsta hæð) var lægri en skjárinn (lvh) */
+  /* 8.4 = 9 glærur (7 verkefni + inngangur + útgangur) á sama skrolltakti
+     og upphaflega hönnunin (~0.93 x 130vh á glæru) */
+  .showcase{position:relative;z-index:1;height:calc(8.4 * 130vh);height:calc(8.4 * 130dvh);}
+  .show-sticky{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;}
   .show-bg{
     position:absolute;inset:0;opacity:0;
     background-color:var(--navy);
@@ -879,7 +884,7 @@
     nav ul{display:none;}
     .menu-btn{display:block;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
-    h1{font-size:clamp(30px,8vw,46px);}
+    h1{font-size:clamp(48px,14.5vw,76px);}
     .hero-copy{grid-template-columns:1fr;}
     .show-slide h3{font-size:clamp(28px,8vw,40px);}
     .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
@@ -1917,7 +1922,7 @@
       // notandinn er yfir höfuð búinn að skrolla því í sjónmál. Þannig
       // byrjar hreyfingin ekki fyrr en orðið er raunverulega að birtast,
       // og tekur svo drjúgan spöl af skrolli að klárast.
-      var flipRange = vh * 0.55;
+      var flipRange = vh * 0.15;
       flipWords.forEach(function(fw){
         var hf = fw.el.getBoundingClientRect();
         if (fw.top0 === null) fw.top0 = hf.top;
@@ -2012,7 +2017,7 @@
           // VERKEFNI réttist úr sér á fyrri helmingi inngangsglærunnar,
           // áður en textinn byrjar að feidast út
           if (introFlip && !reduceMotion){
-            var fpi = Math.min(1, frac / 0.45);
+            var fpi = Math.min(1, frac / 0.16);
             introFlip.style.transform = 'scaleX(' + (fpi < 0.5 ? -1 : 1) + ') scaleY(' + (-1 + 2 * fpi).toFixed(4) + ')';
           }
         } else {
