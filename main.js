@@ -34,7 +34,7 @@
   // flip-orðin: byrja á hvolfi/speglað og réttast úr sér við skroll
   // (sama hreyfing og á forsíðunni - hrein 2D-skölun, engin þrívídd)
   var flipWords = [].slice.call(document.querySelectorAll('.flip-word')).map(function(el){
-    return { el: el, top0: null };
+    return { el: el, top0: null, dir: -1 };
   });
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!mainNav && !flipWords.length) return;
@@ -52,7 +52,10 @@
         if (fw.top0 === null) fw.top0 = hf.top;
         var ref = Math.min(fw.top0, vh * 0.92);
         var fp = Math.min(1, Math.max(0, (ref - hf.top) / flipRange));
-        fw.el.style.transform = 'scaleX(' + (fp < 0.5 ? -1 : 1) + ') scaleY(' + (-1 + 2 * fp).toFixed(4) + ')';
+        // dautt belti um miðjuna svo örsmátt fram/til-baka trackpad-skroll
+        // (inertial scroll á Mac) ýti ekki scaleX endalaust milli -1/1
+        if (fp < 0.46) fw.dir = -1; else if (fp > 0.54) fw.dir = 1;
+        fw.el.style.transform = 'scaleX(' + fw.dir + ') scaleY(' + (-1 + 2 * fp).toFixed(4) + ')';
       });
     }
     ticking = false;
