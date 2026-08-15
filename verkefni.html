@@ -126,7 +126,53 @@
 
   /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
      fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
-  
+
+
+  /* ── LOGO-HRINGEKJA: lóðréttur stafli af viðskiptavina-logoum hægra
+     megin við fyrirsögnina - miðjupillan er virk og stærri, hinar
+     dofna út fyrir ofan og neðan (sbr. hero-mynstrið í viðmiðuninni).
+     Röðin stokkast við hvert refresh og smellur flettir áfram. ── */
+  .page-hero .wrap{position:relative;}
+  .logo-carousel{
+    /* aðeins ofar en miðjan svo pillan sitji á milli línanna
+       "Nokkur" og "Verkefni" í fyrirsögninni */
+    position:absolute;right:0;top:42%;
+    width:min(360px,30vw);height:360px;
+    transform:translateY(-50%);
+    z-index:1;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* GLER-PILLAN: ein föst pilla í miðjunni sem hreyfist aldrei -
+     logoin fljúga inn í hana og út úr henni */
+  .logo-frame{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:min(250px,24vw);height:76px;
+    border:1px solid rgba(11,12,13,0.25);border-radius:999px;
+    /* sama gler og navið fær þegar skrollað er: sami litur, sama blur */
+    background:rgba(243,240,234,0.45);
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+    box-shadow:0 8px 32px rgba(11,12,13,0.10);
+  }
+  .logo-pill{
+    position:absolute;left:50%;top:50%;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .6s cubic-bezier(.25,.6,.25,1),opacity .6s;
+    will-change:transform,opacity;
+    pointer-events:none;
+    opacity:0;
+  }
+  /* hvít SVG þvinguð í svart með brightness(0), eins og á forsíðunni */
+  .logo-pill img{
+    display:block;height:30px;width:auto;max-width:180px;object-fit:contain;
+    filter:brightness(0);
+  }
+  /* hverfur þegar plássið dugir ekki lengur við hliðina á fyrirsögninni,
+     og birtist aldrei í mobile */
+  @media (max-width:1100px){
+    .logo-carousel{display:none;}
+  }
 </style>
 </head>
 <body class="tone-sage">
@@ -205,6 +251,7 @@
   <div class="wrap">
     <h1><span>Nokkur</span><span class="flip-word">Verkefni</span></h1>
     <p class="lede">Nokkur valin verkefni frá síðustu árum.</p>
+    <div class="logo-carousel" id="logoCarousel" aria-hidden="true"><div class="logo-frame"></div></div>
   </div>
 </section>
 </div><!-- /.top -->
@@ -518,6 +565,89 @@
 </div><!-- /.site -->
 
 <script src="main.js?v=6"></script>
+
+<script>
+// ── LOGO-HRINGEKJA: sömu logo og í marquee-inu á forsíðunni ──
+(function(){
+  var box = document.getElementById('logoCarousel');
+  if (!box) return;
+
+  var LOGOS = [
+    {src:'logo-thjodkirkjan.svg', h:22},
+    {src:'logo-lbhi.svg', h:22},
+    {src:'logo-regla.svg', h:24},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/verkis.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Olis.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Sjo%CC%81va%CC%81.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/O%CC%88lgerdin.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Arnarlax.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Samgo%CC%88ngustofa.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Nox-medical.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Sto%CC%81lpi.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Klasi.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Safi%CC%81r.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Kjarkur.svg'},
+    {src:'https://reykjavikdigital.is/wp-content/uploads/Pipar.svg'}
+  ];
+
+  // stokka við hvert refresh svo röðin (og byrjunarlogoið) sé alltaf ný
+  for (var i = LOGOS.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = LOGOS[i]; LOGOS[i] = LOGOS[j]; LOGOS[j] = t;
+  }
+
+  var pills = LOGOS.map(function(l){
+    var d = document.createElement('div');
+    d.className = 'logo-pill';
+    var img = document.createElement('img');
+    img.src = l.src;
+    img.alt = '';
+    img.loading = 'lazy';
+    if (l.h) img.style.height = l.h + 'px';
+    d.appendChild(img);
+    box.appendChild(d);
+    return d;
+  });
+
+  var N = pills.length;
+  var active = 0;
+  var STEP = 74;                   // px milli logoa í staflanum
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function render(){
+    pills.forEach(function(p, i){
+      // hringlaga fjarlægð frá virka logoinu: -2..2 er sýnilegi glugginn
+      var d = ((i - active) % N + N + Math.floor(N / 2)) % N - Math.floor(N / 2);
+      var on = d === 0;
+      if (Math.abs(d) > 2){
+        p.style.opacity = 0;
+        p.style.transform = 'translate(-50%,-50%) translateY(' + (d > 0 ? 3 : -3) * STEP * 0.5 + 'px) scale(0.5)';
+        return;
+      }
+      // pillan stendur kyrr - logoin fljúga inn í hana og út úr henni,
+      // það sem er í pillunni er stærst og í fullum styrk
+      p.style.opacity = on ? 1 : (Math.abs(d) === 1 ? 0.3 : 0.1);
+      p.style.transform = 'translate(-50%,-50%) translateY(' + d * STEP + 'px) scale(' + (on ? 1.12 : 0.66) + ')';
+    });
+  }
+
+  var timer = null;
+  function schedule(){
+    if (reduceMotion) return;      // engin sjálfvirk hreyfing, smellur virkar samt
+    clearInterval(timer);
+    timer = setInterval(function(){ active = (active + 1) % N; render(); }, 2400);
+  }
+
+  box.addEventListener('click', function(){
+    active = (active + 1) % N;
+    render();
+    schedule();                    // smellur núllstillir taktinn
+  });
+
+  render();
+  schedule();
+})();
+</script>
 
 
 </body>
