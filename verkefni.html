@@ -600,10 +600,20 @@
     var d = document.createElement('div');
     d.className = 'logo-pill';
     var img = document.createElement('img');
-    img.src = l.src;
+    img.src = l.src;               // ekkert lazy: allt forhlaðið svo aldrei birtist tómt pláss
     img.alt = '';
-    img.loading = 'lazy';
     if (l.h) img.style.height = l.h + 'px';
+    // logo sem nær ekki að hlaðast er fjarlægt úr hringnum í stað
+    // þess að birtast sem tómt gat
+    img.addEventListener('error', function(){
+      var idx = pills.indexOf(d);
+      if (idx === -1) return;
+      pills.splice(idx, 1);
+      box.removeChild(d);
+      N = pills.length;
+      if (N && active >= N) active = active % N;
+      if (N) render();
+    });
     d.appendChild(img);
     box.appendChild(d);
     return d;
