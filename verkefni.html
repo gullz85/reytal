@@ -173,6 +173,36 @@
   @media (max-width:1100px){
     .logo-carousel{display:none;}
   }
+
+  /* ── MOBILE: lárétt logo-marquee undir fyrirsögninni, sama og á
+     forsíðunni en án striksins og án "Meðal viðskiptavina" ── */
+  .hero-marquee{display:none;margin-top:clamp(28px,5vh,44px);}
+  .hero-marquee .marquee{
+    display:flex;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .hero-marquee .marquee-track{
+    display:flex;align-items:center;gap:48px;
+    padding-right:48px;
+    flex-shrink:0;
+    animation:heroMarquee 42s linear infinite;
+  }
+  .hero-marquee .marquee-track img{
+    height:26px;width:auto;max-width:110px;object-fit:contain;
+    filter:brightness(0);
+    opacity:0.45;
+  }
+  @keyframes heroMarquee{
+    from{transform:translateX(0);}
+    to{transform:translateX(-100%);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .hero-marquee .marquee-track{animation:none;}
+  }
+  @media (max-width:1100px){
+    .hero-marquee{display:block;}
+  }
 </style>
 </head>
 <body class="tone-sage">
@@ -252,6 +282,45 @@
     <h1><span>Nokkur</span><span class="flip-word">Verkefni</span></h1>
     <p class="lede">Nokkur valin verkefni frá síðustu árum.</p>
     <div class="logo-carousel" id="logoCarousel" aria-hidden="true"><div class="logo-frame"></div></div>
+    <!-- mobile: sama marquee og á forsíðunni, án striks og labels -->
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track">
+          <img src="logo-thjodkirkjan.svg" alt="Þjóðkirkjan" style="height:20px;">
+          <img src="logo-lbhi.svg" alt="LBHÍ" style="height:20px;">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/verkis.svg" alt="Verkís">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Olis.svg" alt="Olís">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sjo%CC%81va%CC%81.svg" alt="Sjóvá">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/O%CC%88lgerdin.svg" alt="Ölgerðin">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Arnarlax.svg" alt="Arnarlax">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Samgo%CC%88ngustofa.svg" alt="Samgöngustofa">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Nox-medical.svg" alt="Nox Medical">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sto%CC%81lpi.svg" alt="Stólpi Gámar">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Klasi.svg" alt="Klasi">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Safi%CC%81r.svg" alt="Safír">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Kjarkur.svg" alt="Kjarkur endurhæfing">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Pipar.svg" alt="Pipar\TBWA">
+          <img src="logo-regla.svg" alt="Regla" style="height:22px;">
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <img src="logo-thjodkirkjan.svg" alt="" style="height:20px;">
+          <img src="logo-lbhi.svg" alt="" style="height:20px;">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/verkis.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Olis.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sjo%CC%81va%CC%81.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/O%CC%88lgerdin.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Arnarlax.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Samgo%CC%88ngustofa.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Nox-medical.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Sto%CC%81lpi.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Klasi.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Safi%CC%81r.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Kjarkur.svg" alt="">
+          <img src="https://reykjavikdigital.is/wp-content/uploads/Pipar.svg" alt="">
+          <img src="logo-regla.svg" alt="" style="height:22px;">
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 </div><!-- /.top -->
