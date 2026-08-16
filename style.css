@@ -8,11 +8,17 @@
   }
 
 *{box-sizing:border-box;margin:0;padding:0;}
+  /* overflow-x:hidden á body eitt og sér dugar ekki alltaf á iOS Safari -
+     ef eitthvert frumefni teygir sig þótt örlítið út fyrir jaðarinn getur
+     notandinn samt togað síðuna til hliðar (rubber-band). html þarf sömu
+     vörn til að síðan sé alveg föst lárétt. */
+  html{overflow-x:hidden;width:100%;}
   body{
     font-family:'DM Sans',sans-serif;
     background:var(--cream);
     color:var(--black);
     overflow-x:hidden;
+    width:100%;
   }
   .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
   h1,h2{text-transform:uppercase;}
@@ -306,7 +312,12 @@ body.tone-amber{
     position:absolute;left:0;right:0;top:50%;
     transform:translateY(-50%);
     display:flex;flex-direction:column;
-    gap:0.4vmin;
+    /* vh en ekki vmin: raðirnar eiga að fylla HÆÐINA á skjánum. Í mobile
+       (mjó portrait-skjámynd) er vmin bundið breiddinni sem er lítil, svo
+       stafla af röðum varð allt of lágur og sat bara í miðjunni með auðu
+       rjóma-svæði fyrir ofan og neðan. vh heldur stafla-hæðinni réttri
+       óháð stærðarhlutfalli skjásins. */
+    gap:0.4vh;
   }
   #splashC .c-row{
     display:flex;overflow:hidden;

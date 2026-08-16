@@ -128,14 +128,17 @@
   var WORD = '<svg class="w" viewBox="0 0 46.38 8.54" aria-hidden="true"><use href="#markWide"/></svg>';
 
   function rowsHTML(){
-    var vmin = Math.min(innerWidth, innerHeight) / 100;
+    // vh en ekki vmin: raðirnar eiga að fylla HÆÐINA á skjánum. Á mjóum
+    // (portrait) mobile-skjám er vmin bundið breiddinni, sem er lítil,
+    // svo stafla af röðum varð allt of lágur og sat bara í miðjunni.
+    var vh = innerHeight / 100;
     var need = innerWidth * 2.2;                 // hver rák þarf að þekja 2x skjáinn
     var html = '';
     C_ROWS.forEach(function(r, i){
-      var wordW = r[0] * vmin * 4.54;            // breidd merkisins (.78em x 5.43) + bil
+      var wordW = r[0] * vh * 4.54;              // breidd merkisins (.78em x 5.43) + bil
       var reps  = Math.max(3, Math.ceil(need / wordW));
       var track = new Array(reps + 1).join(WORD);
-      html += '<div class="c-row" style="font-size:' + r[0] + 'vmin;--d:' +
+      html += '<div class="c-row" style="font-size:' + r[0] + 'vh;--d:' +
               (i * 0.035).toFixed(3) + 's;--dout:' +
               ((C_ROWS.length - 1 - i) * 0.022).toFixed(3) + 's">' +
                 '<div class="c-track ' + (r[2] === 'L' ? 'r-l' : 'r-r') +
