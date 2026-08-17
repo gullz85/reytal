@@ -8,17 +8,20 @@
   }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-  /* overflow-x:hidden á body eitt og sér dugar ekki alltaf á iOS Safari -
-     ef eitthvert frumefni teygir sig þótt örlítið út fyrir jaðarinn getur
-     notandinn samt togað síðuna til hliðar (rubber-band). html þarf sömu
-     vörn til að síðan sé alveg föst lárétt. */
-  html{overflow-x:hidden;width:100%;}
+  /* overflow-x:hidden á BÁÐUM html og body samtímis er þekkt fyrir að rugla
+     vafra (sérstaklega Safari) um hvort frumefnið er hið eiginlega skroll-
+     svæði - niðurstaðan getur orðið að lóðrétt músaskroll hættir að virka
+     með öllu. Þess vegna er overflow-x:hidden bara á body, og hliðar-
+     togið (rubber-band á iOS) er þess í stað varið af overscroll-behavior-x,
+     sem býr ekki til nýtt skroll-samhengi og á því ekki að trufla venjulegt
+     lóðrétt skroll. */
+  html{overscroll-behavior-x:none;}
   body{
     font-family:'DM Sans',sans-serif;
     background:var(--cream);
     color:var(--black);
     overflow-x:hidden;
-    width:100%;
+    overscroll-behavior-x:none;
   }
   .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
   h1,h2{text-transform:uppercase;}
