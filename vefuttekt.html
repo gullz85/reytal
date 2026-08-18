@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="description" content="Ókeypis vefúttekt: sláðu inn lénið þitt og fáðu faglega greiningu á tækni, hraða, öryggi og sýnileika vefsins — á innan við mínútu.">
+<meta name="description" content="Ókeypis vefúttekt: sláðu inn lénið þitt og fáðu faglega greiningu á tækni, hraða, öryggi og sýnileika vefsins, á innan við mínútu.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vefúttekt: REYTAL">
 <meta property="og:description" content="Sláðu inn lénið þitt og fáðu faglega úttekt á tækni, hraða, öryggi og sýnileika vefsins. Ókeypis og án skráningar.">
@@ -173,6 +173,134 @@
     .cta-box{flex-direction:column;align-items:flex-start;}
     .va-form .btn-primary{width:100%;}
   }
+
+  /* ── HERO Í TVEIMUR DÁLKUM: form vinstra megin, sýnishorn hægra ── */
+  .va-hero{
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,0.9fr);
+    gap:clamp(36px,5vw,80px);align-items:center;
+  }
+  @media (max-width:1080px){
+    .va-hero{grid-template-columns:1fr;}
+    .va-mock{max-width:460px;margin:clamp(32px,6vh,48px) auto 0;}
+  }
+
+  /* stærra input: þetta er aðal-aðgerð síðunnar og á að líta þannig út */
+  .va-form{max-width:640px;}
+  .va-field input{
+    min-height:66px;
+    padding:20px 28px;
+    font-size:19px;
+  }
+  .va-form .btn-primary{min-height:66px;padding:20px 38px;font-size:17px;}
+
+  /* ── SÝNISHORN AF ÚTTEKT: teiknað í HTML/CSS, alltaf skarpt ────── */
+  .va-mock{position:relative;z-index:1;}
+  .mock-card{
+    background:#fff;
+    border:1px solid rgba(11,12,13,0.10);
+    border-radius:24px;
+    box-shadow:0 24px 70px rgba(11,12,13,0.13);
+    padding:clamp(22px,2.6vw,32px);
+    transform:rotate(-1.2deg);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .mock-card{transition:transform .6s cubic-bezier(.25,.6,.25,1);}
+    .va-mock:hover .mock-card{transform:rotate(0deg);}
+  }
+  .mock-head{
+    display:flex;align-items:center;gap:8px;
+    padding-bottom:16px;margin-bottom:20px;
+    border-bottom:1px solid rgba(11,12,13,0.10);
+  }
+  .mock-head .mdot{width:9px;height:9px;border-radius:50%;background:rgba(11,12,13,0.14);}
+  .mock-url{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.04em;
+    color:var(--slate);margin-left:8px;
+  }
+  .mock-badge{
+    margin-left:auto;
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--navy);border:1px solid rgba(11,12,13,0.22);border-radius:999px;
+    padding:5px 12px;white-space:nowrap;
+  }
+
+  .mock-score{display:flex;align-items:center;gap:clamp(18px,2.4vw,28px);}
+  .ring{
+    position:relative;border-radius:50%;
+    display:grid;place-items:center;
+    background:conic-gradient(var(--rc,var(--navy)) calc(var(--p)*1%), rgba(11,12,13,0.07) 0);
+  }
+  .ring::before{
+    content:'';position:absolute;inset:var(--rw,8px);
+    background:#fff;border-radius:50%;
+  }
+  .ring>span{position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-weight:700;}
+  .ring-main{width:clamp(96px,10vw,124px);aspect-ratio:1;--rw:10px;}
+  .ring-main>span{font-size:clamp(30px,3vw,38px);letter-spacing:-0.02em;}
+  .mock-grade{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(19px,2vw,23px);letter-spacing:-0.01em;
+  }
+  .mock-grade-sub{font-size:14px;line-height:1.5;color:#2a2a2a;margin-top:6px;max-width:260px;}
+
+  .mock-cats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+    margin-top:clamp(20px,2.6vh,26px);padding-top:clamp(18px,2.4vh,24px);
+    border-top:1px solid rgba(11,12,13,0.10);
+  }
+  .mock-cat{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .ring-sm{width:54px;aspect-ratio:1;--rw:6px;}
+  .ring-sm>span{font-size:15px;}
+  .mock-cat b{
+    font-family:'DM Mono',monospace;font-weight:400;
+    font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--slate);
+  }
+
+  .mock-findings{display:grid;gap:9px;margin-top:clamp(18px,2.4vh,24px);}
+  .mock-find{
+    display:flex;align-items:center;gap:10px;
+    font-size:13.5px;line-height:1.4;color:#2a2a2a;
+    border:1px solid rgba(11,12,13,0.08);border-radius:12px;
+    padding:10px 14px;background:rgba(243,240,234,0.5);
+  }
+  .mock-find .fi{
+    flex:0 0 auto;width:18px;height:18px;border-radius:50%;
+    display:grid;place-items:center;font-size:10.5px;font-weight:700;
+  }
+  .mock-find.ok .fi{background:var(--navy);color:var(--cream);}
+  .mock-find.warn .fi{background:#C68A2D;color:#fff;}
+
+
+  /* ── SVONA VIRKAR ÞAÐ: þrjú skref með stórum mono-tölum ────────── */
+  .how{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0 0;}
+  .how-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:clamp(20px,3vw,36px);
+    margin-top:clamp(36px,5vh,52px);
+  }
+  .how-card{
+    border:1px solid rgba(11,12,13,0.14);border-radius:22px;
+    padding:clamp(24px,3vw,34px);
+    background:rgba(255,255,255,0.45);
+  }
+  .how-card .num{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;color:var(--slate);
+  }
+  .how-card h3{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(19px,2vw,24px);letter-spacing:-0.01em;
+    margin-top:12px;
+  }
+  .how-card p{font-size:15px;line-height:1.6;color:#2a2a2a;margin-top:10px;}
+  @media (max-width:860px){ .how-grid{grid-template-columns:1fr;} }
+
+  .section-head{max-width:640px;}
+  .section-head h2{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.01em;
+    margin-top:14px;
+  }
+  .section-head p{font-size:16.5px;line-height:1.65;color:#2a2a2a;margin-top:16px;}
 </style>
 
 
@@ -251,10 +379,12 @@
 
 <section class="page-hero">
   <div class="wrap">
+    <div class="va-hero">
+    <div class="va-hero-main">
     <h1><span>Vefúttekt</span><span class="flip-word">Á mínútu</span></h1>
     <p class="lede">
       Sláðu inn vefinn þinn. Greiningarvél okkar les hann, mælir tækni, hraða,
-      öryggi og sýnileika — og skilar faglegri úttekt sem þú getur lesið strax.
+      öryggi og sýnileika og skilar faglegri úttekt sem þú getur lesið strax.
     </p>
 
     <form class="va-form" id="vaForm" novalidate>
@@ -293,9 +423,92 @@
       </ol>
       <p class="va-msg" id="vaMsg">Athuga lénið…</p>
     </div>
+    </div><!-- /.va-hero-main -->
+
+    <!-- SÝNISHORN: dæmi um hvernig úttektin lítur út, teiknað í CSS -->
+    <div class="va-mock" aria-hidden="true">
+      <div class="mock-card">
+        <div class="mock-head">
+          <span class="mdot"></span><span class="mdot"></span><span class="mdot"></span>
+          <span class="mock-url">fyrirtaekid.is</span>
+          <span class="mock-badge">Sýnishorn</span>
+        </div>
+        <div class="mock-score">
+          <div class="ring ring-main" style="--p:86"><span>86</span></div>
+          <div>
+            <div class="mock-grade">Góður grunnur</div>
+            <p class="mock-grade-sub">7 ábendingar um það sem má bæta, raðað eftir því hvað skiptir mestu máli.</p>
+          </div>
+        </div>
+        <div class="mock-cats">
+          <div class="mock-cat"><div class="ring ring-sm" style="--p:92"><span>92</span></div><b>Tækni</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" style="--p:78;--rc:#4C7C93"><span>78</span></div><b>Hraði</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" style="--p:95"><span>95</span></div><b>Öryggi</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" style="--p:71;--rc:#C68A2D"><span>71</span></div><b>SEO</b></div>
+        </div>
+        <div class="mock-findings">
+          <div class="mock-find ok"><span class="fi">✓</span>SSL-skírteini gilt og rétt uppsett</div>
+          <div class="mock-find ok"><span class="fi">✓</span>Svartími vel innan viðmiða</div>
+          <div class="mock-find warn"><span class="fi">!</span>Myndir án alt-texta draga úr sýnileika í leit</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.va-hero -->
   </div>
 </section>
 </div><!-- /.top -->
+
+<section class="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Svona virkar það</div>
+      <h2>Þrjú skref, engin skráning</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="num">01</div>
+        <h3>Sláðu inn lénið</h3>
+        <p>Ekkert notandanafn, ekkert kreditkort. Bara vefslóðin þín og einn smellur.</p>
+      </div>
+      <div class="how-card">
+        <div class="num">02</div>
+        <h3>Vélin les vefinn</h3>
+        <p>Greiningarvélin heimsækir vefinn eins og notandi og leitarvél gera: mælir tækni, hraða, öryggi og sýnileika.</p>
+      </div>
+      <div class="how-card">
+        <div class="num">03</div>
+        <h3>Úttektin opnast</h3>
+        <p>Innan mínútu færðu skor, sundurliðun og skýrar ábendingar, skrifaðar á mannamáli.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Af hverju að skanna?</div>
+      <h2>Vefurinn þinn vinnur allan sólarhringinn. Veistu hvernig honum gengur?</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="num">Hraði</div>
+        <h3>Fyrsta sýn tekur sekúndur</h3>
+        <p>Hægur vefur missir heimsóknir áður en nokkur les fyrsta orðið. Úttektin sýnir svart á hvítu hvort vefurinn þinn svarar nógu hratt.</p>
+      </div>
+      <div class="how-card">
+        <div class="num">Sýnileiki</div>
+        <h3>Google er að meta þig núna</h3>
+        <p>Leitarvélar verðlauna tæknilega heilbrigða vefi. Úttektin finnur það sem heldur þér neðar í leitarniðurstöðum en þú átt skilið.</p>
+      </div>
+      <div class="how-card">
+        <div class="num">Öryggi</div>
+        <h3>Traust byggist á smáatriðum</h3>
+        <p>Útrunnin skírteini og gamlar viðbætur fæla bæði viðskiptavini og leitarvélar. Betra að finna það sjálfur en að láta aðra reka sig á það.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="work">
   <div class="blob2 blob2--a"></div>
@@ -308,14 +521,14 @@
           <h3>Hvað er mælt</h3>
           <p>Vefkerfið sem vefurinn keyrir á, útgáfur og viðbætur, svartími og
              hraði, SSL og öryggisstillingar, mælingar og sýnileiki í leit.
-             Allt lesið beint af vefnum — ekkert giskað.</p>
+             Allt lesið beint af vefnum, ekkert giskað.</p>
         </div>
         <div class="work-tags"><span class="work-tag">Tækni</span><span class="work-tag">Hraði</span><span class="work-tag">Öryggi</span><span class="work-tag">SEO</span></div>
       </div>
 
       <div class="work-row">
         <div class="work-main">
-          <h3>Hvað þú færð</h3>
+          <h3>Hvað færðu?</h3>
           <p>Heildarskor með sundurliðun, það sem er í góðu lagi, það sem má
              laga og hvers vegna það skiptir máli. Skrifað á mannamáli, ekki
              sem tæknilegur útprentaður listi.</p>
@@ -325,10 +538,10 @@
 
       <div class="work-row">
         <div class="work-main">
-          <h3>Hvað það kostar</h3>
+          <h3>Hvað kostar þetta?</h3>
           <p>Ekkert. Úttektin er gefin án skilyrða og án skráningar. Viljirðu
              fara yfir niðurstöðurnar með okkur er hnappur til þess neðst á
-             úttektinni — það er þitt val, ekki skilyrði.</p>
+             úttektinni. Það er þitt val, ekki skilyrði.</p>
         </div>
         <div class="work-tags"><span class="work-tag">Ókeypis</span></div>
       </div>
@@ -432,7 +645,7 @@
   var FALLBACK = {
     network: "Við náðum ekki sambandi við úttektarvélina. Reyndu aftur eftir augnablik.",
     failed: "Ekki tókst að klára úttektina að þessu sinni. Vefurinn gæti verið niðri eða svarað of hægt.",
-    slow: "Þetta tekur lengri tíma en venjulega. Úttektin heldur áfram hjá okkur — prófaðu aftur eftir smástund."
+    slow: "Þetta tekur lengri tíma en venjulega. Úttektin heldur áfram hjá okkur. Prófaðu aftur eftir smástund."
   };
 
   function openReport(url) {
@@ -528,7 +741,7 @@
 
         setStep(2, "done");
         setStep(3, "active");
-        say("Beiðnin er komin í röð. Þú mátt bíða hér — úttektin opnast sjálf.");
+        say("Beiðnin er komin í röð. Þú mátt bíða hér, úttektin opnast sjálf.");
         poll(data.auditId, Date.now());
       })
       .catch(function () {
