@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vefúttekt: REYTAL</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="description" content="Ókeypis vefúttekt: sláðu inn lénið þitt og fáðu faglega greiningu á tækni, hraða, öryggi og sýnileika vefsins — á innan við mínútu.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vefúttekt: REYTAL">
+<meta property="og:description" content="Sláðu inn lénið þitt og fáðu faglega úttekt á tækni, hraða, öryggi og sýnileika vefsins. Ókeypis og án skráningar.">
+<meta property="og:locale" content="is_IS">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="canonical" href="https://reytal.is/vefuttekt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KZYV12RDN2');
+</script>
+
+<link rel="stylesheet" href="style.css?v=6">
+<style>
+  /* ── VEFÚTTEKT: lendingarsíða ────────────────────────────────────────
+     Sama myndmál og aðrar undirsíður (page-hero, wrap, btn-primary). Það
+     eina sem er nýtt hér er formið sjálft og stöðulistinn — og hann er
+     RAUNVERULEGUR: hvert skref kviknar þegar Wisdom segir að það sé búið,
+     ekki eftir tímamæli. Falsað prósentuhlutfall væri fljótlegra að smíða
+     og lygi í hvert einasta skipti. */
+  .top{position:relative;}
+  h1,h2{text-transform:uppercase;}
+  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(40px,6vh,72px);}
+
+  h1{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:flex-start;gap:0.05em;
+    margin-top:clamp(36px,6vw,88px);
+  }
+  h1 .accent{color:var(--navy);}
+  @media (max-width:620px){ h1{line-height:0.98;gap:0.08em;} }
+
+  .page-hero p.lede{
+    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:580px;
+    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
+  }
+
+  /* ── Formið ─────────────────────────────────────────────────────── */
+  .va-form{
+    position:relative;z-index:1;
+    margin-top:clamp(28px,4vh,40px);
+    display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;
+    max-width:620px;
+  }
+  .va-field{flex:1 1 280px;display:block;position:relative;}
+  .va-field input{
+    width:100%;height:100%;min-height:54px;
+    padding:16px 20px;
+    font-family:'DM Sans',sans-serif;font-size:17px;color:var(--black);
+    background:rgba(255,255,255,0.55);
+    border:1px solid rgba(11,12,13,0.22);border-radius:999px;
+    transition:border-color .3s ease, background .3s ease, box-shadow .3s ease;
+  }
+  .va-field input::placeholder{color:var(--grey);}
+  .va-field input:focus{
+    outline:none;border-color:var(--navy);background:#fff;
+    box-shadow:0 0 0 4px rgba(13,70,89,0.10);
+  }
+  .va-form .btn-primary{min-height:54px;padding:16px 32px;}
+  .va-form .btn-primary:disabled{opacity:0.55;cursor:default;transform:none;}
+  /* Hunangsgildra: hvorki sýnileg né í flipa-röðinni. */
+  .va-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+
+  .va-note{
+    font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--slate);margin-top:14px;position:relative;z-index:1;
+  }
+  .va-error{
+    margin-top:16px;max-width:620px;position:relative;z-index:1;
+    font-size:15px;line-height:1.55;color:#8a2b2b;
+  }
+
+  /* ── Stöðulistinn ───────────────────────────────────────────────── */
+  .va-status{
+    position:relative;z-index:1;max-width:620px;
+    margin-top:clamp(26px,4vh,36px);
+    padding:clamp(22px,3vh,28px) clamp(22px,3vw,30px);
+    border:1px solid rgba(11,12,13,0.14);border-radius:22px;
+    background:rgba(255,255,255,0.45);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  .va-steps{list-style:none;display:grid;gap:14px;}
+  .va-steps li{
+    display:flex;align-items:flex-start;gap:12px;
+    font-size:15.5px;line-height:1.4;color:var(--grey);
+    transition:color .3s ease;
+  }
+  .va-steps .dot{
+    flex:0 0 auto;width:18px;height:18px;margin-top:1px;
+    border-radius:50%;border:1.5px solid rgba(11,12,13,0.22);
+    display:grid;place-items:center;
+    font-size:11px;line-height:1;color:transparent;
+    transition:border-color .3s ease, background .3s ease, color .3s ease;
+  }
+  .va-steps li[data-state="active"]{color:var(--black);font-weight:600;}
+  .va-steps li[data-state="active"] .dot{
+    border-color:var(--navy);
+    background:radial-gradient(circle at center, var(--navy) 38%, transparent 40%);
+    animation:va-pulse 1.6s ease-in-out infinite;
+  }
+  .va-steps li[data-state="done"]{color:var(--black);}
+  .va-steps li[data-state="done"] .dot{
+    border-color:var(--navy);background:var(--navy);color:var(--cream);
+  }
+  @keyframes va-pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(13,70,89,0.28);}
+    50%{box-shadow:0 0 0 7px rgba(13,70,89,0);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .va-steps li[data-state="active"] .dot{animation:none;}
+  }
+  .va-msg{
+    margin-top:18px;padding-top:16px;
+    border-top:1px solid rgba(11,12,13,0.10);
+    font-size:14.5px;line-height:1.55;color:#2a2a2a;
+  }
+  .va-msg a{color:var(--navy);font-weight:600;}
+
+  /* ── „Hvað færðu" ───────────────────────────────────────────────── */
+  .work{position:relative;z-index:1;padding:clamp(56px,8vh,96px) 0 clamp(96px,13vh,150px);}
+  .work-index{border-top:1px solid rgba(11,12,13,0.14);}
+  .work-row{
+    display:grid;grid-template-columns:1fr auto;
+    gap:clamp(20px,3vw,48px);align-items:start;
+    padding:clamp(26px,4vh,40px) 0;
+    border-bottom:1px solid rgba(11,12,13,0.14);
+    text-decoration:none;color:inherit;
+  }
+  .work-row h3{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(22px,3vw,36px);line-height:1.05;letter-spacing:-0.02em;
+  }
+  .work-row p{font-size:15px;line-height:1.6;color:#2a2a2a;max-width:560px;margin-top:10px;}
+  .work-tags{display:flex;flex-wrap:nowrap;gap:8px;justify-content:flex-end;padding-top:12px;}
+  .work-tag{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+    border:1px solid rgba(11,12,13,0.22);border-radius:999px;padding:6px 14px;color:var(--navy);
+    white-space:nowrap;
+  }
+
+  .cta{position:relative;z-index:1;padding:0 0 clamp(96px,13vh,150px);}
+  .cta-box{
+    border-top:1px solid rgba(11,12,13,0.12);
+    padding-top:clamp(48px,7vh,72px);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
+  }
+  .cta-box h2{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.01em;max-width:520px;
+  }
+
+  @media (max-width:760px){
+    .work-row{grid-template-columns:1fr;gap:8px;}
+    .work-tags{flex-wrap:wrap;justify-content:flex-start;padding-top:6px;}
+    .cta-box{flex-direction:column;align-items:flex-start;}
+    .va-form .btn-primary{width:100%;}
+  }
+</style>
+
+
+</head>
+<body class="tone-orange">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+  <symbol id="markWide" viewBox="0 0 46.38 8.54">
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH: síðuskipta-skjár -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="/">Heim</a>
+  <a href="/thjonusta">Þjónusta</a>
+  <a href="/vefuttekt" class="active">Vefúttekt</a>
+  <a href="/verkefni">Verkefni</a>
+  <a href="/um-okkur">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb"><div class="blob"></div></div>
+<header>
+  <nav class="wrap">
+    <a href="/" class="logo-mark" aria-label="REYTAL">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="/">Heim</a></li>
+      <li><a href="/thjonusta">Þjónusta</a></li>
+      <li><a href="/vefuttekt" class="active">Vefúttekt</a></li>
+      <li><a href="/verkefni">Verkefni</a></li>
+      <li><a href="/um-okkur">Um okkur</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <h1><span>Vefúttekt</span><span class="flip-word">Á mínútu</span></h1>
+    <p class="lede">
+      Sláðu inn vefinn þinn. Greiningarvél okkar les hann, mælir tækni, hraða,
+      öryggi og sýnileika — og skilar faglegri úttekt sem þú getur lesið strax.
+    </p>
+
+    <form class="va-form" id="vaForm" novalidate>
+      <label class="va-field">
+        <span class="sr-only" style="position:absolute;left:-9999px;">Vefslóð</span>
+        <input
+          id="vaDomain"
+          name="domain"
+          type="text"
+          inputmode="url"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          autocomplete="url"
+          placeholder="fyrirtaekid.is"
+          aria-label="Vefslóð"
+          required
+        >
+      </label>
+      <!-- Hunangsgildra fyrir vélmenni: manneskja sér þennan reit aldrei. -->
+      <input class="va-hp" id="vaHp" name="website" tabindex="-1" aria-hidden="true" autocomplete="off">
+      <button class="btn-primary" type="submit" id="vaSubmit">
+        <span class="btn-label">Skoða vefinn</span>
+      </button>
+    </form>
+
+    <p class="va-note">Ókeypis · engin skráning · niðurstaðan opnast í vafranum</p>
+    <p class="va-error" id="vaError" hidden></p>
+
+    <div class="va-status" id="vaStatus" role="status" aria-live="polite" hidden>
+      <ol class="va-steps" id="vaSteps">
+        <li data-step="1" data-state="todo"><span class="dot">✓</span><span>Vefurinn fundinn</span></li>
+        <li data-step="2" data-state="todo"><span class="dot">✓</span><span>Beiðnin komin í röð</span></li>
+        <li data-step="3" data-state="todo"><span class="dot">✓</span><span>Farið yfir tækni, hraða, öryggi og sýnileika</span></li>
+        <li data-step="4" data-state="todo"><span class="dot">✓</span><span>Úttektin tilbúin</span></li>
+      </ol>
+      <p class="va-msg" id="vaMsg">Athuga lénið…</p>
+    </div>
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="work">
+  <div class="blob2 blob2--a"></div>
+  <div class="blob2 blob2--b"></div>
+  <div class="wrap">
+    <div class="work-index">
+
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Hvað er mælt</h3>
+          <p>Vefkerfið sem vefurinn keyrir á, útgáfur og viðbætur, svartími og
+             hraði, SSL og öryggisstillingar, mælingar og sýnileiki í leit.
+             Allt lesið beint af vefnum — ekkert giskað.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Tækni</span><span class="work-tag">Hraði</span><span class="work-tag">Öryggi</span><span class="work-tag">SEO</span></div>
+      </div>
+
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Hvað þú færð</h3>
+          <p>Heildarskor með sundurliðun, það sem er í góðu lagi, það sem má
+             laga og hvers vegna það skiptir máli. Skrifað á mannamáli, ekki
+             sem tæknilegur útprentaður listi.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Skor</span><span class="work-tag">Niðurstöður</span></div>
+      </div>
+
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Hvað það kostar</h3>
+          <p>Ekkert. Úttektin er gefin án skilyrða og án skráningar. Viljirðu
+             fara yfir niðurstöðurnar með okkur er hnappur til þess neðst á
+             úttektinni — það er þitt val, ekki skilyrði.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Ókeypis</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Ertu með spurningu áður en þú byrjar?</h2>
+      <a href="mailto:hallo@reytal.is?subject=Vef%C3%BAttekt" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FÓTUR -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+      <div class="footer-pills">
+        <span class="tag">Reykjavík</span>
+        <span class="tag">Tallinn</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>REYTAL © 2026</span>
+      <a href="mailto:hallo@reykjavikdigital.is?subject=Fyrirspurn%20af%20vef">Hafa samband ↗︎</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /.site -->
+
+<script src="main.js?v=6"></script>
+
+<script>
+/* ============================================================================
+   VEFÚTTEKT — tengingin við Wisdom.
+
+   Þetta er ALLT sem reytal.is þarf að kunna: senda lén, spyrja hvort úttektin
+   sé tilbúin, opna slóðina sem Wisdom skilar. Engin skýrslugerð, ekkert
+   skannaraviðmót, ENGINN API-lykill — endapunktarnir eru raunverulega
+   opinberir og verjast sjálfir (lénastaðfesting, netvörn, hraðamörk).
+
+   Sjá REYTAL_INTEGRATION.md í Wisdom fyrir fullan samning.
+
+   TVÆR REGLUR SEM MÁ EKKI BRJÓTA:
+     1. Slóðin á úttektina er BÚIN TIL AF WISDOM. Hér er hún meðhöndluð sem
+        ógegnsær strengur. Að setja hana saman úr auðkennum myndi brotna um
+        leið og Wisdom breytir innri byggingu sinni.
+     2. Framvindan er RAUNVERULEG. Hvert skref kviknar við svar frá Wisdom,
+        aldrei við tímamæli. Prósentutala sem hreyfist af sjálfu sér er lygi
+        sem kostar ekkert að smíða og allt að treysta á.
+   ========================================================================= */
+(function () {
+  var API = "https://wisdom.reytal.is";
+  var POLL_MS = 3000;        // hæfilegt: skönnun tekur sekúndur, ekki millisekúndur
+  var MAX_WAIT_MS = 180000;  // þrjár mínútur, svo hættum við að spyrja
+
+  var form = document.getElementById("vaForm");
+  var input = document.getElementById("vaDomain");
+  var hp = document.getElementById("vaHp");
+  var btn = document.getElementById("vaSubmit");
+  var status = document.getElementById("vaStatus");
+  var steps = document.getElementById("vaSteps");
+  var msg = document.getElementById("vaMsg");
+  var errorBox = document.getElementById("vaError");
+  if (!form) return;
+
+  var busy = false;
+
+  function setStep(n, state) {
+    var li = steps.querySelector('[data-step="' + n + '"]');
+    if (li) li.setAttribute("data-state", state);
+  }
+  function resetSteps() {
+    [1, 2, 3, 4].forEach(function (n) { setStep(n, "todo"); });
+  }
+  function say(text) { msg.textContent = text; }
+  function showError(text) {
+    errorBox.textContent = text;
+    errorBox.hidden = false;
+    status.hidden = true;
+  }
+  function clearError() {
+    errorBox.hidden = true;
+    errorBox.textContent = "";
+  }
+  function lock(on) {
+    busy = on;
+    btn.disabled = on;
+    input.disabled = on;
+    btn.querySelector(".btn-label").textContent = on ? "Augnablik…" : "Skoða vefinn";
+  }
+
+  /* Wisdom skilar tilbúnum íslenskum texta í `error`. Þessi kort eru aðeins
+     öryggisnet ef svarið berst ekki (netvilla, þjónn niðri). */
+  var FALLBACK = {
+    network: "Við náðum ekki sambandi við úttektarvélina. Reyndu aftur eftir augnablik.",
+    failed: "Ekki tókst að klára úttektina að þessu sinni. Vefurinn gæti verið niðri eða svarað of hægt.",
+    slow: "Þetta tekur lengri tíma en venjulega. Úttektin heldur áfram hjá okkur — prófaðu aftur eftir smástund."
+  };
+
+  function openReport(url) {
+    setStep(3, "done");
+    setStep(4, "done");
+    say("Úttektin er tilbúin. Opna…");
+    window.location.assign(url);
+  }
+
+  function poll(auditId, startedAt) {
+    if (Date.now() - startedAt > MAX_WAIT_MS) {
+      setStep(3, "todo");
+      say(FALLBACK.slow);
+      lock(false);
+      return;
+    }
+    setTimeout(function () {
+      // Ekki spyrja úr földum flipa — það hjálpar engum og telur upp í þakið.
+      if (document.visibilityState === "hidden") return poll(auditId, startedAt);
+
+      fetch(API + "/api/public/audits/" + encodeURIComponent(auditId))
+        .then(function (r) {
+          if (r.status === 404) throw new Error("gone");
+          return r.json();
+        })
+        .then(function (data) {
+          if (data.status === "ready" && data.reportUrl) return openReport(data.reportUrl);
+          if (data.status === "failed") {
+            setStep(3, "todo");
+            say(FALLBACK.failed);
+            lock(false);
+            return;
+          }
+          if (data.status === "scanning") {
+            setStep(2, "done");
+            setStep(3, "active");
+            say("Wisdom er að fara yfir vefinn. Þetta tekur yfirleitt hálfa mínútu.");
+          }
+          poll(auditId, startedAt);
+        })
+        .catch(function (e) {
+          if (e && e.message === "gone") {
+            showError(FALLBACK.network);
+            lock(false);
+            return;
+          }
+          poll(auditId, startedAt); // stök netvilla stöðvar ekki biðina
+        });
+    }, POLL_MS);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var domain = (input.value || "").trim();
+    if (!domain) { input.focus(); return; }
+
+    clearError();
+    resetSteps();
+    lock(true);
+    status.hidden = false;
+    setStep(1, "active");
+    say("Athuga lénið…");
+
+    if (typeof gtag === "function") {
+      gtag("event", "vefuttekt_beidni");
+    }
+
+    fetch(API + "/api/public/audits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ domain: domain, website: hp ? hp.value : "" })
+    })
+      .then(function (r) {
+        return r.json().then(function (data) { return { http: r.status, data: data }; });
+      })
+      .then(function (res) {
+        var data = res.data || {};
+        if (!data.ok) {
+          // Wisdom sendir sýnanlegan texta með hverri höfnun.
+          showError(data.error || FALLBACK.network);
+          lock(false);
+          return;
+        }
+
+        setStep(1, "done");
+        if (data.domain) input.value = data.domain; // sýnum lénið eins og það var lesið
+
+        if (data.status === "ready" && data.reportUrl) {
+          setStep(2, "done");
+          return openReport(data.reportUrl);
+        }
+
+        setStep(2, "done");
+        setStep(3, "active");
+        say("Beiðnin er komin í röð. Þú mátt bíða hér — úttektin opnast sjálf.");
+        poll(data.auditId, Date.now());
+      })
+      .catch(function () {
+        showError(FALLBACK.network);
+        lock(false);
+      });
+  });
+})();
+</script>
+
+
+
+</body>
+</html>
