@@ -60,9 +60,25 @@
     }
     ticking = false;
   }
-  window.addEventListener('scroll', function(){
+  function requestUpdate(){
     if (!ticking){ requestAnimationFrame(update); ticking = true; }
-  }, {passive:true});
+  }
+  window.addEventListener('scroll', requestUpdate, {passive:true});
+
+  // Við breidd-breytingu (snúningur síma, gluggastærð) hliðrast útlitið og
+  // top0 - upphafsstaða orðsins - verður úrelt, sem lætur flippið byrja á
+  // röngum stað. Hæðarbreyting ein og sér er nær alltaf bara address-barið
+  // á síma, og að núllstilla þá myndi láta orðin hoppa til við venjulegt
+  // skroll, svo hún er hunsuð.
+  var lastW = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if (window.innerWidth !== lastW){
+      lastW = window.innerWidth;
+      flipWords.forEach(function(fw){ fw.top0 = null; });
+    }
+    requestUpdate();
+  });
+
   update();
 })();
 
@@ -290,7 +306,14 @@
     a.addEventListener('mouseenter', function(){ current = a; moveTo(a); });
   });
   ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
-  window.addEventListener('resize', function(){ moveTo(current, true); });
+  // aðeins við breidd-breytingu: undirstrikan situr kyrr þótt address-barið
+  // á síma breyti hæðinni, og þá er óþarfi að mæla hlekkina upp á nýtt
+  var navW = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if (window.innerWidth === navW) return;
+    navW = window.innerWidth;
+    moveTo(current, true);
+  });
 
   // ── Pillu-morphið og strikið ──────────────────────────────────
   // Þrennt hreyfist samtímis þegar navið morphast: gap á ul-inu, padding/
@@ -334,12 +357,50 @@
   }
 })();
 
-// farsímavalmynd: opna/loka heilsíðu-yfirlagið
+// ── FARSÍMAVALMYND: opna/loka heilsíðu-yfirlagið ────────────────────────
+// Síðan undir yfirlaginu má ekki skrollast meðan það er opið. Áður gerði
+// hún það: notandi opnaði valmyndina, strauk, lokaði - og var kominn
+// eitthvað allt annað. body.menu-open notar position:fixed (eina aðferðin
+// sem iOS Safari virðir), sem hendir skrollstöðunni, svo hún er geymd í
+// --scroll-y og skilað við lokun.
 (function(){
   var btn = document.getElementById('menuBtn');
   var menu = document.getElementById('mobileMenu');
-  var close = document.getElementById('menuClose');
+  var closeBtn = document.getElementById('menuClose');
   if (!btn || !menu) return;
-  btn.addEventListener('click', function(){ menu.classList.add('open'); });
-  if (close) close.addEventListener('click', function(){ menu.classList.remove('open'); });
+  var body = document.body;
+  var savedY = 0;
+
+  function openMenu(){
+    savedY = window.scrollY || window.pageYOffset || 0;
+    body.style.setProperty('--scroll-y', savedY + 'px');
+    body.classList.add('menu-open');
+    menu.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeMenu(){
+    menu.classList.remove('open');
+    body.classList.remove('menu-open');
+    body.style.removeProperty('--scroll-y');
+    window.scrollTo(0, savedY);      // skila notandanum nákvæmlega þangað sem hann var
+    btn.setAttribute('aria-expanded', 'false');
+    btn.focus();
+  }
+
+  btn.setAttribute('aria-expanded', 'false');
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+  // hlekkur í valmyndinni: loka fyrst svo skrunlæsingin sitji ekki eftir
+  // ef vafrinn skilar síðunni úr bfcache við bakk-hnappinn
+  menu.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a');
+    if (a) closeMenu();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+  });
 })();

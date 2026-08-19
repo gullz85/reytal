@@ -3,16 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REYTAL: vefkerfi og stafrænar lausnir</title>
+<title>Vefþróun og stafrænar lausnir - REYTAL</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="description" content="REYTAL hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni. 15+ ára reynsla, Reykjavík og Tallinn.">
+<meta name="description" content="REYTAL hannar og þróar vefi, netverslanir og stafrænar lausnir fyrir fyrirtæki. Sterk tækni, góð upplifun og lausnir sem skila árangri.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="REYTAL: vefkerfi og stafrænar lausnir">
-<meta property="og:description" content="REYTAL hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni.">
+<meta property="og:title" content="Vefþróun og stafrænar lausnir - REYTAL">
+<meta property="og:description" content="REYTAL hannar og þróar vefi, netverslanir og stafrænar lausnir fyrir fyrirtæki. Sterk tækni, góð upplifun og lausnir sem skila árangri.">
 <meta property="og:locale" content="is_IS">
+<meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="REYTAL">
+<meta property="og:site_name" content="REYTAL">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F3F0EA">
+<link rel="canonical" href="https://reytal.is/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
@@ -36,12 +43,25 @@
     --cream:#F3F0EA;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
+  /* overscroll-behavior-x (ekki overflow-x) á html: ver hliðartog á iOS án
+     þess að búa til nýtt skroll-samhengi. Sjá skýringu í style.css - að
+     setja overflow-x:hidden á BÆÐI html og body drepur lóðrétt músaskroll
+     í Safari. */
+  html{scroll-behavior:smooth;overscroll-behavior-x:none;}
   body{
     font-family:'DM Sans',sans-serif;
     background:var(--cream);
     color:var(--black);
     overflow-x:hidden;
+    overscroll-behavior-x:none;
+  }
+  /* Skrunlæsing meðan farsímavalmyndin er opin - sjá style.css */
+  body.menu-open{
+    position:fixed;
+    top:calc(var(--scroll-y, 0px) * -1);
+    left:0;right:0;
+    width:100%;
+    overflow:hidden;
   }
   .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
   /* hero-innihaldið stillist nákvæmlega á vinstri brún logosins. --align er
@@ -128,19 +148,29 @@
     position:relative;
     min-height:calc(100vh - 92px);
     display:flex;flex-direction:column;justify-content:center;
-    padding:clamp(64px,9vh,104px) 0 72px;
+    /* jafnt að ofan og neðan: eftir að pillurnar fóru undan textanum
+       verður innihaldið að sitja raunverulega á miðjum skjánum, ekki
+       örlítið neðar eins og ójafna padding-ið olli */
+    padding:clamp(64px,9vh,104px) 0;
   }
   /* ── ORB: glow + snúandi REYTAL hringir (gl. 22) ───────────── */
   /* mjukur hringur sem reikar um allan hausinn, bakvid textann */
+  /* Klippisvæðið er VÍSVITANDI stærra en hausinn. Blobbið reikar allt að
+     26vw til hliðar og 16vh upp, og við sumar gluggastærðir (t.d. 1280x800)
+     náði það 19vh út fyrir inset:0 - overflow:hidden skar það þá af með
+     harðri brún, sem sást sem beint strik í mjúka ljómanum. Innskotin eru
+     samhverf svo miðja blobbsins færist ekki, bara mörkin sem klippa. */
   .orb{
-    position:absolute;inset:0;z-index:0;
+    position:absolute;inset:-32vh -25vw;z-index:0;
     overflow:hidden;
     pointer-events:none;
-    will-change:transform;
   }
   .blob{
     position:absolute;left:50%;top:50%;
-    width:min(60vw,760px);aspect-ratio:1;
+    /* 90vh-þakið skiptir máli: án þess varð blobbið 760px á lágum glugga
+       (t.d. 1256x400) - nærri tvöföld skjáhæðin - og teygði sig langt út
+       fyrir klippisvæðið, sem sást sem hörð brún í mjúka ljómanum. */
+    width:min(60vw,760px,90vh);aspect-ratio:1;
     border-radius:50%;
     background:radial-gradient(circle at 36% 34%,
                  rgba(13,70,89,0.22),
@@ -301,9 +331,6 @@
   }
   .hero-copy p{font-size:19px;line-height:1.55;max-width:520px;color:#2a2a2a;}
 
-  .meta-row{
-    display:flex;gap:12px;margin-top:64px;flex-wrap:wrap;position:relative;z-index:1;
-  }
   .tag{
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;
     border:1px solid rgba(11,12,13,0.25);border-radius:999px;padding:8px 16px;color:var(--navy);
@@ -468,6 +495,12 @@
   .footer-top{
     display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
   }
+  /* netfang + heimilisfang í einum dálki, heimilisfangið lágstemmt undir */
+  .footer-contact{display:flex;flex-direction:column;gap:clamp(10px,1.6vh,16px);}
+  .footer-addr{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--slate);font-style:normal;   /* <address> er skáletrað sjálfgefið */
+  }
   .footer-mail{
     font-family:'DM Sans',sans-serif;font-weight:500;
     font-size:clamp(32px,5.6vw,76px);line-height:1;letter-spacing:-0.03em;
@@ -494,7 +527,8 @@
   }
   .clients .label{
     font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--grey);margin-bottom:26px;
+    /* --slate (4,0:1) í stað --grey (2,3:1) - 11px texti þarf læsileg birtuskil */
+    color:var(--slate);margin-bottom:26px;
   }
   .marquee{
     display:flex;overflow:hidden;
@@ -559,6 +593,116 @@
   }
   @media (max-width:760px){
     .award-grid{grid-template-columns:1fr;gap:32px;}
+  }
+
+  /* ── GREININGARVÉLIN: CTA-spjald undir verðlaununum sem vísar á
+     vefúttektina. Sami dökki, ljómandi stíll og traust-spjaldið á
+     /vefuttekt, en með eigin, léttari textatóni. ── */
+  .engine-cta{position:relative;z-index:1;padding:clamp(88px,13vh,168px) 0 clamp(72px,10vh,120px);}
+  .engine-panel{
+    position:relative;overflow:hidden;
+    background:var(--navy);color:var(--cream);
+    border-radius:clamp(24px,3vw,40px);
+    padding:clamp(44px,6.5vw,80px) clamp(28px,6vw,72px);
+  }
+  .engine-panel::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(520px 400px at 6% 100%, rgba(76,124,147,0.5), transparent 60%),
+      radial-gradient(460px 460px at 100% 0%, rgba(190,191,166,0.18), transparent 65%);
+  }
+  .engine-grid{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,0.7fr);
+    gap:clamp(36px,5vw,64px);align-items:center;
+  }
+  .engine-copy .eyebrow{color:rgba(243,240,234,0.65);margin-bottom:16px;}
+  .engine-copy .eyebrow::before{background:var(--sage);}
+  .engine-copy h2{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(22px,2.4vw,32px);line-height:1.15;letter-spacing:-0.01em;
+    max-width:460px;
+  }
+  .engine-copy p{
+    font-size:16.5px;line-height:1.65;color:rgba(243,240,234,0.82);
+    max-width:460px;margin-top:16px;
+  }
+  .engine-copy .btn-primary{
+    margin-top:26px;
+    background:var(--cream);color:var(--black);
+    transition:color .4s cubic-bezier(.25,.7,.25,1), transform .35s cubic-bezier(.25,.6,.25,1), box-shadow .35s ease;
+  }
+  .engine-copy .btn-primary::before{background:var(--black);}
+  .engine-copy .btn-primary:hover{color:var(--cream);}
+
+  .engine-visual{display:flex;align-items:center;justify-content:center;justify-self:end;}
+  /* hringurinn fyllist og talan telur upp í 100, en á toppnum breytist
+     talan í spurningarmerki - úttektin er þess virði að sjá sjálfur */
+  .engine-ring{
+    position:relative;width:clamp(170px,17vw,240px);aspect-ratio:1;border-radius:50%;
+    display:grid;place-items:center;
+    background:conic-gradient(var(--sage) calc(var(--p, 0)*1%), rgba(243,240,234,0.14) 0);
+  }
+  .engine-ring::before{content:'';position:absolute;inset:16px;background:var(--navy);border-radius:50%;}
+  .engine-ring span{
+    position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(46px,4.4vw,64px);color:var(--cream);
+    display:inline-block;
+    transition:opacity .32s ease, transform .32s ease, filter .32s ease, font-size .32s ease;
+  }
+  /* talan hverfur og "endurfæðist" sem spurningarmerki í stað þess að
+     skipta um sig í einu vetfangi - mýkri, minna vélrænn skiptaeffekt */
+  .engine-ring span.is-morphing{
+    opacity:0;transform:scale(0.55) rotate(-12deg);filter:blur(6px);
+  }
+  /* spurningarmerkið sjálft fær að vera töluvert stærra en tölurnar */
+  .engine-ring span.is-question{
+    font-size:clamp(66px,6.4vw,96px);
+  }
+
+  /* ── Súluritið: daufar súlur sem lyftast upp úr miðju spjaldsins þegar
+     það kemur í sjónmál - vísar til gagnagreiningarinnar án þess að
+     trufla lesturinn. ── */
+  .engine-bars{
+    position:absolute;right:clamp(4px,1.5vw,24px);top:50%;transform:translateY(-50%);
+    display:flex;align-items:flex-end;gap:clamp(12px,2.2vw,24px);
+    width:min(420px,50%);height:64%;
+    z-index:0;pointer-events:none;
+    /* botninn deyr út í mjúku fade-i í stað þess að enda á harðri línu */
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+    mask-image:linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  }
+  .engine-bars span{
+    flex:1 1 auto;border-radius:5px 5px 0 0;
+    background:linear-gradient(180deg, rgba(243,240,234,0.16), rgba(190,191,166,0.03));
+    opacity:0;transform:translateY(22px);
+    transition:opacity .8s ease, transform .8s cubic-bezier(.22,.9,.25,1);
+    transition-delay:calc(var(--i) * 0.07s);
+  }
+  .engine-panel.in-view .engine-bars span{opacity:1;transform:translateY(0);}
+  .engine-bars span:nth-child(1){height:32%;}
+  .engine-bars span:nth-child(2){height:54%;}
+  .engine-bars span:nth-child(3){height:74%;}
+  .engine-bars span:nth-child(4){height:100%;}
+  .engine-bars span:nth-child(5){height:66%;}
+  .engine-bars span:nth-child(6){height:44%;}
+  .engine-bars span:nth-child(7){height:60%;}
+  @media (max-width:860px){
+    .engine-visual{display:none;}
+    .engine-bars{
+      left:50%;right:auto;top:auto;bottom:0;
+      transform:translateX(-50%);
+      width:min(280px,74%);height:22%;
+      -webkit-mask-image:none;mask-image:none;
+    }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .engine-bars span{transition:none;opacity:1;transform:translateY(0);}
+    .engine-ring span{transition:none;}
+  }
+  @media (max-width:760px){
+    .engine-grid{grid-template-columns:1fr;gap:36px;}
+    .engine-visual{justify-self:start;}
   }
 
   /* verðlaunagripurinn flýgur upp á Orkureits-glærunni og glans-rák
@@ -690,6 +834,17 @@
   .show-slide.active{
     opacity:1;pointer-events:auto;
     transition-delay:.06s;
+  }
+  /* HRAÐSKROLL: við snöggt flikk fer notandinn gegnum 2-4 glærur á broti úr
+     sekúndu, en hver þeirra ræsir 0,5s fade sem næsta glæra grípur fram í.
+     Útkoman var stafli af hálfkláruðum yfirgangi sem leit út eins og hik.
+     Þegar JS merkir kaflann sem "is-fast" styttast skiptingarnar niður í
+     þriðjung, svo glæran nær alltaf að setjast áður en sú næsta tekur við. */
+  .showcase.is-fast .show-slide{transition-duration:.16s;}
+  .showcase.is-fast .show-slide.active{transition-delay:0s;}
+  .showcase.is-fast .show-panel{
+    transition-duration:.18s,.2s;
+    transition-delay:0s;
   }
   /* upplýsingalínan: lágstemmd lína sem rennur upp frá botninum,
      nafn vinstra megin, pillur og hlekkur hægra megin */
@@ -927,9 +1082,8 @@
     .hero .wrap{padding:0 20px;}
     h1{font-size:clamp(46px,16vw,92px);letter-spacing:-0.02em;line-height:0.92;}
     /* meira loft milli merkis og hnapps, en samt ekki heilskjás-hetja */
-    .hero{min-height:auto;padding:clamp(48px,8vh,80px) 0 clamp(36px,5vh,52px);}
+    .hero{min-height:auto;padding:clamp(48px,8vh,80px) 0;}
     .hero-copy{grid-template-columns:1fr;margin-top:clamp(44px,7vh,72px);gap:26px;}
-    .meta-row{margin-top:32px;}
     .show-slide h3{font-size:clamp(28px,8vw,40px);}
     .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
     .panel-side{justify-content:flex-start;padding-bottom:0;}
@@ -942,10 +1096,9 @@
      neðar í skránni og hefur sömu sérhæfni) og fyrirsögnin varð pínulítil. */
   @media (max-height:960px) and (min-width:761px){
     h1{font-size:clamp(42px,6.6vw,92px);}
-    .hero{padding:clamp(40px,6vh,72px) 0 56px;}
+    .hero{padding:clamp(40px,6vh,72px) 0;}
     .hero-copy{margin-top:clamp(48px,7vh,88px);}
     .hero-copy p{font-size:17px;max-width:480px;}
-    .meta-row{margin-top:44px;}
     .clients{margin-top:0;}
   }
 
@@ -1377,6 +1530,7 @@
   <a href="/" class="active">Heim</a>
   <a href="/thjonusta">Þjónusta</a>
   <a href="/verkefni">Verkefni</a>
+  <a href="/vefuttekt">Vefúttekt</a>
   <a href="/um-okkur">Um okkur</a>
 </div>
 <div class="site">
@@ -1401,6 +1555,7 @@
       <li><a href="/" class="active">Heim</a></li>
       <li><a href="/thjonusta">Þjónusta</a></li>
       <li><a href="/verkefni">Verkefni</a></li>
+      <li><a href="/vefuttekt">Vefúttekt</a></li>
       <li><a href="/um-okkur">Um okkur</a></li>
     </ul>
     <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
@@ -1416,15 +1571,8 @@
       <div class="hero-cta">
         <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
       </div>
-      <p>REYTAL hannar og rekur stafræna innviði fyrir fyrirtæki sem vilja vaxa: vefkerfi, gervigreind og sjálfvirkni, byggt á áratugareynslu Reykjavík Digital.</p>
+      <p>Við hönnum og byggjum vefi, netverslanir og stafrænar lausnir fyrir íslensk fyrirtæki. Vandað handverk sem skilar árangri.</p>
     </div>
-    <div class="meta-row">
-      <div class="tag">Reykjavík</div>
-      <div class="tag">Tallinn</div>
-      <div class="tag">15+ ára reynsla</div>
-      <div class="tag">Vefir í umsjón</div>
-    </div>
-
   </div>
 </section>
 </div><!-- /.top -->
@@ -1440,6 +1588,30 @@
       </div>
       <div class="award-photo">
         <img src="svef-2025-b.jpg" alt="Verðlaunaskjalið Söluvefur ársins 2025 frá SVEF fyrir Orkureitinn" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GREININGARVÉLIN: CTA sem vísar á vefúttektina -->
+<section class="engine-cta">
+  <div class="wrap">
+    <div class="engine-panel" id="enginePanel">
+      <div class="engine-bars" aria-hidden="true">
+        <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span>
+        <span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span>
+        <span style="--i:6"></span>
+      </div>
+      <div class="engine-grid">
+        <div class="engine-copy">
+          <div class="eyebrow">Greiningarvélin okkar</div>
+          <h2>Hvernig stendur vefurinn þinn sig?</h2>
+          <p>Sláðu inn lénið þitt og fáðu ókeypis úttekt á tækni, hraða, öryggi og sýnileika, innan við mínútu. Ekkert kreditkort, engin skráning, bara svör.</p>
+          <a href="/vefuttekt" class="btn-primary"><span class="btn-label" data-label="Vefúttekt">Vefúttekt</span></a>
+        </div>
+        <div class="engine-visual" aria-hidden="true">
+          <div class="engine-ring" id="engineRing" style="--p:0"><span id="engineRingNum">0</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1475,7 +1647,7 @@
         <div class="life-glow b"></div>
         <div class="life-rows"></div>
       </div>
-      <img class="slide-media" src="https://images.prismic.io/project-takk/aM1kaZ5xUNkB06Pg_Hero.avif?auto=format,compress&w=2400" alt="">
+      <img class="slide-media" src="takk-hero.avif" alt="">
       <div class="show-panel">
         <div class="panel-info">
           <span class="panel-eyebrow">Valin verkefni</span>
@@ -1495,7 +1667,7 @@
         <div class="life-rows"></div>
       </div>
       <video class="slide-media" muted loop playsinline preload="metadata"
-             src="orkureiturinn.mp4"></video>
+             src="orkureiturinn-web.mp4"></video>
       <div class="show-panel">
         <div class="slide-trophy">
           <div class="trophy-inner">
@@ -1520,7 +1692,7 @@
         <div class="life-rows"></div>
       </div>
       <video class="slide-media" muted loop playsinline preload="metadata"
-             src="verkis.mp4"></video>
+             src="verkis-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
           <span class="panel-eyebrow">Valin verkefni</span>
@@ -1558,7 +1730,7 @@
         <div class="life-rows"></div>
       </div>
       <video class="slide-media" muted loop playsinline preload="metadata"
-             src="https://littupp.is/videos/Littupp-Desktop-Party.mp4"></video>
+             src="littupp-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
           <span class="panel-eyebrow">Valin verkefni</span>
@@ -1577,7 +1749,7 @@
         <div class="life-rows"></div>
       </div>
       <video class="slide-media" muted loop playsinline preload="metadata"
-             src="https://skjahaetta.is/videos/Sjova_Skjahaetta26_1920x1080_Gudmundur_web.mp4"></video>
+             src="skjahaetta-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
           <span class="panel-eyebrow">Valin verkefni</span>
@@ -1597,7 +1769,7 @@
         <div class="life-rows"></div>
       </div>
       <video class="slide-media" muted loop playsinline preload="metadata"
-             src="march-forward.mp4"></video>
+             src="march-forward-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
           <span class="panel-eyebrow">Valin verkefni</span>
@@ -1624,7 +1796,10 @@
 <footer class="footer">
   <div class="wrap">
     <div class="footer-top">
-      <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+      <div class="footer-contact">
+        <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+        <address class="footer-addr">Guðrúnartún 8, 105 Reykjavík</address>
+      </div>
       <div class="footer-pills">
         <span class="tag">Reykjavík</span>
         <span class="tag">Tallinn</span>
@@ -1639,7 +1814,9 @@
 
 </div><!-- /.site -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<!-- Lottie hýst hjá okkur (var áður sótt af cdnjs í hverri heimsókn - ef
+     cdnjs yrði fyrir árás keyrðist framandi kóði á forsíðunni okkar) -->
+<script src="lottie.min.js?v=1"></script>
 <script>
 (function(){
   var intro = document.getElementById('intro');
@@ -1862,7 +2039,15 @@
   }
 
   align();
-  window.addEventListener('resize', align);
+  // align() les breidd merkisins og skrifar --align; það þarf aðeins að
+  // gerast við raunverulega breidd-breytingu, ekki í hvert sinn sem
+  // address-barið á síma breytir hæðinni meðan skrollað er.
+  var alignW = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if (window.innerWidth === alignW) return;
+    alignW = window.innerWidth;
+    align();
+  });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
 })();
 
@@ -1894,6 +2079,8 @@
     return [parseInt(c.substr(1,2),16), parseInt(c.substr(3,2),16), parseInt(c.substr(5,2),16)];
   });
   var active = -1, ticking = false;
+  // skrollhraða-mæling fyrir .is-fast (sjá update())
+  var lastY = window.scrollY, fast = false, fastT = null;
 
   // flip-hausinn: "Lausnir" byrjar á hvolfi/speglað og réttist smám saman
   // við um leið og skrollað er framhjá - hrein 2D-skölun (scaleX/scaleY),
@@ -1960,6 +2147,24 @@
         if (fp < 0.46) fw.dir = -1; else if (fp > 0.54) fw.dir = 1;
         fw.el.style.transform = 'scaleX(' + fw.dir + ') scaleY(' + (-1 + 2 * fp).toFixed(4) + ')';
       });
+    }
+
+    // SKROLLHRAÐI: mældur í px á ramma. Yfir þröskuldi er notandinn að
+    // flikka gegnum kaflann og skiptingarnar styttast (sjá .is-fast í CSS)
+    // svo glærurnar staflist ekki hálfkláraðar hver ofan á aðra. Merkið
+    // situr í 220ms eftir að hægt er á, svo síðasta glæran í flikkinu nái
+    // að setjast áður en mjúki takturinn kemur aftur.
+    if (wrapEl){
+      var dy = Math.abs(scrollY - lastY);
+      lastY = scrollY;
+      if (dy > 55){
+        if (!fast){ fast = true; wrapEl.classList.add('is-fast'); }
+        clearTimeout(fastT);
+        fastT = setTimeout(function(){
+          fast = false;
+          wrapEl.classList.remove('is-fast');
+        }, 220);
+      }
     }
 
     if (wrapEl && N){
@@ -2080,13 +2285,34 @@
 
     ticking = false;
   }
-  window.addEventListener('scroll', function(){
+  function requestUpdate(){
     if (!ticking){
       requestAnimationFrame(update);
       ticking = true;
     }
-  }, {passive:true});
-  window.addEventListener('resize', update);
+  }
+  window.addEventListener('scroll', requestUpdate, {passive:true});
+
+  // RESIZE: address-barið á símum sendir 'resize' stanslaust meðan skrollað
+  // er, og af því að showcase-kaflinn er byggður á dvh breytist hæðin í
+  // hvert skipti. Áður keyrði update() beint við hvert einasta slíkt event -
+  // þungur útreikningur (getBoundingClientRect á öllum flip-orðum + öll
+  // glæru-uppfærslan) margfalt á ramma, sem er stór hluti af hökti í mobile.
+  // Nú fer resize gegnum sama rAF-hlið og skrollið.
+  //
+  // Flip-orðin geyma upphafsstöðu sína (top0) sem verður ógild þegar
+  // útlitið hliðrast, svo hún er hreinsuð við raunverulega breidd-breytingu.
+  // Bara breidd: hæðarbreyting ein og sér er nær alltaf address-barið, og
+  // að núllstilla þá myndi láta orðin hoppa til við venjulegt skroll.
+  var lastW = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if (window.innerWidth !== lastW){
+      lastW = window.innerWidth;
+      flipWords.forEach(function(fw){ fw.top0 = null; });
+    }
+    requestUpdate();
+  });
+
   update();
 })();
 
@@ -2117,7 +2343,14 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   resize();
-  window.addEventListener('resize', resize);
+  // canvas-endurstilling er dýr (nýr bakgrunnsbuffer + hreinsun). Address-
+  // barið á símum sendir resize í sífellu við skroll, svo við bíðum af
+  // okkur skotið í stað þess að endurbyggja canvasinn tugum sinna.
+  var rzT;
+  window.addEventListener('resize', function(){
+    clearTimeout(rzT);
+    rzT = setTimeout(resize, 150);
+  });
 
   // vörumerkjalitirnir + mildur gulllitur sem gefur verðlaunatilfinninguna
   var COLORS = ['#0D4659','#4C7C93','#BEBFA6','#C6A15B','#0B0C0D'];
@@ -2244,7 +2477,14 @@
     a.addEventListener('mouseenter', function(){ current = a; moveTo(a); });
   });
   ul.addEventListener('mouseleave', function(){ current = activeLink; moveTo(activeLink); });
-  window.addEventListener('resize', function(){ moveTo(current, true); });
+  // aðeins við breidd-breytingu: undirstrikan situr kyrr þótt address-barið
+  // á síma breyti hæðinni, og þá er óþarfi að mæla hlekkina upp á nýtt
+  var navW = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if (window.innerWidth === navW) return;
+    navW = window.innerWidth;
+    moveTo(current, true);
+  });
 
   // ── Pillu-morphið og strikið ──────────────────────────────────
   // Þrennt hreyfist samtímis þegar navið morphast: gap á ul-inu, padding/
@@ -2353,16 +2593,124 @@
 
 
 <script>
-// farsímavalmynd: opna/loka heilsíðu-yfirlagið
+// ── FARSÍMAVALMYND: opna/loka heilsíðu-yfirlagið ────────────────────────
+// Sama og í main.js: síðan undir yfirlaginu læsist meðan það er opið,
+// skrollstaðan geymd í --scroll-y og skilað við lokun.
 (function(){
   var btn = document.getElementById('menuBtn');
   var menu = document.getElementById('mobileMenu');
-  var close = document.getElementById('menuClose');
+  var closeBtn = document.getElementById('menuClose');
   if (!btn || !menu) return;
-  btn.addEventListener('click', function(){ menu.classList.add('open'); });
-  if (close) close.addEventListener('click', function(){ menu.classList.remove('open'); });
+  var body = document.body;
+  var savedY = 0;
+
+  function openMenu(){
+    savedY = window.scrollY || window.pageYOffset || 0;
+    body.style.setProperty('--scroll-y', savedY + 'px');
+    body.classList.add('menu-open');
+    menu.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeMenu(){
+    menu.classList.remove('open');
+    body.classList.remove('menu-open');
+    body.style.removeProperty('--scroll-y');
+    window.scrollTo(0, savedY);
+    btn.setAttribute('aria-expanded', 'false');
+    btn.focus();
+  }
+
+  btn.setAttribute('aria-expanded', 'false');
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+  menu.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a');
+    if (a) closeMenu();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+  });
 })();
 </script>
-<script src="samband.js?v=3" defer></script>
+<script>
+// ── GREININGARVÉLIN: hringurinn í CTA-spjaldinu fyllist og telur upp í 100,
+// og talan "morphast" svo mjúklega í spurningarmerki - keyrir bara einu
+// sinni, ekki á repeat, úttektin sjálf á að svara restinni.
+(function () {
+  var ring = document.getElementById("engineRing");
+  var num = document.getElementById("engineRingNum");
+  if (!ring || !num) return;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    ring.style.setProperty("--p", 100);
+    num.textContent = "?";
+    num.classList.add("is-question");
+    return;
+  }
+
+  var COUNT_MS = 1800;
+  var MORPH_MS = 320;
+
+  function morphTo(text) {
+    num.classList.add("is-morphing");
+    setTimeout(function () {
+      num.textContent = text;
+      num.classList.add("is-question");
+      // þvinga reflow svo næsta klassabreyting kveiki sannarlega á transition
+      void num.offsetWidth;
+      num.classList.remove("is-morphing");
+    }, MORPH_MS);
+  }
+
+  function run() {
+    var start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / COUNT_MS);
+      var eased = 1 - Math.pow(1 - p, 2);
+      var val = eased * 100;
+      ring.style.setProperty("--p", val.toFixed(1));
+      if (p < 1) {
+        num.textContent = Math.round(val);
+        requestAnimationFrame(frame);
+      } else {
+        morphTo("?");
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  if (!("IntersectionObserver" in window)) { run(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { run(); io.disconnect(); }
+    });
+  }, { threshold: 0.4 });
+  io.observe(ring);
+})();
+</script>
+
+<script>
+// ── SÚLURITIÐ: daufu súlurnar í CTA-spjaldinu lyftast upp úr miðjunni
+// þegar spjaldið kemur í sjónmál, einu sinni.
+(function () {
+  var panel = document.getElementById("enginePanel");
+  if (!panel) return;
+  if (!("IntersectionObserver" in window)) { panel.classList.add("in-view"); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { panel.classList.add("in-view"); io.disconnect(); }
+    });
+  }, { threshold: 0.3 });
+  io.observe(panel);
+})();
+</script>
+
+<script src="samband.js?v=5" defer></script>
 </body>
 </html>

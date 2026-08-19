@@ -60,7 +60,7 @@
       type: "text",
       q: "Ertu með vef í dag?",
       hint: "Við kíkjum á hann áður en við heyrum í þér",
-      placeholder: "fyrirtaekid.is",
+      placeholder: "mittfyrirtaeki.is",
       skip: "Ég er ekki með vef",
       inputmode: "url",
       autocomplete: "url",
@@ -69,7 +69,7 @@
       key: "message",
       type: "textarea",
       q: "Segðu okkur aðeins meira",
-      hint: "Ef þú ert með frekari upplýsingar sem þú vilt koma á framfæri — annars slepptu þessu.",
+      hint: "Ef þú ert með frekari upplýsingar sem þú vilt koma á framfæri, annars slepptu þessu.",
       placeholder: "Hvað stendur til?",
       skip: "Sleppa",
     },
@@ -78,7 +78,7 @@
       type: "email",
       q: "Hvert eigum við að svara?",
       hint: "Netfang, og símanúmer ef þú vilt heyra í okkur fyrr",
-      placeholder: "nafn@fyrirtaekid.is",
+      placeholder: "nafn@mittfyrirtaeki.is",
       required: true,
       autocomplete: "email",
       extra: { key: "phone", placeholder: "Símanúmer (valfrjálst)", autocomplete: "tel" },
@@ -96,20 +96,25 @@
 
     /* Þrepin sem strik. Aranja notar samfellda slá; strikin segja það sem
        slá segir ekki: HVERSU MÖRG skref eru eftir, talin í heilum tölum. */
-    ".sb-top{display:flex;align-items:center;gap:20px;padding:22px clamp(20px,4vw,44px);}",
-    ".sb-marks{display:flex;gap:6px;flex:1;max-width:340px;}",
+    ".sb-top{display:flex;align-items:center;padding:22px clamp(20px,4vw,44px);}",
+    /* Framvindan situr neðst og miðjusett - strikin fyrst, teljarinn undir. */
+    ".sb-foot{display:flex;flex-direction:column;align-items:center;gap:12px;",
+    "  padding:0 clamp(20px,4vw,44px) clamp(26px,4vh,40px);}",
+    ".sb-marks{display:flex;gap:6px;width:100%;max-width:340px;}",
     ".sb-mark{height:3px;flex:1;border-radius:999px;background:rgba(11,12,13,0.14);",
     "  transition:background .35s ease;}",
     ".sb-mark.is-done{background:var(--navy,#0D4659);}",
     ".sb-mark.is-now{background:var(--slate,#4C7C93);}",
     ".sb-count{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;",
-    "  text-transform:uppercase;color:var(--grey,#9AA1A6);white-space:nowrap;}",
+    "  text-transform:uppercase;color:var(--slate,#4C7C93);white-space:nowrap;}",
     ".sb-x{margin-left:auto;background:none;border:none;cursor:pointer;padding:8px;",
     "  line-height:0;color:var(--black,#0B0C0D);opacity:.55;transition:opacity .25s ease;}",
     ".sb-x:hover{opacity:1;}",
 
     ".sb-body{flex:1;display:flex;align-items:center;overflow-y:auto;}",
-    ".sb-inner{width:100%;max-width:660px;margin:0 auto;padding:0 clamp(20px,5vw,44px) clamp(40px,8vh,90px);}",
+    /* minna botn-padding en áður: framvindan situr núna í sínum eigin fæti
+       fyrir neðan, svo innihaldið þarf ekki lengur að taka frá pláss */
+    ".sb-inner{width:100%;max-width:660px;margin:0 auto;padding:0 clamp(20px,5vw,44px) clamp(16px,2.5vh,32px);}",
 
     ".sb-q{font-family:'DM Sans',sans-serif;font-weight:700;",
     "  font-size:clamp(26px,4.4vw,44px);line-height:1.06;letter-spacing:-0.02em;",
@@ -199,23 +204,29 @@
 
     sheet = el("div", "sb-sheet");
 
+    // Efst situr aðeins lokunarhnappurinn. Framvindan (strikin + teljarinn)
+    // færðist neðst og miðjusett: hún er staðfesting, ekki fyrirsögn, og á
+    // ekki að keppa við spurninguna sem verið er að svara.
     var top = el("div", "sb-top");
-    marks = el("div", "sb-marks");
-    for (var i = 0; i < STEPS.length; i++) marks.appendChild(el("span", "sb-mark"));
-    count = el("span", "sb-count");
     var x = el("button", "sb-x");
     x.setAttribute("aria-label", "Loka");
     x.innerHTML =
       '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5l10 10M15 5L5 15"/></svg>';
     x.addEventListener("click", close);
-    top.appendChild(marks);
-    top.appendChild(count);
     top.appendChild(x);
 
     body = el("div", "sb-body");
 
+    var foot = el("div", "sb-foot");
+    marks = el("div", "sb-marks");
+    for (var i = 0; i < STEPS.length; i++) marks.appendChild(el("span", "sb-mark"));
+    count = el("span", "sb-count");
+    foot.appendChild(marks);
+    foot.appendChild(count);
+
     sheet.appendChild(top);
     sheet.appendChild(body);
+    sheet.appendChild(foot);
     root.appendChild(sheet);
     document.body.appendChild(root);
 

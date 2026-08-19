@@ -3,15 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vefúttekt: REYTAL</title>
+<title>Ókeypis vefúttekt - Greindu vefinn þinn - REYTAL</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="description" content="Ókeypis vefúttekt: sláðu inn lénið þitt og fáðu faglega greiningu á tækni, hraða, öryggi og sýnileika vefsins, á innan við mínútu.">
+<meta name="description" content="Fáðu ókeypis vefúttekt á innan við mínútu. Við greinum tækni, hraða, öryggi, SEO og fleiri lykilþætti sem hafa áhrif á árangur vefsins.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Vefúttekt: REYTAL">
-<meta property="og:description" content="Sláðu inn lénið þitt og fáðu faglega úttekt á tækni, hraða, öryggi og sýnileika vefsins. Ókeypis og án skráningar.">
+<meta property="og:title" content="Ókeypis vefúttekt - Greindu vefinn þinn - REYTAL">
+<meta property="og:description" content="Fáðu ókeypis vefúttekt á innan við mínútu. Við greinum tækni, hraða, öryggi, SEO og fleiri lykilþætti sem hafa áhrif á árangur vefsins.">
 <meta property="og:locale" content="is_IS">
+<meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="REYTAL">
+<meta property="og:site_name" content="REYTAL">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F3F0EA">
 <link rel="canonical" href="https://reytal.is/vefuttekt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +32,7 @@
   gtag('config', 'G-KZYV12RDN2');
 </script>
 
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=9">
 <style>
   /* ── VEFÚTTEKT: lendingarsíða ────────────────────────────────────────
      Sama myndmál og aðrar undirsíður (page-hero, wrap, btn-primary). Það
@@ -69,7 +75,9 @@
     border:1px solid rgba(11,12,13,0.22);border-radius:999px;
     transition:border-color .3s ease, background .3s ease, box-shadow .3s ease;
   }
-  .va-field input::placeholder{color:var(--grey);}
+  /* --grey á rjóma gefur aðeins 2,3:1 birtuskil og fellur á WCAG AA.
+     --slate er 4,0:1 og les vel án þess að keppa við innslegna textann. */
+  .va-field input::placeholder{color:var(--slate);opacity:1;}
   .va-field input:focus{
     outline:none;border-color:var(--navy);background:#fff;
     box-shadow:0 0 0 4px rgba(13,70,89,0.10);
@@ -79,10 +87,6 @@
   /* Hunangsgildra: hvorki sýnileg né í flipa-röðinni. */
   .va-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
 
-  .va-note{
-    font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--slate);margin-top:14px;position:relative;z-index:1;
-  }
   .va-error{
     margin-top:16px;max-width:620px;position:relative;z-index:1;
     font-size:15px;line-height:1.55;color:#8a2b2b;
@@ -100,7 +104,9 @@
   .va-steps{list-style:none;display:grid;gap:14px;}
   .va-steps li{
     display:flex;align-items:flex-start;gap:12px;
-    font-size:15.5px;line-height:1.4;color:var(--grey);
+    /* --slate (4,0:1) í stað --grey (2,3:1): skrefin sem eru ekki byrjuð
+       eiga að vera lágstemmd en samt læsileg */
+    font-size:15.5px;line-height:1.4;color:var(--slate);
     transition:color .3s ease;
   }
   .va-steps .dot{
@@ -178,10 +184,23 @@
   .va-hero{
     display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,0.9fr);
     gap:clamp(36px,5vw,80px);align-items:center;
+    transition:grid-template-columns .5s cubic-bezier(.25,.6,.25,1);
   }
   @media (max-width:1080px){
     .va-hero{grid-template-columns:1fr;}
     .va-mock{max-width:460px;margin:clamp(32px,6vh,48px) auto 0;}
+  }
+
+  /* Meðan greiningin stendur yfir: sýnishornið hverfur og statusinn
+     breiðir úr sér yfir alla síðuna, enda í enda. */
+  .va-hero.is-scanning{grid-template-columns:1fr;}
+  .va-hero.is-scanning .va-mock{
+    opacity:0;pointer-events:none;
+    position:absolute;visibility:hidden;
+  }
+  .va-hero.is-scanning .va-status{max-width:none;}
+  @media (prefers-reduced-motion:reduce){
+    .va-hero{transition:none;}
   }
 
   /* stærra input: þetta er aðal-aðgerð síðunnar og á að líta þannig út */
@@ -279,19 +298,26 @@
     margin-top:clamp(36px,5vh,52px);
   }
   .how-card{
-    border:1px solid rgba(11,12,13,0.14);border-radius:22px;
-    padding:clamp(24px,3vw,34px);
-    background:rgba(255,255,255,0.45);
+    position:relative;overflow:hidden;
+    border:none;border-radius:22px;
+    padding:clamp(26px,3.2vw,36px);
+    background:var(--black);color:var(--cream);
   }
+  .how-card::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(360px 280px at 18% 0%, var(--glow,rgba(76,124,147,0.5)), transparent 65%);
+  }
+  .how-card > *{position:relative;z-index:1;}
   .how-card .num{
-    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;color:var(--slate);
+    font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;
+    color:rgba(243,240,234,0.6);
   }
   .how-card h3{
     font-family:'DM Sans',sans-serif;font-weight:700;
     font-size:clamp(19px,2vw,24px);letter-spacing:-0.01em;
-    margin-top:12px;
+    margin-top:12px;color:var(--cream);
   }
-  .how-card p{font-size:15px;line-height:1.6;color:#2a2a2a;margin-top:10px;}
+  .how-card p{font-size:15px;line-height:1.6;color:rgba(243,240,234,0.78);margin-top:10px;}
   @media (max-width:860px){ .how-grid{grid-template-columns:1fr;} }
 
   .section-head{max-width:640px;}
@@ -301,6 +327,88 @@
     margin-top:14px;
   }
   .section-head p{font-size:16.5px;line-height:1.65;color:#2a2a2a;margin-top:16px;}
+
+  /* ── TRAUST + SKREF: dökkt, stórt spjald sem rýfur takt síðunnar - talan
+     telur upp vinstra megin, skrefin stór hægra megin með tengilínu. Talan
+     er RAUNVERULEG: fjöldi .is-vefsvæða í gagnasafni Wisdom, ekki
+     uppspunnin úttektartala. ── */
+  .trust{position:relative;z-index:1;padding:clamp(80px,11vh,130px) 0;overflow:hidden;}
+  .trust-panel{
+    position:relative;overflow:hidden;
+    background:var(--navy);color:var(--cream);
+    border-radius:clamp(24px,3vw,40px);
+    padding:clamp(48px,7vw,88px) clamp(28px,6vw,72px);
+  }
+  /* mjúkur ljómi ofan í dökka spjaldinu svo það sé aldrei alveg flatt */
+  .trust-panel::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(560px 420px at 8% 0%, rgba(76,124,147,0.55), transparent 60%),
+      radial-gradient(500px 500px at 100% 100%, rgba(190,191,166,0.20), transparent 65%);
+  }
+  .trust-split{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:minmax(0,0.95fr) minmax(0,1.05fr);
+    gap:clamp(40px,5vw,80px);align-items:center;
+  }
+  @media (max-width:860px){
+    .trust-split{grid-template-columns:1fr;gap:clamp(44px,7vh,64px);}
+  }
+  .trust-stat{position:relative;}
+  .trust-stat .eyebrow{color:rgba(243,240,234,0.65);}
+  .trust-stat .eyebrow::before{background:var(--sage);}
+  .trust-stat .num{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    /* letrið verður alltaf að passa í dálkinn (um 40% af rammanum) - ekki
+       bara vw, annars sker overflow:hidden á rammanum töluna af */
+    font-size:clamp(40px,5.6vw,88px);line-height:0.9;letter-spacing:-0.03em;
+    white-space:nowrap;margin-top:10px;
+    background:linear-gradient(180deg,#fff, var(--sage) 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .trust-stat p{
+    font-size:17.5px;line-height:1.6;color:rgba(243,240,234,0.82);
+    max-width:360px;margin-top:16px;
+  }
+  /* „pro"-stimpillinn: lítið vottunarmerki sem gefur tölunni faglegt vægi */
+  .trust-badge{
+    display:inline-flex;align-items:center;gap:9px;
+    margin-top:20px;padding:9px 16px 9px 10px;
+    border:1px solid rgba(190,191,166,0.45);border-radius:999px;
+    background:rgba(190,191,166,0.08);
+  }
+  .trust-badge svg{
+    flex:0 0 auto;width:19px;height:19px;
+    background:var(--sage);border-radius:50%;
+    fill:var(--navy);padding:3px;box-sizing:border-box;
+  }
+  .trust-badge span{
+    font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--cream);
+  }
+  .trust-steps{
+    list-style:none;display:grid;gap:0;
+    position:relative;
+  }
+  .trust-steps li{
+    display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;
+    padding:clamp(18px,2.4vh,26px) 0;
+    position:relative;
+  }
+  .trust-steps li + li{border-top:1px solid rgba(243,240,234,0.14);}
+  .trust-steps .snum{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(38px,4.6vw,60px);line-height:1;letter-spacing:-0.02em;
+    color:rgba(243,240,234,0.28);
+    transition:color .3s ease;
+  }
+  .trust-steps li:hover .snum{color:var(--sage);}
+  .trust-steps h3{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(20px,2.3vw,27px);letter-spacing:-0.01em;
+    color:var(--cream);
+  }
+  .trust-steps p{font-size:15.5px;line-height:1.6;color:rgba(243,240,234,0.72);margin-top:8px;max-width:440px;}
 </style>
 
 
@@ -349,6 +457,7 @@
   <a href="/">Heim</a>
   <a href="/thjonusta">Þjónusta</a>
   <a href="/verkefni">Verkefni</a>
+  <a href="/vefuttekt" class="active">Vefúttekt</a>
   <a href="/um-okkur">Um okkur</a>
 </div>
 <div class="site">
@@ -371,6 +480,7 @@
       <li><a href="/">Heim</a></li>
       <li><a href="/thjonusta">Þjónusta</a></li>
       <li><a href="/verkefni">Verkefni</a></li>
+      <li><a href="/vefuttekt" class="active">Vefúttekt</a></li>
       <li><a href="/um-okkur">Um okkur</a></li>
     </ul>
     <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
@@ -381,7 +491,7 @@
   <div class="wrap">
     <div class="va-hero">
     <div class="va-hero-main">
-    <h1><span>Vefúttekt</span><span class="flip-word">Á mínútu</span></h1>
+    <h1><span>Sjáðu</span><span>stöðuna</span></h1>
     <p class="lede">
       Sláðu inn vefinn þinn. Greiningarvél okkar les hann, mælir tækni, hraða,
       öryggi og sýnileika og skilar faglegri úttekt sem þú getur lesið strax.
@@ -399,7 +509,7 @@
           autocorrect="off"
           spellcheck="false"
           autocomplete="url"
-          placeholder="fyrirtaekid.is"
+          placeholder="mittfyrirtaeki.is"
           aria-label="Vefslóð"
           required
         >
@@ -411,7 +521,6 @@
       </button>
     </form>
 
-    <p class="va-note">Ókeypis · engin skráning · niðurstaðan opnast í vafranum</p>
     <p class="va-error" id="vaError" hidden></p>
 
     <div class="va-status" id="vaStatus" role="status" aria-live="polite" hidden>
@@ -430,21 +539,21 @@
       <div class="mock-card">
         <div class="mock-head">
           <span class="mdot"></span><span class="mdot"></span><span class="mdot"></span>
-          <span class="mock-url">fyrirtaekid.is</span>
+          <span class="mock-url">mittfyrirtaeki.is</span>
           <span class="mock-badge">Sýnishorn</span>
         </div>
         <div class="mock-score">
-          <div class="ring ring-main" style="--p:86"><span>86</span></div>
+          <div class="ring ring-main" data-p="86" style="--p:0"><span>0</span></div>
           <div>
             <div class="mock-grade">Góður grunnur</div>
             <p class="mock-grade-sub">7 ábendingar um það sem má bæta, raðað eftir því hvað skiptir mestu máli.</p>
           </div>
         </div>
         <div class="mock-cats">
-          <div class="mock-cat"><div class="ring ring-sm" style="--p:92"><span>92</span></div><b>Tækni</b></div>
-          <div class="mock-cat"><div class="ring ring-sm" style="--p:78;--rc:#4C7C93"><span>78</span></div><b>Hraði</b></div>
-          <div class="mock-cat"><div class="ring ring-sm" style="--p:95"><span>95</span></div><b>Öryggi</b></div>
-          <div class="mock-cat"><div class="ring ring-sm" style="--p:71;--rc:#C68A2D"><span>71</span></div><b>SEO</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" data-p="92" style="--p:0"><span>0</span></div><b>Tækni</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" data-p="78" style="--p:0;--rc:#4C7C93"><span>0</span></div><b>Hraði</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" data-p="95" style="--p:0"><span>0</span></div><b>Öryggi</b></div>
+          <div class="mock-cat"><div class="ring ring-sm" data-p="71" style="--p:0;--rc:#C68A2D"><span>0</span></div><b>SEO</b></div>
         </div>
         <div class="mock-findings">
           <div class="mock-find ok"><span class="fi">✓</span>SSL-skírteini gilt og rétt uppsett</div>
@@ -458,27 +567,42 @@
 </section>
 </div><!-- /.top -->
 
-<section class="how">
+<section class="trust">
   <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Svona virkar það</div>
-      <h2>Þrjú skref, engin skráning</h2>
-    </div>
-    <div class="how-grid">
-      <div class="how-card">
-        <div class="num">01</div>
-        <h3>Sláðu inn lénið</h3>
-        <p>Ekkert notandanafn, ekkert kreditkort. Bara vefslóðin þín og einn smellur.</p>
-      </div>
-      <div class="how-card">
-        <div class="num">02</div>
-        <h3>Vélin les vefinn</h3>
-        <p>Greiningarvélin heimsækir vefinn eins og notandi og leitarvél gera: mælir tækni, hraða, öryggi og sýnileika.</p>
-      </div>
-      <div class="how-card">
-        <div class="num">03</div>
-        <h3>Úttektin opnast</h3>
-        <p>Innan mínútu færðu skor, sundurliðun og skýrar ábendingar, skrifaðar á mannamáli.</p>
+    <div class="trust-panel">
+      <div class="trust-split">
+        <div class="trust-stat">
+          <div class="eyebrow">Gagnasafnið okkar</div>
+          <div class="num" id="trustCount" data-target="30000" data-suffix="">0</div>
+          <p>Höfum greint yfir 30.000 íslenska vefi. Við erum sérfræðingar í vefþróun, hraða og öryggi og vitum nákvæmlega hvert á að leita.</p>
+          <div class="trust-badge">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 13.4 4.1 10l-1.4 1.4L7.5 16.2 17.3 6.4 15.9 5z"/></svg>
+            <span>Vottuð greining</span>
+          </div>
+        </div>
+        <ol class="trust-steps">
+          <li>
+            <span class="snum">1</span>
+            <div>
+              <h3>Sláðu inn lén</h3>
+              <p>Ekkert notandanafn, ekkert kreditkort. Bara vefslóðin þín og einn smellur.</p>
+            </div>
+          </li>
+          <li>
+            <span class="snum">2</span>
+            <div>
+              <h3>Vélin les vefinn</h3>
+              <p>Greiningarvélin heimsækir vefinn eins og notandi og leitarvél gera: mælir tækni, hraða, öryggi og sýnileika.</p>
+            </div>
+          </li>
+          <li>
+            <span class="snum">3</span>
+            <div>
+              <h3>Úttektin opnast</h3>
+              <p>Innan mínútu færðu skor, sundurliðun og skýrar ábendingar, skrifaðar á mannamáli.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </div>
@@ -488,20 +612,20 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Af hverju að skanna?</div>
-      <h2>Vefurinn þinn vinnur allan sólarhringinn. Veistu hvernig honum gengur?</h2>
+      <h2>Veistu hvernig vefnum þínum gengur?</h2>
     </div>
     <div class="how-grid">
-      <div class="how-card">
+      <div class="how-card" style="--glow:rgba(76,124,147,0.55)">
         <div class="num">Hraði</div>
         <h3>Fyrsta sýn tekur sekúndur</h3>
         <p>Hægur vefur missir heimsóknir áður en nokkur les fyrsta orðið. Úttektin sýnir svart á hvítu hvort vefurinn þinn svarar nógu hratt.</p>
       </div>
-      <div class="how-card">
+      <div class="how-card" style="--glow:rgba(190,191,166,0.4)">
         <div class="num">Sýnileiki</div>
         <h3>Google er að meta þig núna</h3>
         <p>Leitarvélar verðlauna tæknilega heilbrigða vefi. Úttektin finnur það sem heldur þér neðar í leitarniðurstöðum en þú átt skilið.</p>
       </div>
-      <div class="how-card">
+      <div class="how-card" style="--glow:rgba(198,138,45,0.45)">
         <div class="num">Öryggi</div>
         <h3>Traust byggist á smáatriðum</h3>
         <p>Útrunnin skírteini og gamlar viðbætur fæla bæði viðskiptavini og leitarvélar. Betra að finna það sjálfur en að láta aðra reka sig á það.</p>
@@ -538,7 +662,7 @@
 
       <div class="work-row">
         <div class="work-main">
-          <h3>Hvað kostar þetta?</h3>
+          <h3>Hvað kostar úttektin?</h3>
           <p>Ekkert. Úttektin er gefin án skilyrða og án skráningar. Viljirðu
              fara yfir niðurstöðurnar með okkur er hnappur til þess neðst á
              úttektinni. Það er þitt val, ekki skilyrði.</p>
@@ -563,7 +687,10 @@
 <footer class="footer">
   <div class="wrap">
     <div class="footer-top">
-      <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+      <div class="footer-contact">
+        <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+        <address class="footer-addr">Guðrúnartún 8, 105 Reykjavík</address>
+      </div>
       <div class="footer-pills">
         <span class="tag">Reykjavík</span>
         <span class="tag">Tallinn</span>
@@ -578,7 +705,7 @@
 
 </div><!-- /.site -->
 
-<script src="main.js?v=6"></script>
+<script src="main.js?v=7"></script>
 
 <script>
 /* ============================================================================
@@ -612,6 +739,7 @@
   var steps = document.getElementById("vaSteps");
   var msg = document.getElementById("vaMsg");
   var errorBox = document.getElementById("vaError");
+  var hero = document.querySelector(".va-hero");
   if (!form) return;
 
   var busy = false;
@@ -628,6 +756,7 @@
     errorBox.textContent = text;
     errorBox.hidden = false;
     status.hidden = true;
+    if (hero) hero.classList.remove("is-scanning");
   }
   function clearError() {
     errorBox.hidden = true;
@@ -707,6 +836,7 @@
     resetSteps();
     lock(true);
     status.hidden = false;
+    if (hero) hero.classList.add("is-scanning");
     setStep(1, "active");
     say("Athuga lénið…");
 
@@ -752,8 +882,105 @@
 })();
 </script>
 
+<script>
+// ── TRAUST-TALAN: telur upp þegar hún kemur í sjónmál, aðeins einu sinni ──
+(function () {
+  var el = document.getElementById("trustCount");
+  if (!el) return;
+  var target = parseInt(el.getAttribute("data-target"), 10) || 0;
+  var suffix = el.getAttribute("data-suffix") || "";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Handvirk þúsundapunktun í stað toLocaleString("is-IS") - sum vafraumhverfi
+  // vantar full ICU-gögn fyrir íslensku og skila kommu í staðinn fyrir punkt.
+  function formatIs(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  function render(n) { el.textContent = formatIs(n) + suffix; }
 
-<script src="samband.js?v=3" defer></script>
+  if (reduceMotion) { render(target); return; }
+
+  function run() {
+    var start = null;
+    var DUR = 1200;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / DUR);
+      var eased = 1 - Math.pow(1 - p, 3);
+      render(Math.round(eased * target));
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  if (!("IntersectionObserver" in window)) { render(target); return; }
+  var seen = false;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && !seen) {
+        seen = true;
+        run();
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  io.observe(el);
+})();
+</script>
+
+<script>
+// ── SÝNISHORN-HRINGIRNIR: hlaðast upp í raungildi þegar spjaldið kemur í sjónmál ──
+(function () {
+  var rings = document.querySelectorAll(".ring[data-p]");
+  if (!rings.length) return;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function animateRing(el, target, delay) {
+    var label = el.querySelector("span");
+    if (reduceMotion) {
+      el.style.setProperty("--p", target);
+      if (label) label.textContent = target;
+      return;
+    }
+    setTimeout(function () {
+      var start = null;
+      var DUR = 1100;
+      function frame(ts) {
+        if (start === null) start = ts;
+        var p = Math.min(1, (ts - start) / DUR);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = eased * target;
+        el.style.setProperty("--p", val.toFixed(1));
+        if (label) label.textContent = Math.round(val);
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }, delay);
+  }
+
+  function run() {
+    rings.forEach(function (el, i) {
+      var target = parseFloat(el.getAttribute("data-p")) || 0;
+      animateRing(el, target, i * 110);
+    });
+  }
+
+  var mock = document.querySelector(".va-mock");
+  if (!mock || !("IntersectionObserver" in window)) { run(); return; }
+  var seen = false;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && !seen) {
+        seen = true;
+        run();
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  io.observe(mock);
+})();
+</script>
+
+<script src="samband.js?v=5" defer></script>
 </body>
 </html>
