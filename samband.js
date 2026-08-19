@@ -69,7 +69,7 @@
       key: "message",
       type: "textarea",
       q: "Segðu okkur aðeins meira",
-      hint: "Shift + Enter fyrir nýja línu",
+      hint: "Ef þú ert með frekari upplýsingar sem þú vilt koma á framfæri — annars slepptu þessu.",
       placeholder: "Hvað stendur til?",
       skip: "Sleppa",
     },
@@ -457,12 +457,8 @@
         "p",
         null,
         data.domain
-          ? "Fyrirspurnin er komin til okkar og við erum þegar farin að skoða vefinn þinn. Þú heyrir frá okkur á " +
-              data.email +
-              " innan sólarhrings á virkum degi."
-          : "Fyrirspurnin er komin til okkar. Þú heyrir frá okkur á " +
-              data.email +
-              " innan sólarhrings á virkum degi.",
+          ? "Fyrirspurnin er komin til okkar og við erum þegar farin að skoða vefinn þinn. Þú heyrir í okkur innan skamms."
+          : "Fyrirspurnin er komin til okkar. Þú heyrir í okkur innan skamms.",
       ),
     );
 
