@@ -536,7 +536,15 @@
       }
 
       var href = a.getAttribute && a.getAttribute("href");
-      if (!href || href.indexOf("mailto:hallo@reytal.is") !== 0) return;
+      // Vefurinn notar TVÖ netföng á sömu hnöppum (reytal.is og eldra
+      // reykjavikdigital.is). Sýnilegi „Hafa samband" hnappurinn er á því
+      // eldra — svo formið verður að grípa bæði, annars sleppur aðalhnappurinn.
+      if (
+        !href ||
+        (href.indexOf("mailto:hallo@reytal.is") !== 0 &&
+          href.indexOf("mailto:hallo@reykjavikdigital.is") !== 0)
+      )
+        return;
       // Meta/Ctrl-smellur og miðjusmellur fá að haga sér eins og venjulega.
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       e.preventDefault();
