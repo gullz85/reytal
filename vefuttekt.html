@@ -3,12 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Sett STRAX, á undan CSS: reglur sem fela efni fyrir innkomu eru bundnar
+     við html.js, svo þær taka aldrei gildi ef skriftur eru óvirkar. -->
+<script>document.documentElement.className+=" js";</script>
 <title>Ókeypis vefúttekt - Greindu vefinn þinn - REYTAL</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="description" content="Fáðu ókeypis vefúttekt á innan við mínútu. Við greinum tækni, hraða, öryggi, SEO og fleiri lykilþætti sem hafa áhrif á árangur vefsins.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://reytal.is/vefuttekt">
 <meta property="og:title" content="Ókeypis vefúttekt - Greindu vefinn þinn - REYTAL">
 <meta property="og:description" content="Fáðu ókeypis vefúttekt á innan við mínútu. Við greinum tækni, hraða, öryggi, SEO og fleiri lykilþætti sem hafa áhrif á árangur vefsins.">
 <meta property="og:locale" content="is_IS">
@@ -214,6 +218,14 @@
 
   /* ── SÝNISHORN AF ÚTTEKT: teiknað í HTML/CSS, alltaf skarpt ────── */
   .va-mock{position:relative;z-index:1;}
+  /* Hallinn er RANGSÆLIS: textinn er vinstra megin og kortið hægra megin,
+     svo brúnin sem snýr að textanum lækkar og kortið opnast á móti auganu
+     sem kemur úr lestrinum. Réttsælis halli hallar frá lesandanum og les
+     eins og kortið dragi sig undan.
+     1,2° en ekki meira: við þá gráðu les hallinn sem eðlilegur ófullkomleiki
+     frekar en meðvituð skreyting, sem er sterkara.
+     Snúningurinn er í eigin lagi (.mock-card) en innkoman í ytra lagi
+     (.va-mock) - annars myndu transformin tvö skrifa hvort yfir annað. */
   .mock-card{
     background:#fff;
     border:1px solid rgba(11,12,13,0.10);
@@ -221,10 +233,55 @@
     box-shadow:0 24px 70px rgba(11,12,13,0.13);
     padding:clamp(22px,2.6vw,32px);
     transform:rotate(-1.2deg);
+    transform-origin:50% 60%;
   }
+
+  /* INNKOMA: kortið kemur inn frá hægri, örlítið neðar og minna, og sest
+     á sinn stað. Byrjunarstaðan er sett hér svo ekkert blikk sjáist áður
+     en JS nær að merkja það - .is-in tekur hana svo af.
+
+     Falda staðan er BUNDIN VIÐ html.js. Væri hún ótengd myndi kortið
+     hverfa alveg hjá þeim sem hafa JS slökkt eða ef skriftan bregst -
+     falið efni sem aldrei birtist er verri villa en engin hreyfing. */
+  html.js .va-mock{
+    opacity:0;
+    transform:translate(40px,26px) scale(0.94);
+  }
+  html.js .va-mock.is-in{opacity:1;transform:none;}
+
   @media (prefers-reduced-motion:no-preference){
-    .mock-card{transition:transform .6s cubic-bezier(.25,.6,.25,1);}
-    .va-mock:hover .mock-card{transform:rotate(0deg);}
+    /* Aðeins opacity og transform eru animeruð - hvort tveggja keyrir á
+       skjákortinu og þvingar hvorki layout né paint. */
+    html.js .va-mock{
+      transition:opacity .7s cubic-bezier(.25,.7,.25,1),
+                 transform .9s cubic-bezier(.22,.85,.28,1);
+      will-change:opacity,transform;
+    }
+    /* will-change tekið af um leið og innkoman er búin: það heldur
+       compositing-lagi lifandi og á aldrei að standa varanlega. */
+    html.js .va-mock.is-in{will-change:auto;}
+
+    .mock-card{
+      transition:transform .55s cubic-bezier(.25,.6,.25,1),
+                 box-shadow .55s ease;
+    }
+    /* Hover: réttist upp og lyftist örlítið - staðfestir að þetta sé
+       raunverulegt viðmót en ekki flöt mynd. Bæði hover OG focus-within
+       svo þeir sem fara um með lyklaborði fái sömu svörun. */
+    .va-mock:hover .mock-card,
+    .va-mock:focus-within .mock-card{
+      transform:rotate(0deg) translateY(-6px);
+      box-shadow:0 34px 84px rgba(11,12,13,0.17);
+    }
+    /* Snertiskjáir hafa ekkert hover-ástand; án þessa "festist" kortið
+       í hover-stöðu eftir að ýtt hefur verið á það. */
+    @media (hover:none){
+      .va-mock:hover .mock-card{transform:rotate(-1.2deg);box-shadow:0 24px 70px rgba(11,12,13,0.13);}
+    }
+  }
+  /* Enginn hreyfihrifning: kortið er einfaldlega á sínum stað strax. */
+  @media (prefers-reduced-motion:reduce){
+    html.js .va-mock{opacity:1;transform:none;}
   }
   .mock-head{
     display:flex;align-items:center;gap:8px;
@@ -966,17 +1023,28 @@
   }
 
   var mock = document.querySelector(".va-mock");
-  if (!mock || !("IntersectionObserver" in window)) { run(); return; }
+  if (!mock) return;
+
+  // Kortið rennur inn fyrst, hringirnir byrja að telja rétt á eftir - svo
+  // hreyfingarnar tvær renni saman í eina í stað þess að keppa.
+  function enter() {
+    mock.classList.add("is-in");
+    setTimeout(run, reduceMotion ? 0 : 260);
+  }
+
+  if (!("IntersectionObserver" in window)) { enter(); return; }
   var seen = false;
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting && !seen) {
         seen = true;
-        run();
+        // næsti rammi: tryggir að byrjunarstaðan hafi verið teiknuð svo
+        // vafrinn hafi eitthvað til að animera FRÁ
+        requestAnimationFrame(enter);
         io.disconnect();
       }
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.2 });
   io.observe(mock);
 })();
 </script>
