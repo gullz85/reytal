@@ -33,18 +33,25 @@
      upp, en sá sem er beðinn um það fyrst fer.                            */
   var STEPS = [
     {
+      // Nafn og netfang saman í fyrsta skrefi: hvort tveggja er nauðsynlegt
+      // til að hægt sé að svara, svo það er engin ástæða til að dreifa því
+      // á sitt hvorn endann á ferlinu.
       key: "name",
-      type: "text",
-      q: "Hvað heitir þú?",
-      placeholder: "Nafnið þitt",
+      type: "fields",
+      q: "Hver ert þú?",
+      hint: "Nafn og netfang, og símanúmer ef þú vilt heyra í okkur fyrr.",
       required: true,
-      autocomplete: "name",
+      fields: [
+        { key: "name",  type: "text",  placeholder: "Nafnið þitt", required: true, autocomplete: "name" },
+        { key: "email", type: "email", placeholder: "nafn@mittfyrirtaeki.is", required: true, autocomplete: "email" },
+        { key: "phone", type: "tel",   placeholder: "Símanúmer (valfrjálst)", autocomplete: "tel" },
+      ],
     },
     {
       key: "topics",
       type: "choice",
       q: "Hvað getum við gert fyrir þig?",
-      hint: "Veldu eins margt og þú vilt",
+      hint: "Veldu þjónustuþætti eða ýttu á tölurnar á lyklaborðinu",
       required: true,
       options: [
         "Nýr vefur",
@@ -72,16 +79,6 @@
       hint: "Ef þú ert með frekari upplýsingar sem þú vilt koma á framfæri, annars slepptu þessu.",
       placeholder: "Hvað stendur til?",
       skip: "Sleppa",
-    },
-    {
-      key: "email",
-      type: "email",
-      q: "Hvert eigum við að svara?",
-      hint: "Netfang, og símanúmer ef þú vilt heyra í okkur fyrr",
-      placeholder: "nafn@mittfyrirtaeki.is",
-      required: true,
-      autocomplete: "email",
-      extra: { key: "phone", placeholder: "Símanúmer (valfrjálst)", autocomplete: "tel" },
     },
   ];
 
@@ -184,6 +181,9 @@
   var open = false;
   var sending = false;
   var root, sheet, body, marks, count;
+  // lyklaborðsstýring valkosta-skrefsins; hangir á document og VERÐUR að
+  // fjarlægjast þegar skipt er um skref, annars safnast hlustarar upp
+  var keyHandler = null;
 
   function el(tag, cls, txt) {
     var n = document.createElement(tag);
@@ -245,15 +245,33 @@
     count.textContent = "Skref " + (idx + 1) + " af " + STEPS.length;
   }
 
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i;
+
+  function validField(f) {
+    if (!f.required) return true;
+    var v = String(data[f.key] || "").trim();
+    if (f.type === "email") return EMAIL_RE.test(v);
+    return v.length > 0;
+  }
+
   function valid(step) {
+    if (step.type === "choice") return !step.required || data.topics.length > 0;
+    // fjölreita-skref gildir aðeins ef ALLIR skyldureitir standast
+    if (step.type === "fields") return step.fields.every(validField);
     if (!step.required) return true;
-    if (step.type === "choice") return data.topics.length > 0;
-    if (step.key === "email") return /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(data.email.trim());
+    if (step.type === "email") return EMAIL_RE.test(String(data[step.key] || "").trim());
     return String(data[step.key] || "").trim().length > 0;
+  }
+
+  function detachKeys() {
+    if (!keyHandler) return;
+    document.removeEventListener("keydown", keyHandler);
+    keyHandler = null;
   }
 
   function render() {
     var step = STEPS[idx];
+    detachKeys();          // fyrra skref má ekki halda lyklaborðinu
     progress();
     body.innerHTML = "";
 
@@ -265,22 +283,80 @@
 
     if (step.type === "choice") {
       var wrap = el("div", "sb-choices");
+      var buttons = [];
+      function toggle(i) {
+        var opt = step.options[i];
+        var b = buttons[i];
+        if (!b) return;
+        var at = data.topics.indexOf(opt);
+        if (at >= 0) data.topics.splice(at, 1);
+        else data.topics.push(opt);
+        b.classList.toggle("is-on");
+        next.disabled = !valid(step);
+      }
       step.options.forEach(function (opt, i) {
         var b = el("button", "sb-choice");
         b.type = "button";
         b.appendChild(el("span", "n", String(i + 1)));
         b.appendChild(el("span", null, opt));
         if (data.topics.indexOf(opt) >= 0) b.classList.add("is-on");
+        b.setAttribute("aria-pressed", data.topics.indexOf(opt) >= 0 ? "true" : "false");
         b.addEventListener("click", function () {
-          var at = data.topics.indexOf(opt);
-          if (at >= 0) data.topics.splice(at, 1);
-          else data.topics.push(opt);
-          b.classList.toggle("is-on");
-          next.disabled = !valid(step);
+          toggle(i);
+          b.setAttribute("aria-pressed", b.classList.contains("is-on") ? "true" : "false");
         });
+        buttons.push(b);
         wrap.appendChild(b);
       });
       inner.appendChild(wrap);
+
+      // Tölurnar á valkostunum eru ekki bara skraut: 1-9 velja og afvelja.
+      // Hlustarinn hangir á document (valkostirnir eru hnappar, svo það er
+      // enginn einn reitur sem heldur fókus) og er tekinn af um leið og
+      // skipt er um skref - sjá keyHandler-hreinsunina efst í render().
+      keyHandler = function (e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        var t = e.target;
+        // ekki grípa innslátt í reit
+        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+        var n = parseInt(e.key, 10);
+        if (isNaN(n) || n < 1 || n > step.options.length) return;
+        e.preventDefault();
+        toggle(n - 1);
+        var b = buttons[n - 1];
+        if (b) b.setAttribute("aria-pressed", b.classList.contains("is-on") ? "true" : "false");
+      };
+      document.addEventListener("keydown", keyHandler);
+    } else if (step.type === "fields") {
+      // Nokkrir reitir í einu skrefi. Enter fer í næsta reit sem er tómur,
+      // eða áfram ef allt stenst - það er hraðara en að þvinga tab.
+      var inputs = [];
+      step.fields.forEach(function (fd) {
+        var lab = el("label", "sb-field");
+        var inp = document.createElement("input");
+        inp.type = fd.type === "email" ? "email" : fd.type === "tel" ? "tel" : "text";
+        inp.placeholder = fd.placeholder || "";
+        inp.value = data[fd.key] || "";
+        inp.setAttribute("aria-label", fd.placeholder || fd.key);
+        if (fd.autocomplete) inp.autocomplete = fd.autocomplete;
+        if (fd.required) inp.required = true;
+        inp.addEventListener("input", function () {
+          data[fd.key] = inp.value;
+          next.disabled = !valid(step);
+        });
+        inp.addEventListener("keydown", function (e) {
+          if (e.key !== "Enter") return;
+          e.preventDefault();
+          if (valid(step)) { advance(); return; }
+          for (var k = 0; k < inputs.length; k++) {
+            if (!validField(inputs[k].fd)) { inputs[k].inp.focus(); break; }
+          }
+        });
+        lab.appendChild(inp);
+        inner.appendChild(lab);
+        inputs.push({ inp: inp, fd: fd });
+      });
+      first = inputs.length ? inputs[0].inp : null;
     } else {
       var f = el("label", "sb-field");
       var input =
@@ -306,26 +382,6 @@
       inner.appendChild(f);
       first = input;
 
-      if (step.extra) {
-        var f2 = el("label", "sb-field");
-        var i2 = document.createElement("input");
-        i2.type = "text";
-        i2.placeholder = step.extra.placeholder;
-        i2.value = data[step.extra.key] || "";
-        i2.setAttribute("aria-label", step.extra.placeholder);
-        if (step.extra.autocomplete) i2.autocomplete = step.extra.autocomplete;
-        i2.addEventListener("input", function () {
-          data[step.extra.key] = i2.value;
-        });
-        i2.addEventListener("keydown", function (e) {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            if (valid(step)) advance();
-          }
-        });
-        f2.appendChild(i2);
-        inner.appendChild(f2);
-      }
     }
 
     var actions = el("div", "sb-actions");
@@ -451,6 +507,7 @@
   }
 
   function done() {
+    detachKeys();
     for (var i = 0; i < marks.children.length; i++) {
       marks.children[i].className = "sb-mark is-done";
     }
@@ -499,6 +556,7 @@
   function close() {
     if (!root) return;
     open = false;
+    detachKeys();          // annars grípa tölutakkar áfram eftir lokun
     root.classList.remove("is-in");
     document.body.style.overflow = "";
     setTimeout(function () { root.classList.remove("is-open"); }, 300);
