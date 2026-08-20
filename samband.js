@@ -39,12 +39,11 @@
       key: "name",
       type: "fields",
       q: "Hver ert þú?",
-      hint: "Nafn og netfang, og símanúmer ef þú vilt heyra í okkur fyrr.",
+      hint: "Nafn og netfang, svo við vitum við hvern við erum að tala.",
       required: true,
       fields: [
         { key: "name",  type: "text",  placeholder: "Nafnið þitt", required: true, autocomplete: "name" },
         { key: "email", type: "email", placeholder: "nafn@mittfyrirtaeki.is", required: true, autocomplete: "email" },
-        { key: "phone", type: "tel",   placeholder: "Símanúmer (valfrjálst)", autocomplete: "tel" },
       ],
     },
     {
@@ -154,9 +153,18 @@
     "  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--grey,#9AA1A6);",
     "  text-decoration:underline;text-underline-offset:4px;transition:color .25s ease;}",
     ".sb-ghost:hover{color:var(--navy,#0D4659);}",
-    ".sb-enter{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;",
-    "  text-transform:uppercase;color:var(--grey,#9AA1A6);}",
-    "@media (max-width:620px){.sb-enter{display:none;}}",
+    /* Lyklaborðsvísbending: takkinn teiknaður sem takki, merkingin við hlið.
+       Þetta er eina leiðin til að vita að Enter og Esc geri eitthvað - án
+       hennar er ferlið jafn nothæft en enginn kemst að því. */
+    ".sb-keys{display:flex;align-items:center;gap:16px;margin-left:auto;}",
+    ".sb-key{display:inline-flex;align-items:center;gap:7px;",
+    "  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;",
+    "  text-transform:uppercase;color:var(--slate,#4C7C93);white-space:nowrap;}",
+    ".sb-key kbd{font-family:'DM Mono',monospace;font-size:10.5px;line-height:1;",
+    "  border:1px solid rgba(11,12,13,0.22);border-radius:5px;padding:5px 7px;",
+    "  background:rgba(255,255,255,0.5);color:var(--black,#0B0C0D);}",
+    /* Á litlum skjá er lyklaborðið hvort eð er ekki til staðar. */
+    "@media (max-width:620px){.sb-keys{display:none;}}",
 
     ".sb-err{margin-top:18px;font-size:14.5px;line-height:1.5;color:#8a2b2b;}",
 
@@ -180,6 +188,8 @@
   var idx = 0;
   var open = false;
   var sending = false;
+  // satt eftir að fyrirspurn hefur verið send: þá er ekkert skref til baka
+  var sent = false;
   var root, sheet, body, marks, count;
   // lyklaborðsstýring valkosta-skrefsins; hangir á document og VERÐUR að
   // fjarlægjast þegar skipt er um skref, annars safnast hlustarar upp
@@ -230,9 +240,16 @@
     root.appendChild(sheet);
     document.body.appendChild(root);
 
+    // ESC bakkar eitt skref í einu og lokar fyrst þegar lengra verður ekki
+    // farið til baka. Þannig er alltaf hægt að komast út með því að halda
+    // áfram að ýta - Escape þýðir enn "út", það tekur bara fleiri en eitt
+    // högg. Eftir sendingu er ekkert til baka, þá lokar hann strax.
     document.addEventListener("keydown", function (e) {
-      if (!open) return;
-      if (e.key === "Escape") close();
+      if (!open || e.key !== "Escape") return;
+      e.preventDefault();
+      if (sent || idx === 0) { close(); return; }
+      idx--;
+      render();
     });
   }
 
@@ -319,6 +336,16 @@
         var t = e.target;
         // ekki grípa innslátt í reit
         if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+
+        // Enter heldur ferlinu gangandi: þetta er eina skrefið án textareits,
+        // svo án þessa slitnaði lyklaborðsleiðin hér og notandinn þurfti mús.
+        if (e.key === "Enter") {
+          if (!valid(step)) return;
+          e.preventDefault();
+          advance();
+          return;
+        }
+
         var n = parseInt(e.key, 10);
         if (isNaN(n) || n < 1 || n > step.options.length) return;
         e.preventDefault();
@@ -413,9 +440,21 @@
       actions.appendChild(back);
     }
 
-    if (step.type !== "choice") {
-      actions.appendChild(el("span", "sb-enter", "Enter"));
+    // Lyklaborðsvísbendingin. Merkingin er breytileg eftir skrefi: á síðasta
+    // skrefi sendir Enter (ekki "áfram"), og á því fyrsta lokar Esc (það er
+    // ekkert skref til baka). Röng merking væri verri en engin.
+    function keyHint(label, meaning) {
+      var s = el("span", "sb-key");
+      var k = document.createElement("kbd");
+      k.textContent = label;
+      s.appendChild(k);
+      s.appendChild(el("span", null, meaning));
+      return s;
     }
+    var keys = el("div", "sb-keys");
+    keys.appendChild(keyHint("Enter", idx === STEPS.length - 1 ? "senda" : "áfram"));
+    keys.appendChild(keyHint("Esc", idx > 0 ? "til baka" : "loka"));
+    actions.appendChild(keys);
 
     inner.appendChild(actions);
 
@@ -507,6 +546,7 @@
   }
 
   function done() {
+    sent = true;
     detachKeys();
     for (var i = 0; i < marks.children.length; i++) {
       marks.children[i].className = "sb-mark is-done";
@@ -537,6 +577,9 @@
     actions.appendChild(b);
     inner.appendChild(actions);
     body.appendChild(inner);
+    // Fókus á lokahnappinn svo Enter loki forminu - lokahlekkurinn í
+    // lyklaborðsleiðinni, annars sæti notandinn fastur á takkskjánum.
+    setTimeout(function () { b.focus(); }, 60);
   }
 
   /* ── Opna og loka ───────────────────────────────────────────────────── */
@@ -546,6 +589,7 @@
     // hann smellti á.
     data = { name: "", topics: topic ? [topic] : [], domain: "", message: "", email: "", phone: "" };
     idx = 0;
+    sent = false;
     open = true;
     root.classList.add("is-open");
     document.body.style.overflow = "hidden";
