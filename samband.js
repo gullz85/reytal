@@ -50,7 +50,9 @@
       key: "topics",
       type: "choice",
       q: "Hvað getum við gert fyrir þig?",
-      hint: "Veldu þjónustuþætti eða ýttu á tölurnar á lyklaborðinu",
+      hint: "Veldu þá þjónustuþætti sem eiga við",
+      // hintKeys sést aðeins á tækjum með bendil/lyklaborð - sjá .sb-kbd-only
+      hintKeys: " eða ýttu á tölurnar á lyklaborðinu",
       required: true,
       options: [
         "Nýr vefur",
@@ -163,8 +165,17 @@
     ".sb-key kbd{font-family:'DM Mono',monospace;font-size:10.5px;line-height:1;",
     "  border:1px solid rgba(11,12,13,0.22);border-radius:5px;padding:5px 7px;",
     "  background:rgba(255,255,255,0.5);color:var(--black,#0B0C0D);}",
-    /* Á litlum skjá er lyklaborðið hvort eð er ekki til staðar. */
-    "@media (max-width:620px){.sb-keys{display:none;}}",
+    /* FALIÐ Á SNERTITÆKJUM. Við miðum við hover-getu en ekki skjábreidd:
+       sími og spjaldtölva án bendils skila (hover:none) og fá vísbendinguna
+       ekki, en spjaldtölva MEÐ lyklaborði og stýriflötu skilar (hover:hover)
+       og fær hana - sem er einmitt notandinn sem hefur gagn af henni.
+       Breiddarregla hefði falið hana fyrir þeim síðarnefnda líka. */
+    "@media (hover:none){.sb-keys{display:none;}}",
+    /* Öryggisnet fyrir mjög mjóa glugga þar sem hún myndi hvort eð er brotna. */
+    "@media (max-width:560px){.sb-keys{display:none;}}",
+    /* Sama gildir um textann sem segir "ýttu á tölurnar": hann á ekki að
+       standa þar sem engar tölur eru til að ýta á. */
+    "@media (hover:none){.sb-kbd-only{display:none;}}",
 
     ".sb-err{margin-top:18px;font-size:14.5px;line-height:1.5;color:#8a2b2b;}",
 
@@ -294,7 +305,13 @@
 
     var inner = el("div", "sb-inner sb-step");
     inner.appendChild(el("h2", "sb-q", step.q));
-    if (step.hint) inner.appendChild(el("p", "sb-hint", step.hint));
+    if (step.hint) {
+      var hintEl = el("p", "sb-hint", step.hint);
+      // lyklaborðshlutinn er í eigin span svo CSS geti falið hann á
+      // snertitækjum án þess að skilja eftir hálfa setningu
+      if (step.hintKeys) hintEl.appendChild(el("span", "sb-kbd-only", step.hintKeys));
+      inner.appendChild(hintEl);
+    }
 
     var first = null;
 
