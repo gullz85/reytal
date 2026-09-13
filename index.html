@@ -67,7 +67,11 @@
   .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;}
   /* hero-innihaldið stillist nákvæmlega á vinstri brún logosins. --align er
      reiknað í JS (sjá neðst) svo þetta haldi sér á öllum skjástærðum. */
-  .hero .wrap{padding-left:calc(32px + var(--align, 0px));}
+  /* width:100% er nauðsynlegt: .hero er flex-dálkur og margin:0 auto lét
+     .wrap skreppa saman utan um innihaldið og miðjast - fyrirsögnin sat þá
+     ~220px hægra megin við merkið og alla aðra kafla, og --align-reikningurinn
+     gaf neikvætt padding sem vafrinn hunsaði */
+  .hero .wrap{width:100%;padding-left:calc(32px + var(--align, 0px));}
   /* leturgerðin hefur innbyggt loft vinstra megin við V, dregið frá sjónrænt */
   .hero h1{margin-left:-0.045em;}
 
@@ -119,6 +123,8 @@
     color:var(--black);text-decoration:none;opacity:0.65;position:relative;
   }
   nav.wrap.pill ul li a{font-size:12px;}
+  /* hlekkurinn sjálfur lýsist líka upp, ekki bara strikið undir honum */
+  nav ul li a:hover{opacity:1;}
   nav ul li a.active{opacity:1;}
   nav ul li a.active::after{
     content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
@@ -690,10 +696,13 @@
   .engine-bars span:nth-child(7){height:60%;}
   @media (max-width:860px){
     .engine-visual{display:none;}
+    /* súlurnar fá sitt eigið belti neðst í spjaldinu í stað þess að liggja
+       undir hnappnum: spjaldið fær auka botn-padding sem svarar hæð þeirra */
+    .engine-panel{padding-bottom:calc(clamp(44px,6.5vw,80px) + 64px);}
     .engine-bars{
       left:50%;right:auto;top:auto;bottom:0;
       transform:translateX(-50%);
-      width:min(280px,74%);height:22%;
+      width:min(280px,74%);height:72px;
       -webkit-mask-image:none;mask-image:none;
     }
   }
@@ -1035,7 +1044,10 @@
   .menu-btn{
     display:none;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
+    background:none;border:none;color:var(--black);cursor:pointer;
+    /* snertiflöturinn er stækkaður í ~44px með padding sem neikvæð
+       spássía étur upp aftur - textinn situr nákvæmlega þar sem hann var */
+    padding:14px 0 14px 16px;margin:-14px 0 -14px -16px;
   }
   body.on-dark .menu-btn{color:var(--cream);}
   .mobile-menu{
@@ -1065,7 +1077,10 @@
     top:32px;transform:translateY(-50%);
     right:20px;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
+    background:none;border:none;color:var(--black);cursor:pointer;
+    /* sama stækkun og .menu-btn: kassinn vex til vinstri og jafnt upp/niður
+       (miðjaður með translateY) svo textinn hreyfist ekki um pixil */
+    padding:14px 0 14px 16px;
   }
 
   @media (max-width:760px){
@@ -1091,6 +1106,44 @@
     .show-tags{justify-content:flex-start;}
   }
 
+
+/* ── FÓKUS FYRIR LYKLABORÐ: sami navy-litur og annars staðar í stað
+     sjálfgefna appelsínugula/bláa rammans. :focus-visible kviknar aðeins
+     við lyklaborðsnotkun, aldrei við mús/snertingu, svo þetta sést ekki
+     hjá þeim sem smella. Reitir sem eiga sinn eigin fókus-stíl (vefúttektar-
+     inputið, sambandsformið) halda honum: þeir hafa hærri sérhæfni. ── */
+  :focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+  .btn-primary:focus-visible{outline-offset:4px;}
+  /* heil röð er hlekkur: ramminn helst innan raðarinnar svo hann skeri
+     ekki strikin milli raða */
+  .work-row:focus-visible{outline-offset:-4px;}
+  body.on-dark :focus-visible{outline-color:var(--cream);}
+  /* takkinn í dökka spjaldinu: navy rammi sæist ekki á navy grunni */
+  .engine-copy .btn-primary:focus-visible{outline-color:var(--cream);}
+
+  /* ── MOBILE-TAKTUR: bilið frá hetjunni niður að strikinu fyrir ofan
+     verðlaunakaflann var ~150px á síma, svo strikið sat eitt í tómu svæði.
+     Þéttara hér, óbreytt á stærri skjám. ── */
+  @media (max-width:760px){
+    .award{padding-top:clamp(44px,6vh,64px);}
+  }
+
+
+/* ── HLIÐARSKROLL: faldi splash-skjárinn (hringirnir eru allt að 152vw) og
+     .orb (inset -25vw) náðu langt út fyrir skjáinn. Sveip á stýrifleti gat þá
+     fært síðuna til hliðar á meðan fasta navið sat kyrrt, svo ekkert virtist
+     í gridinu. overflow-x:clip (ekki hidden) býr ekki til skroll-samhengi og
+     truflar því hvorki lóðrétt skroll né position:sticky. ── */
+  .site{overflow-x:clip;}
+  .splash{overflow:hidden;}
+
+  /* fóturinn í mobile: sama lagfæring og í style.css (media-reglan stóð
+     ofar en grunnreglan og tapaði, svo fóturinn miðjaðist) */
+  @media (max-width:760px){
+    .footer .footer-top{align-items:flex-start;}
+    .footer .footer-bottom{margin-top:clamp(28px,5vh,48px);}
+  }
+
   /* ── FARTÖLVUSKJÁIR (t.d. MacBook 14"): lægri skjár, allt andar betur ──
      ATH: min-width:761px er nauðsynlegt. Símar eru líka undir 960px á hæð,
      svo án þess yfirskrifaði þessi regla mobile-stærðina á h1 (hún kemur
@@ -1109,7 +1162,7 @@
     display:inline-block;overflow:hidden;vertical-align:bottom;
     padding-bottom:.16em;margin-bottom:-.16em;
     padding-right:.08em;margin-right:-.08em;
-    padding-top:.16em;margin-top:-.16em;
+    padding-top:.32em;margin-top:-.32em;   /* rými fyrir kommur á hástöfum (Á í ÁRSINS) */
   }
   .fx .fx-w > span{
     display:inline-block;
@@ -1950,6 +2003,11 @@
   function buildC(){
     var host = document.getElementById('cRows');
     if (!host) return;
+    // Öryggisnet: í glugga með enga hæð (forhleðsla, falinn rammi) verður
+    // reps hér að neðan óendanlegt og new Array() kastar RangeError - sem
+    // stöðvaði ALLT skriftublokkið (showcase, nav-strik, fyrirsagna-reveal).
+    // Raðirnar eru þá bara byggðar við næsta resize.
+    if (!innerWidth || !innerHeight) return;
     // vh en ekki vmin: sjá skýringu í style.css - annars fylla raðirnar
     // ekki hæðina á mjóum (portrait) mobile-skjám
     var vh = innerHeight / 100;
@@ -1958,7 +2016,7 @@
     C_ROWS.forEach(function(r, i){
       var px   = r[0] * vh;
       var wordW = px * 4.54;                   // breidd merkisins (.78em x 5.43) + bil
-      var reps  = Math.max(3, Math.ceil(need / wordW));
+      var reps  = Math.min(80, Math.max(3, Math.ceil(need / wordW)));
       var track = new Array(reps + 1).join(WORD);
       html += '<div class="c-row" style="font-size:' + r[0] + 'vh;--d:' +
               (i * 0.035).toFixed(3) + 's;--dout:' +

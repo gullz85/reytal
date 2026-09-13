@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vefþróun, hönnun og stafrænar lausnir - REYTAL</title>
+<title>Vefþróun - REYTAL</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="description" content="Vefþróun, hönnun, SEO, hýsing, rekstur, sjálfvirkni og snjallar stafrænar lausnir. Sjáðu hvernig REYTAL getur styrkt þinn stafræna rekstur.">
+<meta name="description" content="Sérsniðnir vefir, vefkerfi og netverslanir frá grunni. Hraðir, öruggir og byggðir til að vaxa með fyrirtækinu.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://reytal.is/thjonusta">
-<meta property="og:title" content="Vefþróun, hönnun og stafrænar lausnir - REYTAL">
-<meta property="og:description" content="Vefþróun, hönnun, SEO, hýsing, rekstur, sjálfvirkni og snjallar stafrænar lausnir. Sjáðu hvernig REYTAL getur styrkt þinn stafræna rekstur.">
+<meta property="og:url" content="https://reytal.is/thjonusta/vefthroun/">
+<meta property="og:title" content="Vefþróun - REYTAL">
+<meta property="og:description" content="Sérsniðnir vefir, vefkerfi og netverslanir frá grunni. Hraðir, öruggir og byggðir til að vaxa með fyrirtækinu.">
 <meta property="og:locale" content="is_IS">
 <meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
 <meta property="og:image:width" content="1200">
@@ -20,7 +20,7 @@
 <meta property="og:site_name" content="REYTAL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F3F0EA">
-<link rel="canonical" href="https://reytal.is/thjonusta">
+<link rel="canonical" href="https://reytal.is/thjonusta/vefthroun/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
@@ -32,113 +32,11 @@
   gtag('js', new Date());
   gtag('config', 'G-KZYV12RDN2');
 </script>
-
-<link rel="stylesheet" href="style.css?v=13">
-<style>
-  
-  
-
-  /* NAV: fastur efst, morphast mjúklega í miðjusetta pillu þegar skrollað er */
-  
-
-  /* PAGE-HERO */
-  .top{position:relative;}
-  h1,h2{text-transform:uppercase;}
-  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
-  
-
-  
-
-  h1{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
-    position:relative;z-index:1;
-    display:flex;flex-direction:column;align-items:flex-start;gap:0.05em;
-    margin-top:clamp(36px,6vw,88px);
-  }
-  h1 .accent{color:var(--navy);}
-  /* smá aukabil og hærri línuhæð í mobile - annars geta há/lág stafi eins og
-     Þ og Í í efri og neðri línu skarast og virkað eins og þeir skerist af */
-  @media (max-width:620px){
-    h1{line-height:0.98;gap:0.08em;}
-  }
-
-  .page-hero p.lede{
-    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:560px;
-    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
-  }
-
-  /* ── VERKEFNA-INDEX: sami stíll og á forsíðunni ─────────────── */
-  .work{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0 clamp(96px,13vh,150px);}
-  .work-index{border-top:1px solid rgba(11,12,13,0.14);}
-  .work-row{
-    display:grid;grid-template-columns:1fr auto;
-    gap:clamp(20px,3vw,48px);align-items:start;
-    padding:clamp(26px,4vh,40px) 0;
-    border-bottom:1px solid rgba(11,12,13,0.14);
-    text-decoration:none;color:inherit;
-  }
-  .work-row h3{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(26px,3.6vw,44px);line-height:1.05;letter-spacing:-0.02em;
-    display:flex;align-items:center;gap:0.35em;
-    transition:color .3s ease;
-  }
-  .work-row .arrow{
-    font-size:0.62em;
-    opacity:0;transform:translateX(-8px);
-    transition:opacity .3s ease, transform .3s cubic-bezier(.25,.6,.25,1);
-    color:var(--slate);
-  }
-  .work-row:hover h3{color:var(--navy);}
-  .work-row:hover .arrow{opacity:1;transform:translateX(0);}
-  .work-client{
-    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
-    color:var(--slate);display:block;margin-top:8px;
-  }
-  .work-row p{
-    font-size:15px;line-height:1.6;color:#2a2a2a;max-width:520px;margin-top:10px;
-  }
-  .work-tags{
-    display:flex;flex-wrap:nowrap;gap:8px;justify-content:flex-end;
-    padding-top:12px;
-  }
-  .work-tag{
-    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
-    border:1px solid rgba(11,12,13,0.22);border-radius:999px;padding:6px 14px;color:var(--navy);
-    white-space:nowrap;
-  }
-
-  /* ── CTA ────────────────────────────────────────────────────── */
-  .cta{position:relative;z-index:1;padding:0 0 clamp(96px,13vh,150px);}
-  .cta-box{
-    border-top:1px solid rgba(11,12,13,0.12);
-    padding-top:clamp(48px,7vh,72px);
-    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
-  }
-  .cta-box h2{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.01em;max-width:480px;
-  }
-  
-
-  @media (max-width:760px){
-    .work-row{grid-template-columns:1fr;gap:8px;}
-    .work-tags{flex-wrap:wrap;justify-content:flex-start;padding-top:6px;}
-    .cta-box{flex-direction:column;align-items:flex-start;}
-  }
-
-  /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
-  
-  
-
-  /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
-     fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
-  
-</style>
+<link rel="stylesheet" href="../../style.css?v=13">
+<link rel="stylesheet" href="../../thjonusta-sida.css?v=6">
+<link rel="stylesheet" href="../../reytal-ui.css?v=2">
 </head>
-<body class="tone-orange">
-
+<body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="markStack" viewBox="0 0 23.19 18.89">
     <g id="sT">
@@ -167,14 +65,11 @@
     </g>
   </symbol>
 </svg>
-
 <!-- SPLASH: síðuskipta-skjár -->
 <div class="splash" id="splashB" aria-hidden="true">
   <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
   <div class="splash-bar"><span></span></div>
 </div>
-
-
 <!-- FARSÍMAVALMYND -->
 <div class="mobile-menu" id="mobileMenu">
   <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
@@ -210,74 +105,81 @@
     <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
   </nav>
 </header>
-
 <section class="page-hero">
   <div class="wrap">
-    <h1><span>Þjónusta</span><span class="flip-word">Í boði</span></h1>
-    <p class="lede">Frá stefnu til afhendingar, allt undir einu þaki.</p>
+    <a class="back" href="/thjonusta">&larr; Öll þjónusta</a>
+    <h1><span>Vefþróun</span><span class="accent">Frá grunni</span></h1>
+    <p class="lede">Sérsniðnir vefir, vefkerfi og netverslanir. Við veljum tæknina eftir verkefninu, ekki öfugt, og byggjum þannig að vefurinn þoli vöxt.</p>
+    <div class="hero-cta"><a href="mailto:hallo@reytal.is?subject=Vef%C3%BEr%C3%B3un" class="btn-primary"><span class="btn-label">Hafa samband</span></a></div>
+    <div class="hero-el touch" aria-hidden="true"><div class="u-browser u-tilt"><div class="win u-plate"><div class="u-bar"><i></i><i></i><i></i><span class="url"></span></div><div class="body"><s class="h"></s><s class="l1"></s><s class="l2"></s><div class="cols"><b></b><b></b><b></b></div></div></div><div class="chip u-plate"><s></s></div></div></div>
   </div>
 </section>
 </div><!-- /.top -->
 
-<section class="work">
+<section class="section">
   <div class="blob2 blob2--a"></div>
   <div class="blob2 blob2--b"></div>
   <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Þjónustan</div>
+      <h2>Þetta felst í vefþróun</h2>
+    </div>
     <div class="work-index">
-
-      <a class="work-row" href="/thjonusta/vefthroun/">
+      <div class="work-row">
         <div class="work-main">
-          <h3>Vefþróun <span class="arrow">↗︎</span></h3>
-          <p>Sérsniðnir vefir og vefkerfi frá grunni: hraðir, öruggir og byggðir til að vaxa með fyrirtækinu. Við veljum tæknina eftir verkefninu, ekki öfugt.</p>
+          <h3>Vefsíður</h3>
+          <p>Kynningarvefir og upplýsingavefir sem eru hraðir, aðgengilegir og einfaldir í rekstri. Efnisstýring sem starfsfólkið þitt ræður við án okkar.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">Vefsíður</span><span class="work-tag">Vefkerfi</span><span class="work-tag">Sérlausnir</span><span class="work-tag">Netverslanir</span></div>
-      </a>
-
-      <a class="work-row" href="/thjonusta/honnun/">
+        <div class="work-tags"><span class="work-tag">Vefsíður</span><span class="work-tag">Efnisstýring</span></div>
+      </div>
+      <div class="work-row">
         <div class="work-main">
-          <h3>Hönnun og vörumerki <span class="arrow">↗︎</span></h3>
-          <p>Vefhönnun, vörumerki og ásýnd sem endurspegla fyrirtækið þitt: frá wireframe að fullkláruðu útliti með notendaupplifun í forgrunni.</p>
+          <h3>Vefkerfi og sérlausnir</h3>
+          <p>Innri kerfi, gáttir og sérsmíði þegar tilbúin lausn dugar ekki. Við hönnum gagnalíkanið, byggjum bakendann og tengjum við það sem fyrir er.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">UX / UI</span><span class="work-tag">Vörumerki</span></div>
-      </a>
-
-      <a class="work-row" href="/thjonusta/seo/">
+        <div class="work-tags"><span class="work-tag">Sérlausnir</span><span class="work-tag">Bakendi</span><span class="work-tag">API</span></div>
+      </div>
+      <div class="work-row">
         <div class="work-main">
-          <h3>Leitarvélabestun <span class="arrow">↗︎</span></h3>
-          <p>Sýnileikabestun sem skilar raunverulegri umferð: tæknileg SEO, efnisstefna og mælingar svo þú sjáir hvað virkar.</p>
+          <h3>Netverslanir</h3>
+          <p>Vöruskrá, greiðslur, afhending og allt þar á milli. Kaupferli sem er stutt og skýrt, og rekstur sem sést í tölum.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">SEO</span><span class="work-tag">Greiningar</span></div>
-      </a>
-
-      <a class="work-row" href="/thjonusta/hysing/">
+        <div class="work-tags"><span class="work-tag">Netverslun</span><span class="work-tag">Greiðslulausnir</span></div>
+      </div>
+      <div class="work-row">
         <div class="work-main">
-          <h3>Hýsing og rekstur <span class="arrow">↗︎</span></h3>
-          <p>Við gætum, verndum og viðhöldum vefjum dag eftir dag: hýsing, öryggisuppfærslur, afritun og vöktun í öruggum höndum.</p>
+          <h3>Hraði og tækni</h3>
+          <p>Léttar síður, rétt uppsett myndefni og skynsamleg hýsing. Við mælum svartíma og Core Web Vitals áður en vefur fer í loftið, ekki eftir á.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">Hýsing</span><span class="work-tag">Umsjón</span></div>
-      </a>
-
-      <a class="work-row" href="/thjonusta/gervigreind/">
-        <div class="work-main">
-          <h3>Gervigreind og sjálfvirkni <span class="arrow">↗︎</span></h3>
-          <p>Snjallar lausnir sem spara tíma: gervigreind í þjónustu og efnisvinnslu, sjálfvirkni í ferlum og samþættingar milli kerfa.</p>
-        </div>
-        <div class="work-tags"><span class="work-tag">AI</span><span class="work-tag">Sjálfvirkni</span></div>
-      </a>
-
+        <div class="work-tags"><span class="work-tag">Hraði</span><span class="work-tag">Core Web Vitals</span></div>
+      </div>
     </div>
   </div>
 </section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Ferlið</div>
+      <h2>Svona vinnum við</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="snum">1</span><div><h3>Greining</h3><p>Við förum yfir markmið, efni og kerfin sem þarf að tengja. Út úr því kemur skýr verklýsing og áætlun.</p></div></li>
+      <li><span class="snum">2</span><div><h3>Smíði</h3><p>Hönnun og forritun í stuttum lotum. Þú sérð vefinn verða til og getur brugðist við á leiðinni.</p></div></li>
+      <li><span class="snum">3</span><div><h3>Afhending og eftirfylgni</h3><p>Prófanir, mælingar og flutningur í loftið. Eftir það: <a href="/thjonusta/hysing/">hýsing, uppfærslur og aðstoð</a> ef þú vilt.</p></div></li>
+    </ol>
+  </div>
+</section>
+
 
 <section class="cta">
   <div class="wrap">
     <div class="cta-box">
-      <h2>Óviss hvar á að byrja? Tökum stutt samtal.</h2>
-      <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
+      <h2>Ertu með verkefni í huga? Segðu okkur frá því.</h2>
+      <a href="mailto:hallo@reytal.is?subject=Vef%C3%BEr%C3%B3un" class="btn-primary"><span class="btn-label">Hafa samband</span></a>
     </div>
   </div>
 </section>
-
 <!-- FÓTUR -->
 <footer class="footer">
   <div class="wrap">
@@ -297,12 +199,9 @@
     </div>
   </div>
 </footer>
-
 </div><!-- /.site -->
-
-<script src="main.js?v=8"></script>
-
-
-<script src="samband.js?v=9" defer></script>
+<script src="../../main.js?v=8"></script>
+<script src="../../reytal-ui.js?v=2"></script>
+<script src="../../samband.js?v=9" defer></script>
 </body>
 </html>

@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Um REYTAL - Teymið á bak við lausnirnar</title>
+<title>Hönnun og vörumerki - REYTAL</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="description" content="Kynntu þér REYTAL og fólkið sem hannar, þróar og rekur stafrænar lausnir fyrir fyrirtæki sem vilja gera betur á netinu.">
+<meta name="description" content="Vefhönnun, vörumerki og ásýnd sem endurspegla fyrirtækið þitt. Frá wireframe að fullkláruðu útliti með notendaupplifun í forgrunni.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://reytal.is/um-okkur">
-<meta property="og:title" content="Um REYTAL - Teymið á bak við lausnirnar">
-<meta property="og:description" content="Kynntu þér REYTAL og fólkið sem hannar, þróar og rekur stafrænar lausnir fyrir fyrirtæki sem vilja gera betur á netinu.">
+<meta property="og:url" content="https://reytal.is/thjonusta/honnun/">
+<meta property="og:title" content="Hönnun og vörumerki - REYTAL">
+<meta property="og:description" content="Vefhönnun, vörumerki og ásýnd sem endurspegla fyrirtækið þitt. Frá wireframe að fullkláruðu útliti með notendaupplifun í forgrunni.">
 <meta property="og:locale" content="is_IS">
 <meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
 <meta property="og:image:width" content="1200">
@@ -20,7 +20,7 @@
 <meta property="og:site_name" content="REYTAL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F3F0EA">
-<link rel="canonical" href="https://reytal.is/um-okkur">
+<link rel="canonical" href="https://reytal.is/thjonusta/honnun/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
@@ -32,126 +32,11 @@
   gtag('js', new Date());
   gtag('config', 'G-KZYV12RDN2');
 </script>
-
-<link rel="stylesheet" href="style.css?v=13">
-<style>
-  
-  
-
-  /* NAV: fastur efst, morphast mjúklega í miðjusetta pillu þegar skrollað er */
-  
-
-  /* PAGE-HERO: haus og inngangur deila fleti svo hringurinn gangi óslitið undir */
-  .top{position:relative;}
-  h1,h2{text-transform:uppercase;}
-  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
-  
-
-  
-
-  h1{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
-    position:relative;z-index:1;
-    display:flex;flex-direction:column;align-items:flex-start;gap:0.05em;
-    margin-top:clamp(36px,6vw,88px);
-  }
-  h1 .accent{color:var(--navy);}
-  /* smá aukabil og hærri línuhæð í mobile - annars geta há/lág stafi eins og
-     Þ og Í í efri og neðri línu skarast og virkað eins og þeir skerist af */
-  @media (max-width:620px){
-    h1{line-height:0.98;gap:0.08em;}
-  }
-
-  .page-hero p.lede{
-    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:560px;
-    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
-  }
-
-  
-
-  /* ── TEYMIÐ: skýrir myndakassar, nafn, netfang, titill (aranja.com/studio) ── */
-  .team{position:relative;z-index:1;padding:clamp(88px,12vh,140px) 0 clamp(72px,10vh,120px);}
-  .section-head{max-width:620px;margin-bottom:clamp(48px,7vh,72px);}
-  .section-head h2{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.01em;
-    margin-top:14px;
-  }
-
-  /* þrjár í röð: við tvær í röð voru kortin breiðari en 768px myndirnar
-     þola án þess að verða upprennt/blörrí, þrjár heldur sér skarpt */
-  .team-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:clamp(32px,4vw,44px);
-  }
-  .person{position:relative;}
-  .avatar{
-    position:relative;
-    width:100%;aspect-ratio:4/5;border-radius:6px;
-    overflow:hidden;background:var(--sage);
-  }
-  .avatar .avatar-photo{
-    width:100%;height:100%;object-fit:cover;object-position:center top;display:block;
-    transition:transform .8s cubic-bezier(.25,.6,.25,1);
-  }
-  /* hover: myndin andar örlítið inn og upplýsingarnar lyftast */
-  .person:hover .avatar-photo{transform:scale(1.045);}
-  /* mjúk skyggja neðst svo textinn lesist á öllum myndum */
-  .avatar::after{
-    content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
-    background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
-    pointer-events:none;
-  }
-  .person-info{
-    position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
-    display:flex;flex-direction:column;gap:3px;
-    text-align:left;
-    transition:transform .5s cubic-bezier(.25,.6,.25,1);
-  }
-  .person:hover .person-info{transform:translateY(-5px);}
-  .person-info h3{
-    font-family:'DM Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
-    color:#fff;
-  }
-  .person-info .role{
-    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-    color:#fff;
-    border:1px solid rgba(255,255,255,0.45);border-radius:999px;
-    padding:6px 13px;
-    width:fit-content;
-    margin-top:4px;
-  }
-
-  /* ── CTA ────────────────────────────────────────────────────── */
-  .cta{position:relative;z-index:1;padding:0 0 clamp(96px,13vh,150px);}
-  .cta-box{
-    border-top:1px solid rgba(11,12,13,0.12);
-    padding-top:clamp(48px,7vh,72px);
-    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px;
-  }
-  .cta-box h2{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(24px,2.8vw,34px);letter-spacing:-0.01em;max-width:480px;
-  }
-  
-
-  @media (max-width:760px){
-    .cta-box{flex-direction:column;align-items:flex-start;}
-    .team-grid{grid-template-columns:1fr;}
-  }
-
-  /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
-  
-  
-
-  /* ── FYRIRSAGNA-REVEAL: orðin rísa upp úr ósýnilegri línu, hvert á
-     fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
-  
-</style>
+<link rel="stylesheet" href="../../style.css?v=13">
+<link rel="stylesheet" href="../../thjonusta-sida.css?v=6">
+<link rel="stylesheet" href="../../reytal-ui.css?v=2">
 </head>
 <body class="tone-rose">
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="markStack" viewBox="0 0 23.19 18.89">
     <g id="sT">
@@ -180,22 +65,19 @@
     </g>
   </symbol>
 </svg>
-
 <!-- SPLASH: síðuskipta-skjár -->
 <div class="splash" id="splashB" aria-hidden="true">
   <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
   <div class="splash-bar"><span></span></div>
 </div>
-
-
 <!-- FARSÍMAVALMYND -->
 <div class="mobile-menu" id="mobileMenu">
   <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
   <a href="/">Heim</a>
-  <a href="/thjonusta">Þjónusta</a>
+  <a href="/thjonusta" class="active">Þjónusta</a>
   <a href="/verkefni">Verkefni</a>
   <a href="/vefuttekt">Vefúttekt</a>
-  <a href="/um-okkur" class="active">Um okkur</a>
+  <a href="/um-okkur">Um okkur</a>
 </div>
 <div class="site">
 <div class="top">
@@ -215,131 +97,89 @@
     </a>
     <ul>
       <li><a href="/">Heim</a></li>
-      <li><a href="/thjonusta">Þjónusta</a></li>
+      <li><a href="/thjonusta" class="active">Þjónusta</a></li>
       <li><a href="/verkefni">Verkefni</a></li>
       <li><a href="/vefuttekt">Vefúttekt</a></li>
-      <li><a href="/um-okkur" class="active">Um okkur</a></li>
+      <li><a href="/um-okkur">Um okkur</a></li>
     </ul>
     <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
   </nav>
 </header>
-
 <section class="page-hero">
   <div class="wrap">
-    <h1><span>Um</span><span class="flip-word">Okkur</span></h1>
-    <p class="lede">Fólkið sem hannar og byggir stafræna innviði fyrir fyrirtæki sem vilja vaxa.</p>
-    <div class="meta-row">
-      <div class="tag">Reykjavík</div>
-      <div class="tag">Tallinn</div>
-    </div>
+    <a class="back" href="/thjonusta">&larr; Öll þjónusta</a>
+    <h1><span>Hönnun</span><span class="accent">og ásýnd</span></h1>
+    <p class="lede">Vefhönnun, vörumerki og ásýnd sem endurspegla fyrirtækið þitt. Frá fyrsta wireframe að fullkláruðu útliti, með notandann í forgrunni.</p>
+    <div class="hero-cta"><a href="mailto:hallo@reytal.is?subject=H%C3%B6nnun" class="btn-primary"><span class="btn-label">Hafa samband</span></a></div>
+    <div class="hero-el touch" aria-hidden="true"><div class="u-cards u-tilt"><i class="c1"><s></s><s></s><s></s></i><i class="c2"><s></s><s></s><s></s></i><i class="c3"><s></s><s></s><s></s></i></div></div>
   </div>
 </section>
 </div><!-- /.top -->
 
-<section class="team">
+<section class="section">
   <div class="blob2 blob2--a"></div>
   <div class="blob2 blob2--b"></div>
   <div class="wrap">
     <div class="section-head">
-      <div class="eyebrow">Teymið</div>
-      <h2>Sérfræðingar á sínu sviði</h2>
+      <div class="eyebrow">Þjónustan</div>
+      <h2>Þetta felst í hönnun</h2>
     </div>
-
-    <div class="team-grid">
-      <!-- Titlar og netföng eru enn staðgenglar, breyttu eftir þörfum -->
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-gudlaugur.jpg" alt="Gunnlaugur">
-          <div class="person-info">
-            <h3>Gunnlaugur</h3>
-            <div class="role">Framkvæmdastjóri</div>
-          </div>
+    <div class="work-index">
+      <div class="work-row">
+        <div class="work-main">
+          <h3>UX og viðmót</h3>
+          <p>Flæði, uppbygging og viðmót. Við teiknum vefinn fyrst sem wireframe svo ákvarðanir um innihald séu teknar áður en útlitið kemur.</p>
         </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-jon-haukur.jpg" alt="Jón Haukur">
-          <div class="person-info">
-            <h3>Jón Haukur</h3>
-            <div class="role">Verkefnastjóri</div>
-          </div>
+        <div class="work-tags"><span class="work-tag">UX</span><span class="work-tag">Wireframe</span></div>
+      </div>
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Útlitshönnun</h3>
+          <p>Letur, litir, myndmál og taktur. Hönnun sem heldur sér á öllum skjástærðum og er teiknuð til að vera forrituð, ekki bara skoðuð.</p>
         </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-tomas.jpg" alt="Tómas">
-          <div class="person-info">
-            <h3>Tómas</h3>
-            <div class="role">Verkefnastjóri</div>
-          </div>
+        <div class="work-tags"><span class="work-tag">UI</span><span class="work-tag">Responsive</span></div>
+      </div>
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Vörumerki og ásýnd</h3>
+          <p>Merki, litapalletta, leturval og reglur um notkun. Ásýnd sem virkar jafnt á vef, í prenti og á samfélagsmiðlum.</p>
         </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-isak.jpg" alt="Ísak">
-          <div class="person-info">
-            <h3>Ísak</h3>
-            <div class="role">Hönnuður</div>
-          </div>
+        <div class="work-tags"><span class="work-tag">Vörumerki</span><span class="work-tag">Ásýnd</span></div>
+      </div>
+      <div class="work-row">
+        <div class="work-main">
+          <h3>Hönnunarkerfi</h3>
+          <p>Endurnýtanlegir hlutar, tókar og skjölun. Vefurinn helst samkvæmur þegar hann stækkar og fleiri koma að honum.</p>
         </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-petur.jpg" alt="Pétur">
-          <div class="person-info">
-            <h3>Pétur</h3>
-            <div class="role">Hönnuður</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-mikk.jpg" alt="Mikk">
-          <div class="person-info">
-            <h3>Mikk</h3>
-            <div class="role">Forritari</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-daniel.jpg" alt="Daníel">
-          <div class="person-info">
-            <h3>Daníel</h3>
-            <div class="role">Forritari</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="einar-2025.jpg" alt="Einar">
-          <div class="person-info">
-            <h3>Einar</h3>
-            <div class="role">Forritari</div>
-          </div>
-        </div>
-      </article>
-
+        <div class="work-tags"><span class="work-tag">Design system</span><span class="work-tag">Skjölun</span></div>
+      </div>
     </div>
   </div>
 </section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Ferlið</div>
+      <h2>Svona vinnum við</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="snum">1</span><div><h3>Rannsókn</h3><p>Viðtöl, samkeppni og efnið sem er til. Við skiljum hvað vefurinn á að gera áður en við teiknum.</p></div></li>
+      <li><span class="snum">2</span><div><h3>Wireframe og flæði</h3><p>Grá uppbygging fyrst: hvað er á síðunni, í hvaða röð og hvað gerist þegar smellt er.</p></div></li>
+      <li><span class="snum">3</span><div><h3>Útlit og frumgerð</h3><p>Fullbúið útlit sem hægt er að smella í gegnum og prófa á fólki áður en það er forritað.</p></div></li>
+    </ol>
+  </div>
+</section>
+
 
 <section class="cta">
   <div class="wrap">
     <div class="cta-box">
-      <h2>Viltu vinna með okkur?</h2>
-      <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
+      <h2>Vantar vefinn þinn skýrari ásýnd? Tökum samtalið.</h2>
+      <a href="mailto:hallo@reytal.is?subject=H%C3%B6nnun" class="btn-primary"><span class="btn-label">Hafa samband</span></a>
     </div>
   </div>
 </section>
-
 <!-- FÓTUR -->
 <footer class="footer">
   <div class="wrap">
@@ -359,12 +199,9 @@
     </div>
   </div>
 </footer>
-
 </div><!-- /.site -->
-
-<script src="main.js?v=8"></script>
-
-
-<script src="samband.js?v=9" defer></script>
+<script src="../../main.js?v=8"></script>
+<script src="../../reytal-ui.js?v=2"></script>
+<script src="../../samband.js?v=9" defer></script>
 </body>
 </html>

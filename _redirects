@@ -3,6 +3,14 @@
 /verkefni    /verkefni.html    200
 /um-okkur    /um-okkur.html    200
 
+# Þjónustusíðurnar liggja í möppum (thjonusta/<slóð>/index.html) og
+# þurfa því enga reglu. Eldri flatar slóðir vísa varanlega á nýju slóðina.
+/thjonusta-vefthroun   /thjonusta/vefthroun/   301
+/thjonusta-honnun   /thjonusta/honnun/   301
+/thjonusta-seo   /thjonusta/seo/   301
+/thjonusta-hysing   /thjonusta/hysing/   301
+/thjonusta-gervigreind   /thjonusta/gervigreind/   301
+
 # Villusida: verdur ad vera SIDASTA reglan (reglur eru lesnar ofan fra og
 # fyrsta regla sem passar er notud - ef thessi vaeri ofar myndi hun gleypa
 # allar hinar). Skilar 404.html med rettum 404-statuskoda fyrir allar

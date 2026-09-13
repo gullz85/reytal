@@ -1,0 +1,231 @@
+/* ═══════════════════════════════════════════════════════════════════
+   REYTAL VIÐMÓT: element í stíl Laga, Sónars, Hraðamælis og Spjalda.
+
+   Sama uppskrift alls staðar, það er það sem gerir þau samstæð:
+   - hvítar plötur (.u-plate) með 1px línu og mjúkum skugga
+   - navy áherslur, grannar slate-línur, sage sem þriðji litur
+   - DM Mono í merkingum
+   - sami halli í rými (.u-tilt), vaggar hægt og hallar sér að músinni
+
+   Foreldrið þarf perspective (hero-el og .stage.c hafa það nú þegar).
+   JS: reytal-ui.js
+   ═══════════════════════════════════════════════════════════════════ */
+:root{--u-e:cubic-bezier(.25,.6,.25,1);}
+
+.u-plate{background:#fff;border:1px solid rgba(11,12,13,.1);border-radius:14px;box-shadow:0 22px 44px rgba(11,12,13,.10);}
+.u-tilt{transform:rotateX(12deg) rotateY(-18deg);transform-style:preserve-3d;
+  animation:uTilt 7s ease-in-out infinite;transition:transform .5s var(--u-e);}
+.u-tilt.live{animation:none;}
+@keyframes uTilt{0%,100%{transform:rotateX(12deg) rotateY(-18deg);}50%{transform:rotateX(18deg) rotateY(-8deg);}}
+
+/* gluggastika: þrír punktar og heiti */
+.u-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid rgba(11,12,13,.08);flex:0 0 auto;}
+.u-bar i{width:8px;height:8px;border-radius:50%;background:rgba(11,12,13,.14);display:block;}
+.u-bar .url{margin-left:6px;flex:1;height:12px;border-radius:999px;background:rgba(13,70,89,.07);}
+/* ENGINN TEXTI Í ELEMENTUNUM: orð eru teiknuð sem strik svo elementin
+   séu óháð tungumáli og keppi ekki við textann á síðunni */
+
+/* sameiginleg merking efst í spjaldi */
+.u-lbl{display:flex;align-items:center;gap:8px;}
+.u-lbl::after{content:'';width:var(--w,58px);height:6px;border-radius:3px;background:rgba(13,70,89,.18);}
+.u-lbl::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--navy);animation:uPulse 1.8s ease-in-out infinite;}
+@keyframes uPulse{0%,100%{box-shadow:0 0 0 0 rgba(13,70,89,.35);}50%{box-shadow:0 0 0 6px rgba(13,70,89,0);}}
+
+/* ── 01 lög ───────────────────────────────────────────────────── */
+.u-stack{position:relative;width:50%;aspect-ratio:1;transform:rotateX(58deg) rotateZ(-45deg);transform-style:preserve-3d;}
+.u-stack i{position:absolute;inset:0;display:block;border-radius:14px;border:1px solid rgba(13,70,89,.35);
+  background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(190,191,166,.38));box-shadow:0 18px 30px rgba(11,12,13,.08);
+  animation:uStackBob 4.6s ease-in-out infinite;animation-delay:calc(var(--i) * -.55s);}
+.u-stack i:first-child{background:var(--navy);border-color:var(--navy);}
+.u-stack i:last-child{background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(243,240,234,.9));}
+@keyframes uStackBob{0%,100%{transform:translateZ(calc(var(--i) * 34px));}50%{transform:translateZ(calc(var(--i) * 34px + 14px));}}
+
+/* ── 02 vafragluggi: síðan byggist upp, merki um að hún sé komin í loftið ── */
+.u-browser{position:relative;width:74%;aspect-ratio:4/3;}
+.u-browser .win{position:absolute;inset:0;overflow:hidden;display:flex;flex-direction:column;}
+.u-browser .body{flex:1;padding:7%;display:flex;flex-direction:column;gap:5%;}
+.u-browser s{display:block;border-radius:4px;background:rgba(13,70,89,.16);transform-origin:left center;
+  animation:uBuildX 6.5s var(--u-e) infinite both;}
+.u-browser .h{flex:0 0 26%;background:var(--navy);border-radius:6px;}
+.u-browser .l1{flex:0 0 5%;width:72%;animation-delay:.2s;}
+.u-browser .l2{flex:0 0 5%;width:50%;animation-delay:.32s;}
+.u-browser .cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6%;}
+.u-browser .cols b{display:block;border-radius:6px;background:rgba(190,191,166,.4);transform-origin:bottom;
+  animation:uBuildY 6.5s var(--u-e) infinite both;}
+.u-browser .cols b:nth-child(1){animation-delay:.45s;}
+.u-browser .cols b:nth-child(2){animation-delay:.55s;}
+.u-browser .cols b:nth-child(3){animation-delay:.65s;}
+.u-browser .chip{position:absolute;right:-12%;bottom:10%;transform:translateZ(50px);border-radius:999px;padding:10px 13px;
+  display:flex;align-items:center;gap:8px;animation:uChip 6.5s var(--u-e) infinite both;}
+.u-browser .chip s{display:block;width:34px;height:5px;border-radius:3px;background:rgba(13,70,89,.3);}
+.u-browser .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--navy);animation:uPulse 1.8s ease-in-out infinite;}
+@keyframes uBuildX{0%{transform:scaleX(0);opacity:0;}14%{transform:scaleX(1);opacity:1;}82%{transform:scaleX(1);opacity:1;}94%,100%{transform:scaleX(1);opacity:0;}}
+@keyframes uBuildY{0%{transform:scaleY(0);opacity:0;}14%{transform:scaleY(1);opacity:1;}82%{transform:scaleY(1);opacity:1;}94%,100%{transform:scaleY(1);opacity:0;}}
+@keyframes uChip{0%,20%{opacity:0;transform:translateZ(50px) translateY(8px);}30%,82%{opacity:1;transform:translateZ(50px);}94%,100%{opacity:0;transform:translateZ(50px);}}
+
+/* ── 03 kóði: línur skrifast út ──────────────────────────────────── */
+.u-code{position:relative;width:78%;}
+.u-code .card{overflow:hidden;padding-bottom:6%;}
+.u-code .lines{padding:14px 16px 4px;display:flex;flex-direction:column;gap:9px;}
+.u-code .ln{display:flex;align-items:center;gap:6px;padding-left:calc(var(--in) * 14px);height:6px;}
+.u-code .ln b{display:block;height:6px;border-radius:3px;width:var(--w);transform-origin:left center;
+  animation:uBuildX 6.5s var(--u-e) infinite both;animation-delay:calc(var(--i) * .09s);}
+.u-code .ln .t{background:var(--navy);}
+.u-code .ln .a{background:rgba(76,124,147,.55);}
+.u-code .ln .s{background:rgba(190,191,166,.9);}
+.u-code .ln .x{background:rgba(11,12,13,.14);}
+.u-code .caret{display:inline-block;width:2px;height:11px;background:var(--navy);animation:uBlink 1s steps(1) infinite;}
+@keyframes uBlink{50%{opacity:0;}}
+
+/* ── 04 uppitími: 30 dagar af súlum ─────────────────────────────── */
+.u-uptime{position:relative;width:78%;}
+.u-uptime .card{padding:7% 7% 6%;display:flex;flex-direction:column;gap:14px;}
+.u-uptime .top{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.u-uptime .valbar{display:block;width:30%;height:14px;border-radius:4px;background:var(--navy);}
+.u-uptime .ticks{display:flex;gap:3%;height:44px;align-items:flex-end;}
+.u-uptime .ticks i{flex:1;height:100%;border-radius:3px;background:var(--navy);display:block;transform-origin:bottom;
+  animation:uTick 6s var(--u-e) infinite both;animation-delay:calc(var(--i) * .035s);}
+.u-uptime .ticks i.warn{background:var(--sage);height:55%;}
+.u-uptime .foot{display:flex;justify-content:space-between;gap:10px;}
+.u-uptime .foot i{display:block;width:28%;height:5px;border-radius:3px;background:rgba(11,12,13,.12);}
+.u-uptime .foot i + i{width:18%;}
+@keyframes uTick{0%{transform:scaleY(0);opacity:.2;}18%{transform:scaleY(1);opacity:1;}85%{transform:scaleY(1);opacity:1;}100%{transform:scaleY(1);opacity:.15;}}
+
+/* ── 05 sónar ─────────────────────────────────────────────────── */
+.u-sonar{position:relative;width:62%;aspect-ratio:1;}
+.u-sonar i{position:absolute;inset:0;display:block;border-radius:50%;border:1.5px solid var(--navy);opacity:0;animation:uSonar 3.9s cubic-bezier(.2,.6,.3,1) infinite;}
+.u-sonar i:nth-child(2){animation-delay:1.3s;}
+.u-sonar i:nth-child(3){animation-delay:2.6s;}
+.u-sonar b{position:absolute;left:50%;top:50%;width:15%;aspect-ratio:1;border-radius:50%;background:var(--navy);transform:translate(-50%,-50%);display:block;}
+.u-sonar b::after{content:'';position:absolute;left:50%;top:50%;width:38%;aspect-ratio:1;border-radius:50%;background:var(--cream);transform:translate(-50%,-50%);}
+@keyframes uSonar{0%{transform:scale(.16);opacity:.85;}100%{transform:scale(1);opacity:0;}}
+
+/* ── 06 lás: lokast, hakið kemur og bylgjur fara út ─────────────── */
+.u-lock{position:relative;width:72%;aspect-ratio:1;display:grid;place-items:center;}
+.u-lock .ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--navy);opacity:0;display:block;
+  animation:uLockRing 6s cubic-bezier(.2,.6,.3,1) infinite both;}
+.u-lock .ring + .ring{animation-delay:.45s;}
+.u-lock .plate{position:relative;width:46%;aspect-ratio:1;display:grid;place-items:center;border-radius:22px;}
+.u-lock .lock{position:relative;width:44%;height:56%;}
+.u-lock .shackle{position:absolute;left:17%;right:17%;top:0;height:52%;border:3.5px solid var(--navy);border-bottom:0;
+  border-radius:999px 999px 0 0;display:block;animation:uShackle 6s cubic-bezier(.5,0,.3,1.4) infinite both;}
+.u-lock .body{position:absolute;left:0;right:0;bottom:0;height:58%;background:var(--navy);border-radius:6px;display:block;}
+.u-lock .body::after{content:'';position:absolute;left:50%;top:44%;width:18%;aspect-ratio:1;border-radius:50%;background:var(--cream);transform:translate(-50%,-50%);}
+.u-lock .ok{position:absolute;right:-9%;top:-9%;width:30%;aspect-ratio:1;border-radius:50%;background:var(--navy);color:var(--cream);
+  border:3px solid #fff;display:grid;place-items:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;line-height:1;
+  animation:uOk 6s cubic-bezier(.3,1.5,.5,1) infinite both;}
+@keyframes uLockRing{0%,30%{transform:scale(.4);opacity:0;}33%{opacity:.7;transform:scale(.45);}72%,100%{transform:scale(1);opacity:0;}}
+@keyframes uShackle{0%,14%{transform:translateY(-22%);}30%,86%{transform:translateY(0);}96%,100%{transform:translateY(-22%);}}
+@keyframes uOk{0%,30%{transform:translateZ(30px) scale(0);}40%,86%{transform:translateZ(30px) scale(1);}94%,100%{transform:translateZ(30px) scale(0);}}
+
+/* ── 07 hraðamælir ────────────────────────────────────────────── */
+.u-gauge{position:relative;width:64%;aspect-ratio:1;--p:0;}
+.u-gauge .arc{position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 240deg, var(--navy) calc(var(--p) * .6667%), rgba(13,70,89,.12) 0 66.67%, transparent 66.67%);
+  -webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%);}
+.u-gauge .needle{position:absolute;left:50%;top:50%;width:2px;height:36%;margin-left:-1px;background:var(--black);border-radius:2px;
+  transform-origin:top center;transform:rotate(calc(var(--p) * 2.4deg + 60deg));}
+.u-gauge .needle::before{content:'';position:absolute;left:50%;top:0;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--black);}
+.u-gauge .val{position:absolute;left:0;right:0;bottom:6%;text-align:center;}
+.u-gauge .val b{display:block;font-family:'DM Sans',sans-serif;font-weight:700;font-size:34px;letter-spacing:-.02em;color:var(--black);font-variant-numeric:tabular-nums;}
+.u-gauge .val s{display:block;width:34px;height:5px;border-radius:3px;background:rgba(13,70,89,.2);margin:8px auto 0;}
+
+/* ── 08 graf: umferðarlína teiknast upp ──────────────────────────── */
+.u-chart{position:relative;width:78%;}
+.u-chart .card{padding:7% 7% 5%;}
+.u-chart .top{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.u-chart .val{font-family:'DM Sans',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.02em;color:var(--navy);
+  animation:uVal 7s var(--u-e) infinite both;}
+.u-chart svg{display:block;width:100%;height:auto;margin-top:14px;overflow:visible;}
+.u-chart .grid{stroke:rgba(11,12,13,.08);stroke-width:1;fill:none;}
+.u-chart .area{fill:rgba(13,70,89,.08);animation:uArea 7s var(--u-e) infinite both;}
+.u-chart .line{fill:none;stroke:var(--navy);stroke-width:2;stroke-linecap:round;stroke-dasharray:1;animation:uLine 7s var(--u-e) infinite both;}
+.u-chart circle{fill:var(--navy);transform-box:fill-box;transform-origin:center;animation:uDot 7s var(--u-e) infinite both;}
+@keyframes uLine{0%{stroke-dashoffset:1;opacity:1;}40%{stroke-dashoffset:0;}86%{stroke-dashoffset:0;opacity:1;}96%,100%{stroke-dashoffset:0;opacity:0;}}
+@keyframes uArea{0%,30%{opacity:0;}50%,86%{opacity:1;}96%,100%{opacity:0;}}
+@keyframes uDot{0%,36%{transform:scale(0);}46%,86%{transform:scale(1);}96%,100%{transform:scale(0);}}
+@keyframes uVal{0%,40%{opacity:0;transform:translateY(4px);}50%,86%{opacity:1;transform:none;}96%,100%{opacity:0;}}
+
+/* ── 09 fljótandi spjöld ──────────────────────────────────────── */
+.u-cards{position:relative;width:56%;aspect-ratio:4/3;}
+.u-cards i{position:absolute;inset:0;display:flex;flex-direction:column;gap:9%;padding:12%;border-radius:12px;background:#fff;
+  border:1px solid rgba(11,12,13,.1);box-shadow:0 22px 44px rgba(11,12,13,.10);}
+.u-cards i s{display:block;height:8%;border-radius:4px;background:rgba(13,70,89,.16);text-decoration:none;}
+.u-cards i s:first-child{width:52%;height:12%;background:var(--navy);}
+.u-cards i s:last-child{width:70%;}
+.u-cards .c1{transform:translate3d(-12%,12%,0);}
+.u-cards .c2{transform:translate3d(0,0,44px);}
+.u-cards .c3{transform:translate3d(12%,-12%,88px);}
+.u-cards .c3 s:first-child{background:var(--slate);}
+
+/* ── 10 litaspjöld: pallettan breiðir úr sér eins og litabók ─────── */
+.u-swatch{position:relative;width:72%;aspect-ratio:1;}
+.u-swatch i{position:absolute;left:31%;bottom:12%;width:38%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;font-style:normal;transform-origin:50% 120%;
+  animation:uFan 6s cubic-bezier(.5,0,.2,1) infinite both;}
+.u-swatch i::before{content:'';flex:1;background:var(--c);}
+.u-swatch i span{flex:0 0 26%;display:flex;align-items:center;padding:0 12%;background:#fff;}
+.u-swatch i span s{display:block;width:60%;height:5px;border-radius:3px;background:rgba(13,70,89,.25);}
+.u-swatch i.type{justify-content:center;align-items:center;}
+.u-swatch i.type::before{display:none;}
+.u-swatch i.type b{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(30px,3.4vw,44px);letter-spacing:-.03em;color:var(--navy);line-height:1;}
+.u-swatch i.type span{flex:none;padding:0;margin-top:10px;background:none;width:40%;justify-content:center;}
+.u-swatch i.type span s{width:100%;}
+@keyframes uFan{0%,12%,92%,100%{transform:rotate(0deg);}40%,70%{transform:rotate(var(--r));}}
+
+/* ── 11 leit: þinn vefur klifrar upp í fyrsta sæti ───────────────── */
+.u-rank{position:relative;width:74%;aspect-ratio:1;}
+.u-rank .search{position:absolute;left:0;right:0;top:0;height:15%;border-radius:999px;display:flex;align-items:center;gap:9px;
+  padding:0 7%;overflow:hidden;}
+.u-rank .search s{display:block;width:46%;height:6px;border-radius:3px;background:rgba(11,12,13,.16);}
+.u-rank .search .caret{display:block;width:1.5px;height:12px;margin-left:-5px;background:var(--navy);animation:uBlink 1s steps(1) infinite;}
+.u-rank .mag{position:relative;flex:0 0 auto;width:11px;height:11px;border:1.5px solid var(--navy);border-radius:50%;}
+.u-rank .mag::after{content:'';position:absolute;right:-5px;bottom:-3px;width:6px;height:1.5px;background:var(--navy);transform:rotate(45deg);}
+.u-rank .list{position:absolute;left:0;right:0;top:22%;bottom:0;}
+.u-rank .res{position:absolute;left:0;right:0;height:29%;top:calc(var(--p) * 35.5%);padding:0 7%;
+  display:flex;flex-direction:column;justify-content:center;gap:7px;border-radius:12px;
+  box-shadow:0 12px 26px rgba(11,12,13,.07);transition:top .9s cubic-bezier(.3,1.25,.4,1);}
+.u-rank .res b{display:block;height:7px;width:52%;border-radius:3px;background:rgba(13,70,89,.3);}
+.u-rank .res s{display:block;height:5px;width:62%;border-radius:3px;background:rgba(13,70,89,.12);}
+.u-rank .res s + s{width:46%;}
+.u-rank .res.me{z-index:2;border-color:rgba(13,70,89,.4);}
+.u-rank .res.me b{background:var(--navy);}
+.u-rank .pos{position:absolute;right:7%;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--slate);}
+.u-rank .me .pos{background:var(--navy);color:var(--cream);border-radius:999px;padding:4px 8px;}
+
+/* ── 12 spjall: spurning, svar á leiðinni, flokkað ───────────────── */
+.u-chat{position:relative;width:76%;}
+.u-chat .card{padding:8% 7%;display:flex;flex-direction:column;gap:10px;}
+.u-chat .me{align-self:flex-end;width:56%;background:var(--navy);padding:11px 13px;border-radius:14px 14px 4px 14px;
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;animation:uChatMe 9s var(--u-e) infinite both;}
+.u-chat .me s{display:block;width:100%;height:6px;border-radius:3px;background:rgba(243,240,234,.7);}
+.u-chat .me s + s{width:58%;}
+.u-chat .ai{align-self:flex-start;width:78%;position:relative;background:rgba(13,70,89,.07);border-radius:14px 14px 14px 4px;
+  padding:11px 13px;display:flex;flex-direction:column;gap:6px;animation:uChatAi 9s var(--u-e) infinite both;}
+.u-chat .ai s{display:block;height:6px;border-radius:3px;background:rgba(13,70,89,.24);transform-origin:left center;
+  animation:uChatLine 9s var(--u-e) infinite both;}
+.u-chat .ai s:nth-of-type(2){width:86%;}
+.u-chat .ai s:nth-of-type(3){width:58%;}
+.u-chat .dots{position:absolute;left:13px;top:50%;transform:translateY(-50%);display:flex;gap:4px;animation:uChatDots 9s linear infinite both;}
+.u-chat .dots i{width:5px;height:5px;border-radius:50%;background:var(--slate);display:block;animation:uBounce .9s ease-in-out infinite;}
+.u-chat .dots i:nth-child(2){animation-delay:.15s;}
+.u-chat .dots i:nth-child(3){animation-delay:.3s;}
+.u-chat .tag{align-self:flex-start;display:flex;align-items:center;gap:7px;border:1px solid rgba(11,12,13,.2);border-radius:999px;padding:7px 11px;
+  animation:uChatTag 9s var(--u-e) infinite both;}
+.u-chat .tag s{display:block;width:64px;height:5px;border-radius:3px;background:rgba(13,70,89,.3);}
+.u-chat .tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sage);}
+@keyframes uChatMe{0%{opacity:0;transform:translateY(8px);}6%{opacity:1;transform:none;}88%{opacity:1;}96%,100%{opacity:0;}}
+@keyframes uChatAi{0%,12%{opacity:0;transform:translateY(8px);}18%{opacity:1;transform:none;}88%{opacity:1;}96%,100%{opacity:0;}}
+@keyframes uChatDots{0%,16%{opacity:0;}20%,36%{opacity:1;}40%,100%{opacity:0;}}
+@keyframes uChatLine{0%,38%{opacity:0;transform:scaleX(.3);}46%{opacity:1;transform:scaleX(1);}88%{opacity:1;}96%,100%{opacity:0;}}
+@keyframes uChatTag{0%,54%{opacity:0;transform:translateY(6px) scale(.96);}62%{opacity:1;transform:none;}88%{opacity:1;}96%,100%{opacity:0;}}
+@keyframes uBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+
+@media (prefers-reduced-motion:reduce){
+  .u-tilt,.u-tilt *,.u-stack i,.u-sonar i,.u-lock *,.u-swatch i,.u-lbl::before{animation:none !important;transition:none !important;}
+  .u-lock .ok{transform:translateZ(30px);}
+  .u-sonar i{opacity:.35;transform:scale(.6);}
+  .u-sonar i:nth-child(2){transform:scale(.8);}
+  .u-sonar i:nth-child(3){transform:scale(1);}
+  .u-swatch i{transform:rotate(var(--r));}
+}

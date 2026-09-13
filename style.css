@@ -85,9 +85,11 @@ header{height:92px;position:relative;z-index:2;background:transparent;}
   nav ul li a{
     font-family:'DM Mono',monospace;font-weight:500;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
     color:var(--black);text-decoration:none;opacity:0.65;position:relative;
-    transition:font-size .5s cubic-bezier(.3,.7,.25,1);
+    transition:font-size .5s cubic-bezier(.3,.7,.25,1), opacity .25s ease;
   }
   nav.wrap.pill ul li a{font-size:12px;}
+  /* hlekkurinn sjálfur lýsist líka upp, ekki bara strikið undir honum */
+  nav ul li a:hover{opacity:1;}
   nav ul li a.active{opacity:1;}
   nav ul li a.active::after{
     content:'';position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--black);
@@ -381,7 +383,9 @@ body.tone-amber{
     display:inline-block;overflow:hidden;vertical-align:bottom;
     padding-bottom:.16em;margin-bottom:-.16em;
     padding-right:.08em;margin-right:-.08em;
-    padding-top:.16em;margin-top:-.16em;
+    /* .32em að ofan: kommur á hástöfum (Ý, Í, Á, Ó) ná upp fyrir hástafahæð
+       og klipptust af þegar maskinn var aðeins .16em */
+    padding-top:.32em;margin-top:-.32em;
   }
   .fx .fx-w > span{
     display:inline-block;
@@ -399,7 +403,10 @@ body.tone-amber{
   .menu-btn{
     display:none;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
+    background:none;border:none;color:var(--black);cursor:pointer;
+    /* snertiflöturinn er stækkaður í ~44px með padding sem neikvæð
+       spássía étur upp aftur - textinn situr nákvæmlega þar sem hann var */
+    padding:14px 0 14px 16px;margin:-14px 0 -14px -16px;
   }
   body.on-dark .menu-btn{color:var(--cream);}
   .mobile-menu{
@@ -429,7 +436,10 @@ body.tone-amber{
     top:32px;transform:translateY(-50%);
     right:20px;
     font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-    background:none;border:none;color:var(--black);cursor:pointer;padding:6px 0;
+    background:none;border:none;color:var(--black);cursor:pointer;
+    /* sama stækkun og .menu-btn: kassinn vex til vinstri og jafnt upp/niður
+       (miðjaður með translateY) svo textinn hreyfist ekki um pixil */
+    padding:14px 0 14px 16px;
   }
 
   @media (max-width:760px){
@@ -442,6 +452,65 @@ body.tone-amber{
     .logo-mark svg{height:32px;}
     nav.wrap.pill{max-width:250px;padding:12px 24px;}
   }
+
+/* ── FÓKUS FYRIR LYKLABORÐ: sami navy-litur og annars staðar í stað
+     sjálfgefna appelsínugula/bláa rammans. :focus-visible kviknar aðeins
+     við lyklaborðsnotkun, aldrei við mús/snertingu, svo þetta sést ekki
+     hjá þeim sem smella. Reitir sem eiga sinn eigin fókus-stíl (vefúttektar-
+     inputið, sambandsformið) halda honum: þeir hafa hærri sérhæfni. ── */
+  :focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+  .btn-primary:focus-visible{outline-offset:4px;}
+  /* heil röð er hlekkur: ramminn helst innan raðarinnar svo hann skeri
+     ekki strikin milli raða */
+  .work-row:focus-visible{outline-offset:-4px;}
+  body.on-dark :focus-visible{outline-color:var(--cream);}
+
+/* ── SNERTITÆKI: örin á þjónustu-/verkefnaröðunum birtist annars aðeins
+     við hover, sem er ekki til á síma. Þar er hún sýnileg í hvíld svo
+     röðin lesist sem hlekkur. ── */
+  @media (hover:none){
+    .work-index .work-row .arrow{opacity:1;transform:none;}
+  }
+
+/* ── SPJALDTÖLVUBREIDD (761-1000px): pillurnar í röðunum brotna ekki, svo
+     röð með fjórar pillur (t.d. Vefþróun á þjónustusíðunni) kreisti textann
+     niður í ~280px. Hér mega þær brotna í tvær línur, hægri-stilltar. ── */
+  @media (min-width:761px) and (max-width:1000px){
+    .work-index .work-row .work-tags{flex-wrap:wrap;max-width:300px;}
+  }
+
+/* ── MOBILE-TAKTUR: bilið frá inngangi undirsíðu niður að fyrsta strikinu
+     var 150-170px á síma, svo strikið sat eitt í tómu svæði. Þéttara hér,
+     óbreytt á stærri skjám. body/.top-forskeytin eru til að vinna
+     sérhæfni-kapphlaupið við reglurnar sem hver undirsíða skilgreinir. ── */
+  @media (max-width:760px){
+    body .page-hero{padding-bottom:clamp(36px,5vh,48px);}
+    .top + .work, .top + .team{padding-top:clamp(44px,6vh,64px);}
+  }
+
+
+/* ── HLIÐARSKROLL: faldi splash-skjárinn (hringirnir eru allt að 152vw) og
+     .orb (inset -25vw) náðu langt út fyrir skjáinn. Sveip á stýrifleti gat þá
+     fært síðuna til hliðar á meðan fasta navið sat kyrrt, svo ekkert virtist
+     í gridinu. overflow-x:clip (ekki hidden) býr ekki til skroll-samhengi og
+     truflar því hvorki lóðrétt skroll né position:sticky. ── */
+  .site{overflow-x:clip;}
+  .splash{overflow:hidden;}
+
+
+/* ── FÓTUR Í MOBILE: media-reglan fyrir fótinn stendur OFAR í skránni en
+     grunnreglan, svo align-items:center og stóra margin-top í grunnreglunni
+     unnu. Fóturinn miðjaðist því í mobile á meðan allt annað er vinstrijafnað.
+     Hærri sérhæfni hér lagar það án þess að færa kóðann til. ── */
+  @media (max-width:760px){
+    .footer .footer-top{align-items:flex-start;}
+    .footer .footer-bottom{margin-top:clamp(28px,5vh,48px);}
+  }
+
+/* ── FYRIRSAGNIR Á UNDIRSÍÐUM MEÐ KOMMUM: línuhæðin 0.9 lét kommuna á
+     seinni línunni (t.d. Í í "Í leit" eða "Í boði") rekast í fyrri línuna.
+     Aðeins meira loft milli lína, sama útlit að öðru leyti. ── */
+  .page-hero h1{line-height:1;gap:.08em;}
 
 /* ── FÓTUR: stórt netfang, staðsetningar-pillur og botnlína ─────── */
   html,body{overscroll-behavior-y:none;}
