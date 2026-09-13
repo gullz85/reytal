@@ -769,19 +769,10 @@
     display:flex;flex-direction:column;align-items:flex-start;
   }
   .work-head h2 .accent{color:var(--navy);}
-  /* "Fleiri verkefni" er hlekkur áfram, ekki önnur fyrirsögn: sama letur og
-     stóra netfangið í fætinum (DM Sans 500, lágstafir), minna og léttara
-     svo það keppi ekki við "Valin verkefni" fyrir ofan sviðið */
-  .work-more{position:relative;z-index:1;padding:clamp(36px,6vh,64px) 0 0;}
-  .work-more h2{
-    font-family:'DM Sans',sans-serif;font-weight:500;text-transform:none;
-    font-size:clamp(24px,2.6vw,36px);line-height:1.1;letter-spacing:-0.02em;
-  }
-  .work-more h2 a{color:var(--black);text-decoration:none;display:inline-flex;align-items:baseline;gap:.35em;transition:color .3s ease;}
-  .work-more h2 .accent{color:inherit;}
-  .work-more h2 a:hover{color:var(--navy);}
-  .work-more .outro-arrow{display:inline-block;font-size:.8em;color:var(--slate);transition:transform .35s cubic-bezier(.25,.6,.25,1),color .3s ease;}
-  .work-more h2 a:hover .outro-arrow{transform:translate(4px,-4px);color:var(--navy);}
+  /* "Fleiri verkefni": miðjaður hnappur undir sviðinu. Sviðið er edge to edge
+     og samhverft, svo næsta skref á heima á miðjunni. Sami hnappur og
+     "Hafa samband" í hero-inu. */
+  .work-more{position:relative;z-index:1;padding:clamp(40px,6vh,72px) 0 0;text-align:center;}
 
   /* ── VERKEFNI: valin verk, mynd + texti + pillur með því sem var gert ── */
   /* ── SHOWCASE: hvert verkefni tekur yfir skjáinn með sínum lit ──
@@ -1859,7 +1850,7 @@
 
 <section class="work-more">
   <div class="wrap">
-    <h2><a href="/verkefni">Fleiri <span class="accent">verkefni</span> <span class="outro-arrow">↗︎</span></a></h2>
+    <a href="/verkefni" class="btn-primary"><span class="btn-label">Fleiri verkefni ↗︎</span></a>
   </div>
 </section>
 
