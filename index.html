@@ -1149,7 +1149,11 @@
      svo án þess yfirskrifaði þessi regla mobile-stærðina á h1 (hún kemur
      neðar í skránni og hefur sömu sérhæfni) og fyrirsögnin varð pínulítil. */
   @media (max-height:960px) and (min-width:761px){
-    h1{font-size:clamp(42px,6.6vw,92px);}
+    /* Áður clamp(42px,6.6vw,92px): á 14" MacBook (um 1512x860) festist
+       fyrirsögnin í 92px með stóru auðu svæði í kring. Nú ræður sú vídd
+       sem fyrr þrengir að - breiddin (11vw) eða hæðin (19vh) - svo hún
+       fyllir skjáinn en hero-ið kemst samt fyrir á einum skjá. */
+    h1{font-size:clamp(56px,min(11vw,19vh),180px);}
     .hero{padding:clamp(40px,6vh,72px) 0;}
     .hero-copy{margin-top:clamp(48px,7vh,88px);}
     .hero-copy p{font-size:17px;max-width:480px;}
