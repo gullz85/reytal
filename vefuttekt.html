@@ -1074,6 +1074,21 @@
       });
   });
 
+  // FRÁ FORSÍÐUNNI: lénið kemur í slóðinni (/vefuttekt?domain=…). Reiturinn
+  // er fylltur og greiningin ræst strax, svo gesturinn þurfi ekki að slá það
+  // inn aftur. Slóðin er hreinsuð um leið, annars færi ný greining af stað
+  // við hverja endurhleðslu eða þegar komið er til baka úr skýrslunni.
+  (function () {
+    var q = "";
+    try { q = new URLSearchParams(window.location.search).get("domain") || ""; } catch (e) { return; }
+    q = q.trim().slice(0, 253);
+    if (!q) return;
+    try { history.replaceState(null, "", window.location.pathname + window.location.hash); } catch (e) {}
+    input.value = q;
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { cancelable: true }));
+  })();
+
   // TIL BAKA ÚR SKÝRSLUNNI: þegar ýtt er á bakk-hnappinn skilar vafrinn
   // síðunni úr bfcache nákvæmlega eins og hún var þegar skýrslan opnaðist:
   // formið læst og "Úttektin er tilbúin. Opna…" í stöðulistanum. Þá er
