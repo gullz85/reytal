@@ -37,6 +37,7 @@
 </script>
 
 <link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="reytal-ui.css?v=2">
 <style>
   /* ── VEFÚTTEKT: lendingarsíða ────────────────────────────────────────
      Sama myndmál og aðrar undirsíður (page-hero, wrap, btn-primary). Það
@@ -277,7 +278,9 @@
   .va-form .btn-primary{min-height:66px;padding:20px 38px;font-size:17px;}
 
   /* ── SÝNISHORN AF ÚTTEKT: teiknað í HTML/CSS, alltaf skarpt ────── */
-  .va-mock{position:relative;z-index:1;}
+  /* perspective lengri en í litlu elementunum (1400px): sama halli, en
+     minni bjögun á stóru spjaldi með texta sem þarf að lesast */
+  .va-mock{position:relative;z-index:1;perspective:1400px;}
   /* Hallinn er RANGSÆLIS: textinn er vinstra megin og kortið hægra megin,
      svo brúnin sem snýr að textanum lækkar og kortið opnast á móti auganu
      sem kemur úr lestrinum. Réttsælis halli hallar frá lesandanum og les
@@ -292,8 +295,9 @@
     border-radius:24px;
     box-shadow:0 24px 70px rgba(11,12,13,0.13);
     padding:clamp(22px,2.6vw,32px);
-    transform:rotate(-1.2deg);
-    transform-origin:50% 60%;
+    /* hallinn og músarhreyfingin koma úr .u-tilt (reytal-ui.css) svo
+       sýnishornið sé hluti af sömu fjölskyldu og elementin á þjónustusíðunum */
+    transform-origin:50% 50%;
   }
 
   /* INNKOMA: kortið kemur inn frá hægri, örlítið neðar og minna, og sest
@@ -321,24 +325,13 @@
        compositing-lagi lifandi og á aldrei að standa varanlega. */
     html.js .va-mock.is-in{will-change:auto;}
 
-    .mock-card{
-      transition:transform .55s cubic-bezier(.25,.6,.25,1),
-                 box-shadow .55s ease;
-    }
-    /* Hover: réttist upp og lyftist örlítið - staðfestir að þetta sé
-       raunverulegt viðmót en ekki flöt mynd. Bæði hover OG focus-within
-       svo þeir sem fara um með lyklaborði fái sömu svörun. */
-    .va-mock:hover .mock-card,
-    .va-mock:focus-within .mock-card{
-      transform:rotate(0deg) translateY(-6px);
-      box-shadow:0 34px 84px rgba(11,12,13,0.17);
-    }
-    /* Snertiskjáir hafa ekkert hover-ástand; án þessa "festist" kortið
-       í hover-stöðu eftir að ýtt hefur verið á það. */
-    @media (hover:none){
-      .va-mock:hover .mock-card{transform:rotate(-1.2deg);box-shadow:0 24px 70px rgba(11,12,13,0.13);}
-    }
   }
+  /* Í mobile fyllir spjaldið nær alla breiddina, og fullur halli (18°) ýtti
+     hægri brúninni út að skjábrún og skekkti textann. Mýkri halli þar. */
+  @media (max-width:760px){
+    .mock-card.u-tilt{animation-name:vaTiltSoft;}
+  }
+  @keyframes vaTiltSoft{0%,100%{transform:rotateX(8deg) rotateY(-7deg);}50%{transform:rotateX(10deg) rotateY(-3deg);}}
   /* Enginn hreyfihrifning: kortið er einfaldlega á sínum stað strax. */
   @media (prefers-reduced-motion:reduce){
     html.js .va-mock{opacity:1;transform:none;}
@@ -414,27 +407,32 @@
     gap:clamp(20px,3vw,36px);
     margin-top:clamp(36px,5vh,52px);
   }
+  /* sama uppskrift og elementin á þjónustusíðunum: hvít plata, element
+     á rjómalitum fleti efst, texti undir */
   .how-card{
-    position:relative;overflow:hidden;
-    border:none;border-radius:22px;
-    padding:clamp(26px,3.2vw,36px);
-    background:var(--black);color:var(--cream);
+    position:relative;display:flex;flex-direction:column;
+    background:#fff;border:1px solid rgba(11,12,13,.08);border-radius:22px;
+    padding:clamp(12px,1.2vw,14px) clamp(12px,1.2vw,14px) clamp(24px,2.6vw,30px);
+    box-shadow:0 18px 40px rgba(11,12,13,.06);
   }
-  .how-card::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(360px 280px at 18% 0%, var(--glow,rgba(76,124,147,0.5)), transparent 65%);
+  .how-el{
+    position:relative;aspect-ratio:4/3;border-radius:14px;background:var(--cream);
+    display:grid;place-items:center;overflow:hidden;perspective:900px;
   }
-  .how-card > *{position:relative;z-index:1;}
+  .how-el .u-gauge{width:52%;}
+  .how-el .u-rank{width:58%;}
+  .how-el .u-lock{width:62%;}
+  .how-card .num,.how-card h3,.how-card p{padding:0 clamp(12px,1.4vw,18px);}
   .how-card .num{
     font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;
-    color:rgba(243,240,234,0.6);
+    color:var(--slate);margin-top:clamp(20px,2.4vw,26px);
   }
   .how-card h3{
     font-family:'DM Sans',sans-serif;font-weight:700;
     font-size:clamp(19px,2vw,24px);letter-spacing:-0.01em;
-    margin-top:12px;color:var(--cream);
+    margin-top:10px;color:var(--black);
   }
-  .how-card p{font-size:15px;line-height:1.6;color:rgba(243,240,234,0.78);margin-top:10px;}
+  .how-card p{font-size:15px;line-height:1.6;color:#2a2a2a;margin-top:10px;}
   @media (max-width:860px){ .how-grid{grid-template-columns:1fr;} }
 
   .section-head{max-width:640px;}
@@ -608,7 +606,7 @@
   <div class="wrap">
     <div class="va-hero">
     <div class="va-hero-main">
-    <h1><span>Sjáðu</span><span>stöðuna</span></h1>
+    <h1><span>Sjáðu</span><span class="flip-word">stöðuna</span></h1>
     <p class="lede">
       Sláðu inn vefinn þinn. Greiningarvél okkar les hann, mælir tækni, hraða,
       öryggi og sýnileika og skilar faglegri úttekt sem þú getur lesið strax.
@@ -653,7 +651,7 @@
 
     <!-- SÝNISHORN: dæmi um hvernig úttektin lítur út, teiknað í CSS -->
     <div class="va-mock" aria-hidden="true">
-      <div class="mock-card" id="mockCard">
+      <div class="mock-card u-tilt" id="mockCard">
         <div class="mock-head">
           <span class="mdot"></span><span class="mdot"></span><span class="mdot"></span>
           <span class="mock-url" id="mockUrl">mittfyrirtaeki.is</span>
@@ -760,17 +758,20 @@
       <h2>Veistu hvernig vefnum þínum gengur?</h2>
     </div>
     <div class="how-grid">
-      <div class="how-card" style="--glow:rgba(76,124,147,0.55)">
+      <div class="how-card">
+        <div class="how-el" aria-hidden="true"><div class="u-gauge" data-value="94"><div class="arc"></div><div class="needle"></div><div class="val"><b>0</b><s></s></div></div></div>
         <div class="num">Hraði</div>
         <h3>Fyrsta sýn tekur sekúndur</h3>
         <p>Hægur vefur missir heimsóknir áður en nokkur les fyrsta orðið. Úttektin sýnir svart á hvítu hvort vefurinn þinn svarar nógu hratt.</p>
       </div>
-      <div class="how-card" style="--glow:rgba(190,191,166,0.4)">
+      <div class="how-card">
+        <div class="how-el" aria-hidden="true"><div class="u-rank u-tilt"><div class="search u-plate"><span class="mag"></span><s></s><i class="caret"></i></div><div class="list"><div class="res u-plate" style="--p:0"><b></b><s></s><s></s><span class="pos">#1</span></div><div class="res u-plate" style="--p:1"><b></b><s></s><s></s><span class="pos">#2</span></div><div class="res me u-plate" style="--p:2"><b></b><s></s><s></s><span class="pos">#3</span></div></div></div></div>
         <div class="num">Sýnileiki</div>
         <h3>Google er að meta þig núna</h3>
         <p>Leitarvélar verðlauna tæknilega heilbrigða vefi. Úttektin finnur það sem heldur þér neðar í leitarniðurstöðum en þú átt skilið.</p>
       </div>
-      <div class="how-card" style="--glow:rgba(198,138,45,0.45)">
+      <div class="how-card">
+        <div class="how-el" aria-hidden="true"><div class="u-lock"><i class="ring"></i><i class="ring"></i><div class="plate u-plate u-tilt"><div class="lock"><span class="shackle"></span><span class="body"></span></div><span class="ok">✓</span></div></div></div>
         <div class="num">Öryggi</div>
         <h3>Traust byggist á smáatriðum</h3>
         <p>Útrunnin skírteini og gamlar viðbætur fæla bæði viðskiptavini og leitarvélar. Betra að finna það sjálfur en að láta aðra reka sig á það.</p>
@@ -851,6 +852,7 @@
 </div><!-- /.site -->
 
 <script src="main.js?v=8"></script>
+<script src="reytal-ui.js?v=2"></script>
 
 <script>
 /* ============================================================================
@@ -1070,6 +1072,20 @@
         showError(FALLBACK.network);
         lock(false);
       });
+  });
+
+  // TIL BAKA ÚR SKÝRSLUNNI: þegar ýtt er á bakk-hnappinn skilar vafrinn
+  // síðunni úr bfcache nákvæmlega eins og hún var þegar skýrslan opnaðist:
+  // formið læst og "Úttektin er tilbúin. Opna…" í stöðulistanum. Þá er
+  // síðan hreinsuð svo hægt sé að skanna annan vef strax.
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    lock(false);
+    clearError();
+    status.hidden = true;
+    if (hero) hero.classList.remove("is-scanning");
+    scanOff();
+    resetSteps();
   });
 })();
 </script>
