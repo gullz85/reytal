@@ -34,6 +34,7 @@
 </script>
 
 <link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="reytal-ui.css?v=2">
 <style>
   
   
@@ -136,80 +137,57 @@
      fætur öðru, með örlitlum halla sem réttir úr sér á leiðinni ── */
 
 
-  /* ── LOGO-HRINGEKJA: lóðréttur stafli af viðskiptavina-logoum hægra
-     megin við fyrirsögnina - miðjupillan er virk og stærri, hinar
-     dofna út fyrir ofan og neðan (sbr. hero-mynstrið í viðmiðuninni).
-     Röðin stokkast við hvert refresh og smellur flettir áfram. ── */
+  /* ── LOGO-VAFRAGLUGGI: vafragluggi sem hallar í rými (sama og
+     Vafragluggi-elementið í reytal-ui.css) og byggist upp aftur og aftur
+     með nýju logoi efst: vefirnir sem við smíðuðum. Í tölvu hægra megin
+     við fyrirsögnina, í síma undir textanum. Kemur í stað logo-hringekjunnar
+     og logo-borðans. ── */
   .page-hero .wrap{position:relative;}
-  .logo-carousel{
-    /* aðeins ofar en miðjan svo pillan sitji á milli línanna
-       "Nokkur" og "Verkefni" í fyrirsögninni */
-    position:absolute;right:0;top:42%;
-    width:min(360px,30vw);height:360px;
-    transform:translateY(-50%);
-    z-index:1;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
+  .logo-win-host{
+    position:absolute;right:0;top:50%;transform:translateY(-50%);
+    width:min(420px,34vw);aspect-ratio:1;
+    display:grid;place-items:center;perspective:1100px;z-index:1;
   }
-  /* GLER-PILLAN: ein föst pilla í miðjunni sem hreyfist aldrei -
-     logoin fljúga inn í hana og út úr henni */
-  .logo-frame{
-    position:absolute;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    width:min(250px,24vw);height:76px;
-    border:1px solid rgba(11,12,13,0.25);border-radius:999px;
-    /* sama gler og navið fær þegar skrollað er: sami litur, sama blur */
-    background:rgba(243,240,234,0.45);
-    backdrop-filter:blur(22px) saturate(180%);
-    -webkit-backdrop-filter:blur(22px) saturate(180%);
-    box-shadow:0 8px 32px rgba(11,12,13,0.10);
+  .logo-win{position:relative;width:92%;aspect-ratio:4/3.1;}
+  .logo-win .inner{position:absolute;inset:0;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+  .logo-win .lw-body{flex:1;padding:7%;display:flex;flex-direction:column;gap:6%;}
+  .logo-win .lw-brand{flex:0 0 36%;position:relative;border-radius:10px;background:rgba(243,240,234,.8);}
+  /* hvít SVG þvinguð í svart með brightness(0), eins og annars staðar */
+  .logo-win .lw-brand img{
+    position:absolute;left:50%;top:50%;display:block;width:auto;height:auto;max-width:62%;max-height:52%;object-fit:contain;
+    filter:brightness(0);opacity:0;transform:translate(-50%,-50%) scale(.94);
+    transition:opacity .45s ease,transform .6s cubic-bezier(.25,.6,.25,1);
   }
-  .logo-pill{
-    position:absolute;left:50%;top:50%;
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .6s cubic-bezier(.25,.6,.25,1),opacity .6s;
-    will-change:transform,opacity;
-    pointer-events:none;
-    opacity:0;
-  }
-  /* hvít SVG þvinguð í svart með brightness(0), eins og á forsíðunni */
-  .logo-pill img{
-    display:block;height:30px;width:auto;max-width:180px;object-fit:contain;
-    filter:brightness(0);
-  }
-  /* hverfur þegar plássið dugir ekki lengur við hliðina á fyrirsögninni,
-     og birtist aldrei í mobile */
+  .logo-win .lw-brand img.on{opacity:.86;transform:translate(-50%,-50%) scale(1);}
+  .logo-win .lw-lines{display:flex;flex-direction:column;gap:9px;}
+  .logo-win .lw-lines s{display:block;height:6px;border-radius:3px;background:rgba(13,70,89,.14);transform-origin:left;}
+  .logo-win .lw-lines s:nth-child(1){width:74%;}
+  .logo-win .lw-lines s:nth-child(2){width:52%;}
+  .logo-win .lw-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6%;}
+  .logo-win .lw-cols b{display:block;border-radius:8px;background:rgba(190,191,166,.4);transform-origin:bottom;}
+  .logo-win.build .lw-lines s{animation:lwGrow .8s cubic-bezier(.25,.6,.25,1) both;}
+  .logo-win.build .lw-lines s:nth-child(2){animation-delay:.08s;}
+  .logo-win.build .lw-cols b{animation:lwGrowY .8s cubic-bezier(.25,.6,.25,1) both;}
+  .logo-win.build .lw-cols b:nth-child(2){animation-delay:.08s;}
+  .logo-win.build .lw-cols b:nth-child(3){animation-delay:.16s;}
+  @keyframes lwGrow{from{transform:scaleX(0);opacity:0;}to{transform:none;opacity:1;}}
+  @keyframes lwGrowY{from{transform:scaleY(0);opacity:0;}to{transform:none;opacity:1;}}
+  .logo-win .lw-chip{position:absolute;right:-10%;bottom:12%;transform:translateZ(50px);display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;}
+  .logo-win .lw-chip i{width:6px;height:6px;border-radius:50%;background:var(--navy);animation:lwPulse 1.8s ease-in-out infinite;}
+  .logo-win .lw-chip span{display:flex;gap:4px;}
+  .logo-win .lw-chip b{display:block;width:14px;height:4px;border-radius:2px;background:rgba(13,70,89,.16);transition:background .3s ease;}
+  .logo-win .lw-chip b.on{background:var(--navy);}
+  @keyframes lwPulse{0%,100%{box-shadow:0 0 0 0 rgba(13,70,89,.35);}50%{box-shadow:0 0 0 6px rgba(13,70,89,0);}}
   @media (max-width:1100px){
-    .logo-carousel{display:none;}
+    .logo-win-host{position:relative;top:auto;right:auto;transform:none;width:min(360px,100%);aspect-ratio:5/4;margin:clamp(28px,5vh,44px) auto 0;}
+    /* merkið fer ekki út fyrir skjábrún í mjóum glugga */
+    .logo-win .lw-chip{right:-3%;}
+    .logo-win.u-tilt{animation-name:lwTiltSoft;}
   }
-
-  /* ── MOBILE: lárétt logo-marquee undir fyrirsögninni, sama og á
-     forsíðunni en án striksins og án "Meðal viðskiptavina" ── */
-  .hero-marquee{display:none;margin-top:clamp(28px,5vh,44px);}
-  .hero-marquee .marquee{
-    display:flex;overflow:hidden;
-    -webkit-mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-    mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  }
-  .hero-marquee .marquee-track{
-    display:flex;align-items:center;gap:48px;
-    padding-right:48px;
-    flex-shrink:0;
-    animation:heroMarquee 42s linear infinite;
-  }
-  .hero-marquee .marquee-track img{
-    height:26px;width:auto;max-width:110px;object-fit:contain;
-    filter:brightness(0);
-    opacity:0.45;
-  }
-  @keyframes heroMarquee{
-    from{transform:translateX(0);}
-    to{transform:translateX(-100%);}
-  }
+  @keyframes lwTiltSoft{0%,100%{transform:rotateX(8deg) rotateY(-8deg);}50%{transform:rotateX(10deg) rotateY(-3deg);}}
   @media (prefers-reduced-motion:reduce){
-    .hero-marquee .marquee-track{animation:none;}
-  }
-  @media (max-width:1100px){
-    .hero-marquee{display:block;}
+    .logo-win.build .lw-lines s,.logo-win.build .lw-cols b,.logo-win .lw-chip i{animation:none;}
+    .logo-win .lw-brand img{transition:none;}
   }
 </style>
 </head>
@@ -291,44 +269,17 @@
   <div class="wrap">
     <h1><span>Nokkur</span><span class="flip-word">Verkefni</span></h1>
     <p class="lede">Nokkur valin verkefni frá síðustu árum.</p>
-    <div class="logo-carousel" id="logoCarousel" aria-hidden="true"><div class="logo-frame"></div></div>
-    <!-- mobile: sama marquee og á forsíðunni, án striks og labels -->
-    <div class="hero-marquee" aria-hidden="true">
-      <div class="marquee">
-        <div class="marquee-track">
-          <img src="logo-thjodkirkjan.svg" alt="Þjóðkirkjan" style="height:20px;">
-          <img src="logo-lbhi.svg" alt="LBHÍ" style="height:20px;">
-          <img src="logo-verkis.svg" alt="Verkís">
-          <img src="logo-olis.svg" alt="Olís">
-          <img src="logo-sjova.svg" alt="Sjóvá">
-          <img src="logo-olgerdin.svg" alt="Ölgerðin">
-          <img src="logo-arnarlax.svg" alt="Arnarlax">
-          <img src="logo-samgongustofa.svg" alt="Samgöngustofa">
-          <img src="logo-nox.svg" alt="Nox Medical">
-          <img src="logo-stolpi.svg" alt="Stólpi Gámar">
-          <img src="logo-klasi.svg" alt="Klasi">
-          <img src="logo-safir.svg" alt="Safír">
-          <img src="logo-kjarkur.svg" alt="Kjarkur endurhæfing">
-          <img src="logo-pipar.svg" alt="Pipar\TBWA">
-          <img src="logo-regla.svg" alt="Regla" style="height:22px;">
+    <div class="logo-win-host" aria-hidden="true">
+      <div class="logo-win u-tilt" id="logoWin">
+        <div class="inner u-plate">
+          <div class="u-bar"><i></i><i></i><i></i><span class="url"></span></div>
+          <div class="lw-body">
+            <div class="lw-brand" id="logoWinBrand"></div>
+            <div class="lw-lines"><s></s><s></s></div>
+            <div class="lw-cols"><b></b><b></b><b></b></div>
+          </div>
         </div>
-        <div class="marquee-track" aria-hidden="true">
-          <img src="logo-thjodkirkjan.svg" alt="" style="height:20px;">
-          <img src="logo-lbhi.svg" alt="" style="height:20px;">
-          <img src="logo-verkis.svg" alt="">
-          <img src="logo-olis.svg" alt="">
-          <img src="logo-sjova.svg" alt="">
-          <img src="logo-olgerdin.svg" alt="">
-          <img src="logo-arnarlax.svg" alt="">
-          <img src="logo-samgongustofa.svg" alt="">
-          <img src="logo-nox.svg" alt="">
-          <img src="logo-stolpi.svg" alt="">
-          <img src="logo-klasi.svg" alt="">
-          <img src="logo-safir.svg" alt="">
-          <img src="logo-kjarkur.svg" alt="">
-          <img src="logo-pipar.svg" alt="">
-          <img src="logo-regla.svg" alt="" style="height:22px;">
-        </div>
+        <div class="lw-chip u-plate"><i></i><span id="logoWinDots"><b class="on"></b><b></b><b></b></span></div>
       </div>
     </div>
   </div>
@@ -674,136 +625,34 @@
 
 <script src="main.js?v=8"></script>
 
+<script src="reytal-ui.js?v=2"></script>
 <script>
-// ── LOGO-HRINGEKJA: sömu logo og í marquee-inu á forsíðunni ──
+// ── LOGO-VAFRAGLUGGI: nýtt logo efst og síðan byggist upp aftur ──
 (function(){
-  var box = document.getElementById('logoCarousel');
-  if (!box) return;
-
-  var LOGOS = [
-    {src:'logo-thjodkirkjan.svg', h:22},
-    {src:'logo-lbhi.svg', h:22},
-    {src:'logo-regla.svg', h:24},
-    {src:'logo-verkis.svg'},
-    {src:'logo-olis.svg'},
-    {src:'logo-sjova.svg'},
-    {src:'logo-olgerdin.svg'},
-    {src:'logo-arnarlax.svg'},
-    {src:'logo-samgongustofa.svg'},
-    {src:'logo-nox.svg'},
-    {src:'logo-stolpi.svg'},
-    {src:'logo-klasi.svg'},
-    {src:'logo-safir.svg'},
-    {src:'logo-kjarkur.svg'},
-    {src:'logo-pipar.svg'}
-  ];
-
-  // stokka við hvert refresh svo röðin (og byrjunarlogoið) sé alltaf ný
+  var brand = document.getElementById('logoWinBrand');
+  var win = document.getElementById('logoWin');
+  var dots = document.getElementById('logoWinDots');
+  if (!brand || !win) return;
+  var LOGOS = ['arnarlax','verkis','olis','sjova','olgerdin','safir','klasi','nox','pipar',
+               'samgongustofa','stolpi','kjarkur','thjodkirkjan','lbhi','regla'];
+  // röðin stokkast við hverja hleðslu, svo nýtt logo birtist fyrst í hvert sinn
   for (var i = LOGOS.length - 1; i > 0; i--){
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = LOGOS[i]; LOGOS[i] = LOGOS[j]; LOGOS[j] = t;
+    var j = Math.floor(Math.random() * (i + 1)), t = LOGOS[i]; LOGOS[i] = LOGOS[j]; LOGOS[j] = t;
   }
-
-  var pills = LOGOS.map(function(l){
-    var d = document.createElement('div');
-    d.className = 'logo-pill';
-    var img = document.createElement('img');
-    img.alt = '';
-    if (l.h) img.style.height = l.h + 'px';
-    d.appendChild(img);
-    box.appendChild(d);
-    d._img = img;
-    d._src = l.src;
-    return d;
-  });
-
-  var N = 0;
-  var active = 0;
-  var STEP = 74;                   // px milli logoa í staflanum
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Stærð eftir fjarlægð frá pillunni: það sem er lengst frá (efst/neðst)
-  // er alltaf minnst og vex jafnt og þétt inn að miðju, þar sem stærsta
-  // logoið situr inni í glerpillunni. Áður fengu d=1 og d=2 sömu stærð,
-  // svo stiginn vantaði og staflinn leit flatur út.
-  var SCALE   = {0:1.12, 1:0.82, 2:0.56};
-  var OPACITY = {0:1,    1:0.34, 2:0.13};
-
-  function render(){
-    if (!N) return;
-    var half = Math.floor(N / 2);
-    pills.forEach(function(p, i){
-      // hringlaga fjarlægð frá virka logoinu: -2..2 er sýnilegi glugginn
-      var d = ((i - active) % N + N + half) % N - half;
-      var ad = Math.abs(d);
-      if (ad > 2){
-        p.style.opacity = 0;
-        p.style.transform = 'translate(-50%,-50%) translateY(' + (d > 0 ? 3 : -3) * STEP * 0.5 + 'px) scale(0.42)';
-        return;
-      }
-      p.style.opacity = OPACITY[ad];
-      p.style.transform = 'translate(-50%,-50%) translateY(' + d * STEP + 'px) scale(' + SCALE[ad] + ')';
-    });
-  }
-
-  var timer = null;
-  function schedule(){
-    if (reduceMotion || N < 2) return;   // engin sjálfvirk hreyfing, smellur virkar samt
-    clearInterval(timer);
-    timer = setInterval(function(){ active = (active + 1) % N; render(); }, 2400);
-  }
-
-  box.addEventListener('click', function(){
-    if (!N) return;
-    active = (active + 1) % N;
-    render();
-    schedule();                    // smellur núllstillir taktinn
-  });
-
-  /* ── RÆSING ──────────────────────────────────────────────────────────
-     Áður var render() kallað um leið og pillurnar voru búnar til, löngu
-     áður en myndirnar höfðu hlaðist. Fyrsta pillan birtist því tóm þar
-     til skráin barst - og error-hlustarinn greip bara myndir sem klikka,
-     ekki þær sem eru einfaldlega hægar. Núna bíðum við eftir að ALLAR
-     myndir hafi ráðist til lykta, hendum þeim sem brugðust og byrjum
-     fyrst þá. Glerpillan er sýnileg allan tímann, svo ramminn stendur
-     tómur í augnablik í stað þess að sýna brotið logo. */
-  var pending = pills.length;
-  var started = false;
-
-  function start(){
-    if (started) return;
-    started = true;
-    // aðeins þau sem hlóðust raunverulega fá að vera með
-    var ok = [];
-    pills.forEach(function(p){
-      if (p._img.naturalWidth > 0) ok.push(p);
-      else if (p.parentNode) p.parentNode.removeChild(p);
-    });
-    pills = ok;
-    N = pills.length;
-    if (!N) return;
-    active = Math.floor(Math.random() * N);   // byrjunarlogo alltaf nýtt
-    render();
-    schedule();
-  }
-
-  function settled(){
-    if (--pending <= 0) start();
-  }
-
-  pills.forEach(function(p){
-    var img = p._img;
-    // hlustarar SETTIR ÁÐUR en src - annars getur load-atburður úr
-    // skyndiminni farið fram hjá okkur og pending stæði fast
-    img.addEventListener('load', settled);
-    img.addEventListener('error', settled);
-    img.src = p._src;
-  });
-
-  // öryggisnet: skili eitthvert logo hvorki load né error (t.d. þjónn sem
-  // hangir) á hringekjan samt að fara í gang með það sem komst til skila
-  setTimeout(start, 4000);
+  brand.innerHTML = LOGOS.map(function(n, i){
+    return '<img src="logo-' + n + '.svg" alt=""' + (i ? '' : ' class="on"') + '>';
+  }).join('');
+  var imgs = [].slice.call(brand.querySelectorAll('img')), k = 0;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  win.classList.add('build');
+  setInterval(function(){
+    if (document.hidden) return;
+    imgs[k].classList.remove('on');
+    k = (k + 1) % imgs.length;
+    imgs[k].classList.add('on');
+    [].forEach.call(dots.children, function(b, i){ b.classList.toggle('on', i === k % 3); });
+    win.classList.remove('build'); void win.offsetWidth; win.classList.add('build');
+  }, 2800);
 })();
 </script>
 

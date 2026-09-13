@@ -758,46 +758,30 @@
     .show-slide.active .slide-trophy .trophy-flare{animation:none;}
   }
 
-  /* ── VALIN VERKEFNI: inngangsglæra fremst í showcase-inu. Liturinn
-     morphast frá rjóma yfir í lit fyrsta verkefnisins á meðan skrollað
-     er í gegnum hana, og stóri textinn feidast/stækkar út í leiðinni ── */
-  .show-slide.show-intro{
-    justify-content:center;
-  }
-  .show-intro .intro-headline{
-    max-width:1000px;
-    will-change:opacity,transform;
-  }
-  .show-intro h2{
+  /* ── VALIN VERKEFNI: fyrirsögnin stendur fyrir ofan sviðið og "Fleiri
+     verkefni" fyrir neðan það, í venjulegu flæði síðunnar. Áður voru þær
+     glærur inni í sýningunni sem morphuðu úr og í rjóma - það er óþarfi
+     núna þegar sviðið opnast inn í síðuna í stað þess að taka hana yfir. ── */
+  .work-head{position:relative;z-index:1;padding:clamp(24px,4vh,48px) 0 clamp(28px,4vh,44px);}
+  .work-head h2{
     font-family:'DM Sans',sans-serif;font-weight:700;
     font-size:clamp(40px,6.5vw,96px);line-height:1.02;letter-spacing:-0.035em;
-    color:var(--black);
-    display:flex;flex-direction:column;align-items:center;
+    display:flex;flex-direction:column;align-items:flex-start;
   }
-  .show-intro h2 .accent{color:var(--navy);}
-
-  /* ── ÚTGANGSGLÆRA: spegilmynd inngangsins - liturinn morphast aftur í
-     rjóma og stór hlekkur á verkefnasíðuna feidast inn ─────────── */
-  .show-slide.show-outro{
-    justify-content:center;
+  .work-head h2 .accent{color:var(--navy);}
+  /* "Fleiri verkefni" er hlekkur áfram, ekki önnur fyrirsögn: sama letur og
+     stóra netfangið í fætinum (DM Sans 500, lágstafir), minna og léttara
+     svo það keppi ekki við "Valin verkefni" fyrir ofan sviðið */
+  .work-more{position:relative;z-index:1;padding:clamp(36px,6vh,64px) 0 0;}
+  .work-more h2{
+    font-family:'DM Sans',sans-serif;font-weight:500;text-transform:none;
+    font-size:clamp(24px,2.6vw,36px);line-height:1.1;letter-spacing:-0.02em;
   }
-  .show-outro .outro-headline{
-    max-width:1000px;
-    will-change:opacity,transform;
-  }
-  .show-outro h2{
-    font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(40px,6.5vw,96px);line-height:1.02;letter-spacing:-0.035em;
-  }
-  .show-outro h2 a{color:var(--black);text-decoration:none;transition:color .3s ease;}
-  .show-outro h2 .accent{color:var(--navy);transition:color .3s ease;}
-  .show-outro h2 a:hover,
-  .show-outro h2 a:hover .accent{color:var(--navy);}
-  .show-outro .outro-arrow{
-    display:inline-block;
-    transition:transform .35s cubic-bezier(.25,.6,.25,1);
-  }
-  .show-outro h2 a:hover .outro-arrow{transform:translateX(14px);}
+  .work-more h2 a{color:var(--black);text-decoration:none;display:inline-flex;align-items:baseline;gap:.35em;transition:color .3s ease;}
+  .work-more h2 .accent{color:inherit;}
+  .work-more h2 a:hover{color:var(--navy);}
+  .work-more .outro-arrow{display:inline-block;font-size:.8em;color:var(--slate);transition:transform .35s cubic-bezier(.25,.6,.25,1),color .3s ease;}
+  .work-more h2 a:hover .outro-arrow{transform:translate(4px,-4px);color:var(--navy);}
 
   /* ── VERKEFNI: valin verk, mynd + texti + pillur með því sem var gert ── */
   /* ── SHOWCASE: hvert verkefni tekur yfir skjáinn með sínum lit ──
@@ -813,18 +797,41 @@
      því sticky-glæran (svh = minnsta hæð) var lægri en skjárinn (lvh) */
   /* 8.4 = 9 glærur (7 verkefni + inngangur + útgangur) á sama skrolltakti
      og upphaflega hönnunin (~0.93 x 130vh á glæru) */
-  .showcase{position:relative;z-index:1;height:calc(8.4 * 130vh);height:calc(8.4 * 130dvh);}
-  .show-sticky{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;}
+  /* EDGE TO EDGE (sept. 2026): 7 glærur x 75vh + einn skjár fyrir sticky.
+     Áður 8.4 x 130vh (~11 skjáhæðir) - nú um helmingi styttra. */
+  .showcase{position:relative;z-index:1;height:calc(7 * 75vh + 100vh);height:calc(7 * 75dvh + 100dvh);}
+  /* rjómaröndin efst (padding-top) er frátekin fyrir navið, svo það situr
+     áfram á ljósum grunni og þarf ekki að skipta yfir í dökkt */
+  /* 96px en ekki 80px: pillan nær niður í ~78px, svo í 80px lá neðri brún
+     hennar nánast á mörkunum við sviðið. Nú er jafnt loft undir og yfir. */
+  .show-sticky{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;padding-top:96px;}
+  /* sviðið sjálft: klippt inn í takt við efnisdálkinn (--gx) með rúnnuðum
+     hornum þegar kaflinn kemur inn, og opnast út að brúnunum (JS) */
+  .show-stage{
+    --gx:max(32px, calc((100vw - 1240px) / 2 + 32px));
+    position:relative;height:100%;overflow:hidden;
+    clip-path:inset(0 var(--gx) 24px round 36px);
+    will-change:clip-path;
+  }
   .show-bg{
     position:absolute;inset:0;opacity:0;
     background-color:var(--navy);
     will-change:opacity,background-color;
   }
+  /* staðan: eitt strik á verkefni efst í sviðinu, það virka fyllist */
+  .show-ticks{position:absolute;z-index:3;top:clamp(20px,3vh,32px);left:calc(var(--gx) + 24px);right:calc(var(--gx) + 24px);display:flex;gap:6px;pointer-events:none;}
+  .show-ticks i{flex:1;height:2px;border-radius:2px;background:rgba(255,255,255,.22);overflow:hidden;display:block;}
+  .show-ticks b{display:block;height:100%;width:0;background:#fff;}
+  @media (max-width:760px){
+    .show-sticky{padding-top:90px;}
+    .show-stage{--gx:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){ .show-stage{clip-path:none !important;} }
   .show-slide{
     position:absolute;inset:0;z-index:1;
     display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
     text-align:center;
-    padding:96px 32px clamp(28px,6vh,56px);
+    padding:0 calc(var(--gx) + 24px) clamp(24px,4vh,40px);
     opacity:0;
     transition:opacity .5s ease;
     pointer-events:none;
@@ -860,21 +867,35 @@
     opacity:1;transform:none;
     transition-delay:.14s;
   }
-  .panel-info{display:flex;flex-direction:column;gap:10px;}
-  .panel-side{
-    display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:flex-end;
-    padding-bottom:6px;
-  }
-  .panel-eyebrow{
+  /* UPPLÝSINGALÍNAN (sept. 2026):
+     - litla línan yfir nafninu er viðskiptavinurinn, ekki "Valin verkefni
+       07 / 07" - fyrirsögnin stendur fyrir ofan kaflann og strikin sýna hvar
+       gesturinn er, svo sú lína sagði ekkert nýtt
+     - nafnið helst á einni línu; löng nöfn (.long) fá aðeins minna letur
+     - pillurnar eru bara þjónusta; viðurkenningar fá sér sage-merki
+     - pillur og hlekkur á sömu línu, neðst í takt við nafnið */
+  .panel-info{display:flex;flex-direction:column;gap:12px;min-width:0;}
+  .panel-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .panel-client{
     font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-    color:rgba(255,255,255,0.55);
+    color:rgba(255,255,255,0.7);
   }
-  .panel-eyebrow .count{color:rgba(255,255,255,0.35);margin-left:10px;}
+  .panel-award{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--navy);background:var(--sage);border-radius:999px;padding:5px 11px 5px 9px;white-space:nowrap;
+  }
+  .panel-award::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--navy);}
+  .panel-side{
+    display:flex;align-items:center;gap:20px;flex-wrap:nowrap;justify-content:flex-end;
+    padding-bottom:8px;flex:0 0 auto;
+  }
   .show-slide h3{
     font-family:'DM Sans',sans-serif;font-weight:500;
     font-size:clamp(34px,4.5vw,64px);line-height:1;letter-spacing:-0.03em;
-    color:#fff;position:relative;
+    color:#fff;position:relative;white-space:nowrap;
   }
+  .show-slide h3.long{font-size:clamp(30px,3.6vw,52px);}
   /* ── LIFANDI BAKGRUNNUR: hvert verkefni fær hreyfingu á sínum fleti ──
      Vörumerkjamynstrið (nafnið endurtekið, önnur hver röð á hvolfi) skríður
      hægt þvert yfir skjáinn og mjúkir ljósblettir reika yfir litinn.
@@ -1088,9 +1109,9 @@
     /* meira loft milli merkis og hnapps, en samt ekki heilskjás-hetja */
     .hero{min-height:auto;padding:clamp(48px,8vh,80px) 0;}
     .hero-copy{grid-template-columns:1fr;margin-top:clamp(44px,7vh,72px);gap:26px;}
-    .show-slide h3{font-size:clamp(28px,8vw,40px);}
+    .show-slide h3,.show-slide h3.long{font-size:clamp(28px,8vw,40px);white-space:normal;}
     .show-panel{flex-direction:column;align-items:flex-start;gap:16px;}
-    .panel-side{justify-content:flex-start;padding-bottom:0;}
+    .panel-side{justify-content:flex-start;padding-bottom:0;flex-wrap:wrap;gap:14px 18px;}
     .show-tags{justify-content:flex-start;}
   }
 
@@ -1665,21 +1686,23 @@
   </div>
 </section>
 
+<section class="work-head">
+  <div class="wrap">
+    <h2><span class="accent">Valin</span><span class="flip-word">Verkefni</span></h2>
+  </div>
+</section>
+
 <section class="showcase" id="work">
   <div class="show-sticky" id="showSticky">
+   <div class="show-stage" id="showStage">
     <div class="show-bg" id="showBg"></div>
-
-    <div class="show-slide show-intro" data-color="#F3F0EA">
-      <div class="intro-headline" id="introHeadline">
-        <h2><span class="accent">Valin</span><span class="flip-word">Verkefni</span></h2>
-      </div>
-    </div>
+    <div class="show-ticks" id="showTicks" aria-hidden="true"></div>
 
     <div class="show-slide" data-color="#481E35">
       <div class="slide-lottie" id="lottieCross"></div>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Þjóðkirkja Íslands</span></div>
           <h3>Þjóðkirkjan</h3>
         </div>
         <div class="panel-side">
@@ -1698,7 +1721,7 @@
       <img class="slide-media" src="takk-hero.avif" alt="">
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Hagar</span></div>
           <h3>Takk</h3>
         </div>
         <div class="panel-side">
@@ -1724,11 +1747,11 @@
           </div>
         </div>
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Safír</span><span class="panel-award">Söluvefur ársins 2025</span></div>
           <h3>Orkureiturinn</h3>
         </div>
         <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span><span class="show-tag">Söluvefur ársins 2025</span></div>
+          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
           <a class="show-link" href="https://orkureiturinn.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Orkureiturinn">Skoða verkefni ↗︎</a>
         </div>
       </div>
@@ -1743,7 +1766,7 @@
              src="verkis-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Verkís</span></div>
           <h3>Verkís</h3>
         </div>
         <div class="panel-side">
@@ -1761,7 +1784,7 @@
       </div>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Sigur Rós</span></div>
           <h3>Sigur Rós</h3>
         </div>
         <div class="panel-side">
@@ -1781,7 +1804,7 @@
              src="littupp-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Netöryggismiðstöð Íslands</span></div>
           <h3>Líttupp</h3>
         </div>
         <div class="panel-side">
@@ -1800,7 +1823,7 @@
              src="skjahaetta-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
+          <div class="panel-meta"><span class="panel-client">Sjóvá og Samgöngustofa</span></div>
           <h3>Skjáhætta</h3>
         </div>
         <div class="panel-side">
@@ -1820,21 +1843,23 @@
              src="march-forward-web.mp4"></video>
       <div class="show-panel">
         <div class="panel-info">
-          <span class="panel-eyebrow">Valin verkefni</span>
-          <h3>March Forward 2025</h3>
+          <div class="panel-meta"><span class="panel-client">UN Women · með Pipar\TBWA</span><span class="panel-award">PHNX tilnefning</span></div>
+          <h3 class="long">March Forward 2025</h3>
         </div>
         <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Herferð</span><span class="show-tag">UN Women</span><span class="show-tag">Pipar\TBWA</span><span class="show-tag">PHNX tilnefning</span></div>
+          <div class="show-tags"><span class="show-tag">Herferð</span></div>
           <a class="show-link" href="https://marchforward2025.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: March Forward 2025">Skoða verkefni ↗︎</a>
         </div>
       </div>
     </div>
 
-    <div class="show-slide show-outro" data-color="#F3F0EA">
-      <div class="outro-headline" id="outroHeadline">
-        <h2><a href="/verkefni">Fleiri <span class="accent">verkefni</span> <span class="outro-arrow">↗︎</span></a></h2>
-      </div>
-    </div>
+   </div><!-- /.show-stage -->
+  </div>
+</section>
+
+<section class="work-more">
+  <div class="wrap">
+    <h2><a href="/verkefni">Fleiri <span class="accent">verkefni</span> <span class="outro-arrow">↗︎</span></a></h2>
   </div>
 </section>
 
@@ -2125,8 +2150,16 @@
   var wrapEl = document.querySelector('.showcase');
   var sticky = document.getElementById('showSticky');
   var bg = document.getElementById('showBg');
+  var stage = document.getElementById('showStage');
+  var showTicks = document.getElementById('showTicks');
   var slides = wrapEl ? [].slice.call(wrapEl.querySelectorAll('.show-slide')) : [];
   var N = slides.length;
+  // eitt strik á hvert verkefni efst í sviðinu
+  var tickBars = [];
+  if (showTicks){
+    showTicks.innerHTML = new Array(N + 1).join('<i><b></b></i>');
+    tickBars = [].slice.call(showTicks.querySelectorAll('b'));
+  }
   var colors = slides.map(function(sl){
     var c = sl.getAttribute('data-color');
     return [parseInt(c.substr(1,2),16), parseInt(c.substr(3,2),16), parseInt(c.substr(5,2),16)];
@@ -2238,7 +2271,7 @@
         slides.forEach(function(sl){
           if (sl.classList.contains('show-intro') || sl.classList.contains('show-outro')) return;
           num++;
-          var eb = sl.querySelector('.panel-eyebrow');
+          var eb = sl.querySelector('.panel-eyebrow');   // ekki lengur til: engin tvítekin talning
           if (eb && !eb.querySelector('.count')){
             var c = document.createElement('span');
             c.className = 'count';
@@ -2330,10 +2363,27 @@
 
       // ljóst efni í nav á meðan sýningin þekur skjáinn - en ekki á meðan
       // ljósu jaðarglærurnar (inngangur/útgangur) ráða litnum
-      var covering = rect.top <= 100 && rect.bottom >= vh - 100;
-      var pastIntro = !isIntro || frac > 0.55;
-      var beforeOutro = !isOutro || frac < 0.4;
-      body.classList.toggle('on-dark', covering && pastIntro && beforeOutro);
+      // EDGE TO EDGE: navið situr alltaf á rjómaröndinni, svo það skiptir
+      // ekki lengur yfir í dökkt. Strikin sýna hvar í röðinni gesturinn er.
+      // ...nema rétt á meðan sviðið rennur upp undir navið í lok kaflans:
+      // þá liggur navið ofan á litnum og þarf ljósa textann í smástund
+      var padTop = window.innerWidth <= 760 ? 90 : 96;
+      var stageTop = rect.bottom - vh + padTop;
+      body.classList.toggle('on-dark', stageTop < 82 && rect.bottom > 40);
+      if (showTicks){
+        tickBars.forEach(function(b, i){
+          b.style.width = (i < idx ? 100 : i === idx ? frac * 100 : 0) + '%';
+        });
+      }
+      // opnunin: klippingin fer úr efnisdálknum út að brúnunum á meðan
+      // kaflinn rennur upp á skjáinn, og er lokið þegar hann festist efst
+      if (stage && !reduceMotion){
+        var e = Math.min(1, Math.max(0, (vh - rect.top) / vh));
+        e = 1 - (1 - e) * (1 - e);
+        var gx = window.innerWidth <= 760 ? 16 : Math.max(32, (window.innerWidth - 1240) / 2 + 32);
+        stage.style.clipPath = 'inset(0 ' + (gx * (1 - e)).toFixed(1) + 'px ' + (24 * (1 - e)).toFixed(1) +
+                               'px round ' + (36 * (1 - e)).toFixed(1) + 'px)';
+      }
     }
 
     ticking = false;
