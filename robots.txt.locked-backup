@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Innra safn, ekki ætlað almenningi
+Disallow: /elements
+Disallow: /elements.html
+
+Sitemap: https://reytal.is/sitemap.xml

@@ -2,6 +2,7 @@
 /vefuttekt   /vefuttekt.html   200
 /verkefni    /verkefni.html    200
 /um-okkur    /um-okkur.html    200
+/kynning     /kynning.html     200
 
 # Þjónustusíðurnar liggja í möppum (thjonusta/<slóð>/index.html) og
 # þurfa því enga reglu. Eldri flatar slóðir vísa varanlega á nýju slóðina.

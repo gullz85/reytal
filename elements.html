@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Tímabundin læsing á meðan vefurinn er í vinnslu - sjá las.js -->
+<script src="las.js?v=1"></script>
 <title>Elements (einkasafn): REYTAL</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -155,7 +157,10 @@
   }
 
   /* ── 06 birtupanel (aurora) ─────────────────────────── */
-  .el-aurora{position:absolute;inset:0;}
+  /* .stage.el-aurora: sviðið sjálft verður að vera afmörkun blettanna -
+     án þess breiddu þeir sig yfir alla síðuna og huldu önnur spjöld */
+  .stage.el-aurora{position:relative;}
+  .el-aurora:not(.stage){position:absolute;inset:0;}
   .el-aurora span{
     position:absolute;border-radius:50%;filter:blur(30px);
     will-change:transform;
@@ -176,6 +181,296 @@
   @media (prefers-reduced-motion:reduce){
     .el-roam .blob,.el-rings *,.el-const .dot,.el-flip,.el-lines span,.el-aurora span{animation:none !important;}
   }
+
+
+
+  /* ── ÚR BRANDINU: element-stílarnir sjálfir eru í reytal-brand.css ── */
+  .bgroup-label{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);
+    margin:clamp(32px,5vw,48px) 0 14px;display:flex;align-items:center;gap:14px;
+  }
+  .bgroup-label::after{content:'';flex:1;height:1px;background:rgba(11,12,13,.12);}
+  .bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);}
+  @media (max-width:1020px){ .bgrid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .bgrid{grid-template-columns:1fr;} }
+  .bgrid .card-meta .from{
+    display:block;margin-top:8px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--slate);
+  }
+  .bgrid .card-meta code{font-family:'DM Mono',monospace;font-size:10.5px;background:rgba(11,12,13,.06);padding:1px 5px;border-radius:4px;}
+
+  /* ── FYRSTI HLUTI: 3D-fjölskyldan (reytal-3d.js) ─────────────── */
+  .family{padding:clamp(40px,6vw,64px) 0 clamp(56px,8vw,96px);border-bottom:1px solid rgba(11,12,13,0.1);}
+  .family .eyebrow2{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--slate);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+  }
+  .family .eyebrow2::before{content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;}
+  .family h2{
+    font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;
+    font-size:clamp(28px,4.4vw,52px);line-height:0.98;letter-spacing:-0.01em;margin-bottom:16px;max-width:18ch;
+  }
+  .family .lead{font-size:clamp(15px,1.6vw,18px);line-height:1.6;opacity:.72;max-width:62ch;}
+  .controls{display:flex;flex-wrap:wrap;gap:24px 36px;margin-top:28px;align-items:center;}
+  .ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .ctl-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-right:4px;}
+  .seg{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    background:transparent;color:var(--navy);border:1px solid rgba(11,12,13,0.22);border-radius:999px;
+    padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .seg i{width:12px;height:12px;border-radius:50%;display:block;border:1px solid rgba(11,12,13,.2);}
+  .seg:hover{border-color:var(--navy);}
+  .seg[aria-pressed="true"]{background:var(--navy);color:var(--cream);border-color:var(--navy);}
+  .seg:focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+
+  .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);margin-top:clamp(28px,4vw,40px);}
+  @media (max-width:1020px){ .fgrid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .fgrid{grid-template-columns:1fr;} }
+  .fcard{
+    border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(11,12,13,0.08);
+    display:flex;flex-direction:column;
+  }
+  .fstage{display:grid;place-items:center;background:var(--cream);transition:background .4s ease;}
+  .fstage .r3d{width:88%;}
+  .family.dark .fstage{background:var(--navy);}
+  .fmeta{padding:14px 18px 18px;border-top:1px solid rgba(11,12,13,0.06);display:flex;flex-direction:column;gap:4px;}
+  .fmeta .num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--slate);}
+  .fmeta h3{font-family:'Archivo',sans-serif;font-weight:900;font-size:17px;letter-spacing:-0.01em;text-transform:uppercase;}
+  .fmeta p{font-size:13px;line-height:1.5;opacity:.65;}
+  .fmeta .copy3{
+    align-self:flex-start;margin-top:10px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--black);color:var(--cream);border:none;border-radius:999px;padding:8px 14px;cursor:pointer;transition:background .3s ease;
+  }
+  .fmeta .copy3:hover{background:var(--navy);}
+  .fmeta .copy3:focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+
+  /* sýnishorn: fjórir hlutir í röð eins og á þjónustusíðu */
+  .demo{margin-top:clamp(48px,7vw,80px);padding:clamp(36px,5vw,64px) clamp(20px,4vw,56px);border-radius:clamp(20px,3vw,36px);background:#fff;border:1px solid rgba(11,12,13,0.08);transition:background .4s ease,color .4s ease;}
+  .family.dark .demo{background:var(--navy);color:var(--cream);border-color:var(--navy);}
+  .demo-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:clamp(20px,3vw,32px);}
+  .family.dark .demo-label{color:rgba(243,240,234,.6);}
+  .demo-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,40px);}
+  @media (max-width:900px){ .demo-row{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .demo-row{grid-template-columns:1fr;} }
+  .demo-item{display:flex;flex-direction:column;align-items:flex-start;}
+  .demo-item .r3d{width:min(220px,100%);margin-left:-6%;}
+  .demo-item .dn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--slate);margin-top:6px;}
+  .family.dark .demo-item .dn{color:var(--sage);}
+  .demo-item h4{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(20px,2vw,24px);letter-spacing:-0.02em;margin-top:6px;}
+  .demo-item p{font-size:14.5px;line-height:1.6;opacity:.75;margin-top:8px;max-width:32ch;}
+
+  /* ── ANNAR HLUTI: 3D- og þjónustu-element ─────────────────── */
+  .section-head2{padding:clamp(48px,7vw,80px) 0 0;border-top:1px solid rgba(11,12,13,0.1);}
+  .section-head2 .eyebrow{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--slate);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+  }
+  .section-head2 .eyebrow::before{content:'';width:7px;height:7px;background:var(--slate);border-radius:50%;}
+  .section-head2 h2{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:clamp(28px,4.4vw,52px);line-height:0.98;letter-spacing:-0.01em;margin-bottom:16px;max-width:18ch;
+  }
+  .section-head2 p{font-size:clamp(15px,1.6vw,18px);line-height:1.6;opacity:.72;max-width:60ch;}
+  .grid.g2{padding-top:clamp(32px,5vw,48px);}
+  .stage.c{display:grid;place-items:center;perspective:900px;}
+  .card-meta .use{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .card-meta .use span{
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--navy);border:1px solid rgba(11,12,13,0.18);border-radius:999px;padding:4px 9px;
+  }
+  .card-meta .copy{
+    margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--black);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;cursor:pointer;
+    transition:background .3s ease;
+  }
+  .card-meta .copy:hover{background:var(--navy);}
+  .card-meta .copy.ok{background:var(--slate);}
+  .card-meta .copy:focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+  .howto{
+    margin-top:clamp(28px,4vw,40px);padding:20px 24px;border:1px solid rgba(11,12,13,0.1);border-radius:16px;
+    font-size:14px;line-height:1.6;opacity:.8;max-width:70ch;
+  }
+  .howto code{font-family:'DM Mono',monospace;font-size:12px;background:rgba(11,12,13,0.06);padding:2px 6px;border-radius:5px;}
+</style>
+<link rel="stylesheet" href="reytal-brand.css?v=1">
+<link rel="stylesheet" href="reytal-ui.css?v=2">
+
+<!-- Hvert element á sinn <style data-el="NN"> - „Afrita kóða" hnappurinn
+     sækir nákvæmlega þann bút, HTML-ið úr sviðinu og JS ef við á. -->
+<style data-el="07">
+/* 07 leitargeisli: ratsjá sem sópar yfir punkta - sýnileiki, SEO, vöktun */
+.el-radar{position:relative;width:74%;aspect-ratio:1;border-radius:50%;}
+.el-radar .ring{position:absolute;left:50%;top:50%;width:var(--s);aspect-ratio:1;border-radius:50%;border:1px solid rgba(13,70,89,.22);transform:translate(-50%,-50%);display:block;}
+.el-radar .beam{
+  position:absolute;inset:6%;border-radius:50%;display:block;
+  background:conic-gradient(from 0deg, rgba(13,70,89,.42), rgba(13,70,89,.10) 20%, transparent 32%);
+  animation:elRadarSpin 4.2s linear infinite;
+}
+.el-radar .core{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:var(--navy);display:block;}
+.el-radar .pip{
+  position:absolute;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--slate);display:block;
+  opacity:.28;animation:elRadarPip 4.2s ease-out infinite;animation-delay:var(--d);
+}
+@keyframes elRadarSpin{to{transform:rotate(360deg);}}
+@keyframes elRadarPip{0%{opacity:1;box-shadow:0 0 0 0 rgba(76,124,147,.55);}35%{opacity:.28;box-shadow:0 0 0 12px rgba(76,124,147,0);}100%{opacity:.28;}}
+</style>
+<style data-el="08">
+/* 08 sýnileiki: súlur á perspektífu-gólfi, þín súla klifrar upp í #1 - SEO */
+.el-rank{position:relative;width:68%;height:64%;}
+.el-rank .floor{
+  position:absolute;left:-14%;right:-14%;bottom:4%;height:64%;
+  transform:rotateX(68deg);transform-origin:bottom;
+  background:
+    repeating-linear-gradient(0deg,rgba(13,70,89,.14) 0 1px,transparent 1px 16px),
+    repeating-linear-gradient(90deg,rgba(13,70,89,.14) 0 1px,transparent 1px 16px);
+  -webkit-mask:linear-gradient(to top,#000 30%,transparent);mask:linear-gradient(to top,#000 30%,transparent);
+}
+.el-rank .bars{position:absolute;inset:0 0 4% 0;display:flex;align-items:flex-end;justify-content:center;gap:7%;}
+.el-rank .bars span{
+  display:block;width:12%;height:var(--h);border-radius:6px 6px 2px 2px;
+  background:linear-gradient(180deg,rgba(76,124,147,.55),rgba(76,124,147,.22));
+  box-shadow:inset -5px 0 0 rgba(11,12,13,.05);
+  transform-origin:bottom;animation:elRankLoop 7s cubic-bezier(.22,.9,.25,1) infinite;animation-delay:var(--d,0s);
+}
+.el-rank .bars .me{background:linear-gradient(180deg,var(--navy),var(--slate));animation-name:elRankMe;}
+@keyframes elRankLoop{0%{transform:scaleY(0);}12%{transform:scaleY(1);}82%{transform:scaleY(1);}94%,100%{transform:scaleY(0);}}
+@keyframes elRankMe{0%{transform:scaleY(0);}12%{transform:scaleY(.42);}34%{transform:scaleY(.42);}48%{transform:scaleY(1);}82%{transform:scaleY(1);}94%,100%{transform:scaleY(0);}}
+.el-rank .lbl{
+  position:absolute;left:50%;top:-6%;transform:translateX(-50%);
+  font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--navy);
+  animation:elRankLbl 7s ease infinite;
+}
+@keyframes elRankLbl{0%,46%{opacity:0;transform:translate(-50%,6px);}54%,80%{opacity:1;transform:translate(-50%,0);}90%,100%{opacity:0;}}
+</style>
+<style data-el="09">
+/* 09 lög: ísómetrískur stafli af plötum sem anda - hýsing, vefkerfi, arkitektúr */
+.el-stack{position:relative;width:50%;aspect-ratio:1;transform:rotateX(58deg) rotateZ(-45deg);transform-style:preserve-3d;}
+.el-stack i{
+  position:absolute;inset:0;display:block;border-radius:14px;
+  border:1px solid rgba(13,70,89,.35);
+  background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(190,191,166,.38));
+  box-shadow:0 18px 30px rgba(11,12,13,.08);
+  animation:elStackBob 4.6s ease-in-out infinite;animation-delay:calc(var(--i) * -.55s);
+}
+.el-stack i:first-child{background:var(--navy);border-color:var(--navy);}
+.el-stack i:last-child{background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(243,240,234,.9));}
+@keyframes elStackBob{0%,100%{transform:translateZ(calc(var(--i) * 34px));}50%{transform:translateZ(calc(var(--i) * 34px + 14px));}}
+</style>
+<style data-el="10">
+/* 10 teningur: vírteningur sem snýst hægt, TAL-hliðin á hvolfi (flip-mótífið) - vefþróun */
+.el-cube{width:118px;aspect-ratio:1;transform-style:preserve-3d;animation:elCubeSpin 16s linear infinite;}
+.el-cube i{
+  position:absolute;inset:0;display:grid;place-items:center;
+  border:1px solid var(--navy);background:rgba(243,240,234,.55);
+  font-family:'DM Mono',monospace;font-style:normal;font-size:12px;letter-spacing:.12em;color:var(--navy);
+  backface-visibility:visible;
+}
+.el-cube .f1{transform:translateZ(59px);}
+.el-cube .f2{transform:rotateY(180deg) translateZ(59px) rotate(180deg);}
+.el-cube .f3{transform:rotateY(90deg) translateZ(59px);}
+.el-cube .f4{transform:rotateY(-90deg) translateZ(59px) rotate(180deg);}
+.el-cube .f5{transform:rotateX(90deg) translateZ(59px);}
+.el-cube .f6{transform:rotateX(-90deg) translateZ(59px);}
+@keyframes elCubeSpin{from{transform:rotateX(-22deg) rotateY(0deg);}to{transform:rotateX(-22deg) rotateY(360deg);}}
+</style>
+<style data-el="11">
+/* 11 hnöttur: punktahnöttur á canvas, snýst hægt - alþjóðlegt, sýnileiki */
+.el-globe{position:relative;width:78%;aspect-ratio:1;}
+.el-globe canvas{width:100%;height:100%;display:block;}
+</style>
+<style data-el="12">
+/* 12 net: hnútar og línur, púlsar renna á milli - gervigreind, sjálfvirkni, samþættingar */
+.el-net{position:absolute;inset:0;}
+.el-net canvas{width:100%;height:100%;display:block;}
+</style>
+<style data-el="13">
+/* 13 sónar: hringir sem breiðast út frá miðju - öryggi, vöktun, hýsing */
+.el-sonar{position:relative;width:62%;aspect-ratio:1;}
+.el-sonar i{position:absolute;inset:0;display:block;border-radius:50%;border:1.5px solid var(--navy);opacity:0;animation:elSonar 3.9s cubic-bezier(.2,.6,.3,1) infinite;}
+.el-sonar i:nth-child(2){animation-delay:1.3s;}
+.el-sonar i:nth-child(3){animation-delay:2.6s;}
+.el-sonar b{position:absolute;left:50%;top:50%;width:15%;aspect-ratio:1;border-radius:50%;background:var(--navy);transform:translate(-50%,-50%);display:block;}
+.el-sonar b::after{content:'';position:absolute;left:50%;top:50%;width:38%;aspect-ratio:1;border-radius:50%;background:var(--cream);transform:translate(-50%,-50%);}
+@keyframes elSonar{0%{transform:scale(.16);opacity:.85;}100%{transform:scale(1);opacity:0;}}
+</style>
+<style data-el="14">
+/* 14 hraðamælir: 240° bogi fyllist, nálin fylgir, talan telur - hraði, frammistaða */
+.el-gauge{position:relative;width:64%;aspect-ratio:1;--p:0;}
+.el-gauge .arc{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 240deg, var(--navy) calc(var(--p) * .6667%), rgba(13,70,89,.12) 0 66.67%, transparent 66.67%);
+  -webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%);
+}
+.el-gauge .needle{
+  position:absolute;left:50%;top:50%;width:2px;height:36%;margin-left:-1px;
+  background:var(--black);border-radius:2px;transform-origin:top center;
+  transform:rotate(calc(var(--p) * 2.4deg + 60deg));
+}
+.el-gauge .needle::before{content:'';position:absolute;left:50%;top:0;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--black);}
+.el-gauge .val{position:absolute;left:0;right:0;bottom:6%;text-align:center;}
+.el-gauge .val b{display:block;font-family:'DM Sans',sans-serif;font-weight:700;font-size:34px;letter-spacing:-.02em;color:var(--black);font-variant-numeric:tabular-nums;}
+.el-gauge .val span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);}
+</style>
+<style data-el="15">
+/* 15 fljótandi spjöld: þrjú lög af skjámyndum í 3D, halla með músinni - hönnun, UX */
+.el-cards{
+  position:relative;width:56%;aspect-ratio:4/3;transform-style:preserve-3d;
+  transform:rotateX(12deg) rotateY(-18deg);
+  animation:elCardsIdle 7s ease-in-out infinite;
+  transition:transform .5s cubic-bezier(.25,.6,.25,1);
+}
+.el-cards.live{animation:none;}
+.el-cards i{
+  position:absolute;inset:0;display:flex;flex-direction:column;gap:9%;
+  padding:12%;border-radius:12px;background:#fff;border:1px solid rgba(11,12,13,.1);
+  box-shadow:0 22px 44px rgba(11,12,13,.10);
+}
+.el-cards i s{display:block;height:8%;border-radius:4px;background:rgba(13,70,89,.16);text-decoration:none;}
+.el-cards i s:first-child{width:52%;height:12%;background:var(--navy);}
+.el-cards i s:last-child{width:70%;}
+.el-cards .c1{transform:translate3d(-12%,12%,0);}
+.el-cards .c2{transform:translate3d(0,0,44px);}
+.el-cards .c3{transform:translate3d(12%,-12%,88px);}
+.el-cards .c3 s:first-child{background:var(--slate);}
+@keyframes elCardsIdle{0%,100%{transform:rotateX(12deg) rotateY(-18deg);}50%{transform:rotateX(18deg) rotateY(-8deg);}}
+</style>
+<style data-el="16">
+/* 16 merkið í þrívídd: REY/TAL veltur um lárétta ásinn og speglast á kantinum,
+   endar sem merkið snúið 180° - flip-mótíf vörumerkisins í rými */
+.el-mark{width:36%;perspective:700px;}
+.el-mark .turn{display:block;animation:elMarkTurn 7s cubic-bezier(.7,0,.3,1) infinite;transform-style:preserve-3d;}
+.el-mark .mirror{display:block;animation:elMarkMirror 7s step-end infinite;}
+.el-mark svg{display:block;width:100%;height:auto;fill:var(--black);}
+@keyframes elMarkTurn{0%,38%{transform:rotateX(0deg);}62%,100%{transform:rotateX(180deg);}}
+@keyframes elMarkMirror{0%,50%{transform:scaleX(1);}50.01%,100%{transform:scaleX(-1);}}
+</style>
+<style data-el="17">
+/* 17 bylgjur: þrjár sínuslínur á canvas, hver á sínum hraða - gögn, greining, mælingar */
+.el-waves{position:absolute;inset:0;}
+.el-waves canvas{width:100%;height:100%;display:block;}
+</style>
+<style data-el="18">
+/* 18 hringtexti: þjónustuorðin á hring sem snýst hægt - hvaða þjónustusíða sem er */
+.el-ring{width:74%;aspect-ratio:1;}
+.el-ring svg{width:100%;height:100%;display:block;overflow:visible;}
+.el-ring .txt{
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  fill:var(--navy);transform-origin:100px 100px;animation:elRingSpin 40s linear infinite;
+}
+.el-ring .dot{fill:var(--navy);}
+.el-ring .halo{fill:none;stroke:rgba(13,70,89,.2);stroke-width:1;}
+@keyframes elRingSpin{to{transform:rotate(360deg);}}
+</style>
+<style data-el="all">
+@media (prefers-reduced-motion:reduce){
+  .el-radar .beam,.el-radar .pip,.el-rank .bars span,.el-rank .lbl,.el-stack i,.el-cube,.el-sonar i,
+  .el-cards,.el-mark .turn,.el-mark .mirror,.el-ring .txt{animation:none !important;}
+  .el-rank .lbl{opacity:1;}
+  .el-sonar i{opacity:.35;transform:scale(.6);}
+  .el-sonar i:nth-child(2){transform:scale(.8);} .el-sonar i:nth-child(3){transform:scale(1);}
+}
 </style>
 </head>
 <body>
@@ -187,9 +482,114 @@
 
     <section class="intro">
       <div class="eyebrow">Elements &middot; einkasafn</div>
-      <h1>Hreyfð element</h1>
+      <h1>Element</h1>
       <p>Mjúk, róleg element í sama myndmáli og vefurinn sjálfur, sami litapallettan, sama blur/roam-hreyfing og hringurinn í hausnum og sama flip-hreyfing og fyrirsagnirnar. Hugsuð sem uppfyllingarefni: bakgrunnur á bak við tilvitnun, skraut við tölur, eða autt horn sem vantar líf.</p>
-      <p class="priv">Þessi síða er ekki tengd í valmyndinni og er eingöngu til að skoða og velja úr.</p>
+      <p class="priv">Þessi síða er ekki tengd í valmyndinni og er eingöngu til að skoða og velja úr. Neðar: 3D- og þjónustu-element með „Afrita kóða".</p>
+    </section>
+
+
+
+
+    <section class="family" aria-labelledby="uiTitle">
+      <div class="eyebrow2">Ný tillaga &middot; meira svona</div>
+      <h2 id="uiTitle">Viðmót</h2>
+      <p class="lead">Byggt á elementunum sem þér leist vel á: Lögum, Sónar, Hraðamæli og Fljótandi spjöldum. Sama uppskrift alls staðar: hvítar plötur með mjúkum skugga, navy áherslur, grannar línur, DM Mono í merkingum og sami halli í rými. Hlutirnir halla sér að músinni. Stílar í <code>reytal-ui.css</code> og JS í <code>reytal-ui.js</code>.</p>
+
+      <div class="bgroup-label">Kerfi og rekstur</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="u-stack"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i></div></div><div class="card-meta"><div class="num">01</div><h3>Lög</h3><p>Fjórar plötur í ísómetrískum stafla sem anda hver í sínum takti.</p><div class="use"><span>Hýsing</span><span>Vefkerfi</span></div><span class="from"><code>u-stack</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-browser u-tilt"><div class="win u-plate"><div class="u-bar"><i></i><i></i><i></i><span class="url"></span></div><div class="body"><s class="h"></s><s class="l1"></s><s class="l2"></s><div class="cols"><b></b><b></b><b></b></div></div></div><div class="chip u-plate"><s></s></div></div></div><div class="card-meta"><div class="num">02</div><h3>Vafragluggi</h3><p>Síðan byggist upp hluti fyrir hluta og merki skýtur upp kollinum þegar hún er komin í loftið.</p><div class="use"><span>Vefþróun</span><span>Vefsíður</span></div><span class="from"><code>u-browser</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-code u-tilt"><div class="u-plate card"><div class="u-bar"><i></i><i></i><i></i><span class="url"></span></div><div class="lines"></div></div></div></div><div class="card-meta"><div class="num">03</div><h3>Kóði</h3><p>Kóðagluggi þar sem línurnar byggjast upp ein af annarri, með inndrætti.</p><div class="use"><span>Vefþróun</span><span>Sérlausnir</span></div><span class="from"><code>u-code</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-uptime u-tilt"><div class="u-plate card"><div class="top"><span class="u-lbl"></span><span class="valbar"></span></div><div class="ticks"></div><div class="foot"><i></i><i></i></div></div></div></div><div class="card-meta"><div class="num">04</div><h3>Uppitími</h3><p>Súlur sem rísa ein af annarri. Ein sage, lítið hikst sem var lagað.</p><div class="use"><span>Hýsing</span><span>Rekstur</span></div><span class="from"><code>u-uptime</code></span></div></div>
+      </div>
+
+      <div class="bgroup-label">Öryggi og mælingar</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="u-sonar"><i></i><i></i><i></i><b></b></div></div><div class="card-meta"><div class="num">05</div><h3>Sónar</h3><p>Hringir sem breiðast rólega út frá kjarna.</p><div class="use"><span>Öryggi</span><span>Vöktun</span></div><span class="from"><code>u-sonar</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-lock"><i class="ring"></i><i class="ring"></i><div class="plate u-plate u-tilt"><div class="lock"><span class="shackle"></span><span class="body"></span></div><span class="ok">✓</span></div></div></div><div class="card-meta"><div class="num">06</div><h3>Lás</h3><p>Lásinn smellur í lás, hak birtist og bylgjur fara út.</p><div class="use"><span>Öryggi</span><span>Hýsing</span></div><span class="from"><code>u-lock</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-gauge"><div class="arc"></div><div class="needle"></div><div class="val"><b>0</b><s></s></div></div></div><div class="card-meta"><div class="num">07</div><h3>Hraðamælir</h3><p>Bogi fyllist, nálin fylgir og talan telur upp í 96.</p><div class="use"><span>Hraði</span><span>Vefúttekt</span></div><span class="from"><code>u-gauge</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-chart u-tilt"><div class="u-plate card"><div class="top"><span class="u-lbl"></span><span class="val">+42%</span></div><svg viewBox="0 0 200 90" aria-hidden="true"><path class="grid" d="M0 22H200M0 45H200M0 68H200"/><path class="area" d="M4 78 C30 74 44 70 60 62 S92 58 110 46 S150 30 170 22 S190 16 196 14 L196 90 L4 90Z"/><path class="line" d="M4 78 C30 74 44 70 60 62 S92 58 110 46 S150 30 170 22 S190 16 196 14" pathLength="1"/><circle cx="196" cy="14" r="4"/></svg></div></div></div><div class="card-meta"><div class="num">08</div><h3>Graf</h3><p>Lína teiknast upp og talan birtist við endann.</p><div class="use"><span>SEO</span><span>Greiningar</span></div><span class="from"><code>u-chart</code></span></div></div>
+      </div>
+
+      <div class="bgroup-label">Hönnun, leit og gervigreind</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="u-cards u-tilt"><i class="c1"><s></s><s></s><s></s></i><i class="c2"><s></s><s></s><s></s></i><i class="c3"><s></s><s></s><s></s></i></div></div><div class="card-meta"><div class="num">09</div><h3>Fljótandi spjöld</h3><p>Þrjár skjámyndir í lögum í rými sem halla sér að músinni.</p><div class="use"><span>Hönnun</span><span>UX / UI</span></div><span class="from"><code>u-cards</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-swatch"><i class="u-plate" style="--c:#0D4659;--r:-24deg"><span><s></s></span></i><i class="u-plate" style="--c:#4C7C93;--r:-8deg"><span><s></s></span></i><i class="u-plate" style="--c:#BEBFA6;--r:8deg"><span><s></s></span></i><i class="u-plate type" style="--r:24deg"><b>Aa</b><span><s></s></span></i></div></div><div class="card-meta"><div class="num">10</div><h3>Litaspjöld</h3><p>Litir vefsins og letursýni breiða úr sér eins og litabók.</p><div class="use"><span>Hönnun</span><span>Vörumerki</span></div><span class="from"><code>u-swatch</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-rank u-tilt"><div class="search u-plate"><span class="mag"></span><s></s><i class="caret"></i></div><div class="list"><div class="res u-plate" style="--p:0"><b></b><s></s><s></s><span class="pos">#1</span></div><div class="res u-plate" style="--p:1"><b></b><s></s><s></s><span class="pos">#2</span></div><div class="res me u-plate" style="--p:2"><b></b><s></s><s></s><span class="pos">#3</span></div></div></div></div><div class="card-meta"><div class="num">11</div><h3>Leit</h3><p>Leitarniðurstöður þar sem þinn vefur klifrar úr 3. sæti í það fyrsta.</p><div class="use"><span>SEO</span><span>Sýnileiki</span></div><span class="from"><code>u-rank</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="u-chat u-tilt"><div class="u-plate card"><div class="me"><s></s><s></s></div><div class="ai"><span class="dots"><i></i><i></i><i></i></span><s></s><s></s><s></s></div><div class="tag"><s></s></div></div></div></div><div class="card-meta"><div class="num">12</div><h3>Spjall</h3><p>Skilaboð koma inn, svarið er á leiðinni og erindið fær merki.</p><div class="use"><span>Gervigreind</span><span>Sjálfvirkni</span></div><span class="from"><code>u-chat</code></span></div></div>
+      </div>
+    </section>
+
+    <section class="family" aria-labelledby="brandTitle">
+      <div class="eyebrow2">Önnur tillaga &middot; úr brandinu</div>
+      <h2 id="brandTitle">Úr merkinu sjálfu</h2>
+      <p class="lead">Tólf hugmyndir sem nota bara það sem vefurinn á nú þegar: navy á rjóma, flippið, letrið, strikin, pillurnar og punktinn. Engin skygging, engin ný form eða litir, sama hreyfikúrfa alls staðar. Þess vegna eru þær samstæðar þótt þær séu ólíkar. Stílarnir eru í <code>reytal-brand.css</code> og JS í <code>reytal-brand.js</code>.</p>
+
+      <div class="bgroup-label">Klipping og flipp</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="b-arch"><i class="t"></i><i class="b"></i></div></div><div class="card-meta"><div class="num">01</div><h3>Bogi</h3><p>Hringur klipptur í tvennt. Helmingarnir renna í sundur og smella aftur saman.</p><span class="from">Úr: bilinu milli REY og TAL &middot; <code>b-arch</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="b-chev"><i class="t"></i><i class="b"></i></div></div><div class="card-meta"><div class="num">02</div><h3>Ör</h3><p>Tveir þríhyrningar. Sá neðri flippast og formið skiptir um merkingu.</p><span class="from">Úr: flippinu í fyrirsögnunum &middot; <code>b-chev</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="b-domes"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div></div><div class="card-meta"><div class="num">03</div><h3>Bylgja</h3><p>Hálfhringir á línu sem flippast yfir hana, einn af öðrum.</p><span class="from">Úr: flippinu, sett í takt &middot; <code>b-domes</code></span></div></div>
+        <div class="card"><div class="stage"><div class="b-mirror"></div></div><div class="card-meta"><div class="num">04</div><h3>Spegilorð</h3><p>Orð skorið í miðju. Neðri helmingurinn er speglaður og rennur í hina áttina.</p><span class="from">Úr: TAL á hvolfi í merkinu &middot; <code>b-mirror</code></span></div></div>
+      </div>
+
+      <div class="bgroup-label">Letur</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="b-ring"></div></div><div class="card-meta"><div class="num">05</div><h3>Hringorð</h3><p>REYTAL á tveimur hringjum sem snúast hvor á móti öðrum, TAL á hvolfi.</p><span class="from">Úr: splash-skjánum með hringjunum &middot; <code>b-ring</code></span></div></div>
+        <div class="card"><div class="stage"><div class="b-rows"></div></div><div class="card-meta"><div class="num">06</div><h3>Raðir</h3><p>Merkið í röðum af ólíkri stærð. Önnur hver á hvolfi, skríða í sitthvora áttina.</p><span class="from">Úr: splash-skjánum með röðunum &middot; <code>b-rows</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="b-flip"><span class="lbl">Þjónusta</span><span class="w">Vefir</span></div></div><div class="card-meta"><div class="num">07</div><h3>Flippað orð</h3><p>Orð fellur saman, kemur inn á hvolfi og réttir úr sér.</p><span class="from">Úr: „Lausnir“ á forsíðunni &middot; <code>b-flip</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="b-odo"><div class="num" data-value="30.000" aria-label="30.000"></div><span class="lbl">Íslenskir vefir greindir</span></div></div><div class="card-meta"><div class="num">08</div><h3>Talning</h3><p>Tala sem rúllar upp eins og kílómetramælir og byrjar svo aftur.</p><span class="from">Úr: 30.000 á vefúttektinni &middot; <code>b-odo</code></span></div></div>
+      </div>
+
+      <div class="bgroup-label">Línur og punktar</div>
+      <div class="bgrid">
+        <div class="card"><div class="stage c"><div class="b-under"><span>Vefir</span><span>Hönnun</span><span>SEO</span><i></i></div></div><div class="card-meta"><div class="num">09</div><h3>Strikið</h3><p>Eitt strik sem skýst milli orða með teygju. Fylgir músinni.</p><span class="from">Úr: undirstrikinu í valmyndinni &middot; <code>b-under</code></span></div></div>
+        <div class="card"><div class="stage"><div class="b-pills"></div></div><div class="card-meta"><div class="num">10</div><h3>Pillur</h3><p>Tög sem detta niður, hlaðast upp og hverfa svo.</p><span class="from">Úr: pillunum á öllum síðum &middot; <code>b-pills</code></span></div></div>
+        <div class="card"><div class="stage c"><div class="b-dots"></div></div><div class="card-meta"><div class="num">11</div><h3>Punktar</h3><p>Grind af punktum sem anda í bylgju út frá miðju.</p><span class="from">Úr: punktinum fyrir framan eyebrow-textann &middot; <code>b-dots</code></span></div></div>
+        <div class="card"><div class="stage c"><svg class="b-cut" viewBox="0 0 200 200" aria-hidden="true"><path class="h" d="M22 100 H178" pathLength="1"/><path class="t" d="M40 100 A60 60 0 0 1 160 100" pathLength="1"/><path class="b" d="M40 100 A60 60 0 0 0 160 100" pathLength="1"/><circle cx="100" cy="100" r="3"/></svg></div><div class="card-meta"><div class="num">12</div><h3>Skurður</h3><p>Hringur teiknaður með einu striki sem klofnar í tvennt og lokast.</p><span class="from">Úr: 1px línunum og merkinu &middot; <code>b-cut</code></span></div></div>
+      </div>
+    </section>
+
+    <section class="family" id="family">
+      <div class="eyebrow2">Til samanburðar &middot; 3D</div>
+      <h2>3D-fjölskyldan</h2>
+      <p class="lead">Átta hlutir sem mega vera bull. Það sem heldur þeim saman er allt annað: sama efni, sami litur, sama lýsing, sama stærð og sami hægi snúningur. Skiptu um áferð og bakgrunn til að sjá að þeir haldast samstæðir. Hlutirnir halla sér að músinni.</p>
+
+      <div class="controls">
+        <div class="ctl" role="group" aria-label="Áferð">
+          <span class="ctl-label">Áferð</span>
+          <button class="seg" type="button" data-finish="navy" aria-pressed="true"><i style="background:#0D4659"></i>Navy</button>
+          <button class="seg" type="button" data-finish="rjomi" aria-pressed="false"><i style="background:#EFEAE0"></i>Rjómi</button>
+          <button class="seg" type="button" data-finish="sage" aria-pressed="false"><i style="background:#AEB08F"></i>Sage</button>
+          <button class="seg" type="button" data-finish="svart" aria-pressed="false"><i style="background:#141618"></i>Svart</button>
+        </div>
+        <div class="ctl" role="group" aria-label="Bakgrunnur">
+          <span class="ctl-label">Grunnur</span>
+          <button class="seg" type="button" data-bg="light" aria-pressed="true">Ljós</button>
+          <button class="seg" type="button" data-bg="dark" aria-pressed="false">Navy</button>
+        </div>
+      </div>
+
+      <div class="fgrid">
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="oddur" data-finish="navy"></div></div><div class="fmeta"><span class="num">#01</span><h3>Oddur</h3><p>Þríhyrndur píramídi, flatir fletir.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="kleina" data-finish="navy"></div></div><div class="fmeta"><span class="num">#02</span><h3>Kleina</h3><p>Þykkur hringur sem veltur hægt.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="tolf" data-finish="navy"></div></div><div class="fmeta"><span class="num">#03</span><h3>Tólf</h3><p>Tólfflötungur, flatir fletir.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="snuningur" data-finish="navy"></div></div><div class="fmeta"><span class="num">#04</span><h3>Snúningur</h3><p>Teningur með mjúk horn, snúinn um miðjuna.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="hnutur" data-finish="navy"></div></div><div class="fmeta"><span class="num">#05</span><h3>Hnútur</h3><p>Rör sem fer tvisvar í kringum sjálft sig.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="klumpur" data-finish="navy"></div></div><div class="fmeta"><span class="num">#06</span><h3>Klumpur</h3><p>Kúla sem gárast rólega, aldrei eins.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="pilla" data-finish="navy"></div></div><div class="fmeta"><span class="num">#07</span><h3>Pilla</h3><p>Hylki á ská. Einfaldast af öllum.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+        <div class="fcard"><div class="fstage"><div class="r3d" data-shape="tviskipt" data-finish="navy"></div></div><div class="fmeta"><span class="num">#08</span><h3>Tvískipt</h3><p>Kúla í tvennu. Efri helmingurinn veltur á hvolf og til baka, eins og TAL í merkinu.</p><button class="copy3" type="button">Afrita kóða</button></div></div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Sýnishorn &middot; svona gæti það litið út á þjónustusíðu</div>
+        <div class="demo-row">
+          <div class="demo-item"><div class="r3d" data-shape="tolf" data-finish="navy"></div><span class="dn">#01</span><h4>Vefþróun</h4><p>Sérsniðnir vefir og vefkerfi, hraðir, öruggir og byggðir til að vaxa.</p></div>
+          <div class="demo-item"><div class="r3d" data-shape="kleina" data-finish="navy"></div><span class="dn">#02</span><h4>Hönnun</h4><p>Vefhönnun og ásýnd, frá wireframe að fullkláruðu útliti.</p></div>
+          <div class="demo-item"><div class="r3d" data-shape="oddur" data-finish="navy"></div><span class="dn">#03</span><h4>Leitarvélabestun</h4><p>Tæknileg SEO, efnisstefna og mælingar sem skila umferð.</p></div>
+          <div class="demo-item"><div class="r3d" data-shape="snuningur" data-finish="navy"></div><span class="dn">#04</span><h4>Hýsing og rekstur</h4><p>Uppfærslur, afritun og vöktun í öruggum höndum.</p></div>
+        </div>
+      </div>
     </section>
 
     <div class="grid">
@@ -272,6 +672,218 @@
 
     </div>
 
+    <section class="section-head2">
+      <div class="eyebrow">Þriðji hluti &middot; eldri tillögur</div>
+      <h2>3D- og þjónustu-element</h2>
+      <p>Sterkari element, hugsuð sem myndrænt akkeri á þjónustusíðu: eitt við hlið fyrirsagnar eða inni í spjaldi. Merkingin fylgir þjónustunni (ratsjá fyrir sýnileika, stafli fyrir hýsingu, mælir fyrir hraða) svo þau eru ekki bara skraut. Allt í sama litakerfi, ekkert bókasafn, aðeins CSS og lítið JS þar sem það þarf.</p>
+      <div class="howto">Ýttu á <code>Afrita kóða</code> undir elementi. Á klemmuspjaldið fer sjálfstæður bútur: litabreyturnar, CSS-ið, HTML-ið og JS ef við á. Límdu hann þar sem elementið á að vera; ytri kassinn <code>.el-host</code> ræður stærðinni (sjálfgefið 1:1), þú stillir bara <code>width</code> á honum.</div>
+    </section>
+
+    <div class="grid g2">
+
+      <div class="card">
+        <div class="stage c" data-el="07">
+          <div class="el-radar">
+            <i class="ring" style="--s:100%"></i><i class="ring" style="--s:68%"></i><i class="ring" style="--s:36%"></i>
+            <i class="beam"></i>
+            <b class="pip" style="left:66%;top:28%;--d:.8s"></b>
+            <b class="pip" style="left:28%;top:56%;--d:2.7s"></b>
+            <b class="pip" style="left:72%;top:70%;--d:1.7s"></b>
+            <b class="pip" style="left:44%;top:22%;--d:3.6s"></b>
+            <i class="core"></i>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">07</div>
+          <h3>Leitargeisli</h3>
+          <p>Ratsjárgeisli sópar hringinn og punktarnir kvikna þegar hann fer yfir þá. Sýnileiki: vefurinn þinn er fundinn.</p>
+          <div class="use"><span>SEO</span><span>Vöktun</span><span>Greiningar</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="08">
+          <div class="el-rank">
+            <div class="floor"></div>
+            <div class="bars">
+              <span style="--h:44%;--d:0s"></span>
+              <span style="--h:62%;--d:.08s"></span>
+              <span class="me" style="--h:100%;--d:.16s"></span>
+              <span style="--h:74%;--d:.24s"></span>
+              <span style="--h:52%;--d:.32s"></span>
+            </div>
+            <div class="lbl">#1</div>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">08</div>
+          <h3>Sýnileiki</h3>
+          <p>Súlur rísa á perspektífu-gólfi. Ein þeirra, þín, staldrar við í miðjunni og klifrar svo upp í fyrsta sæti. Endurtekur sig hægt.</p>
+          <div class="use"><span>SEO</span><span>Leitarvélabestun</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="09">
+          <div class="el-stack"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">09</div>
+          <h3>Lög</h3>
+          <p>Fjórar plötur í ísómetrískum stafla sem anda hver í sínum takti. Grunnurinn navy, efsta lagið ljóst. Vefkerfi, hýsing, það sem liggur undir.</p>
+          <div class="use"><span>Hýsing</span><span>Vefkerfi</span><span>Rekstur</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="10">
+          <div class="el-cube"><i class="f1">REY</i><i class="f2">TAL</i><i class="f3">VEF</i><i class="f4">KÓÐI</i><i class="f5"></i><i class="f6"></i></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">10</div>
+          <h3>Teningur</h3>
+          <p>Vírteningur sem snýst hægt með mono-orðum á hliðunum. Önnur hver hlið á hvolfi, sama flip og í merkinu.</p>
+          <div class="use"><span>Vefþróun</span><span>Sérlausnir</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="11">
+          <div class="el-globe"></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">11</div>
+          <h3>Hnöttur</h3>
+          <p>Punktahnöttur teiknaður á canvas, snýst hægt og punktarnir dofna eftir því sem þeir fara aftur fyrir. Reykjavík og Tallinn, alþjóðleg verkefni.</p>
+          <div class="use"><span>Um okkur</span><span>SEO</span><span>Alþjóðlegt</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage" data-el="12">
+          <div class="el-net"></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">12</div>
+          <h3>Net</h3>
+          <p>Hnútar tengdir grönnum línum og litlir púlsar sem renna á milli þeirra. Kerfi sem tala saman.</p>
+          <div class="use"><span>Gervigreind</span><span>Sjálfvirkni</span><span>Samþættingar</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="13">
+          <div class="el-sonar"><i></i><i></i><i></i><b></b></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">13</div>
+          <h3>Sónar</h3>
+          <p>Hringir sem breiðast rólega út frá kjarna. Eitthvað vakir yfir vefnum: öryggisuppfærslur, afritun, vöktun.</p>
+          <div class="use"><span>Öryggi</span><span>Vöktun</span><span>Hýsing</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="14">
+          <div class="el-gauge">
+            <div class="arc"></div>
+            <div class="needle"></div>
+            <div class="val"><b>0</b><s></s></div>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">14</div>
+          <h3>Hraðamælir</h3>
+          <p>240° bogi fyllist, nálin fylgir og talan telur upp í 96. Heldur í nokkrar sekúndur, núllstillist og fer aftur. Talan er stillanleg í JS.</p>
+          <div class="use"><span>Hraði</span><span>Vefúttekt</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="15">
+          <div class="el-cards">
+            <i class="c1"><s></s><s></s><s></s></i>
+            <i class="c2"><s></s><s></s><s></s></i>
+            <i class="c3"><s></s><s></s><s></s></i>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">15</div>
+          <h3>Fljótandi spjöld</h3>
+          <p>Þrjár skjámyndir í lögum í rými, vagga hægt í hvíld og halla með músinni þegar sveimað er yfir. Wireframe að fullkláruðu útliti.</p>
+          <div class="use"><span>Hönnun</span><span>UX / UI</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="16">
+          <div class="el-mark">
+            <span class="turn"><span class="mirror">
+              <svg viewBox="0 0 23.19 18.89" aria-hidden="true">
+                <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+                <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+                <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+                <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+                <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+                <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+                <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+              </svg>
+            </span></span>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">16</div>
+          <h3>Merkið í rými</h3>
+          <p>REY/TAL veltur um lárétta ásinn. Á kantinum, þar sem það er ósýnilegt, speglast það, svo það lendir alltaf sem merkið sjálft snúið 180°. Flip-mótífið í þrívídd.</p>
+          <div class="use"><span>Vörumerki</span><span>Um okkur</span><span>404</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage" data-el="17">
+          <div class="el-waves"></div>
+        </div>
+        <div class="card-meta">
+          <div class="num">17</div>
+          <h3>Bylgjur</h3>
+          <p>Þrjár sínuslínur, hver á sínum hraða og í sínum lit, renna hægt yfir. Umferð, mælingar, gögn sem hreyfast.</p>
+          <div class="use"><span>Greiningar</span><span>SEO</span><span>Mælingar</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stage c" data-el="18">
+          <div class="el-ring">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <defs><path id="elRingPath" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+              <circle class="halo" cx="100" cy="100" r="52"/>
+              <text class="txt"><textPath href="#elRingPath">Vefþróun · Hönnun · SEO · Hýsing · Gervigreind · </textPath></text>
+              <circle class="dot" cx="100" cy="100" r="4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="num">18</div>
+          <h3>Hringtexti</h3>
+          <p>Þjónustuorðin í mono á hring sem snýst hægt um kyrran punkt. Skiptu orðunum út eftir síðu.</p>
+          <div class="use"><span>Þjónusta</span><span>Allar síður</span></div>
+          <button class="copy" type="button">Afrita kóða</button>
+        </div>
+      </div>
+
+    </div>
+
     <footer class="note">REYTAL &middot; einkasíða, ekki opinber</footer>
   </div>
 
@@ -342,5 +954,242 @@
   }
 })();
 </script>
+
+<!-- JS fyrir canvas-elementin og mælinn. Hver skrifta er merkt data-el, er sjálfstæð
+     og finnur sín element eftir klasa, svo afritaði búturinn virkar einn og sér. -->
+<script data-el="11">
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.el-globe').forEach(function(host){
+    host.innerHTML = '';
+    var c = document.createElement('canvas'); host.appendChild(c);
+    var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+    var N = 520, pts = [];
+    for (var i = 0; i < N; i++){                       // Fibonacci-dreifing á kúlu
+      var y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), a = i * 2.39996;
+      pts.push([Math.cos(a) * r, y, Math.sin(a) * r]);
+    }
+    function size(){ W = host.clientWidth; H = host.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    var rot = 0, tilt = -0.42;
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      var R = Math.min(W,H) * 0.44, cx = W/2, cy = H/2;
+      var cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(tilt), st = Math.sin(tilt);
+      for (var i = 0; i < N; i++){
+        var p = pts[i];
+        var x = p[0]*cr - p[2]*sr, z = p[0]*sr + p[2]*cr, y = p[1];
+        var y2 = y*ct - z*st, z2 = y*st + z*ct;
+        var depth = (z2 + 1) / 2;                      // 0 = bak, 1 = fram
+        ctx.globalAlpha = 0.08 + depth * 0.82;
+        ctx.fillStyle = depth > 0.5 ? '#0D4659' : '#4C7C93';
+        var s = 0.9 + depth * 1.7;
+        ctx.beginPath(); ctx.arc(cx + x*R, cy - y2*R, s, 0, 6.2832); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    size(); draw();
+    if (!reduce) (function loop(){ rot += 0.0045; draw(); requestAnimationFrame(loop); })();
+    addEventListener('resize', function(){ size(); draw(); });
+  });
+})();
+</script>
+<script data-el="12">
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.el-net').forEach(function(host){
+    host.innerHTML = '';
+    var c = document.createElement('canvas'); host.appendChild(c);
+    var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+    var nodes = [[.18,.30],[.42,.18],[.68,.24],[.84,.44],[.72,.70],[.48,.80],[.24,.66],[.50,.50],[.32,.46],[.62,.46]];
+    var edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0],[0,8],[8,7],[7,9],[9,3],[1,7],[7,5],[8,6],[9,4]];
+    var pulses = [];
+    function size(){ W = host.clientWidth; H = host.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    function P(i){ return [nodes[i][0]*W, nodes[i][1]*H]; }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(13,70,89,0.18)';
+      edges.forEach(function(e){ var a = P(e[0]), b = P(e[1]); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); });
+      pulses.forEach(function(p){
+        var a = P(edges[p.e][0]), b = P(edges[p.e][1]);
+        var t = p.dir ? p.t : 1 - p.t;
+        var x = a[0] + (b[0]-a[0]) * t, y = a[1] + (b[1]-a[1]) * t;
+        ctx.fillStyle = '#BEBFA6'; ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'rgba(190,191,166,0.35)'; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.2832); ctx.fill();
+      });
+      nodes.forEach(function(n, i){
+        var p = P(i), big = i === 7;
+        ctx.fillStyle = big ? '#0D4659' : '#4C7C93';
+        ctx.beginPath(); ctx.arc(p[0], p[1], big ? 6 : 3.5, 0, 6.2832); ctx.fill();
+      });
+    }
+    function step(){
+      if (Math.random() < 0.05 && pulses.length < 5) pulses.push({e: (Math.random()*edges.length)|0, t: 0, dir: Math.random() < .5});
+      pulses.forEach(function(p){ p.t += 0.012; });
+      pulses = pulses.filter(function(p){ return p.t < 1; });
+      draw(); requestAnimationFrame(step);
+    }
+    size(); draw();
+    if (!reduce) step();
+    addEventListener('resize', function(){ size(); draw(); });
+  });
+})();
+</script>
+<script data-el="14">
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.el-gauge').forEach(function(g){
+    var TARGET = 96, num = g.querySelector('.val b');
+    function set(v){ g.style.setProperty('--p', v.toFixed(2)); num.textContent = Math.round(v); }
+    if (reduce){ set(TARGET); return; }
+    var start = null;
+    function frame(ts){
+      if (start === null) start = ts;
+      var t = (ts - start) / 1000 % 8;                  // 8s lota: 2.2s upp, 3.8s kyrrt, 0.8s niður, 1.2s bið
+      var v;
+      if (t < 2.2){ var p = t / 2.2; v = TARGET * (1 - Math.pow(1 - p, 3)); }
+      else if (t < 6.0) v = TARGET;
+      else if (t < 6.8){ var q = (t - 6.0) / 0.8; v = TARGET * (1 - q * q); }
+      else v = 0;
+      set(v); requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+})();
+</script>
+<script data-el="15">
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.el-cards').forEach(function(el){
+    var host = el.parentElement;
+    host.addEventListener('mousemove', function(e){
+      var r = host.getBoundingClientRect();
+      var nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+      el.classList.add('live');
+      el.style.transform = 'rotateX(' + (12 - ny * 22).toFixed(2) + 'deg) rotateY(' + (-18 + nx * 30).toFixed(2) + 'deg)';
+    }, {passive:true});
+    host.addEventListener('mouseleave', function(){ el.style.transform = ''; el.classList.remove('live'); });
+  });
+})();
+</script>
+<script data-el="17">
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.el-waves').forEach(function(host){
+    host.innerHTML = '';
+    var c = document.createElement('canvas'); host.appendChild(c);
+    var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+    var waves = [
+      {col:'#0D4659', amp:.12, len:1.1, sp:.9,  w:1.6, off:0},
+      {col:'#4C7C93', amp:.09, len:1.6, sp:1.3, w:1.2, off:2.1},
+      {col:'#BEBFA6', amp:.15, len:0.8, sp:.6,  w:1.2, off:4.2}
+    ];
+    function size(){ W = host.clientWidth; H = host.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    var t = 0;
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      waves.forEach(function(wv){
+        ctx.beginPath(); ctx.lineWidth = wv.w; ctx.strokeStyle = wv.col;
+        for (var x = 0; x <= W; x += 3){
+          var y = H/2 + Math.sin(x / W * Math.PI * 2 * wv.len + t * wv.sp + wv.off) * H * wv.amp
+                      + Math.sin(x / W * Math.PI * 6 + t * .4) * H * .015;
+          x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        }
+        ctx.stroke();
+      });
+    }
+    size(); draw();
+    if (!reduce) (function loop(){ t += 0.016; draw(); requestAnimationFrame(loop); })();
+    addEventListener('resize', function(){ size(); draw(); });
+  });
+})();
+</script>
+<script>
+// „Afrita kóða": safnar saman litabreytum, CSS-i, HTML-i og JS fyrir eitt element
+(function(){
+  var VARS = ':root{--black:#0B0C0D;--navy:#0D4659;--slate:#4C7C93;--grey:#9AA1A6;--sage:#BEBFA6;--cream:#F3F0EA;}\n' +
+             '.el-host{position:relative;aspect-ratio:1;width:100%;display:grid;place-items:center;overflow:hidden;perspective:900px;}';
+  document.querySelectorAll('.card-meta .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.card');
+      var stage = card.querySelector('.stage');
+      var id = stage.getAttribute('data-el');
+      var title = card.querySelector('h3').textContent;
+      var css = [].map.call(document.querySelectorAll('style[data-el="' + id + '"], style[data-el="all"]'), function(s){ return s.textContent.trim(); }).join('\n');
+      var js = document.querySelector('script[data-el="' + id + '"]');
+      // canvas-element: klónum sviðið og tökum canvasinn burt, JS býr hann til aftur
+      var clone = stage.cloneNode(true);
+      clone.querySelectorAll('canvas').forEach(function(cv){ cv.remove(); });
+      var html = clone.innerHTML.trim().replace(/^ {10}/gm, '');
+      var out = '<!-- REYTAL element ' + id + ': ' + title + ' -->\n<style>\n' + VARS + '\n' + css + '\n</style>\n' +
+                '<div class="el-host">\n' + html + '\n</div>' +
+                (js ? '\n<script>' + js.textContent + '<\/script>' : '') + '\n';
+      function done(ok){
+        btn.textContent = ok ? 'Afritað' : 'Tókst ekki';
+        btn.classList.toggle('ok', ok);
+        setTimeout(function(){ btn.textContent = 'Afrita kóða'; btn.classList.remove('ok'); }, 1800);
+      }
+      // gamla leiðin sem varaskeifa: clipboard-API hafnar t.d. ef skjalið
+      // er ekki með fókus (falinn flipi, iframe), execCommand virkar þá oft samt
+      function legacy(){
+        var ta = document.createElement('textarea'); ta.value = out;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch(e){}
+        ta.remove(); done(ok);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(out).then(function(){ done(true); }, legacy);
+      } else {
+        legacy();
+      }
+    });
+  });
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="reytal-3d.js?v=2"></script>
+<script>
+// 3D-fjölskyldan: áferðar- og bakgrunnsrofar + „Afrita kóða"
+(function(){
+  var fam = document.getElementById('family');
+  if (!fam || !window.REYTAL3D) return;
+  var current = 'navy';
+  function press(group, btn){ group.querySelectorAll('.seg').forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); }); }
+  fam.querySelectorAll('.seg[data-finish]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      current = btn.getAttribute('data-finish');
+      press(btn.parentElement, btn);
+      fam.querySelectorAll('.r3d').forEach(function(h){ window.REYTAL3D.setFinish(h, current); });
+    });
+  });
+  fam.querySelectorAll('.seg[data-bg]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var dark = btn.getAttribute('data-bg') === 'dark';
+      press(btn.parentElement, btn);
+      fam.classList.toggle('dark', dark);
+      fam.querySelectorAll('.r3d').forEach(function(h){ h.classList.toggle('on-dark', dark); });
+    });
+  });
+  fam.querySelectorAll('.copy3').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.fcard');
+      var shape = card.querySelector('.r3d').getAttribute('data-shape');
+      var name = card.querySelector('h3').textContent;
+      var out = '<!-- REYTAL 3D: ' + name + ' (áferð: ' + current + ') -->\n' +
+        '<div class="r3d" data-shape="' + shape + '" data-finish="' + current + '" style="width:320px"></div>\n' +
+        '<!-- eitt skipti neðst á síðunni, sama hversu margir hlutir eru: -->\n' +
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>\n' +
+        '<script src="reytal-3d.js"><\/script>\n';
+      function done(ok){ btn.textContent = ok ? 'Afritað' : 'Tókst ekki'; setTimeout(function(){ btn.textContent = 'Afrita kóða'; }, 1800); }
+      function legacy(){ var ta=document.createElement('textarea'); ta.value=out; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); var ok=false; try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); done(ok); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out).then(function(){ done(true); }, legacy); else legacy();
+    });
+  });
+})();
+</script>
+<script src="reytal-brand.js?v=1"></script>
+<script src="reytal-ui.js?v=2"></script>
 </body>
 </html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kynning · REYTAL</title>
+<!-- Þetta er vinnuskjal fyrir eina kynningu, ekki hluti af vefnum sjálfum. -->
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     KYNNING · Föss hjá Pipar\TBWA, 8. október 2026
+     ───────────────────────────────────────────────────────────────────
+     Ein glæra = einn skjár. Örvatakkar, bil, PageUp/PageDown og tölurnar
+     1-9 fletta. Skrollið virkar líka (scroll-snap), svo þetta má keyra
+     eins og vef ef það hentar betur í salnum.
+
+     GULMERKTUR TEXTI = EYÐA SEM ÞÚ FYLLIR INN. Hann er merktur með
+     .fill og sést strax; þegar þú skiptir honum út hverfur merkingin.
+     Glósur (N) eru það sem þú segir, ekki það sem stendur á skjánum.
+     ═══════════════════════════════════════════════════════════════════ */
+  :root{
+    --black:#0B0C0D; --navy:#0D4659; --slate:#4C7C93; --grey:#9AA1A6;
+    --sage:#BEBFA6; --cream:#F3F0EA;
+    --rule:rgba(11,12,13,.14);
+    --e:cubic-bezier(.25,.6,.25,1);
+    --gx:clamp(24px,6vw,96px);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-snap-type:y mandatory;background:var(--cream);}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream);color:var(--black);overflow-x:clip;}
+  a{color:inherit;}
+  button{font:inherit;}
+
+  /* ── glæra ─────────────────────────────────────────────────────── */
+  .slide{
+    position:relative;scroll-snap-align:start;scroll-snap-stop:always;
+    min-height:100vh;min-height:100dvh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(72px,10vh,120px) var(--gx) clamp(72px,10vh,110px);
+    border-bottom:1px solid transparent;
+  }
+  .slide.dark{background:var(--navy);color:var(--cream);}
+  .slide.dark .eyebrow{color:var(--sage);}
+  .slide.dark .eyebrow::before{background:var(--sage);}
+  .slide.dark .lead{color:rgba(243,240,234,.82);}
+  .slide.dark .rule{border-color:rgba(243,240,234,.2);}
+
+  .eyebrow{
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--slate);display:flex;align-items:center;gap:10px;margin-bottom:clamp(18px,3vh,28px);
+  }
+  .eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--slate);}
+  h1{
+    font-family:'DM Sans',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:clamp(44px,min(9vw,13vh),150px);line-height:.92;letter-spacing:-.035em;
+    display:flex;flex-direction:column;align-items:flex-start;
+  }
+  h2{
+    font-family:'DM Sans',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:clamp(30px,min(5.4vw,8vh),84px);line-height:.98;letter-spacing:-.03em;max-width:18ch;
+  }
+  h3{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(19px,2vw,26px);letter-spacing:-.01em;}
+  .accent{color:var(--navy);}
+  .slide.dark .accent{color:var(--sage);}
+  .lead{font-size:clamp(17px,1.5vw,21px);line-height:1.6;color:#2a2a2a;max-width:58ch;margin-top:clamp(18px,3vh,30px);}
+  .rule{border-top:1px solid var(--rule);margin-top:clamp(28px,5vh,52px);padding-top:clamp(22px,4vh,38px);}
+
+  /* eyður sem þú fyllir inn */
+  .fill{
+    background:rgba(190,191,166,.42);box-shadow:0 0 0 3px rgba(190,191,166,.42);
+    border-radius:3px;color:var(--navy);font-style:normal;
+  }
+  .slide.dark .fill{background:rgba(190,191,166,.26);box-shadow:0 0 0 3px rgba(190,191,166,.26);color:var(--sage);}
+
+  /* ── stjórnborð ────────────────────────────────────────────────── */
+  .bar{position:fixed;left:0;right:0;top:0;height:2px;background:rgba(11,12,13,.1);z-index:50;}
+  .bar b{display:block;height:100%;width:0;background:var(--navy);transition:width .35s var(--e);}
+  .hud{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vh,24px);z-index:50;
+    display:flex;align-items:center;gap:10px;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);
+    background:rgba(243,240,234,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(11,12,13,.14);border-radius:999px;padding:9px 14px;
+  }
+  .hud b{color:var(--black);font-weight:500;font-variant-numeric:tabular-nums;}
+  .hud button{background:none;border:0;color:var(--slate);cursor:pointer;letter-spacing:.08em;text-transform:uppercase;font-size:11px;}
+  .hud button:hover{color:var(--navy);}
+  .hud .time{font-variant-numeric:tabular-nums;}
+
+  /* glósur: það sem þú segir. Kveikt og slökkt með N. */
+  .note{
+    display:none;margin-top:clamp(20px,3vh,30px);max-width:62ch;
+    border-left:2px solid var(--sage);padding:10px 0 10px 16px;
+    font-size:15px;line-height:1.6;color:#2a2a2a;
+  }
+  .note b{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);display:block;margin-bottom:6px;}
+  body.notes .note{display:block;}
+  .slide.dark .note{color:rgba(243,240,234,.8);}
+
+  /* ── byggingareiningar ─────────────────────────────────────────── */
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:clamp(20px,3vw,40px);}
+  .cols.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .cols.split{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;}
+  @media (max-width:860px){ .cols.two,.cols.split{grid-template-columns:1fr;} }
+
+  .facts{list-style:none;display:grid;gap:14px;}
+  .facts li{display:grid;grid-template-columns:clamp(104px,12vw,150px) 1fr;gap:16px;align-items:baseline;
+    border-top:1px solid var(--rule);padding-top:12px;font-size:clamp(16px,1.4vw,19px);line-height:1.5;}
+  .facts dt,.facts .k{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);}
+  .slide.dark .facts li{border-color:rgba(243,240,234,.2);}
+  .slide.dark .facts .k{color:var(--sage);}
+
+  .bullets{list-style:none;display:grid;gap:clamp(12px,2vh,18px);margin-top:clamp(20px,3vh,32px);}
+  .bullets li{position:relative;padding-left:26px;font-size:clamp(16px,1.5vw,20px);line-height:1.5;max-width:52ch;}
+  .bullets li::before{content:'';position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--slate);}
+  .slide.dark .bullets li::before{background:var(--sage);}
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(18px,3vh,26px);}
+  .tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+    border:1px solid rgba(11,12,13,.25);border-radius:999px;padding:7px 14px;color:var(--navy);}
+  .slide.dark .tag{border-color:rgba(243,240,234,.35);color:var(--cream);}
+
+  .big{display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,72px);margin-top:clamp(24px,4vh,40px);}
+  .big div{min-width:120px;}
+  .big .n{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(40px,5.4vw,84px);line-height:.95;letter-spacing:-.03em;}
+  .big .l{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-top:8px;}
+  .slide.dark .big .l{color:var(--sage);}
+
+  /* myndareitir: skjáskot sem þú dregur inn seinna */
+  .shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,20px);margin-top:clamp(20px,3vh,32px);}
+  @media (max-width:860px){ .shots{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .shot{
+    position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:#fff;
+    border:1px solid rgba(11,12,13,.1);box-shadow:0 18px 40px rgba(11,12,13,.07);
+    display:flex;flex-direction:column;
+  }
+  .shot .top{display:flex;align-items:center;gap:5px;padding:9px 12px;border-bottom:1px solid rgba(11,12,13,.07);}
+  .shot .top i{width:7px;height:7px;border-radius:50%;background:rgba(11,12,13,.14);}
+  .shot .top span{margin-left:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.04em;color:var(--slate);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .shot .ph{flex:1;display:grid;place-items:center;background:repeating-linear-gradient(135deg,rgba(13,70,89,.05) 0 10px,transparent 10px 20px);
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);text-align:center;padding:10px;}
+  .shot img,.shot video{flex:1;width:100%;height:100%;object-fit:cover;display:block;}
+
+  /* teymið */
+  .team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,20px);margin-top:clamp(20px,3vh,30px);}
+  @media (max-width:860px){ .team{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .person{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/5;background:var(--sage);}
+  .person img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
+  .person::after{content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
+    background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.2) 55%,transparent);}
+  .person .who{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;color:#fff;}
+  .person .who b{display:block;font-weight:500;font-size:clamp(15px,1.3vw,19px);letter-spacing:-.01em;}
+  .person .who span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75);}
+
+  /* logo-veggur */
+  .logos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(16px,2.4vw,36px);align-items:center;margin-top:clamp(22px,4vh,38px);}
+  @media (max-width:860px){ .logos{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  .logos img{width:100%;max-height:34px;object-fit:contain;filter:brightness(0);opacity:.55;}
+  .slide.dark .logos img{filter:brightness(0) invert(1);opacity:.7;}
+
+  /* myndbandareitir */
+  .reel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.4vw,18px);margin-top:clamp(20px,3vh,32px);}
+  @media (max-width:860px){ .reel{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .reel figure{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:#222;}
+  .reel video{width:100%;height:100%;object-fit:cover;display:block;}
+  .reel figcaption{position:absolute;left:12px;bottom:12px;z-index:2;color:#fff;
+    font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 1px 10px rgba(0,0,0,.6);}
+  .reel figure::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%);}
+
+  /* merkið á forsíðu- og lokaglæru */
+  .mark{width:min(380px,46vw);height:auto;fill:currentColor;display:block;}
+  .markline{display:flex;align-items:center;gap:clamp(16px,3vw,32px);flex-wrap:wrap;}
+
+  /* nafnabreytingin: gamalt nafn strikað yfir og nýtt við hliðina */
+  .rename{display:flex;align-items:center;gap:clamp(14px,2.4vw,28px);flex-wrap:wrap;margin-top:clamp(20px,3vh,32px);}
+  .rename .old{font-weight:700;font-size:clamp(26px,3.4vw,52px);letter-spacing:-.03em;color:var(--grey);text-decoration:line-through;text-decoration-thickness:2px;}
+  .rename .arrow{font-size:clamp(20px,2.4vw,34px);color:var(--slate);}
+  .rename .new{font-weight:700;font-size:clamp(30px,4.2vw,64px);letter-spacing:-.03em;text-transform:uppercase;}
+
+
+  /* ── LÆSING ─────────────────────────────────────────────────────
+     Síðan er ekki ætluð gestum vefsins. Hún er noindex og krefst
+     lykilorðs. ATH: þetta heldur fólki frá sem rambar inn, en efnið er
+     áfram í HTML-inu og sést í "view source". Þetta er girðing, ekki
+     öryggishólf - sjá athugasemd neðst í skránni. ── */
+  body.locked{overflow:hidden;height:100vh;}
+  body.locked .slide,body.locked .hud,body.locked .bar{display:none;}
+  .lock{
+    position:fixed;inset:0;z-index:100;display:none;place-items:center;
+    background:var(--cream);padding:24px;
+  }
+  body.locked .lock{display:grid;}
+  .lock form{width:min(380px,100%);display:flex;flex-direction:column;gap:14px;}
+  .lock .eyebrow{margin-bottom:4px;}
+  .lock h2{font-size:clamp(26px,3vw,38px);max-width:none;}
+  .lock input{
+    width:100%;min-height:54px;padding:15px 22px;
+    font-family:'DM Sans',sans-serif;font-size:16px;color:var(--black);
+    background:rgba(255,255,255,.55);border:1px solid rgba(11,12,13,.22);border-radius:999px;
+    transition:border-color .3s ease,box-shadow .3s ease;
+  }
+  .lock input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(13,70,89,.1);}
+  .lock button{
+    min-height:54px;border:0;border-radius:999px;cursor:pointer;
+    background:var(--black);color:var(--cream);
+    font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;
+    transition:background .3s ease;
+  }
+  .lock button:hover{background:var(--navy);}
+  .lock .err{font-size:14.5px;color:#8a2b2b;min-height:20px;}
+
+  @media print{
+    html{scroll-snap-type:none;}
+    .slide{min-height:auto;page-break-after:always;border-bottom:1px solid var(--rule);}
+    .bar,.hud{display:none;}
+    body.notes .note{display:block;}
+  }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body class="locked">
+
+<!-- Læsing: efnið birtist ekki fyrr en lykilorðið er slegið inn -->
+<div class="lock" id="lock">
+  <form id="lockForm">
+    <div class="eyebrow">Lokuð síða</div>
+    <h2>Kynning í vinnslu</h2>
+    <p class="lead" style="margin-top:0;font-size:16px">Þessi síða er ekki hluti af vefnum. Sláðu inn lykilorðið til að skoða hana.</p>
+    <label>
+      <span style="position:absolute;left:-9999px">Lykilorð</span>
+      <input type="password" id="lockPw" autocomplete="current-password" placeholder="Lykilorð" autofocus>
+    </label>
+    <button type="submit">Opna</button>
+    <p class="err" id="lockErr"></p>
+  </form>
+</div>
+
+<div class="bar" aria-hidden="true"><b id="bar"></b></div>
+<div class="hud">
+  <span><b id="cur">01</b> / <span id="tot">13</span></span>
+  <span class="time" id="clock">00:00</span>
+  <button type="button" id="notesBtn" title="Glósur (N)">Glósur</button>
+</div>
+
+<!-- ══ 01 · FORSÍÐA ══════════════════════════════════════════════ -->
+<section class="slide" id="s1">
+  <div class="eyebrow">Föss · 8. október 2026</div>
+  <div class="markline">
+    <svg class="mark" viewBox="0 0 23.19 18.89" aria-label="REYTAL">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+    </svg>
+    <div>
+      <h3>Gunnlaugur Arnar <span class="fill">[eftirnafn]</span></h3>
+      <p class="lead" style="margin-top:8px">Framkvæmdastjóri REYTAL, áður Reykjavík Digital.</p>
+    </div>
+  </div>
+  <div class="rule">
+    <div class="tags">
+      <span class="tag">Hver er ég</span>
+      <span class="tag">Reykjavík Digital</span>
+      <span class="tag">Af hverju nýtt nafn</span>
+      <span class="tag">REYTAL</span>
+      <span class="tag">Teymið</span>
+      <span class="tag">Verkefnin</span>
+    </div>
+    <div class="note"><b>Glósur · 1 mín</b>Heilsa, segja hver ég er í einni setningu og hvað er framundan í hálftímanum. Gulmerkti textinn í þessari kynningu er það sem á eftir að fylla inn.</div>
+  </div>
+</section>
+
+<!-- ══ 02 · HVER ER ÉG ═══════════════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="eyebrow">Hver er ég</div>
+  <div class="cols split">
+    <div>
+      <h2>Stutta <span class="accent">útgáfan</span></h2>
+      <ul class="facts" style="margin-top:clamp(22px,4vh,36px)">
+        <li><span class="k">Fæddur</span><span class="fill">[Ár og staður]</span></li>
+        <li><span class="k">Uppalinn</span><span class="fill">[Hvar ólst þú upp]</span></li>
+        <li><span class="k">Menntun</span><span class="fill">[Skóli og nám]</span></li>
+        <li><span class="k">Fjölskylda</span><span class="fill">[Maki og börn]</span></li>
+        <li><span class="k">Áhugamál</span><span class="fill">[Tvö til þrjú sem segja eitthvað]</span></li>
+        <li><span class="k">Býr í</span><span class="fill">[Hverfi eða bær]</span></li>
+      </ul>
+      <div class="note"><b>Glósur · 3 mín</b>Örstutt, eins og Anna sagði. Eitt skemmtilegt smáatriði er betra en heil ferilskrá. Enda á því hvernig ég lenti í vefbransanum.</div>
+    </div>
+    <div class="shot" style="aspect-ratio:4/5">
+      <img src="teymi-gudlaugur.jpg" alt="Gunnlaugur">
+    </div>
+  </div>
+</section>
+
+<!-- ══ 03 · HVAÐ GERI ÉG ═════════════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="eyebrow">Hvað geri ég</div>
+  <h2>Ég rek <span class="accent">vefstofu</span> og kem við sögu í hverju verkefni</h2>
+  <ul class="bullets">
+    <li><span class="fill">[Hvað gerir þú í raun og veru á venjulegum degi]</span></li>
+    <li>Tala við viðskiptavini, met hvað á að byggja og hvað ekki.</li>
+    <li>Set saman teymi á hvert verkefni og held utan um tímalínur.</li>
+    <li><span class="fill">[Hversu mikið kemur þú sjálfur að forritun eða hönnun]</span></li>
+  </ul>
+  <div class="rule">
+    <div class="big">
+      <div><div class="n"><span class="fill">[XX]</span></div><div class="l">Ár í bransanum</div></div>
+      <div><div class="n"><span class="fill">[XX]</span></div><div class="l">Vefir í loftinu</div></div>
+      <div><div class="n">8</div><div class="l">Í teyminu í dag</div></div>
+      <div><div class="n">2</div><div class="l">Borgir: Reykjavík og Tallinn</div></div>
+    </div>
+    <div class="note"><b>Glósur · 2 mín</b>Tölurnar eru til að gefa stærðargráðu. Ef ein þeirra er á reiki skaltu frekar sleppa henni en að giska.</div>
+  </div>
+</section>
+
+<!-- ══ 04 · REYKJAVÍK DIGITAL ════════════════════════════════════ -->
+<section class="slide dark" id="s4">
+  <div class="eyebrow">Þar sem þetta byrjaði</div>
+  <h2>Reykjavík <span class="accent">Digital</span></h2>
+  <div class="cols two" style="margin-top:clamp(22px,4vh,36px)">
+    <div>
+      <ul class="facts">
+        <li><span class="k">Stofnað</span><span class="fill">[Ár]</span></li>
+        <li><span class="k">Byrjaði sem</span><span class="fill">[Einn maður, hliðarverkefni, annað]</span></li>
+        <li><span class="k">Fyrsti vefurinn</span><span class="fill">[Hver var hann]</span></li>
+        <li><span class="k">Sérhæfing</span>Vefþróun, netverslanir og leitarvélabestun</li>
+      </ul>
+    </div>
+    <div>
+      <p class="lead">Við byggðum vefi fyrir íslensk fyrirtæki og stofnanir: allt frá kynningarvefjum upp í sérsmíðuð kerfi. Mikið af því sem við gerum í dag varð til þar.</p>
+      <p class="lead"><span class="fill">[Eitt sem þú ert stoltastur af frá RVK Digital tímanum]</span></p>
+    </div>
+  </div>
+  <div class="note"><b>Glósur · 3 mín</b>Hér er samhengið fyrir nafnabreytinguna. Ekki fara of djúpt, verkefnin koma á næstu glæru.</div>
+</section>
+
+<!-- ══ 05 · VERKEFNI RVK DIGITAL ═════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="eyebrow">Verkefni frá Reykjavík Digital</div>
+  <h2>Nokkur sem <span class="accent">stóðu upp úr</span></h2>
+  <div class="shots">
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span>kirkjan.is</span></div>
+      <div class="ph">Skjáskot · Þjóðkirkjan<br>Veftré, wireframe og forritun</div>
+    </div>
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span>verkis.is</span></div>
+      <div class="ph">Skjáskot · Verkís<br>Vefþróun og SEO</div>
+    </div>
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span>sigurros.com</span></div>
+      <div class="ph">Skjáskot · Sigur Rós<br>Forritun og uppsetning</div>
+    </div>
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span>takkkronur.is</span></div>
+      <div class="ph">Skjáskot · Takk (Hagar)<br>Vildarkerfi Bónus og Hagkaups</div>
+    </div>
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span>sjukast.is</span></div>
+      <div class="ph">Skjáskot · Sjúkást (Stígamót)<br>Tilnefnt til PHNX 2024</div>
+    </div>
+    <div class="shot">
+      <div class="top"><i></i><i></i><i></i><span><span class="fill">[þitt val]</span></span></div>
+      <div class="ph">Skjáskot · <span class="fill">[Verkefni að eigin vali]</span></div>
+    </div>
+  </div>
+  <div class="note"><b>Glósur · 4 mín</b>Taktu skjáskot og settu í reitina í staðinn fyrir röndóttu fletina: <code>&lt;img src="skot-kirkjan.jpg" alt=""&gt;</code> inni í .shot. Segðu eina sögu á hvert verkefni, ekki lista upp allt sem var gert.</div>
+</section>
+
+<!-- ══ 06 · AF HVERJU NÝTT NAFN ══════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="eyebrow">Af hverju að skipta um nafn</div>
+  <h2>Nafnið var farið að <span class="accent">vinna gegn okkur</span></h2>
+  <ul class="bullets">
+    <li><span class="fill">[Vandræðin með nafnið: of langt, erfitt í síma, ruglingur við aðra]</span></li>
+    <li><span class="fill">[Alþjóðlega hliðin: Tallinn, viðskiptavinir utan Íslands]</span></li>
+    <li><span class="fill">[Lénið og samfélagsmiðlar: hvað var upptekið]</span></li>
+    <li><span class="fill">[Það sem við vorum orðin, ekki bara vefstofa í Reykjavík]</span></li>
+  </ul>
+  <div class="rule">
+    <p class="lead">Ákvörðunin var tekin <span class="fill">[hvenær]</span> og ferlið tók <span class="fill">[hversu langan tíma]</span>.</p>
+    <div class="note"><b>Glósur · 3 mín</b>Anna bað sérstaklega um þennan kafla. Mátt alveg hafa eitt dæmi sem er pínu vandræðalegt, það er það sem fólk man.</div>
+  </div>
+</section>
+
+<!-- ══ 07 · LENDINGIN ════════════════════════════════════════════ -->
+<section class="slide dark" id="s7">
+  <div class="eyebrow">Lendingin</div>
+  <div class="rename">
+    <span class="old">Reykjavík Digital</span>
+    <span class="arrow">↗︎</span>
+    <span class="new">REYTAL</span>
+  </div>
+  <p class="lead" style="margin-top:clamp(22px,4vh,34px)">Nafnið er dregið af <span class="fill">[hvaðan kemur REYTAL: REY úr Reykjavík, TAL úr …]</span>. Stutt, auðvelt í síma og virkar jafn vel á ensku.</p>
+  <ul class="facts" style="margin-top:clamp(22px,4vh,34px)">
+    <li><span class="k">Nafnið</span><span class="fill">[Hver fann það, hvernig]</span></li>
+    <li><span class="k">Merkið</span><span class="fill">[Hver hannaði það]</span></li>
+    <li><span class="k">Hugmyndin</span>REY stendur upprétt, TAL snýr við: sami stafurinn, tvær áttir</li>
+    <li><span class="k">Vefurinn</span><span>reytal.is, í loftinu <span class="fill">[hvenær]</span></span></li>
+  </ul>
+  <div class="note"><b>Glósur · 4 mín</b>Hér er gott að sýna merkið stórt og benda á flippið. Það mótíf gengur í gegnum allan vefinn: fyrirsagnir réttast við þegar skrollað er.</div>
+</section>
+
+<!-- ══ 08 · VEFURINN ═════════════════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="eyebrow">Nýi vefurinn</div>
+  <h2>reytal.is</h2>
+  <p class="lead">Nýr vefur fylgdi nafninu: hann er í loftinu og við höldum áfram að þróa hann. Allt handskrifað, ekkert þema.</p>
+  <div class="shots" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+    <div class="shot" style="aspect-ratio:16/10">
+      <div class="top"><i></i><i></i><i></i><span>reytal.is</span></div>
+      <div class="ph">Skjáskot · forsíðan<br><span class="fill">[eða opna vefinn í vafra í staðinn]</span></div>
+    </div>
+    <div class="shot" style="aspect-ratio:16/10">
+      <div class="top"><i></i><i></i><i></i><span>reytal.is/vefuttekt</span></div>
+      <div class="ph">Skjáskot · vefúttektin</div>
+    </div>
+  </div>
+  <div class="note"><b>Glósur · 2 mín</b>Ef netið í salnum er traust er langbest að opna vefinn sjálfan og skrolla í gegnum verkefnakaflann í staðinn fyrir skjáskot.</div>
+</section>
+
+<!-- ══ 09 · GREININGARVÉLIN ══════════════════════════════════════ -->
+<section class="slide dark" id="s9">
+  <div class="eyebrow">Það sem við erum að brasa</div>
+  <h2>Greiningarvél sem les <span class="accent">íslenska vefi</span></h2>
+  <div class="cols split" style="margin-top:clamp(22px,4vh,34px)">
+    <div>
+      <p class="lead">Á reytal.is/vefuttekt slærðu inn lén og færð úttekt á tækni, hraða, öryggi og sýnileika á innan við mínútu. Ekkert kreditkort, engin skráning.</p>
+      <div class="big">
+        <div><div class="n">30.000+</div><div class="l">Íslenskir vefir greindir</div></div>
+        <div><div class="n">&lt; 1 mín</div><div class="l">Frá léni í úttekt</div></div>
+      </div>
+    </div>
+    <div>
+      <ul class="bullets" style="margin-top:0">
+        <li>Við notum hana sjálf til að undirbúa samtöl við ný fyrirtæki.</li>
+        <li><span class="fill">[Hvað kemur mest á óvart í gögnunum]</span></li>
+        <li><span class="fill">[Hvað er framundan með hana]</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><b>Glósur · 3 mín</b>Þetta er sá hluti sem fólk man eftir: við byggðum tól sem skannar íslenska vefinn. Bjóddu salnum að prófa á sínum eigin vef eftir á.</div>
+</section>
+
+<!-- ══ 10 · TEYMIÐ ═══════════════════════════════════════════════ -->
+<section class="slide" id="s10">
+  <div class="eyebrow">Teymið</div>
+  <h2>Hverjir <span class="accent">vinna með mér</span></h2>
+  <div class="team">
+    <div class="person"><img src="teymi-jon-haukur.jpg" alt=""><div class="who"><b>Jón Haukur</b><span>Verkefnastjóri</span></div></div>
+    <div class="person"><img src="teymi-tomas.jpg" alt=""><div class="who"><b>Tómas</b><span>Verkefnastjóri</span></div></div>
+    <div class="person"><img src="teymi-isak.jpg" alt=""><div class="who"><b>Ísak</b><span>Hönnuður</span></div></div>
+    <div class="person"><img src="teymi-petur.jpg" alt=""><div class="who"><b>Pétur</b><span>Hönnuður</span></div></div>
+    <div class="person"><img src="teymi-mikk.jpg" alt=""><div class="who"><b>Mikk</b><span>Forritari</span></div></div>
+    <div class="person"><img src="teymi-daniel.jpg" alt=""><div class="who"><b>Daníel</b><span>Forritari</span></div></div>
+    <div class="person"><img src="einar-2025.jpg" alt=""><div class="who"><b>Einar</b><span>Forritari</span></div></div>
+    <div class="person" style="display:grid;place-items:center;background:var(--cream);border:1px dashed rgba(11,12,13,.25)">
+      <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);text-align:center;padding:12px">
+        <span class="fill">[Fleiri?]</span>
+      </span>
+    </div>
+  </div>
+  <p class="lead">Fastir starfsmenn og verktakar: <span class="fill">[hvernig skiptist það]</span>. Teymið er í <span class="fill">[Reykjavík og Tallinn, hvernig skiptist það]</span>.</p>
+  <div class="note"><b>Glósur · 3 mín</b>Nefndu helstu, ekki alla í röð. Ef Mikk er í salnum, gefðu honum orðið stutta stund á næstu glæru.</div>
+</section>
+
+<!-- ══ 11 · MIKK ═════════════════════════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="eyebrow">Ef hann er í salnum</div>
+  <div class="cols split">
+    <div>
+      <h2><span class="accent">Mikk</span></h2>
+      <ul class="facts" style="margin-top:clamp(22px,4vh,34px)">
+        <li><span class="k">Hvaðan</span><span class="fill">[Hvaðan kemur hann]</span></li>
+        <li><span class="k">Saman síðan</span><span class="fill">[Hvað hafið þið unnið lengi saman]</span></li>
+        <li><span class="k">Gerir</span><span class="fill">[Hvað hann gerir hjá okkur]</span></li>
+        <li><span class="k">Verkefni</span><span class="fill">[Eitt sem hann leiddi]</span></li>
+      </ul>
+      <p class="lead"><span class="fill">[Gefa honum orðið í eina til tvær mínútur, eða segja þetta sjálfur]</span></p>
+    </div>
+    <div class="shot" style="aspect-ratio:4/5"><img src="teymi-mikk.jpg" alt="Mikk"></div>
+  </div>
+  <div class="note"><b>Glósur · 2 mín</b>Anna stakk upp á þessu: gefa honum tækifæri á að segja frá sér, en stutt. Ef hann er ekki á staðnum, slepptu glærunni (ýttu á 12).</div>
+</section>
+
+<!-- ══ 12 · VALIN VERKEFNI ═══════════════════════════════════════ -->
+<section class="slide dark" id="s12">
+  <div class="eyebrow">Valin verkefni</div>
+  <h2>Það sem við höfum <span class="accent">verið að gera</span></h2>
+  <div class="reel">
+    <figure><video src="orkureiturinn-web.mp4" muted loop playsinline preload="metadata"></video><figcaption>Orkureiturinn · Söluvefur ársins 2025</figcaption></figure>
+    <figure><video src="verkis-web.mp4" muted loop playsinline preload="metadata"></video><figcaption>Verkís</figcaption></figure>
+    <figure><video src="littupp-web.mp4" muted loop playsinline preload="metadata"></video><figcaption>Líttupp · Netöryggismiðstöð</figcaption></figure>
+    <figure><video src="march-forward-web.mp4" muted loop playsinline preload="metadata"></video><figcaption>March Forward · UN Women</figcaption></figure>
+  </div>
+  <div class="logos">
+    <img src="logo-verkis.svg" alt="Verkís">
+    <img src="logo-olis.svg" alt="Olís">
+    <img src="logo-sjova.svg" alt="Sjóvá">
+    <img src="logo-olgerdin.svg" alt="Ölgerðin">
+    <img src="logo-arnarlax.svg" alt="Arnarlax">
+    <img src="logo-samgongustofa.svg" alt="Samgöngustofa">
+    <img src="logo-nox.svg" alt="Nox Medical">
+    <img src="logo-klasi.svg" alt="Klasi">
+    <img src="logo-safir.svg" alt="Safír">
+    <img src="logo-pipar.svg" alt="Pipar\TBWA">
+  </div>
+  <div class="note"><b>Glósur · 4 mín</b>Orkureiturinn fyrst: söluvefur ársins 2025 hjá SVEF, unninn með Pipar\TBWA. March Forward er líka þeirra verkefni, svo salurinn þekkir það. Myndböndin spilast sjálf þegar glæran birtist.</div>
+</section>
+
+<!-- ══ 13 · TAKK ═════════════════════════════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="eyebrow">Takk fyrir</div>
+  <h1><span>Spurningar</span><span class="accent">eru velkomnar</span></h1>
+  <div class="rule">
+    <div class="cols two">
+      <div>
+        <h3>Prófaðu vefúttektina</h3>
+        <p class="lead" style="margin-top:10px">reytal.is/vefuttekt · sláðu inn þitt eigið lén og sjáðu hvað kemur.</p>
+      </div>
+      <div>
+        <h3>Samband</h3>
+        <p class="lead" style="margin-top:10px">hallo@reytal.is · reytal.is · Guðrúnartún 8, 105 Reykjavík</p>
+      </div>
+    </div>
+    <div class="note"><b>Glósur · 2 mín</b>Enda á boði: prófið vefúttektina á ykkar eigin vef, ég fer yfir niðurstöðurnar með hverjum sem vill.</div>
+  </div>
+</section>
+
+<script>
+// ── Fletting: örvar, bil, PageUp/PageDown, Home/End og tölurnar 1-9.
+//    Skrollið sjálft sér um restina (scroll-snap í CSS).
+(function(){
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var bar = document.getElementById('bar'), cur = document.getElementById('cur');
+  var notesBtn = document.getElementById('notesBtn');
+  document.getElementById('tot').textContent = ('0' + slides.length).slice(-2);
+
+  function index(){
+    var best = 0, bd = Infinity;
+    slides.forEach(function(s, i){
+      var d = Math.abs(s.getBoundingClientRect().top);
+      if (d < bd){ bd = d; best = i; }
+    });
+    return best;
+  }
+  function go(i){
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[i].scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  var ticking = false;
+  function paint(){
+    ticking = false;
+    var i = index();
+    cur.textContent = ('0' + (i + 1)).slice(-2);
+    bar.style.width = (slides.length > 1 ? i / (slides.length - 1) * 100 : 100) + '%';
+    // myndböndin spilast aðeins á þeirri glæru sem er á skjánum
+    slides.forEach(function(s, k){
+      s.querySelectorAll('video').forEach(function(v){
+        if (k === i){ v.play().catch(function(){}); } else { v.pause(); }
+      });
+    });
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(paint); } }, {passive:true});
+  paint();
+
+  addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'ArrowDown' || k === 'ArrowRight' || k === 'PageDown' || k === ' '){ e.preventDefault(); go(index() + 1); }
+    else if (k === 'ArrowUp' || k === 'ArrowLeft' || k === 'PageUp'){ e.preventDefault(); go(index() - 1); }
+    else if (k === 'Home'){ e.preventDefault(); go(0); }
+    else if (k === 'End'){ e.preventDefault(); go(slides.length - 1); }
+    else if (k === 'n' || k === 'N'){ document.body.classList.toggle('notes'); }
+    else if (/^[1-9]$/.test(k)){ e.preventDefault(); go(parseInt(k, 10) - 1); }
+  });
+  notesBtn.addEventListener('click', function(){ document.body.classList.toggle('notes'); });
+
+  // Klukka: byrjar þegar þú flettir fyrst, svo þú sjáir hvort hálftíminn haldi
+  var started = null;
+  var clock = document.getElementById('clock');
+  function tick(){
+    if (started === null) return;
+    var s = Math.floor((Date.now() - started) / 1000);
+    clock.textContent = ('0' + Math.floor(s / 60)).slice(-2) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+  setInterval(tick, 1000);
+  addEventListener('scroll', function(){ if (started === null && index() > 0) started = Date.now(); }, {passive:true, once:false});
+})();
+</script>
+
+<script>
+// ── LÆSING ──────────────────────────────────────────────────────────
+// SHA-256 af lykilorðinu, ekki lykilorðið sjálft. Til að skipta um orð:
+// keyrðu  echo -n "nytt-ord" | shasum -a 256  og límdu útkomuna hér.
+// Opnunin geymist í sessionStorage, svo þú slærð það einu sinni inn.
+(function(){
+  var HASH = "6236633c893491de76201bcdd924cf6227ecb5b788a10fdd63ca604fd31911e3";
+  var KEY = "reytal-kynning-ok";
+  var body = document.body, lock = document.getElementById('lock');
+  var form = document.getElementById('lockForm'), pw = document.getElementById('lockPw'), err = document.getElementById('lockErr');
+
+  function unlock(){
+    body.classList.remove('locked');
+    try { sessionStorage.setItem(KEY, '1'); } catch(e){}
+    lock.remove();
+  }
+  try { if (sessionStorage.getItem(KEY) === '1') unlock(); } catch(e){}
+
+  async function sha256(t){
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+    return [].map.call(new Uint8Array(buf), function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+  }
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    err.textContent = '';
+    // crypto.subtle er aðeins til yfir https eða á localhost. Sé hún ekki
+    // til staðar (t.d. skrá opnuð beint af diski í sumum vöfrum) sleppum
+    // við læsingunni frekar en að loka þig úti úr þinni eigin kynningu.
+    if (!(window.crypto && crypto.subtle)){ unlock(); return; }
+    var h = await sha256(pw.value.trim());
+    if (h === HASH) unlock();
+    else { err.textContent = 'Rangt lykilorð.'; pw.select(); }
+  });
+})();
+</script>
+</body>
+</html>
