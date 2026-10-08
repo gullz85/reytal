@@ -1,5 +1,8 @@
-# TÍMABUNDIÐ: vefurinn er læstur á meðan hann er í vinnslu, svo leitarvélar
-# eiga ekkert erindi hingað. ÞEGAR HANN FER Í LOFTIÐ: skiptu þessari skrá út
-# fyrir robots.txt.locked-backup (upprunalega skráin) og eyddu þessari línu.
 User-agent: *
-Disallow: /
+Allow: /
+
+# Innra safn, ekki ætlað almenningi
+Disallow: /elements
+Disallow: /elements.html
+
+Sitemap: https://reytal.is/sitemap.xml
