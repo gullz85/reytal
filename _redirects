@@ -3,6 +3,7 @@
 /verkefni    /verkefni.html    200
 /um-okkur    /um-okkur.html    200
 /kynning     /kynning.html     200
+/merki       /merki.html       200
 
 # Þjónustusíðurnar liggja í möppum (thjonusta/<slóð>/index.html) og
 # þurfa því enga reglu. Eldri flatar slóðir vísa varanlega á nýju slóðina.
@@ -17,4 +18,3 @@
 # allar hinar). Skilar 404.html med rettum 404-statuskoda fyrir allar
 # slodir sem finnast ekki.
 /*   /404.html   404
-/merki       /merki.html       200
