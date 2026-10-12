@@ -64,8 +64,13 @@
 
   /* litaspjöld: smellur afritar hex-gildið */
   .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:clamp(14px,2vw,24px);}
-  .swatch{border-radius:18px;overflow:hidden;border:1px solid rgba(11,12,13,.12);background:#fff;cursor:pointer;text-align:left;padding:0;font:inherit;}
-  .swatch .chip{height:clamp(110px,14vw,160px);}
+  /* Spjöldin eru hnappar: þau fá sömu hæð með flex og engan ramma, bara
+     mjúkan skugga, svo liturinn nái alveg út í brún á öllum jafnt. */
+  .swatch{display:flex;flex-direction:column;height:100%;border-radius:18px;overflow:hidden;border:0;
+    background:#fff;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit;
+    box-shadow:0 0 0 1px rgba(11,12,13,.08),0 12px 30px rgba(11,12,13,.06);}
+  .swatch .chip{flex:none;height:clamp(110px,14vw,160px);}
+  .swatch .vals{flex:1;}
   .swatch .vals{padding:16px 18px 18px;display:grid;gap:4px;}
   .swatch .vals b{font-size:16px;font-weight:600;}
   .swatch .vals span{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#555;}
@@ -379,7 +384,7 @@
         <div class="vals"><b>Sage</b><span class="hex">#BEBFA6</span><span>RGB 190, 191, 166</span><span>CMYK 1, 0, 13, 25</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Áhersla á dökkum fleti, mjúk merking</span></div>
       </button>
       <button class="swatch" type="button" data-hex="#F3F0EA" title="Smelltu til að afrita #F3F0EA">
-        <div class="chip" style="background:#F3F0EA;border-bottom:1px solid rgba(11,12,13,.1)"></div>
+        <div class="chip" style="background:#F3F0EA"></div>
         <div class="vals"><b>Rjómi</b><span class="hex">#F3F0EA</span><span>RGB 243, 240, 234</span><span>CMYK 0, 1, 4, 5</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Bakgrunnur vefsins</span></div>
       </button>
     </div>
