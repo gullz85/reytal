@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merki og litir REYTAL</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="description" content="Merki REYTAL í öllum sniðum, litir og letur til niðurhals.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://reytal.is/merki">
+<meta property="og:title" content="Merki og litir REYTAL">
+<meta property="og:description" content="Merki REYTAL í öllum sniðum, litir og letur til niðurhals.">
+<meta property="og:locale" content="is_IS">
+<meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="REYTAL">
+<meta property="og:site_name" content="REYTAL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F3F0EA">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://reytal.is/merki">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KZYV12RDN2');
+</script>
+
+<link rel="stylesheet" href="style.css?v=13">
+<style>
+  /* ── MERKI: niðurhalssíða fyrir merki, liti og letur. Ekki í valmynd. ── */
+  .brand{padding:clamp(56px,8vw,110px) 0;}
+  .brand + .brand{padding-top:0;}
+  .brand .section-head{margin-bottom:clamp(28px,4vw,48px);}
+  .brand .intro{max-width:60ch;font-size:17px;line-height:1.65;color:#2a2a2a;margin-top:14px;}
+
+  /* merkjaspjöld: forskoðun á ljósum og dökkum fleti, svo hnappar á hvert snið */
+  .logo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:clamp(18px,2.4vw,32px);}
+  .logo-card{border:1px solid rgba(11,12,13,.12);border-radius:20px;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+  .logo-card .preview{display:grid;place-items:center;aspect-ratio:16/10;padding:clamp(24px,5vw,56px);}
+  .logo-card .preview.ljost{background:var(--cream);}
+  .logo-card .preview.dokkt{background:var(--navy);}
+  .logo-card .preview svg{width:100%;max-height:100%;height:auto;}
+  .logo-card .preview.stafla svg{max-width:46%;}
+  .logo-card .preview.larett svg{max-width:78%;}
+  .logo-card .meta{padding:18px 22px 22px;display:flex;flex-direction:column;gap:12px;}
+  .logo-card .meta h3{font-size:17px;font-weight:600;letter-spacing:-.01em;}
+  .logo-card .meta p{font-size:14px;line-height:1.5;color:#555;}
+  .dl{display:flex;flex-wrap:wrap;gap:8px;}
+  .dl a{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid rgba(11,12,13,.22);border-radius:999px;padding:8px 14px;color:var(--black);text-decoration:none;
+    transition:background .25s ease,border-color .25s ease,color .25s ease;
+  }
+  .dl a:hover{background:var(--black);border-color:var(--black);color:var(--cream);}
+
+  /* litaspjöld: smellur afritar hex-gildið */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:clamp(14px,2vw,24px);}
+  .swatch{border-radius:18px;overflow:hidden;border:1px solid rgba(11,12,13,.12);background:#fff;cursor:pointer;text-align:left;padding:0;font:inherit;}
+  .swatch .chip{height:clamp(110px,14vw,160px);}
+  .swatch .vals{padding:16px 18px 18px;display:grid;gap:4px;}
+  .swatch .vals b{font-size:16px;font-weight:600;}
+  .swatch .vals span{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#555;}
+  .swatch .vals .hex{color:var(--black);font-size:13px;}
+  .swatch:hover .hex{color:var(--navy);}
+  .swatch.afritad .hex::after{content:'  afritað';color:var(--slate);}
+
+  /* letur */
+  .fonts{display:grid;gap:clamp(18px,2.4vw,32px);}
+  .font-card{border-top:1px solid rgba(11,12,13,.14);padding-top:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px;align-items:start;}
+  @media (max-width:760px){ .font-card{grid-template-columns:1fr;} }
+  .font-card h3{font-size:17px;font-weight:600;}
+  .font-card .use{font-size:14px;line-height:1.55;color:#555;margin-top:6px;}
+  .font-card .sample{font-size:clamp(28px,4vw,52px);line-height:1.05;letter-spacing:-.02em;}
+  .font-card .sample.sans{font-family:'DM Sans',sans-serif;font-weight:700;text-transform:uppercase;}
+  .font-card .sample.mono{font-family:'DM Mono',monospace;font-size:clamp(18px,2.2vw,26px);letter-spacing:.06em;text-transform:uppercase;font-weight:500;}
+  .font-card .sample.archivo{font-family:'Archivo',sans-serif;font-weight:900;}
+  .font-card .dl{margin-top:14px;}
+
+  /* reglur */
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:clamp(16px,2vw,28px);}
+  .rule{border-top:1px solid rgba(11,12,13,.14);padding-top:16px;}
+  .rule b{display:block;font-size:16px;font-weight:600;margin-bottom:6px;}
+  .rule p{font-size:14.5px;line-height:1.6;color:#444;}
+
+  .zip-cta{margin-top:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;align-items:center;gap:16px;}
+  .zip-cta small{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);}
+</style>
+</head>
+<body class="tone-sage">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+  <symbol id="markWide" viewBox="0 0 46.38 8.54">
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH: síðuskipta-skjár -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="/">Heim</a>
+  <a href="/thjonusta">Þjónusta</a>
+  <a href="/verkefni">Verkefni</a>
+  <a href="/vefuttekt">Vefúttekt</a>
+  <a href="/um-okkur">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb"><div class="blob"></div></div>
+<header>
+  <nav class="wrap">
+    <a href="/" class="logo-mark" aria-label="REYTAL">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="/">Heim</a></li>
+      <li><a href="/thjonusta">Þjónusta</a></li>
+      <li><a href="/verkefni">Verkefni</a></li>
+      <li><a href="/vefuttekt">Vefúttekt</a></li>
+      <li><a href="/um-okkur">Um okkur</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <h1><span>Merki og</span><span class="flip-word">Litir</span></h1>
+    <p class="lede">Merki REYTAL í öllum sniðum, litirnir og letrið. Sæktu það sem þú þarft og notaðu eins og það kemur.</p>
+    <div class="meta-row">
+      <div class="tag">SVG</div>
+      <div class="tag">PDF</div>
+      <div class="tag">PNG</div>
+    </div>
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="brand">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Merkið</div>
+      <h2>Tvær útgáfur, þrír litir</h2>
+      <p class="intro">Staflaða merkið er aðalútgáfan: REY stendur upprétt og TAL snýr við. Lárétta útgáfan er fyrir pláss sem er breitt og lágt. SVG og PDF eru vigrar og skalast endalaust, PNG eru með gagnsæjum bakgrunni.</p>
+    </div>
+    <div class="logo-grid">
+      <div class="logo-card">
+        <div class="preview ljost stafla"><svg viewBox="0 0 23.19 18.89" fill="#0B0C0D" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Staflað merki, svart</h3>
+          <p>Aðalútgáfan. Notist á ljósum fleti, rjóma eða hvítu.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-stafla-svart.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-stafla-svart.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-stafla-svart-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-stafla-svart-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+      <div class="logo-card">
+        <div class="preview dokkt stafla"><svg viewBox="0 0 23.19 18.89" fill="#FFFFFF" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Staflað merki, hvítt</h3>
+          <p>Á dökkum fleti, navy eða svörtum, og ofan á myndum.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-stafla-hvitt.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-stafla-hvitt.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-stafla-hvitt-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-stafla-hvitt-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+      <div class="logo-card">
+        <div class="preview ljost stafla"><svg viewBox="0 0 23.19 18.89" fill="#0D4659" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Staflað merki, navy</h3>
+          <p>Þegar liturinn má bera meira, til dæmis í prenti.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-stafla-navy.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-stafla-navy.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-stafla-navy-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-stafla-navy-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+      <div class="logo-card">
+        <div class="preview ljost larett"><svg viewBox="0 0 46.38 8.54" fill="#0B0C0D" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Lárétt merki, svart</h3>
+          <p>Þegar plássið er breitt og lágt: hausar, undirskriftir, borðar.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-larett-svart.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-larett-svart.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-larett-svart-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-larett-svart-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+      <div class="logo-card">
+        <div class="preview dokkt larett"><svg viewBox="0 0 46.38 8.54" fill="#FFFFFF" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Lárétt merki, hvítt</h3>
+          <p>Sama, á dökkum fleti.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-larett-hvitt.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-larett-hvitt.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-larett-hvitt-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-larett-hvitt-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+      <div class="logo-card">
+        <div class="preview ljost larett"><svg viewBox="0 0 46.38 8.54" fill="#0D4659" aria-hidden="true">  <title>REYTAL</title>
+
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </svg></div>
+        <div class="meta">
+          <h3>Lárétt merki, navy</h3>
+          <p>Lárétta útgáfan í navy.</p>
+          <div class="dl">
+            <a href="merki-skrar/reytal-larett-navy.svg" download>SVG</a>
+            <a href="merki-skrar/reytal-larett-navy.pdf" download>PDF</a>
+            <a href="merki-skrar/reytal-larett-navy-2400px.png" download>PNG 2400</a>
+            <a href="merki-skrar/reytal-larett-navy-800px.png" download>PNG 800</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="zip-cta">
+      <a class="btn-primary" href="merki-skrar/reytal-merki.zip" download>Sækja allt í einni skrá ↓</a>
+      <small>reytal-merki.zip · 24 skrár · 380 KB</small>
+    </div>
+  </div>
+</section>
+
+<section class="brand">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Litir</div>
+      <h2>Fimm litir, einn tónn</h2>
+      <p class="intro">Smelltu á lit til að afrita HEX-gildið. CMYK-gildin eru nálgun fyrir prent, láttu prentsmiðjuna stilla eftir HEX ef nákvæmni skiptir máli.</p>
+    </div>
+    <div class="swatches">
+      <button class="swatch" type="button" data-hex="#0B0C0D" title="Smelltu til að afrita #0B0C0D">
+        <div class="chip" style="background:#0B0C0D"></div>
+        <div class="vals"><b>Svart</b><span class="hex">#0B0C0D</span><span>RGB 11, 12, 13</span><span>CMYK 15, 8, 0, 95</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Texti og merki á ljósum fleti</span></div>
+      </button>
+      <button class="swatch" type="button" data-hex="#0D4659" title="Smelltu til að afrita #0D4659">
+        <div class="chip" style="background:#0D4659"></div>
+        <div class="vals"><b>Navy</b><span class="hex">#0D4659</span><span>RGB 13, 70, 89</span><span>CMYK 85, 21, 0, 65</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Aðallitur: áherslur, dökkir fletir</span></div>
+      </button>
+      <button class="swatch" type="button" data-hex="#4C7C93" title="Smelltu til að afrita #4C7C93">
+        <div class="chip" style="background:#4C7C93"></div>
+        <div class="vals"><b>Slate</b><span class="hex">#4C7C93</span><span>RGB 76, 124, 147</span><span>CMYK 48, 16, 0, 42</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Merkingar, smærri texti, línur</span></div>
+      </button>
+      <button class="swatch" type="button" data-hex="#BEBFA6" title="Smelltu til að afrita #BEBFA6">
+        <div class="chip" style="background:#BEBFA6"></div>
+        <div class="vals"><b>Sage</b><span class="hex">#BEBFA6</span><span>RGB 190, 191, 166</span><span>CMYK 1, 0, 13, 25</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Áhersla á dökkum fleti, mjúk merking</span></div>
+      </button>
+      <button class="swatch" type="button" data-hex="#F3F0EA" title="Smelltu til að afrita #F3F0EA">
+        <div class="chip" style="background:#F3F0EA;border-bottom:1px solid rgba(11,12,13,.1)"></div>
+        <div class="vals"><b>Rjómi</b><span class="hex">#F3F0EA</span><span>RGB 243, 240, 234</span><span>CMYK 0, 1, 4, 5</span><span style="color:#777;font-family:'DM Sans',sans-serif;letter-spacing:0;font-size:13px">Bakgrunnur vefsins</span></div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="brand">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Letur</div>
+      <h2>Þrjár leturgerðir</h2>
+      <p class="intro">Allar ókeypis frá Google Fonts, bæði fyrir vef og til niðurhals í hönnunarforrit.</p>
+    </div>
+    <div class="fonts">
+      <div class="font-card">
+        <div><h3>DM Sans</h3><p class="use">Fyrirsagnir í hástöfum, þyngd 700, og allur meginmáltexti í 400 til 600.</p>
+          <div class="dl"><a href="https://fonts.google.com/specimen/DM+Sans" target="_blank" rel="noopener">Google Fonts ↗︎</a></div></div>
+        <div class="sample sans">Stafrænar lausnir sem skila árangri</div>
+      </div>
+      <div class="font-card">
+        <div><h3>DM Mono</h3><p class="use">Merkingar, yfirfyrirsagnir og smærri texti í hástöfum með rúmu stafabili.</p>
+          <div class="dl"><a href="https://fonts.google.com/specimen/DM+Mono" target="_blank" rel="noopener">Google Fonts ↗︎</a></div></div>
+        <div class="sample mono">Reykjavík · Tallinn · 2026</div>
+      </div>
+      <div class="font-card">
+        <div><h3>Archivo</h3><p class="use">Stórar tölur og sérstakar áherslur, þyngd 800 og 900. Notist sparlega.</p>
+          <div class="dl"><a href="https://fonts.google.com/specimen/Archivo" target="_blank" rel="noopener">Google Fonts ↗︎</a></div></div>
+        <div class="sample archivo">35.720</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="brand">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Notkun</div>
+      <h2>Fjórar reglur</h2>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>Pláss í kring</b><p>Hafðu autt svæði í kringum merkið sem nemur að minnsta kosti hæð stafsins R í því.</p></div>
+      <div class="rule"><b>Ekki afbaka</b><p>Merkið er ekki teygt, snúið, skyggt eða litað í öðrum litum en þessum þremur.</p></div>
+      <div class="rule"><b>Einn litur í senn</b><p>Allt merkið í einum lit. REY og TAL eru aldrei í sitt hvorum litnum.</p></div>
+      <div class="rule"><b>Lágmarksstærð</b><p>Staflaða merkið ekki minna en 24 pixlar á hæð á skjá, 8 mm í prenti.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-contact">
+        <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+        <address class="footer-addr">Guðrúnartún 8, 105 Reykjavík</address>
+      </div>
+      <div class="footer-pills">
+        <span class="tag">Reykjavík</span>
+        <span class="tag">Tallinn</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>REYTAL © 2026</span>
+      <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef">Hafa samband ↗︎</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /.site -->
+
+<script src="main.js?v=8"></script>
+
+
+<script src="samband.js?v=9" defer></script>
+<script>
+  // Litaspjöld: smellur afritar hex-gildið og merkir spjaldið í tvær sekúndur
+  document.querySelectorAll('.swatch').forEach(function(b){
+    b.addEventListener('click', function(){
+      var hex = b.getAttribute('data-hex');
+      var fn = function(){ b.classList.add('afritad'); setTimeout(function(){ b.classList.remove('afritad'); }, 2000); };
+      if (navigator.clipboard) navigator.clipboard.writeText(hex).then(fn, fn); else fn();
+    });
+  });
+</script>
+</body>
+</html>

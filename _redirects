@@ -17,3 +17,4 @@
 # allar hinar). Skilar 404.html med rettum 404-statuskoda fyrir allar
 # slodir sem finnast ekki.
 /*   /404.html   404
+/merki       /merki.html       200
