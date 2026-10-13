@@ -79,68 +79,48 @@
     margin-top:14px;
   }
 
-  /* Teymið sem harmónika: allir tólf í einni röð af háum sneiðum. Sú sem
-     músin er yfir, eða síðast var smellt á, opnast og sýnir portrettið í
-     fullri stærð með nafni og titli, hinar standa sem mjóar ræmur með
-     nafninu lóðrétt. Á síma snýst röðin og verður lóðrétt harmónika. */
+  /* þrjár í röð: við tvær í röð voru kortin breiðari en 768px myndirnar
+     þola án þess að verða upprennt/blörrí, þrjár heldur sér skarpt */
   .team-grid{
-    display:flex;gap:10px;
-    height:clamp(440px,72vh,760px);
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:clamp(32px,4vw,44px);
   }
-  .person{
-    position:relative;flex:1 1 0;min-width:0;
-    border-radius:18px;overflow:hidden;background:var(--sage);cursor:pointer;
-    transition:flex .7s cubic-bezier(.25,.6,.25,1);
+  .person{position:relative;}
+  .avatar{
+    position:relative;
+    width:100%;aspect-ratio:4/5;border-radius:6px;
+    overflow:hidden;background:var(--sage);
   }
-  .person.open{flex:6 1 0;}
-  .avatar{position:absolute;inset:0;}
   .avatar .avatar-photo{
     width:100%;height:100%;object-fit:cover;object-position:center top;display:block;
-    transition:transform .9s cubic-bezier(.25,.6,.25,1),filter .6s ease;
+    transition:transform .8s cubic-bezier(.25,.6,.25,1);
   }
-  /* lokaðar sneiðar eru aðeins dekkri svo sú opna beri af */
-  .person:not(.open) .avatar-photo{filter:brightness(.72);}
-  .person.open .avatar-photo{transform:scale(1.02);}
-  /* mjúk skyggja neðst svo nafnið lesist á öllum myndum */
+  /* hover: myndin andar örlítið inn og upplýsingarnar lyftast */
+  .person:hover .avatar-photo{transform:scale(1.045);}
+  /* mjúk skyggja neðst svo textinn lesist á öllum myndum */
   .avatar::after{
-    content:'';position:absolute;left:0;right:0;bottom:0;height:55%;
-    background:linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.2) 55%, transparent);
+    content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
+    background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
     pointer-events:none;
   }
-  /* nafn og titill: lárétt í opnu sneiðinni, lóðrétt í þeim lokuðu */
   .person-info{
-    position:absolute;left:20px;right:20px;bottom:18px;z-index:2;
-    display:flex;flex-direction:column;gap:6px;align-items:flex-start;
-    opacity:0;transform:translateY(8px);
-    transition:opacity .4s ease .15s,transform .5s cubic-bezier(.25,.6,.25,1) .15s;
+    position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
+    display:flex;flex-direction:column;gap:3px;
+    text-align:left;
+    transition:transform .5s cubic-bezier(.25,.6,.25,1);
   }
-  .person.open .person-info{opacity:1;transform:none;}
+  .person:hover .person-info{transform:translateY(-5px);}
   .person-info h3{
-    font-family:'DM Sans',sans-serif;font-weight:500;font-size:clamp(20px,2.2vw,28px);letter-spacing:-0.01em;
-    color:#fff;white-space:nowrap;
+    font-family:'DM Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
+    color:#fff;
   }
   .person-info .role{
     font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-    color:#fff;border:1px solid rgba(255,255,255,.45);border-radius:999px;
-    padding:6px 13px;width:fit-content;white-space:nowrap;
-  }
-  .person .tag-v{
-    position:absolute;left:50%;bottom:22px;z-index:2;
-    transform:translateX(-50%) rotate(180deg);writing-mode:vertical-rl;
-    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#fff;
-    white-space:nowrap;transition:opacity .3s ease;
-  }
-  .person.open .tag-v{opacity:0;}
-
-  @media (max-width:760px){
-    .team-grid{flex-direction:column;height:auto;gap:8px;}
-    .person{flex:0 0 64px;transition:flex .6s cubic-bezier(.25,.6,.25,1);}
-    .person.open{flex:0 0 min(78vw,480px);}
-    .person .tag-v{left:18px;bottom:auto;top:50%;transform:translateY(-50%);writing-mode:horizontal-tb;}
-    .person-info h3{white-space:normal;}
-  }
-  @media (prefers-reduced-motion:reduce){
-    .person,.avatar-photo,.person-info,.tag-v{transition:none;}
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.45);border-radius:999px;
+    padding:6px 13px;
+    width:fit-content;
+    margin-top:4px;
   }
 
   /* ── CTA ────────────────────────────────────────────────────── */
@@ -158,6 +138,7 @@
 
   @media (max-width:760px){
     .cta-box{flex-direction:column;align-items:flex-start;}
+    .team-grid{grid-template-columns:1fr;}
   }
 
   /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
@@ -268,112 +249,124 @@
       <!-- Sama fólk og á teymisglærunni í kynningunni. Þeir sem eiga ekki
            portrett ennþá fá staðgengil af Unsplash (leyfi án nafnbirtingar):
            kafari, riddari, geimfari, api í geimbúningi, koparhjálmur, hjálmgríma. -->
-      <article class="person open">
-        <div class="avatar"><img class="avatar-photo" src="teymi-gudlaugur.jpg" alt="Gunnlaugur"></div>
-        <div class="person-info">
-          <h3>Gunnlaugur</h3>
-          <div class="role">Framkvæmdastjóri</div>
+      <article class="person">
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-gudlaugur.jpg" alt="Gunnlaugur">
+          <div class="person-info">
+            <h3>Gunnlaugur</h3>
+            <div class="role">Framkvæmdastjóri</div>
+          </div>
         </div>
-        <span class="tag-v">Gunnlaugur</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-jon-haukur.jpg" alt="Jón Haukur"></div>
-        <div class="person-info">
-          <h3>Jón Haukur</h3>
-          <div class="role">Verkefnastjóri</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-jon-haukur.jpg" alt="Jón Haukur">
+          <div class="person-info">
+            <h3>Jón Haukur</h3>
+            <div class="role">Verkefnastjóri</div>
+          </div>
         </div>
-        <span class="tag-v">Jón Haukur</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-isak.jpg" alt="Ísak"></div>
-        <div class="person-info">
-          <h3>Ísak</h3>
-          <div class="role">Hönnuður</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-isak.jpg" alt="Ísak">
+          <div class="person-info">
+            <h3>Ísak</h3>
+            <div class="role">Hönnuður</div>
+          </div>
         </div>
-        <span class="tag-v">Ísak</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-petur.jpg" alt="Pétur"></div>
-        <div class="person-info">
-          <h3>Pétur</h3>
-          <div class="role">Hönnuður</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-petur.jpg" alt="Pétur">
+          <div class="person-info">
+            <h3>Pétur</h3>
+            <div class="role">Hönnuður</div>
+          </div>
         </div>
-        <span class="tag-v">Pétur</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-mikk.jpg" alt="Mikk"></div>
-        <div class="person-info">
-          <h3>Mikk</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-mikk.jpg" alt="Mikk">
+          <div class="person-info">
+            <h3>Mikk</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Mikk</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-daniel.jpg" alt="Daníel"></div>
-        <div class="person-info">
-          <h3>Daníel</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-daniel.jpg" alt="Daníel">
+          <div class="person-info">
+            <h3>Daníel</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Daníel</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-einar.jpg" alt="Einar"></div>
-        <div class="person-info">
-          <h3>Einar</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-einar.jpg" alt="Einar">
+          <div class="person-info">
+            <h3>Einar</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Einar</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-dmitri.jpg" alt="Dmitri"></div>
-        <div class="person-info">
-          <h3>Dmitri</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-dmitri.jpg" alt="Dmitri">
+          <div class="person-info">
+            <h3>Dmitri</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Dmitri</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-ivan.jpg" alt="Ivan"></div>
-        <div class="person-info">
-          <h3>Ivan</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-ivan.jpg" alt="Ivan">
+          <div class="person-info">
+            <h3>Ivan</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Ivan</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-aleksei.jpg" alt="Aleksei"></div>
-        <div class="person-info">
-          <h3>Aleksei</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-aleksei.jpg" alt="Aleksei">
+          <div class="person-info">
+            <h3>Aleksei</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Aleksei</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-hannes.jpg" alt="Hannes"></div>
-        <div class="person-info">
-          <h3>Hannes</h3>
-          <div class="role">Forritari</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-hannes.jpg" alt="Hannes">
+          <div class="person-info">
+            <h3>Hannes</h3>
+            <div class="role">Forritari</div>
+          </div>
         </div>
-        <span class="tag-v">Hannes</span>
       </article>
 
       <article class="person">
-        <div class="avatar"><img class="avatar-photo" src="teymi-david.jpg" alt="Davíð"></div>
-        <div class="person-info">
-          <h3>Davíð</h3>
-          <div class="role">Kerfisstjóri</div>
+        <div class="avatar">
+          <img class="avatar-photo" src="teymi-david.jpg" alt="Davíð">
+          <div class="person-info">
+            <h3>Davíð</h3>
+            <div class="role">Kerfisstjóri</div>
+          </div>
         </div>
-        <span class="tag-v">Davíð</span>
       </article>
     </div>
   </div>
@@ -414,16 +407,5 @@
 
 
 <script src="samband.js?v=9" defer></script>
-<script>
-  // Harmónikan: sneiðin sem músin er yfir opnast, smellur opnar á snertiskjá
-  (function(){
-    var sneidar = document.querySelectorAll('.team-grid .person');
-    function opna(el){ sneidar.forEach(function(p){ p.classList.toggle('open', p === el); }); }
-    sneidar.forEach(function(p){
-      p.addEventListener('mouseenter', function(){ opna(p); });
-      p.addEventListener('click', function(){ opna(p); });
-    });
-  })();
-</script>
 </body>
 </html>
