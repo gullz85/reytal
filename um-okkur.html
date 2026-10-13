@@ -115,27 +115,25 @@
     background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
     pointer-events:none;
   }
-  /* Rammi sem snýst: liggur á brún myndarinnar, ekki utan við hana. Á hover
-     kviknar daufur hvítur hringur og ljós rák hleypur hring eftir hring,
-     hvít í oddinn og með lit í löngum hala. Hvert spjald fær sinn lit úr
-     brandpallettunni af handahófi (--rak), stillt í skriftunni neðst.
+  /* Rammi sem snýst, eins og hjá Apparatus: allur hringurinn er sýnilegur á
+     brún myndarinnar, litaður með halla sem fer hvítur, litur, annar litur og
+     aftur hvítur, og hallinn snýst hægt um myndina svo litirnir renna hringinn.
+     Hvert spjald fær tvo liti af handahófi (--rak og --rak2) úr tónum síðunnar.
      Hornið er sérskilgreind CSS-breyta (@property) svo hægt sé að hreyfa það. */
   @property --hornid{syntax:'<angle>';inherits:false;initial-value:0deg;}
   .avatar::before{
-    content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:2px;
-    background:
-      conic-gradient(from var(--hornid),
-        transparent 0deg, transparent 130deg,
-        color-mix(in srgb, var(--rak,#6E9FB8) 35%, transparent) 210deg,
-        var(--rak,#6E9FB8) 300deg, var(--rak,#6E9FB8) 340deg,
-        #fff 356deg, transparent 360deg),
-      linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.16));
+    content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:1.5px;
+    background:conic-gradient(from var(--hornid),
+      rgba(255,255,255,.95) 0deg,
+      var(--rak,#E07A45) 70deg, var(--rak,#E07A45) 150deg,
+      var(--rak2,#6E9FB8) 230deg, var(--rak2,#6E9FB8) 300deg,
+      rgba(255,255,255,.95) 360deg);
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
     -webkit-mask-composite:xor;mask-composite:exclude;
-    opacity:0;transition:opacity .45s ease;pointer-events:none;
-    animation:rammiSnyst 6.5s linear infinite;animation-play-state:paused;
+    opacity:0;transition:opacity .55s ease;pointer-events:none;
+    animation:rammiSnyst 9s linear infinite;animation-play-state:paused;
   }
-  .person:hover .avatar::before{opacity:1;animation-play-state:running;}
+  .person:hover .avatar::before{opacity:.95;animation-play-state:running;}
   @keyframes rammiSnyst{to{--hornid:360deg;}}
   @media (prefers-reduced-motion:reduce){ .avatar::before{animation:none;} }
   .person-info{
@@ -447,15 +445,17 @@
 
 <script src="samband.js?v=9" defer></script>
 <script>
-  // Rammalitir: hvert spjald fær sinn lit úr pallettunni við hverja hleðslu
+  // Rammalitir: hvert spjald fær tvo liti úr pallettunni við hverja hleðslu,
+  // og aðalliturinn er aldrei sá sami og hjá spjaldinu á undan
   (function(){
-    // sömu tónar og litaskýin á síðunum (rós, raf, appelsína, grænn) auk brand-slate
     var litir = ['#C46A78', '#D9A04A', '#E07A45', '#8FA36A', '#6E9FB8', '#BEBFA6'];
-    var fyrri = '';
+    var fyrri = '', fyrri2 = '';
+    function einn(utan){ var v = litir.filter(function(l){ return utan.indexOf(l) < 0; }); return v[Math.floor(Math.random() * v.length)]; }
     document.querySelectorAll('.team-grid .person').forEach(function(p){
-      var val = litir.filter(function(l){ return l !== fyrri; });
-      fyrri = val[Math.floor(Math.random() * val.length)];
-      p.style.setProperty('--rak', fyrri);
+      var a = einn([fyrri, fyrri2]), b = einn([a, fyrri, fyrri2]);
+      p.style.setProperty('--rak', a);
+      p.style.setProperty('--rak2', b);
+      fyrri = a; fyrri2 = b;
     });
   })();
   // Teymið: dálkarnir renna á mismunandi hraða á meðan skrollað er framhjá
