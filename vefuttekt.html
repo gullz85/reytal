@@ -524,6 +524,65 @@
     color:var(--cream);
   }
   .trust-steps p{font-size:15.5px;line-height:1.6;color:rgba(243,240,234,0.72);margin-top:8px;max-width:440px;}
+  /* ── ÍSLENSKI VEFURINN: hlekkur á markaðssíðuna, lifandi úr Wisdom ── */
+  .trust-iv{display:inline-flex;align-items:center;gap:10px;margin-top:18px;margin-left:14px;
+    font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(190,191,166,.45);padding-bottom:4px;
+    transition:border-color .3s ease,gap .3s ease;}
+  .trust-iv:hover{border-color:var(--cream);gap:14px;}
+  .trust-iv svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;}
+
+  .ivk-band{position:relative;z-index:1;padding:clamp(72px,10vh,120px) 0 0;}
+  .ivk{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(36px,6vw,96px);align-items:center;
+    padding:clamp(40px,6vw,76px) clamp(26px,5vw,72px);border-radius:clamp(24px,3vw,40px);
+    background:linear-gradient(135deg,#ECE8DF 0%,#F6F3ED 55%,#E9E6DA 100%);
+    border:1px solid rgba(13,70,89,.10);color:var(--black);text-decoration:none;overflow:hidden;isolation:isolate;
+    transition:box-shadow .5s ease,transform .5s cubic-bezier(.2,.7,.2,1);}
+  .ivk::before{content:'';position:absolute;inset:-40%;z-index:-1;pointer-events:none;
+    background:radial-gradient(420px 320px at var(--mx,70%) var(--my,40%),rgba(76,124,147,.16),transparent 70%);
+    transition:opacity .4s ease;}
+  .ivk:hover{box-shadow:0 30px 70px -40px rgba(13,70,89,.45);transform:translateY(-3px);}
+  .ivk .eyebrow{display:flex;align-items:center;gap:10px;}
+  .ivk .nytt{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 9px;border-radius:999px;background:var(--navy);color:var(--cream);}
+  .ivk h2{margin-top:16px;font-size:clamp(34px,4.2vw,60px);line-height:.98;letter-spacing:-.025em;max-width:13ch;}
+  .ivk p{font-size:18px;line-height:1.6;color:#2a2a2a;max-width:46ch;margin-top:18px;}
+  .ivk p b{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .ivk-hlekkur{display:inline-flex;align-items:center;gap:12px;margin-top:28px;
+    font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);}
+  .ivk-hlekkur i{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid rgba(13,70,89,.35);
+    transition:background .35s ease,border-color .35s ease,transform .45s cubic-bezier(.2,.7,.2,1);}
+  .ivk-hlekkur svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;transition:transform .45s cubic-bezier(.2,.7,.2,1);}
+  .ivk:hover .ivk-hlekkur i{background:var(--navy);border-color:var(--navy);color:var(--cream);}
+  .ivk:hover .ivk-hlekkur svg{transform:translateX(3px);}
+  .ivk-mynd{position:relative;}
+  .ivk-vaffla{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(4px,.55vw,7px);max-width:360px;margin-left:auto;}
+  .ivk-vaffla i{aspect-ratio:1;border-radius:clamp(3px,.45vw,5px);background:#D9D4C7;
+    opacity:0;transform:scale(.4);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1.2),background .6s ease;
+    transition-delay:calc(var(--i) * 9ms);}
+  .ivk.inn .ivk-vaffla i{opacity:1;transform:none;}
+  .ivk.inn .ivk-vaffla i[data-k="wp"]{background:var(--navy);}
+  .ivk.inn .ivk-vaffla i[data-k="sersmidad"]{background:var(--slate);}
+  .ivk.inn .ivk-vaffla i[data-k="litil"]{background:var(--sage);}
+  .ivk:hover .ivk-vaffla i[data-k="wp"]{transform:scale(.86);transition-delay:calc(var(--i) * 4ms);}
+  .ivk-skyring{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:flex-end;max-width:440px;margin:16px 0 0 auto;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:#555;}
+  .ivk-skyring span{display:inline-flex;align-items:center;gap:7px;}
+  .ivk-skyring span::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--c);}
+  .ivk-lifandi{position:absolute;top:0;right:0;transform:translateY(calc(-100% - 14px));
+    display:none;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);}
+  .ivk-lifandi::before{content:'';width:7px;height:7px;border-radius:50%;background:#8FA36A;animation:ivkLif 2.4s ease-in-out infinite;}
+  .ivk.lifandi .ivk-lifandi{display:inline-flex;}
+  @keyframes ivkLif{0%,100%{box-shadow:0 0 0 0 rgba(143,163,106,.55);}50%{box-shadow:0 0 0 6px rgba(143,163,106,0);}}
+  @media (max-width:860px){
+    .ivk{grid-template-columns:1fr;}
+    .ivk-vaffla,.ivk-skyring{margin-left:0;justify-content:flex-start;}
+    .ivk-lifandi{position:static;transform:none;margin-bottom:12px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ivk,.ivk-vaffla i,.ivk-hlekkur svg{transition:none !important;}
+    .ivk-lifandi::before{animation:none;}
+  }
 </style>
 
 
@@ -717,11 +776,12 @@
         <div class="trust-stat">
           <div class="eyebrow">Gagnasafnið okkar</div>
           <div class="num" id="trustCount" data-target="30000" data-suffix="">0</div>
-          <p>Höfum greint yfir 30.000 íslenska vefi. Við erum sérfræðingar í vefþróun, hraða og öryggi og vitum nákvæmlega hvert á að leita.</p>
+          <p>Höfum greint yfir <span id="trustYfir">30.000</span> íslenska vefi. Við erum sérfræðingar í vefþróun, hraða og öryggi og vitum nákvæmlega hvert á að leita.</p>
           <div class="trust-badge">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 13.4 4.1 10l-1.4 1.4L7.5 16.2 17.3 6.4 15.9 5z"/></svg>
             <span>Vottuð greining</span>
           </div>
+          <a class="trust-iv" href="/islenski-vefurinn">Staðan á íslenska vefnum<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
         </div>
         <ol class="trust-steps">
           <li>
@@ -777,6 +837,26 @@
         <p>Útrunnin skírteini og gamlar viðbætur fæla bæði viðskiptavini og leitarvélar. Betra að finna það sjálfur en að láta aðra reka sig á það.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="ivk-band">
+  <div class="wrap">
+    <a class="ivk" id="ivk" href="/islenski-vefurinn">
+      <div class="ivk-texti">
+        <div class="eyebrow"><span class="nytt">Nýtt</span>Íslenski vefurinn</div>
+        <h2>Hvernig stendur íslenski vefurinn?</h2>
+        <p>Vélin okkar les <b data-iv="total">35.720</b> íslenska vefi. <b data-iv="wp">42%</b> þeirra keyra á WordPress og <b data-iv="maela">56%</b> mæla ekki umferð. Sjáðu hvað annað kom í ljós.</p>
+        <span class="ivk-hlekkur"><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></i>Skoða stöðuna</span>
+      </div>
+      <div class="ivk-mynd">
+        <span class="ivk-lifandi">Beint úr Wisdom</span>
+        <div class="ivk-vaffla" id="ivkVaffla" aria-hidden="true"></div>
+        <div class="ivk-skyring" aria-hidden="true">
+          <span style="--c:var(--navy)">WordPress</span><span style="--c:var(--slate)">Sérsmíðað</span><span style="--c:var(--sage)">Wix, Shopify o.fl.</span><span style="--c:#D9D4C7">Annað</span>
+        </div>
+      </div>
+    </a>
   </div>
 </section>
 
@@ -1124,6 +1204,7 @@
   if (reduceMotion) { render(target); return; }
 
   function run() {
+    target = parseInt(el.getAttribute("data-target"), 10) || target;
     var start = null;
     var DUR = 1200;
     function frame(ts) {
@@ -1131,7 +1212,7 @@
       var p = Math.min(1, (ts - start) / DUR);
       var eased = 1 - Math.pow(1 - p, 3);
       render(Math.round(eased * target));
-      if (p < 1) requestAnimationFrame(frame);
+      if (p < 1) requestAnimationFrame(frame); else el.setAttribute("data-lokid", "1");
     }
     requestAnimationFrame(frame);
   }
@@ -1216,5 +1297,91 @@
 </script>
 
 <script src="samband.js?v=9" defer></script>
+<script>
+// ── ÍSLENSKI VEFURINN: tölurnar beint úr Wisdom (sama slóð og markaðssíðan) ──
+// Svari vélin ekki standa geymdu tölurnar frá 7. október 2026.
+(function () {
+  var API = "https://wisdom.reytal.is";
+  try {
+    var stadb = new URLSearchParams(location.search).get("wisdom");
+    if (stadb && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(stadb)) API = stadb;
+  } catch (e) {}
+  var KEY = "reytal-iv-v1:" + API;
+  var GEYMT = { total: 35720, base: 26849, wp: 11228, custom: 7952, litil: 4356, noAnalytics: 15081, measured: 26849 };
+  var rolegt = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function snid(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+
+  function ur(j) {
+    if (!j || !j.sites || !j.platforms || !j.signals) return null;
+    var rows = (j.platforms.rows || []).slice().sort(function (a, b) { return b.count - a.count; });
+    function f(p) { var r = rows.filter(function (x) { return x.platform === p; })[0]; return r ? r.count : 0; }
+    var litil = rows.filter(function (r) { return r.platform !== "wordpress" && r.platform !== "custom"; })
+      .slice(0, 4).reduce(function (a, r) { return a + r.count; }, 0);
+    return { total: j.sites.total, base: j.platforms.base, wp: f("wordpress"), custom: f("custom"), litil: litil,
+      noAnalytics: j.signals.noAnalytics, measured: j.signals.measured, live: true };
+  }
+
+  var kort = document.getElementById("ivk"), vaffla = document.getElementById("ivkVaffla");
+  if (vaffla && !vaffla.children.length) for (var k = 0; k < 100; k++) {
+    var c = document.createElement("i"); c.style.setProperty("--i", k); vaffla.appendChild(c);
+  }
+
+  function nota(d) {
+    var pc = function (a, b) { return b > 0 ? Math.round(a / b * 100) : 0; };
+    var set = function (k, v) { var el = document.querySelector('[data-iv="' + k + '"]'); if (el) el.textContent = v; };
+    set("total", snid(d.total));
+    set("wp", pc(d.wp, d.base) + "%");
+    set("maela", pc(d.noAnalytics, d.measured) + "%");
+    // vaflan: stærstu leifar svo reitirnir verði nákvæmlega 100
+    var g = [d.wp, d.custom, d.litil, Math.max(0, d.base - d.wp - d.custom - d.litil)], alls = d.base || 1;
+    var h = g.map(function (v) { return v / alls * 100; }), n = h.map(Math.floor), afg = 100 - n.reduce(function (a, b) { return a + b; }, 0);
+    h.map(function (v, i) { return [v - n[i], i]; }).sort(function (a, b) { return b[0] - a[0]; }).slice(0, afg).forEach(function (x) { n[x[1]]++; });
+    var hopar = ["wp", "sersmidad", "litil", "annad"], hi = 0;
+    [].forEach.call(vaffla ? vaffla.children : [], function (c) {
+      while (hi < 3 && n[hi] <= 0) hi++;
+      c.setAttribute("data-k", hopar[hi]); n[hi]--;
+    });
+    if (kort) kort.classList.toggle("lifandi", !!d.live);
+    // traust-spjaldið: heildartalan og „yfir X.000"
+    var tc = document.getElementById("trustCount");
+    if (tc) {
+      tc.setAttribute("data-target", d.total);
+      if (tc.getAttribute("data-lokid")) tc.textContent = snid(d.total);
+    }
+    var yfir = document.getElementById("trustYfir");
+    if (yfir) yfir.textContent = snid(Math.floor(d.total / 1000) * 1000);
+  }
+
+  var d0 = GEYMT;
+  try { var g = JSON.parse(localStorage.getItem(KEY) || "null"); if (g && Date.now() - g.t < 30 * 60000) d0 = ur(g.d) || GEYMT; } catch (e) {}
+  nota(d0);
+
+  var ctl = window.AbortController ? new AbortController() : null;
+  if (ctl) setTimeout(function () { ctl.abort(); }, 8000);
+  fetch(API + "/api/public/market?market=is", { credentials: "omit", signal: ctl ? ctl.signal : undefined })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      var d = j && j.ok ? ur(j) : null;
+      if (!d) return;
+      try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: j })); } catch (e) {}
+      nota(d);
+    })
+    .catch(function () {});
+
+  // birtist þegar spjaldið kemur inn á skjá (skrollstýrt, virkar líka í földum flipa)
+  function athuga() {
+    if (!kort || kort.classList.contains("inn")) return;
+    if (rolegt || kort.getBoundingClientRect().top < innerHeight * 0.8) kort.classList.add("inn");
+  }
+  addEventListener("scroll", athuga, { passive: true });
+  athuga();
+  // ljóminn fylgir músinni
+  if (kort && !rolegt) kort.addEventListener("pointermove", function (e) {
+    var r = kort.getBoundingClientRect();
+    kort.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+    kort.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Íslenski vefurinn · REYTAL</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="description" content="Staðan á 35.720 íslenskum vefjum: hvaða kerfi þeir keyra, hvað er að og hvað kom á óvart. Lesið af greiningarvél REYTAL.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://reytal.is/islenski-vefurinn">
+<meta property="og:title" content="Íslenski vefurinn · REYTAL">
+<meta property="og:description" content="Staðan á 35.720 íslenskum vefjum, lesin af greiningarvél REYTAL.">
+<meta property="og:locale" content="is_IS">
+<meta property="og:image" content="https://reytal.is/og-image.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="REYTAL">
+<meta property="og:site_name" content="REYTAL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F3F0EA">
+<link rel="canonical" href="https://reytal.is/islenski-vefurinn">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KZYV12RDN2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KZYV12RDN2');
+</script>
+
+<link rel="stylesheet" href="style.css?v=13">
+<style>
+  /* PAGE-HERO: haus og inngangur deila fleti svo hringurinn gangi óslitið undir */
+  .top{position:relative;}
+  h1,h2{text-transform:uppercase;}
+  .page-hero{position:relative;padding:clamp(72px,11vh,128px) 0 clamp(56px,8vh,96px);}
+  
+
+  
+
+  h1{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(40px,6.5vw,104px);line-height:0.9;letter-spacing:-0.008em;
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:flex-start;gap:0.05em;
+    margin-top:clamp(36px,6vw,88px);
+  }
+  h1 .accent{color:var(--navy);}
+  /* smá aukabil og hærri línuhæð í mobile - annars geta há/lág stafi eins og
+     Þ og Í í efri og neðri línu skarast og virkað eins og þeir skerist af */
+  @media (max-width:620px){
+    h1{line-height:0.98;gap:0.08em;}
+  }
+
+  .page-hero p.lede{
+    font-size:19px;line-height:1.6;color:#2a2a2a;max-width:560px;
+    margin-top:clamp(28px,4vh,40px);position:relative;z-index:1;
+  }
+
+  
+
+  .section-head{max-width:620px;margin-bottom:clamp(48px,7vh,72px);}
+  .section-head h2{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.01em;
+    margin-top:14px;
+  }
+
+  /* ═══ ÍSLENSKI VEFURINN ═══════════════════════════════════════════
+     Lendingarsíða með stöðunni á íslenska vefnum úr Wisdom. Gögn í navy,
+     samhengi í gráu, texti alltaf í textalitum. Allar hreyfingar kvikna
+     þegar hluturinn kemur inn á skjá (.inn) og standa kyrrar ef notandinn
+     hefur slökkt á hreyfingum. */
+  .iv{position:relative;padding:clamp(72px,10vw,140px) 0;}
+  .iv .section-head{margin-bottom:clamp(32px,4vw,52px);}
+  .iv .intro{max-width:56ch;font-size:18px;line-height:1.65;color:#2a2a2a;margin-top:16px;}
+  .birta{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1);}
+  .birta.inn{opacity:1;transform:none;}
+
+  /* ── HAUS: texti vinstra megin, punktasvið hægra megin ── */
+  .page-hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center;}
+  @media (max-width:900px){ .page-hero .wrap{grid-template-columns:1fr;} }
+  .svid{position:relative;width:100%;aspect-ratio:47/38;max-width:620px;justify-self:end;}
+  .svid canvas{position:absolute;inset:0;width:100%;height:100%;}
+  .svid figcaption{position:absolute;left:0;right:0;bottom:-34px;display:flex;justify-content:space-between;gap:12px;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);}
+  .svid figcaption i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--navy);margin-right:7px;vertical-align:1px;}
+  .svid figcaption i.dauf{background:rgba(13,70,89,.18);}
+
+  /* ── LYKILTÖLUR ── */
+  .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,2.4vw,32px);}
+  @media (max-width:860px){ .kpi{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .kpi > div{position:relative;padding-top:22px;}
+  .kpi > div::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:rgba(11,12,13,.16);
+    transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.2,.7,.2,1);}
+  .kpi.inn > div::before{transform:scaleX(1);}
+  .kpi .v{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(46px,6vw,88px);line-height:.95;letter-spacing:-.04em;}
+  .kpi .l{margin-top:12px;font-size:15.5px;line-height:1.45;color:#444;max-width:22ch;}
+
+  /* ── KERFIN: vafla sem stendur kyrr á meðan textinn skrollast ── */
+  .saga{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,110px);}
+  @media (max-width:900px){ .saga{grid-template-columns:1fr;} }
+  .saga-mynd{position:sticky;top:clamp(90px,16vh,160px);align-self:start;}
+  @media (max-width:900px){ .saga-mynd{top:72px;z-index:2;background:var(--cream);padding:10px 0 14px;} }
+  .vaffla{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(4px,.6vw,8px);max-width:480px;}
+  .vaffla i{aspect-ratio:1;border-radius:clamp(3px,.5vw,6px);background:#DDD8CC;
+    transition:background-color .55s ease,transform .55s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i) * 7ms);}
+  .vaffla[data-virk="allt"] i{background:#C9C3B4;}
+  .vaffla[data-virk="wp"] i[data-k="wp"],
+  .vaffla[data-virk="sersmidad"] i[data-k="sersmidad"],
+  .vaffla[data-virk="litil"] i[data-k="litil"],
+  .vaffla[data-virk="annad"] i[data-k="annad"]{background:var(--navy);transform:scale(1.04);}
+  .vaffla-skyring{margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);}
+  .saga-skref .skref{min-height:72vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .5s ease;}
+  .saga-skref .skref.virkt{opacity:1;}
+  .saga-skref .skref:first-child{min-height:56vh;justify-content:flex-start;}
+  .skref .stor{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(64px,8vw,128px);line-height:.9;letter-spacing:-.05em;color:var(--navy);}
+  .skref h3{font-size:clamp(22px,2.2vw,30px);font-weight:600;letter-spacing:-.01em;margin-top:14px;text-transform:none;}
+  .skref p{font-size:17px;line-height:1.6;color:#333;margin-top:10px;max-width:42ch;}
+  .skref ul{list-style:none;margin-top:16px;display:grid;gap:8px;max-width:340px;}
+  .skref li{display:flex;justify-content:space-between;border-bottom:1px solid rgba(11,12,13,.12);padding-bottom:8px;font-size:16px;}
+  .skref li span{font-family:'DM Mono',monospace;font-size:13px;color:#555;}
+
+  /* ── ÞAÐ SEM ER AÐ: hringir sem fyllast ── */
+  .hringir{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,44px);}
+  @media (max-width:900px){ .hringir{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .tag.lifandi::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#8FA36A;margin-right:9px;vertical-align:1px;animation:lifandi 2.4s ease-in-out infinite;}
+  @keyframes lifandi{0%,100%{box-shadow:0 0 0 0 rgba(143,163,106,.55);}50%{box-shadow:0 0 0 6px rgba(143,163,106,0);}}
+  section[hidden]{display:none !important;}
+  .hringur{margin:0;display:flex;flex-direction:column;gap:18px;}
+  .hringur .h{position:relative;width:100%;max-width:220px;aspect-ratio:1;}
+  .hringur svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
+  .hringur .spor{fill:none;stroke:rgba(13,70,89,.12);stroke-width:7;}
+  .hringur .fylla{fill:none;stroke:var(--navy);stroke-width:7;stroke-linecap:round;
+    stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset 1.8s cubic-bezier(.2,.7,.2,1);}
+  .hringur .tala{position:absolute;inset:0;display:grid;place-items:center;
+    font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(34px,3.6vw,52px);letter-spacing:-.03em;}
+  .hringur figcaption{font-size:15.5px;line-height:1.5;color:#2a2a2a;max-width:26ch;}
+  .hringur figcaption small{display:block;margin-top:6px;font-family:'DM Mono',monospace;font-size:11.5px;color:#666;letter-spacing:.02em;}
+
+  /* ── INNSÝN: stórar tölur í lista ── */
+  .listi{border-top:1px solid rgba(11,12,13,.14);}
+  .listi article{display:grid;grid-template-columns:minmax(150px,280px) 1fr;gap:clamp(20px,4vw,60px);align-items:center;
+    padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid rgba(11,12,13,.14);position:relative;}
+  @media (max-width:700px){ .listi article{grid-template-columns:1fr;gap:8px;} }
+  .listi .tala{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(48px,6vw,92px);line-height:.9;letter-spacing:-.05em;color:var(--navy);}
+  .listi h3{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.01em;text-transform:none;}
+  .listi p{font-size:16.5px;line-height:1.6;color:#444;margin-top:8px;max-width:56ch;}
+  .listi article::after{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--navy);transition:width .8s cubic-bezier(.2,.7,.2,1);}
+  .listi article:hover::after{width:100%;}
+
+  /* ── ATVINNUGREINAR ── */
+  .greinar{display:grid;gap:22px;max-width:760px;}
+  .grein .topp{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .grein .topp span{font-size:17px;font-weight:500;}
+  .grein .topp b{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;}
+  .grein .lina{height:8px;border-radius:4px;background:rgba(13,70,89,.1);overflow:hidden;}
+  .grein .lina i{display:block;height:100%;width:0;border-radius:4px;background:var(--navy);transition:width 1.4s cubic-bezier(.2,.7,.2,1);}
+  .greinar .grein:not(:first-child) .lina i{background:#9FA9A8;}
+
+  /* ── HVAR STENDUR ÞINN VEFUR ── */
+  .prufa{position:relative;overflow:hidden;background:var(--navy);color:var(--cream);border-radius:32px;
+    padding:clamp(40px,6vw,88px);display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;}
+  @media (max-width:860px){ .prufa{grid-template-columns:1fr;} }
+  .prufa::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(243,240,234,.16) 1.2px,transparent 1.3px);background-size:22px 22px;
+    -webkit-mask:radial-gradient(ellipse at 85% 30%,#000 0%,transparent 65%);mask:radial-gradient(ellipse at 85% 30%,#000 0%,transparent 65%);}
+  .prufa > *{position:relative;}
+  .prufa h2{color:var(--cream);font-size:clamp(32px,4vw,56px);line-height:1;}
+  .prufa p{color:rgba(243,240,234,.82);font-size:18px;line-height:1.6;margin-top:16px;max-width:40ch;}
+  .prufa form{display:flex;gap:10px;flex-wrap:wrap;}
+  .prufa input{flex:1 1 220px;min-height:60px;border-radius:999px;border:1px solid rgba(243,240,234,.3);background:rgba(243,240,234,.08);
+    color:var(--cream);padding:0 24px;font:17px 'DM Sans',sans-serif;transition:border-color .3s ease,background .3s ease;}
+  .prufa input::placeholder{color:rgba(243,240,234,.5);}
+  .prufa input:focus{outline:none;border-color:var(--sage);background:rgba(243,240,234,.12);}
+  .prufa button{min-height:60px;border-radius:999px;border:0;background:var(--cream);color:var(--black);padding:0 28px;cursor:pointer;
+    font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;transition:background .3s ease,transform .3s ease;}
+  .prufa button:hover{background:var(--sage);transform:translateY(-2px);}
+
+  /* ── AÐFERÐ ── */
+  .adferd{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);}
+  @media (max-width:860px){ .adferd{grid-template-columns:1fr;} }
+  .adferd p{font-size:16px;line-height:1.7;color:#2a2a2a;}
+  .adferd p + p{margin-top:12px;}
+  details.tafla summary{cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);}
+  details.tafla table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14.5px;}
+  details.tafla th,details.tafla td{text-align:left;padding:9px 6px;border-bottom:1px solid rgba(11,12,13,.1);}
+  details.tafla .n{text-align:right;font-variant-numeric:tabular-nums;font-family:'DM Mono',monospace;font-size:13px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .tag.lifandi::before{animation:none !important;}
+    .birta,.kpi > div::before,.vaffla i,.hringur .fylla,.grein .lina i,.saga-skref .skref{transition:none !important;}
+    .birta{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body class="tone-sage">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="markStack" viewBox="0 0 23.19 18.89">
+    <g id="sT">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+    <g id="sR">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+  </symbol>
+  <symbol id="markWide" viewBox="0 0 46.38 8.54">
+    <g>
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+      <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+      <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+      <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+    </g>
+    <g transform="translate(23.19,-10.35)">
+      <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+      <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+      <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- SPLASH: síðuskipta-skjár -->
+<div class="splash" id="splashB" aria-hidden="true">
+  <svg class="splash-mark" viewBox="0 0 23.19 18.89"><use href="#markStack"/></svg>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+
+<!-- FARSÍMAVALMYND -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Loka valmynd">Loka</button>
+  <a href="/">Heim</a>
+  <a href="/thjonusta">Þjónusta</a>
+  <a href="/verkefni">Verkefni</a>
+  <a href="/vefuttekt">Vefúttekt</a>
+  <a href="/um-okkur">Um okkur</a>
+</div>
+<div class="site">
+<div class="top">
+  <div class="orb"><div class="blob"></div></div>
+<header>
+  <nav class="wrap">
+    <a href="/" class="logo-mark" aria-label="REYTAL">
+      <svg viewBox="0 0 23.19 18.89">
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </svg>
+    </a>
+    <ul>
+      <li><a href="/">Heim</a></li>
+      <li><a href="/thjonusta">Þjónusta</a></li>
+      <li><a href="/verkefni">Verkefni</a></li>
+      <li><a href="/vefuttekt">Vefúttekt</a></li>
+      <li><a href="/um-okkur">Um okkur</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Opna valmynd">Valmynd</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div>
+      <h1><span>Íslenski</span><span class="flip-word">vefurinn</span></h1>
+      <p class="lede">Staðan á <span id="ivLedeTala">35.720</span> íslenskum vefjum, lesin af greiningarvélinni okkar. Hvaða kerfi þeir keyra, hvað er að og hvað kom á óvart.</p>
+      <div class="meta-row">
+        <div class="tag" id="ivStada">Staðan 7. október 2026</div>
+        <div class="tag" id="ivUppf">Uppfært mánaðarlega</div>
+      </div>
+    </div>
+    <figure class="svid" id="svidFig" aria-label="35.720 íslenskir vefir sem punktar. 75% svara mælingu.">
+      <canvas id="svid"></canvas>
+      <figcaption><span><i></i>Svara mælingu</span><span><i class="dauf"></i>Svara ekki</span><span id="ivPunktur">1 punktur = 20 vefir</span></figcaption>
+    </figure>
+  </div>
+</section>
+</div><!-- /.top -->
+
+<section class="iv">
+  <div class="wrap">
+    <div class="kpi birta">
+      <div><div class="v" id="kpiTotal" data-to="35720">35.720</div><div class="l">íslenskir vefir í vélinni</div></div>
+      <div><div class="v" id="kpiMaeldir" data-to="75" data-suffix="%">75%</div><div class="l" id="kpiMaeldirL">svara og eru mældir, 26.849 vefir</div></div>
+      <div><div class="v" id="kpiWp" data-to="42" data-suffix="%">42%</div><div class="l">keyra á WordPress</div></div>
+      <div><div class="v" id="kpiMaela" data-to="56" data-suffix="%">56%</div><div class="l">mæla ekki umferð á vefnum sínum</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap saga">
+    <div class="saga-mynd">
+      <div class="vaffla" id="vaffla" data-virk="allt" role="img" aria-label="Skipting 26.849 íslenskra vefja eftir kerfi, 100 reitir"><i data-k="wp" style="--i:0"></i><i data-k="wp" style="--i:1"></i><i data-k="wp" style="--i:2"></i><i data-k="wp" style="--i:3"></i><i data-k="wp" style="--i:4"></i><i data-k="wp" style="--i:5"></i><i data-k="wp" style="--i:6"></i><i data-k="wp" style="--i:7"></i><i data-k="wp" style="--i:8"></i><i data-k="wp" style="--i:9"></i><i data-k="wp" style="--i:10"></i><i data-k="wp" style="--i:11"></i><i data-k="wp" style="--i:12"></i><i data-k="wp" style="--i:13"></i><i data-k="wp" style="--i:14"></i><i data-k="wp" style="--i:15"></i><i data-k="wp" style="--i:16"></i><i data-k="wp" style="--i:17"></i><i data-k="wp" style="--i:18"></i><i data-k="wp" style="--i:19"></i><i data-k="wp" style="--i:20"></i><i data-k="wp" style="--i:21"></i><i data-k="wp" style="--i:22"></i><i data-k="wp" style="--i:23"></i><i data-k="wp" style="--i:24"></i><i data-k="wp" style="--i:25"></i><i data-k="wp" style="--i:26"></i><i data-k="wp" style="--i:27"></i><i data-k="wp" style="--i:28"></i><i data-k="wp" style="--i:29"></i><i data-k="wp" style="--i:30"></i><i data-k="wp" style="--i:31"></i><i data-k="wp" style="--i:32"></i><i data-k="wp" style="--i:33"></i><i data-k="wp" style="--i:34"></i><i data-k="wp" style="--i:35"></i><i data-k="wp" style="--i:36"></i><i data-k="wp" style="--i:37"></i><i data-k="wp" style="--i:38"></i><i data-k="wp" style="--i:39"></i><i data-k="wp" style="--i:40"></i><i data-k="wp" style="--i:41"></i><i data-k="sersmidad" style="--i:42"></i><i data-k="sersmidad" style="--i:43"></i><i data-k="sersmidad" style="--i:44"></i><i data-k="sersmidad" style="--i:45"></i><i data-k="sersmidad" style="--i:46"></i><i data-k="sersmidad" style="--i:47"></i><i data-k="sersmidad" style="--i:48"></i><i data-k="sersmidad" style="--i:49"></i><i data-k="sersmidad" style="--i:50"></i><i data-k="sersmidad" style="--i:51"></i><i data-k="sersmidad" style="--i:52"></i><i data-k="sersmidad" style="--i:53"></i><i data-k="sersmidad" style="--i:54"></i><i data-k="sersmidad" style="--i:55"></i><i data-k="sersmidad" style="--i:56"></i><i data-k="sersmidad" style="--i:57"></i><i data-k="sersmidad" style="--i:58"></i><i data-k="sersmidad" style="--i:59"></i><i data-k="sersmidad" style="--i:60"></i><i data-k="sersmidad" style="--i:61"></i><i data-k="sersmidad" style="--i:62"></i><i data-k="sersmidad" style="--i:63"></i><i data-k="sersmidad" style="--i:64"></i><i data-k="sersmidad" style="--i:65"></i><i data-k="sersmidad" style="--i:66"></i><i data-k="sersmidad" style="--i:67"></i><i data-k="sersmidad" style="--i:68"></i><i data-k="sersmidad" style="--i:69"></i><i data-k="sersmidad" style="--i:70"></i><i data-k="sersmidad" style="--i:71"></i><i data-k="litil" style="--i:72"></i><i data-k="litil" style="--i:73"></i><i data-k="litil" style="--i:74"></i><i data-k="litil" style="--i:75"></i><i data-k="litil" style="--i:76"></i><i data-k="litil" style="--i:77"></i><i data-k="litil" style="--i:78"></i><i data-k="litil" style="--i:79"></i><i data-k="litil" style="--i:80"></i><i data-k="litil" style="--i:81"></i><i data-k="litil" style="--i:82"></i><i data-k="litil" style="--i:83"></i><i data-k="litil" style="--i:84"></i><i data-k="litil" style="--i:85"></i><i data-k="litil" style="--i:86"></i><i data-k="litil" style="--i:87"></i><i data-k="annad" style="--i:88"></i><i data-k="annad" style="--i:89"></i><i data-k="annad" style="--i:90"></i><i data-k="annad" style="--i:91"></i><i data-k="annad" style="--i:92"></i><i data-k="annad" style="--i:93"></i><i data-k="annad" style="--i:94"></i><i data-k="annad" style="--i:95"></i><i data-k="annad" style="--i:96"></i><i data-k="annad" style="--i:97"></i><i data-k="annad" style="--i:98"></i><i data-k="annad" style="--i:99"></i></div>
+      <div class="vaffla-skyring" id="vafflaSkyring">Hver reitur er 1% af 26.849 vefjum</div>
+    </div>
+    <div class="saga-skref" id="skref">
+      <div class="skref" data-syna="allt">
+        <div class="eyebrow">Kerfin</div>
+        <h2>Á hverju keyrir íslenski vefurinn?</h2>
+        <p class="intro">Skrollaðu áfram. Hver reitur í töflunni er eitt prósent af öllum vefjum sem svöruðu mælingu.</p>
+      </div>
+      <div class="skref" data-syna="wp">
+        <div class="stor" id="stWp">42%</div>
+        <h3>WordPress</h3>
+        <p id="stWpT">11.228 vefir. Tveir af hverjum fimm íslenskum vefjum keyra á sama kerfi.</p>
+      </div>
+      <div class="skref" data-syna="sersmidad">
+        <div class="stor" id="stCu">30%</div>
+        <h3>Sérsmíðað</h3>
+        <p id="stCuT">7.952 vefir byggðir án tilbúins vefumsjónarkerfis. Næstum þriðjungur.</p>
+      </div>
+      <div class="skref" data-syna="litil">
+        <div class="stor" id="stLi">16%</div>
+        <h3>Smærri kerfin</h3>
+        <ul id="stLiL">
+          <li>Wix<span>5,7%</span></li><li>Shopify<span>5,3%</span></li>
+          <li>Squarespace<span>2,9%</span></li><li>Moya<span>2,3%</span></li>
+        </ul>
+      </div>
+      <div class="skref" data-syna="annad">
+        <div class="stor" id="stAn">12%</div>
+        <h3>Allt hitt</h3>
+        <p id="stAnT">Önnur kerfi eru 7,9% og á 4,4% vefja þekkist kerfið ekki.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap">
+    <div class="section-head birta">
+      <div class="eyebrow">Það sem er að</div>
+      <h2>Fjögur atriði sem mætti laga</h2>
+    </div>
+    <div class="hringir">
+      <figure class="hringur birta" data-lykill="wpOutdated" data-p="34"><div class="h"><svg viewBox="0 0 120 120"><circle class="spor" cx="60" cy="60" r="52"/><circle class="fylla" cx="60" cy="60" r="52"/></svg><b class="tala" data-to="34" data-suffix="%">34%</b></div>
+        <figcaption>WordPress vefja eru ekki á nýjustu útgáfu<small>3.827 af 11.228</small></figcaption></figure>
+      <figure class="hringur birta" data-lykill="noAnalytics" data-p="56"><div class="h"><svg viewBox="0 0 120 120"><circle class="spor" cx="60" cy="60" r="52"/><circle class="fylla" cx="60" cy="60" r="52"/></svg><b class="tala" data-to="56" data-suffix="%">56%</b></div>
+        <figcaption>vefja mæla ekki umferð, engin greiningartól fundust<small>15.081 af 26.849</small></figcaption></figure>
+      <figure class="hringur birta" data-lykill="phpUnsupported" data-p="12"><div class="h"><svg viewBox="0 0 120 120"><circle class="spor" cx="60" cy="60" r="52"/><circle class="fylla" cx="60" cy="60" r="52"/></svg><b class="tala" data-to="12" data-suffix="%">12%</b></div>
+        <figcaption>WordPress vefja keyra PHP sem fær ekki öryggisuppfærslur<small>1.314 af 11.228</small></figcaption></figure>
+      <figure class="hringur birta" data-lykill="sslAtRisk" data-p="4"><div class="h"><svg viewBox="0 0 120 120"><circle class="spor" cx="60" cy="60" r="52"/><circle class="fylla" cx="60" cy="60" r="52"/></svg><b class="tala" data-to="4" data-suffix="%">4%</b></div>
+        <figcaption>vefja með SSL skírteini sem er útrunnið eða í hættu<small>1.054 af 26.849</small></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap">
+    <div class="section-head birta">
+      <div class="eyebrow">Innsýn</div>
+      <h2>Það sem kom okkur á óvart</h2>
+    </div>
+    <div class="listi" id="innsyn">
+      <article class="birta"><div class="tala" data-to="5.6" data-dec="1" data-suffix="×">5,6×</div><div><h3>Shopify er verslunarkerfið</h3><p>30% netverslana keyra á Shopify, á móti 5,3% allra íslenskra vefja.</p></div></article>
+      <article class="birta"><div class="tala" data-to="3.7" data-dec="1" data-suffix="×">3,7×</div><div><h3>Wix svarar hraðar en WordPress</h3><p>Miðgildi svartíma er 0,17 sekúndur hjá Wix en 0,65 hjá WordPress.</p></div></article>
+      <article class="birta"><div class="tala" data-to="58" data-suffix="%">58%</div><div><h3>Veitingageirinn situr eftir</h3><p>58% vefja í veitingum og ferðaþjónustu keyra úrelt PHP, á móti 45% að meðaltali.</p></div></article>
+      <article class="birta"><div class="tala" data-to="1844">1.844</div><div><h3>Skírteini að renna út</h3><p>SSL skírteini sem renna út á næstu 30 dögum. 203 þeirra eru hjá netverslunum.</p></div></article>
+      <article class="birta"><div class="tala" data-to="518">518</div><div><h3>Vefir sem skiptu um kerfi</h3><p>Á síðustu 30 dögum. 274 þeirra fóru úr sérsmíðuðu kerfi yfir í WordPress.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap">
+    <div class="section-head birta">
+      <div class="eyebrow">Atvinnugreinar</div>
+      <h2>Hverjir eru á vefnum?</h2>
+      <p class="intro" id="greinarIntro">Algengustu greinarnar, af þeim 20.574 vefjum sem vélin hefur flokkað.</p>
+    </div>
+    <div class="greinar birta" id="greinar">
+      <div class="grein"><div class="topp"><span>Verslun og netverslun</span><b>25%</b></div><div class="lina"><i data-b="100"></i></div></div>
+      <div class="grein"><div class="topp"><span>Tækni og hugbúnaður</span><b>13%</b></div><div class="lina"><i data-b="52"></i></div></div>
+      <div class="grein"><div class="topp"><span>Félagasamtök</span><b>12%</b></div><div class="lina"><i data-b="48"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap">
+    <div class="prufa birta">
+      <div>
+        <h2>Hvar stendur þinn vefur?</h2>
+        <p>Sama vél, þinn vefur. Úttekt á tækni, hraða, öryggi og sýnileika á innan við mínútu, án skráningar.</p>
+      </div>
+      <form action="/vefuttekt" method="get">
+        <input type="text" name="domain" id="prufaLen" placeholder="vefurinn.is" aria-label="Lén" autocomplete="url" required>
+        <button type="submit">Greina vefinn</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="iv">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Aðferð</div>
+      <h2>Hvaðan tölurnar koma</h2>
+    </div>
+    <div class="adferd">
+      <div>
+        <p>Greiningarvélin okkar, Wisdom, les íslenska vefi reglulega: hvaða kerfi þeir keyra, hversu hratt þeir svara, hvort skírteini og uppfærslur séu í lagi og hvort mælingar séu til staðar.</p>
+        <p id="adferdTexti">Tölurnar hér eru staðan 7. október 2026. Hlutföll eru reiknuð af þeim 26.849 vefjum sem svöruðu mælingu nema annað sé tekið fram. Síðan er uppfærð mánaðarlega.</p>
+      </div>
+      <details class="tafla">
+        <summary>Sjá kerfin í töflu</summary>
+        <table><thead><tr><th>Kerfi</th><th class="n">Vefir</th><th class="n">Hlutfall</th></tr></thead><tbody id="kerfiTafla"><tr><td>WordPress</td><td class='n'>11.228</td><td class='n'>41,8%</td></tr><tr><td>Sérsmíðað</td><td class='n'>7.952</td><td class='n'>29,6%</td></tr><tr><td>Wix</td><td class='n'>1.520</td><td class='n'>5,7%</td></tr><tr><td>Shopify</td><td class='n'>1.421</td><td class='n'>5,3%</td></tr><tr><td>Squarespace</td><td class='n'>787</td><td class='n'>2,9%</td></tr><tr><td>Moya</td><td class='n'>628</td><td class='n'>2,3%</td></tr><tr><td>Önnur kerfi</td><td class='n'>2.125</td><td class='n'>7,9%</td></tr><tr><td>Kerfi óþekkt</td><td class='n'>1.188</td><td class='n'>4,4%</td></tr></tbody></table>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-contact">
+        <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
+        <address class="footer-addr">Guðrúnartún 8, 105 Reykjavík</address>
+      </div>
+      <div class="footer-pills">
+        <span class="tag">Reykjavík</span>
+        <span class="tag">Tallinn</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>REYTAL © 2026</span>
+      <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef">Hafa samband ↗︎</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /.site -->
+
+<script src="main.js?v=8"></script>
+
+
+<script src="samband.js?v=9" defer></script>
+<script>
+  /* ═══ Hreyfingarnar ═══════════════════════════════════════════════
+     Allt er stýrt af skrollinu sjálfu (ekki IntersectionObserver) svo það
+     virki líka í földum flipum og forskoðun. Ef notandinn hefur slökkt á
+     hreyfingum er allt sýnt í lokastöðu strax. */
+  (function(){
+    var rolegt = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    function snid(v, dec){ return v.toFixed(dec || 0).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+    /* ═══ Gögnin: beint úr Wisdom ═════════════════════════════════════
+       Síðan spyr greiningarvélina (wisdom.reytal.is/api/public/market) um
+       stöðuna. Svarið er aðeins talningar, engin lén. Svari vélin ekki
+       standa geymdu tölurnar frá 7. október 2026 (GEYMT hér að neðan),
+       hluti fyrir hluta: vanti t.d. innsýnirnar en ekki kerfin eru kerfin
+       lifandi og innsýnirnar úr geymslunni. */
+    var GEYMT = {
+      live: false, computedAt: '2026-10-07T12:00:00Z',
+      sites: { total: 35720, measured: 26849, notMeasured: 0, notResponding: 8871, classified: 20574 },
+      platforms: { base: 26849, unknown: 1188, rows: [
+        { platform: 'wordpress', count: 11228 }, { platform: 'custom', count: 7952 }, { platform: 'wix', count: 1520 },
+        { platform: 'shopify', count: 1421 }, { platform: 'squarespace', count: 787 }, { platform: 'moya', count: 628 },
+        { platform: '_annad', count: 2125 } ] },
+      signals: { wordpress: 11228, measured: 26849, wpOutdated: 3827, phpUnsupported: 1314, sslAtRisk: 1054, noAnalytics: 15081 },
+      industries: { classified: 20574, rows: [
+        { industry: 'retail_ecommerce', count: 5144 }, { industry: 'technology', count: 2675 }, { industry: 'nonprofit_association', count: 2469 } ] },
+      insights: [
+        { key: 'industry_lift', facts: { platform: 'shopify', industry: 'retail_ecommerce', lift: 5.6, share: 0.30, overall: 0.053 } },
+        { key: 'speed', facts: { fast: 'wix', slow: 'wordpress', fastMedian: 0.17, slowMedian: 0.65, ratio: 3.7 } },
+        { key: 'php_eol', facts: { industry: 'food_hospitality', share: 0.58, overall: 0.45 } },
+        { key: 'ssl_soon', facts: { n: 1844, shops: 203 } },
+        { key: 'migration', facts: { from: 'custom', to: 'wordpress', n: 274, total: 518 } }
+      ]
+    };
+    var KERFI = { wordpress: 'WordPress', custom: 'Sérsmíðað', wix: 'Wix', shopify: 'Shopify', squarespace: 'Squarespace',
+      moya: 'Moya', webflow: 'Webflow', framer: 'Framer', drupal: 'Drupal', joomla: 'Joomla', magento: 'Magento',
+      ghost: 'Ghost', craft: 'Craft CMS', umbraco: 'Umbraco', hubspot: 'HubSpot CMS', contentful: 'Contentful',
+      sanity: 'Sanity', storyblok: 'Storyblok', datocms: 'DatoCMS', prismic: 'Prismic', strapi: 'Strapi',
+      payload: 'Payload', directus: 'Directus', _annad: 'Önnur kerfi' };
+    // sérsmíðað beygist; hin kerfin eru sérnöfn sem standa óbreytt
+    var SERSMIDAD = { nf: 'Sérsmíðuð kerfi', en: 'sérsmíðuð kerfi', hja: 'sérsmíðuðum kerfum', ur: 'sérsmíðuðu kerfi', i: 'sérsmíðað kerfi' };
+    function kerfi(p, form){ return p === 'custom' ? SERSMIDAD[form || 'nf'] : (KERFI[p] || p); }
+    // atvinnugreinar: nefnifall og orðið á eftir „í" (þágufall)
+    var GREIN = {
+      food_hospitality: ['Veitingar og gisting', 'veitingum og gistingu'], travel_tourism: ['Ferðaþjónusta', 'ferðaþjónustu'],
+      retail_ecommerce: ['Verslun og netverslun', 'verslun og netverslun'], marketing_creative: ['Markaðsmál og hönnun', 'markaðsmálum og hönnun'],
+      technology: ['Tækni og hugbúnaður', 'tækni og hugbúnaði'], construction_property: ['Byggingar og fasteignir', 'byggingum og fasteignum'],
+      professional_services: ['Sérfræðiþjónusta', 'sérfræðiþjónustu'], finance: ['Fjármál', 'fjármálum'],
+      healthcare: ['Heilbrigðisþjónusta', 'heilbrigðisþjónustu'], education: ['Menntun', 'menntun'],
+      public_sector: ['Opinberi geirinn', 'opinbera geiranum'], nonprofit_association: ['Félagasamtök', 'félagasamtökum'],
+      media_culture: ['Fjölmiðlar og menning', 'fjölmiðlum og menningu'], industry_manufacturing: ['Iðnaður og orka', 'iðnaði og orku'],
+      seafood_agriculture: ['Sjávarútvegur og landbúnaður', 'sjávarútvegi og landbúnaði'], automotive: ['Bílgreinin', 'bílgreininni']
+    };
+    var MAN = ['janúar','febrúar','mars','apríl','maí','júní','júlí','ágúst','september','október','nóvember','desember'];
+    function dags(iso){ var d = new Date(iso); return isNaN(d) ? '' : d.getDate() + '. ' + MAN[d.getMonth()] + ' ' + d.getFullYear(); }
+    function klukka(iso){ var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+    function hlut(a, b){ return b > 0 ? a / b : 0; }
+    function pst(x){ var v = x * 100; return v > 0 && v < 10 ? snid(v, 1) + '%' : snid(Math.round(v)) + '%'; }
+    function sek(x){ return snid(x, x < 1 ? 2 : 1); }
+    function $(id){ return document.getElementById(id); }
+    function texti(id, t){ var el = $(id); if (el) el.textContent = t; }
+
+    // teljari fær nýtt markgildi; hafi hann þegar talið fer talan beint á sinn stað
+    function setjaTolu(el, to, dec, suf){
+      if (!el) return;
+      el.dataset.to = String(to); if (dec) el.dataset.dec = dec; else delete el.dataset.dec;
+      if (suf) el.dataset.suffix = suf; else delete el.dataset.suffix;
+      el.textContent = snid(to, dec || 0) + (suf || '');
+    }
+
+    // stærstu-leifar-aðferðin: hlutföllin verða nákvæmlega 100 reitir
+    function hundrad(gildi){
+      var alls = gildi.reduce(function(a, b){ return a + b; }, 0) || 1;
+      var hrátt = gildi.map(function(v){ return v / alls * 100; });
+      var heilt = hrátt.map(Math.floor), afg = 100 - heilt.reduce(function(a, b){ return a + b; }, 0);
+      hrátt.map(function(v, i){ return [v - heilt[i], i]; }).sort(function(a, b){ return b[0] - a[0]; })
+        .slice(0, afg).forEach(function(x){ heilt[x[1]]++; });
+      return heilt;
+    }
+
+    // hraðamunurinn skýrist að mestu af hýsingunni: Wix, Shopify og félagar
+    // hýsa alla sína vefi sjálf, en WordPress og sérsmíðaðir vefir eru á
+    // alls konar hýsingum, frá öflugum netþjónum niður í ódýrustu deildu pakkana.
+    var HYST = { wix: 1, shopify: 1, squarespace: 1, webflow: 1, framer: 1, hubspot: 1 };
+    function hysing(hradur, haegur){
+      var sersm = haegur === 'custom';
+      var sjalf = sersm ? 'Sérsmíðaðir vefir eru' : kerfi(haegur) + ' vefir eru';
+      var midja = sersm ? 'sérsmíðaðir vefir eru' : sjalf;
+      if (HYST[hradur] && !HYST[haegur])
+        return kerfi(hradur) + ' hýsir alla sína vefi sjálft en ' + midja + ' á alls konar hýsingum, misöflugum. Það skýrir muninn að mestu.';
+      if (!HYST[haegur]) return sjalf + ' á alls konar hýsingum, misöflugum, sem skýrir muninn að hluta.';
+      return '';
+    }
+    function innsynGrein(f){ return GREIN[f.industry]; }
+    function smidaInnsyn(i){
+      var f = i.facts || {}, g;
+      if (i.key === 'industry_lift' && (g = innsynGrein(f)) && KERFI[f.platform])
+        return { to: f.lift, dec: 1, suf: '×', h: kerfi(f.platform) + ' sker sig úr í ' + g[1],
+          p: pst(f.share) + ' vefja í ' + g[1] + ' keyra á ' + kerfi(f.platform) + ', á móti ' + pst(f.overall) + ' allra íslenskra vefja.' };
+      if (i.key === 'speed' && f.fast && f.slow)
+        return { to: f.ratio, dec: 1, suf: '×', h: kerfi(f.fast) + (f.fast === 'custom' ? ' svara' : ' svarar') + ' hraðar en ' + kerfi(f.slow, 'en'),
+          p: 'Miðgildi svartíma er ' + sek(f.fastMedian) + ' sekúndur hjá ' + kerfi(f.fast, 'hja') + ' en ' + sek(f.slowMedian) + ' hjá ' + kerfi(f.slow, 'hja') + '.' + (hysing(f.fast, f.slow) ? ' ' + hysing(f.fast, f.slow) : '') };
+      if (i.key === 'speed' && f.platform) return null;   // linsusvar, á ekki heima hér
+      if (i.key === 'php_eol' && (g = innsynGrein(f)))
+        return { to: Math.round(f.share * 100), suf: '%', h: 'Mest úrelt PHP í ' + g[1],
+          p: pst(f.share) + ' vefja í ' + g[1] + ' keyra PHP sem fær ekki öryggisuppfærslur, á móti ' + pst(f.overall) + ' að meðaltali.' };
+      if (i.key === 'ssl_soon' && f.n)
+        return { to: f.n, h: 'Skírteini að renna út',
+          p: 'SSL skírteini sem renna út á næstu 30 dögum.' + (f.shops > 0 ? ' ' + snid(f.shops) + ' þeirra eru hjá netverslunum.' : '') };
+      if (i.key === 'migration' && f.from && f.to && f.total)
+        return { to: f.total, h: 'Vefir sem skiptu um kerfi',
+          p: 'Á síðustu 30 dögum. ' + snid(f.n) + ' þeirra fóru úr ' + kerfi(f.from, 'ur') + ' yfir í ' + kerfi(f.to, 'i') + '.' };
+      return null;
+    }
+
+    var D = GEYMT;
+    function nota(d){
+      D = d;
+      var s = d.sites, pl = d.platforms, sg = d.signals;
+      var raðir = pl.rows.slice().sort(function(a, b){ return b.count - a.count; });
+      function fjoldi(p){ var r = raðir.filter(function(x){ return x.platform === p; })[0]; return r ? r.count : 0; }
+      var wp = fjoldi('wordpress'), cu = fjoldi('custom');
+      var litil = raðir.filter(function(r){ return r.platform !== 'wordpress' && r.platform !== 'custom' && r.platform !== '_annad'; }).slice(0, 4);
+      var litilN = litil.reduce(function(a, r){ return a + r.count; }, 0);
+      var annadKerfi = Math.max(0, pl.base - wp - cu - litilN - pl.unknown);
+
+      // haus og lykiltölur
+      texti('ivLedeTala', snid(s.total));
+      texti('ivStada', 'Staðan ' + dags(d.computedAt));
+      var uppf = $('ivUppf'); if (uppf){ uppf.textContent = d.live ? 'Beint úr Wisdom' : 'Uppfært mánaðarlega'; uppf.classList.toggle('lifandi', !!d.live); }
+      var fig = $('svidFig'); if (fig) fig.setAttribute('aria-label', snid(s.total) + ' íslenskir vefir sem punktar. ' + pst(hlut(s.measured, s.total)) + ' svara mælingu.');
+      setjaTolu($('kpiTotal'), s.total);
+      setjaTolu($('kpiMaeldir'), Math.round(hlut(s.measured, s.total) * 100), 0, '%');
+      texti('kpiMaeldirL', 'svara og eru mældir, ' + snid(s.measured) + ' vefir');
+      setjaTolu($('kpiWp'), Math.round(hlut(wp, pl.base) * 100), 0, '%');
+      setjaTolu($('kpiMaela'), Math.round(hlut(sg.noAnalytics, sg.measured) * 100), 0, '%');
+
+      // vaflan: 100 reitir í fjórum hópum
+      var reitir = hundrad([wp, cu, litilN, annadKerfi + pl.unknown]), hopar = ['wp', 'sersmidad', 'litil', 'annad'], n = 0;
+      [].slice.call(document.querySelectorAll('#vaffla i')).forEach(function(c){
+        while (n < 3 && reitir[n] <= 0) n++;
+        c.setAttribute('data-k', hopar[n]); reitir[n]--;
+      });
+      texti('vafflaSkyring', 'Hver reitur er 1% af ' + snid(pl.base) + ' vefjum');
+
+      // skrefin
+      var wpH = hlut(wp, pl.base), cuH = hlut(cu, pl.base);
+      texti('stWp', pst(wpH));
+      texti('stWpT', snid(wp) + ' vefir. ' + (wpH >= .45 && wpH < .55 ? 'Annar hver íslenskur vefur keyrir á sama kerfi.'
+        : wpH >= .37 && wpH < .45 ? 'Tveir af hverjum fimm íslenskum vefjum keyra á sama kerfi.'
+        : wpH >= .3 && wpH < .37 ? 'Þriðji hver íslenskur vefur keyrir á sama kerfi.'
+        : wpH >= .55 ? 'Meirihluti íslenska vefsins keyrir á sama kerfi.' : 'Algengasta kerfið á íslenska vefnum.'));
+      texti('stCu', pst(cuH));
+      texti('stCuT', snid(cu) + ' vefir byggðir án tilbúins vefumsjónarkerfis.' + (cuH >= .28 && cuH < .334 ? ' Næstum þriðjungur.' : ''));
+      texti('stLi', pst(hlut(litilN, pl.base)));
+      var ul = $('stLiL');
+      if (ul){
+        ul.textContent = '';
+        litil.forEach(function(r){ var li = document.createElement('li'), sp = document.createElement('span');
+          li.textContent = kerfi(r.platform); sp.textContent = snid(hlut(r.count, pl.base) * 100, 1) + '%'; li.appendChild(sp); ul.appendChild(li); });
+      }
+      texti('stAn', pst(hlut(annadKerfi + pl.unknown, pl.base)));
+      texti('stAnT', 'Önnur kerfi eru ' + snid(hlut(annadKerfi, pl.base) * 100, 1) + '% og á ' + snid(hlut(pl.unknown, pl.base) * 100, 1) + '% vefja þekkist kerfið ekki.');
+
+      // hringirnir
+      var NEFNARI = { wpOutdated: sg.wordpress, phpUnsupported: sg.wordpress, noAnalytics: sg.measured, sslAtRisk: sg.measured };
+      [].slice.call(document.querySelectorAll('.hringur[data-lykill]')).forEach(function(f){
+        var k = f.dataset.lykill, a = sg[k] || 0, b = NEFNARI[k] || 0, p = Math.max(a > 0 ? 1 : 0, Math.round(hlut(a, b) * 100));
+        f.dataset.p = p;
+        setjaTolu(f.querySelector('.tala'), p, 0, '%');
+        var sm = f.querySelector('small'); if (sm) sm.textContent = snid(a) + ' af ' + snid(b);
+        if (f.classList.contains('inn')) f.querySelector('.fylla').style.strokeDashoffset = (326.73 * (1 - p / 100)).toFixed(2);
+      });
+
+      // innsýnirnar: aðeins þær sem vélin fann í þetta skipti
+      var listi = $('innsyn');
+      if (listi){
+        var kort = (d.insights || []).map(smidaInnsyn).filter(Boolean);
+        listi.closest('section').hidden = !kort.length;
+        listi.textContent = '';
+        kort.forEach(function(k){
+          var a = document.createElement('article'), t = document.createElement('div'), m = document.createElement('div'),
+              h = document.createElement('h3'), p = document.createElement('p');
+          a.className = 'birta'; t.className = 'tala';
+          setjaTolu(t, k.to, k.dec, k.suf);
+          h.textContent = k.h; p.textContent = k.p;
+          m.appendChild(h); m.appendChild(p); a.appendChild(t); a.appendChild(m); listi.appendChild(a);
+        });
+      }
+
+      // atvinnugreinarnar: þrjár stærstu af flokkuðum vefjum
+      var gr = $('greinar'), ind = d.industries;
+      if (gr && ind && ind.rows.length){
+        texti('greinarIntro', 'Algengustu greinarnar, af þeim ' + snid(ind.classified) + ' vefjum sem vélin hefur flokkað.');
+        var efst = ind.rows.filter(function(r){ return GREIN[r.industry]; }).slice(0, 3), max = efst.length ? efst[0].count : 1;
+        var inni = gr.classList.contains('inn');
+        gr.textContent = '';
+        efst.forEach(function(r){
+          var g = document.createElement('div'), topp = document.createElement('div'), nafn = document.createElement('span'),
+              b = document.createElement('b'), lina = document.createElement('div'), i = document.createElement('i');
+          g.className = 'grein'; topp.className = 'topp'; lina.className = 'lina';
+          nafn.textContent = GREIN[r.industry][0]; b.textContent = pst(hlut(r.count, ind.classified));
+          i.dataset.b = Math.round(r.count / max * 100); if (inni) i.style.width = i.dataset.b + '%';
+          topp.appendChild(nafn); topp.appendChild(b); lina.appendChild(i); g.appendChild(topp); g.appendChild(lina); gr.appendChild(g);
+        });
+      }
+
+      // aðferðin og taflan
+      texti('adferdTexti', (d.live
+        ? 'Tölurnar eru sóttar beint í greiningarvélina og uppfærast sjálfkrafa. Síðast reiknaðar ' + dags(d.computedAt) + ' kl. ' + klukka(d.computedAt) + '.'
+        : 'Tölurnar hér eru staðan ' + dags(d.computedAt) + '.')
+        + ' Hlutföll eru reiknuð af þeim ' + snid(pl.base) + ' vefjum sem svöruðu mælingu nema annað sé tekið fram.');
+      var tb = $('kerfiTafla');
+      if (tb){
+        var syna = raðir.filter(function(r){ return r.platform !== '_annad'; }).slice(0, 6);
+        var tRadir = syna.map(function(r){ return [kerfi(r.platform), r.count]; });
+        tRadir.push(['Önnur kerfi', pl.base - pl.unknown - syna.reduce(function(a, r){ return a + r.count; }, 0)]);
+        tRadir.push(['Kerfi óþekkt', pl.unknown]);
+        tb.textContent = '';
+        tRadir.forEach(function(r){
+          var tr = document.createElement('tr');
+          [r[0], snid(r[1]), snid(hlut(r[1], pl.base) * 100, 1) + '%'].forEach(function(v, j){
+            var td = document.createElement('td'); td.textContent = v; if (j) td.className = 'n'; tr.appendChild(td); });
+          tb.appendChild(tr);
+        });
+      }
+      var pk = Math.max(1, Math.round(s.total / (47 * 38)));
+      texti('ivPunktur', '1 punktur = ' + pk + ' vefir');
+      if (window.ivDaufir) window.ivDaufir(hlut(s.notResponding, s.total));
+    }
+
+    // svar vélarinnar lagt yfir geymdu tölurnar, hluti fyrir hluta
+    function sameina(svar){
+      var ut = { live: true, computedAt: svar.computedAt || GEYMT.computedAt };
+      ['sites', 'platforms', 'signals', 'industries'].forEach(function(k){ ut[k] = svar[k] && typeof svar[k] === 'object' ? svar[k] : GEYMT[k]; });
+      if (!svar.sites || !svar.platforms || !svar.signals) ut.live = false;
+      ut.insights = svar.insights && svar.insights.length ? svar.insights : GEYMT.insights;
+      if (ut.live === false && svar.sites) ut.computedAt = svar.computedAt || GEYMT.computedAt;
+      return ut;
+    }
+
+    var API = 'https://wisdom.reytal.is', GEYMSLA = 'reytal-iv-v1';
+    try {   // á localhost má benda á staðbundna Wisdom: ?wisdom=http://127.0.0.1:3001
+      var stadb = new URLSearchParams(location.search).get('wisdom');
+      if (stadb && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(stadb)) API = stadb;
+    } catch (e) {}
+    GEYMSLA += ':' + API;
+    var nyGogn = null;
+    try { var g = JSON.parse(localStorage.getItem(GEYMSLA) || 'null'); if (g && Date.now() - g.t < 30 * 60000 && g.d && g.d.sites) nyGogn = g.d; } catch (e) {}
+    function saekja(){
+      var ctl = window.AbortController ? new AbortController() : null;
+      if (ctl) setTimeout(function(){ ctl.abort(); }, 8000);
+      return fetch(API + '/api/public/market?market=is', { credentials: 'omit', signal: ctl ? ctl.signal : undefined })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){
+          if (!j || !j.ok || !j.sites) return null;
+          try { localStorage.setItem(GEYMSLA, JSON.stringify({ t: Date.now(), d: j })); } catch (e) {}
+          return j;
+        })
+        .catch(function(){ return null; });
+    }
+
+
+    // teljarar: telja upp úr núlli þegar þeir birtast
+    function telja(el){
+      if (el.dataset.talid) return; el.dataset.talid = 1;
+      var to = parseFloat(el.dataset.to), dec = parseInt(el.dataset.dec || 0, 10), suf = el.dataset.suffix || '';
+      if (rolegt){ el.textContent = snid(to, dec) + suf; return; }
+      var t0 = performance.now(), lengd = 1600;
+      (function skref(nu){
+        var p = Math.min(1, (nu - t0) / lengd), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = snid(to * e, dec) + suf;
+        if (p < 1) requestAnimationFrame(skref); else el.textContent = snid(to, dec) + suf;
+      })(t0);
+      setTimeout(function(){ el.textContent = snid(to, dec) + suf; }, lengd + 400);   // ef rAF er í dvala
+    }
+
+    // .birta, teljarar, hringir og línur kvikna þegar þau koma inn á skjá
+    function athuga(){
+      var h = innerHeight;
+      [].slice.call(document.querySelectorAll('.birta')).forEach(function(el){
+        if (el.classList.contains('inn')) return;
+        if (el.getBoundingClientRect().top < h * 0.86){
+          el.classList.add('inn');
+          el.querySelectorAll('[data-to]').forEach(telja);
+          if (el.matches('[data-to]')) telja(el);
+          el.querySelectorAll('.fylla').forEach(function(c){ c.style.strokeDashoffset = (326.73 * (1 - el.dataset.p / 100)).toFixed(2); });
+          el.querySelectorAll('[data-b]').forEach(function(i){ i.style.width = i.dataset.b + '%'; });
+        }
+      });
+    }
+
+    // vaflan: það skref sem er næst miðju skjásins ræður litnum
+    var vaffla = document.getElementById('vaffla');
+    var skref = [].slice.call(document.querySelectorAll('#skref .skref'));
+    function saga(){
+      var midja = innerHeight * 0.5, best = skref[0], minst = 1e9;
+      skref.forEach(function(s){
+        var b = s.getBoundingClientRect(), d = Math.abs(b.top + b.height / 2 - midja);
+        if (d < minst){ minst = d; best = s; }
+      });
+      skref.forEach(function(s){ s.classList.toggle('virkt', s === best); });
+      vaffla.setAttribute('data-virk', best.dataset.syna);
+    }
+
+    var bidur = false;
+    function allt(){ bidur = false; athuga(); saga(); }
+    addEventListener('scroll', function(){ if (!bidur){ bidur = true; requestAnimationFrame(allt); setTimeout(function(){ if (bidur) allt(); }, 120); } }, {passive:true});
+    addEventListener('resize', allt);
+
+    // byrjað þegar tölurnar eru komnar, eða eftir sekúndu með geymdu tölunum
+    var byrjad = false;
+    function byrja(){ if (byrjad) return; byrjad = true; allt(); }
+    nota(nyGogn ? sameina(nyGogn) : GEYMT);
+    if (nyGogn) byrja();
+    setTimeout(byrja, 1000);
+    saekja().then(function(j){ if (j){ nota(sameina(j)); } byrja(); athuga(); });
+
+    // ── punktasviðið í hausnum: 1.786 punktar, hver = 20 vefir. Fjórðungur
+    //    (vefir sem svara ekki) er daufur. Punktarnir kvikna í handahófsröð
+    //    og svo fer skannlína hægt yfir sviðið, eins og vélin að lesa vefinn.
+    var cv = document.getElementById('svid');
+    if (!cv) return;
+    var cx = cv.getContext('2d'), DALKAR = 47, RADIR = 38, N = DALKAR * RADIR;
+    var rod = [], dauf = new Uint8Array(N), birtist = new Float32Array(N);
+    for (var k = 0; k < N; k++) rod.push(k);
+    for (k = N - 1; k > 0; k--){ var j = Math.floor(Math.random() * (k + 1)), tmp = rod[k]; rod[k] = rod[j]; rod[j] = tmp; }
+    // daufu punktarnir (vefir sem svara ekki) fylgja nýjustu tölunum
+    window.ivDaufir = function(hlutfall){
+      var fj = Math.round(N * hlutfall);
+      for (var q = 0; q < N; q++) dauf[rod[q]] = q < fj ? 1 : 0;
+    };
+    window.ivDaufir(hlut(D.sites.notResponding, D.sites.total));
+    for (k = 0; k < N; k++) birtist[rod[k]] = k / N;          // hvenær hver punktur kviknar (0..1)
+    var W, H, bil, rad, dpr = Math.min(devicePixelRatio || 1, 2), t0 = performance.now();
+    function staerd(){
+      var r = cv.getBoundingClientRect(); W = r.width; H = r.height;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      bil = W / DALKAR; rad = Math.max(1.2, bil * 0.3);
+    }
+    function teikna(nu){
+      var t = (nu - t0) / 1000;
+      var kveikt = rolegt ? 1 : Math.min(1, t / 2.2);                       // innkoman tekur 2,2 sek
+      var skann = rolegt ? -1 : ((t - 2.4) / 5.5) % 1.25;                   // skannlína ofan frá og niður
+      cx.clearRect(0, 0, W, H);
+      for (var i = 0; i < N; i++){
+        if (birtist[i] > kveikt) continue;
+        var x = (i % DALKAR + .5) * bil, y = (Math.floor(i / DALKAR) + .5) * bil;
+        var nalaegd = skann >= 0 ? Math.max(0, 1 - Math.abs(y / H - skann) * 9) : 0;
+        if (dauf[i]){ cx.fillStyle = 'rgba(13,70,89,' + (0.14 + nalaegd * 0.12).toFixed(3) + ')'; }
+        else if (nalaegd > 0.02){ cx.fillStyle = 'rgb(' + Math.round(13 + nalaegd * 177) + ',' + Math.round(70 + nalaegd * 121) + ',' + Math.round(89 + nalaegd * 77) + ')'; }
+        else cx.fillStyle = '#0D4659';
+        cx.beginPath(); cx.arc(x, y, rad * (1 + nalaegd * 0.35), 0, 6.2832); cx.fill();
+      }
+      if (!rolegt) requestAnimationFrame(teikna);
+    }
+    staerd(); addEventListener('resize', staerd);
+    requestAnimationFrame(teikna);
+    if (rolegt) teikna(performance.now());
+
+    // lénareiturinn skiptir um dæmi á meðan hann er tómur
+    var len = document.getElementById('prufaLen'), daemi = ['kirkjan.is', 'verkis.is', 'lbhi.is', 'takkkronur.is', 'vefurinn.is'], d = 0;
+    if (len && !rolegt) setInterval(function(){ if (!len.value && document.activeElement !== len){ d = (d + 1) % daemi.length; len.placeholder = daemi[d]; } }, 2200);
+  })();
+</script>
+</body>
+</html>
