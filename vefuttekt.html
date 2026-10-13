@@ -569,19 +569,12 @@
     font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:#555;}
   .ivk-skyring span{display:inline-flex;align-items:center;gap:7px;}
   .ivk-skyring span::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--c);}
-  .ivk-lifandi{position:absolute;top:0;right:0;transform:translateY(calc(-100% - 14px));
-    display:none;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);}
-  .ivk-lifandi::before{content:'';width:7px;height:7px;border-radius:50%;background:#8FA36A;animation:ivkLif 2.4s ease-in-out infinite;}
-  .ivk.lifandi .ivk-lifandi{display:inline-flex;}
-  @keyframes ivkLif{0%,100%{box-shadow:0 0 0 0 rgba(143,163,106,.55);}50%{box-shadow:0 0 0 6px rgba(143,163,106,0);}}
   @media (max-width:860px){
     .ivk{grid-template-columns:1fr;}
     .ivk-vaffla,.ivk-skyring{margin-left:0;justify-content:flex-start;}
-    .ivk-lifandi{position:static;transform:none;margin-bottom:12px;}
   }
   @media (prefers-reduced-motion:reduce){
     .ivk,.ivk-vaffla i,.ivk-hlekkur svg{transition:none !important;}
-    .ivk-lifandi::before{animation:none;}
   }
 </style>
 
@@ -850,7 +843,6 @@
         <span class="ivk-hlekkur"><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></i>Skoða stöðuna</span>
       </div>
       <div class="ivk-mynd">
-        <span class="ivk-lifandi">Beint úr Wisdom</span>
         <div class="ivk-vaffla" id="ivkVaffla" aria-hidden="true"></div>
       </div>
     </a>
