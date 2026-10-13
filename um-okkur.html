@@ -79,48 +79,55 @@
     margin-top:14px;
   }
 
-  /* þrjár í röð: við tvær í röð voru kortin breiðari en 768px myndirnar
-     þola án þess að verða upprennt/blörrí, þrjár heldur sér skarpt */
+  /* Þrír dálkar þar sem miðdálkurinn er færður niður, svo síðan les eins og
+     bunki af portrettum frekar en tafla. Nafn og titill standa undir
+     myndinni. Á hover kviknar þunnur rammi í brandlitunum utan um hana. */
   .team-grid{
     display:grid;grid-template-columns:repeat(3,1fr);
-    gap:clamp(32px,4vw,44px);
+    gap:clamp(40px,5vh,64px) clamp(28px,3.4vw,44px);
+    align-items:start;
   }
+  .team-grid > .person:nth-child(3n+2){margin-top:clamp(40px,6vw,96px);}
   .person{position:relative;}
   .avatar{
     position:relative;
-    width:100%;aspect-ratio:4/5;border-radius:6px;
+    width:100%;aspect-ratio:4/5;border-radius:18px;
     overflow:hidden;background:var(--sage);
+    box-shadow:0 1px 0 rgba(11,12,13,.06);
+    transition:transform .6s cubic-bezier(.25,.6,.25,1),box-shadow .6s ease;
   }
   .avatar .avatar-photo{
     width:100%;height:100%;object-fit:cover;object-position:center top;display:block;
-    transition:transform .8s cubic-bezier(.25,.6,.25,1);
+    transition:transform .9s cubic-bezier(.25,.6,.25,1);
   }
-  /* hover: myndin andar örlítið inn og upplýsingarnar lyftast */
-  .person:hover .avatar-photo{transform:scale(1.045);}
-  /* mjúk skyggja neðst svo textinn lesist á öllum myndum */
-  .avatar::after{
-    content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
-    background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
-    pointer-events:none;
+  /* ramminn: litahalli í 2px hring, grímaður svo aðeins kanturinn sjáist */
+  .avatar::before{
+    content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:2px;
+    background:linear-gradient(135deg,var(--navy),var(--slate) 55%,var(--sage));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .45s ease;pointer-events:none;
   }
+  .person:hover .avatar{transform:translateY(-6px);box-shadow:0 26px 50px rgba(11,12,13,.16);}
+  .person:hover .avatar::before{opacity:1;}
+  .person:hover .avatar-photo{transform:scale(1.04);}
   .person-info{
-    position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
-    display:flex;flex-direction:column;gap:3px;
-    text-align:left;
-    transition:transform .5s cubic-bezier(.25,.6,.25,1);
+    display:flex;flex-direction:column;gap:6px;align-items:flex-start;
+    margin-top:18px;padding-left:4px;
   }
-  .person:hover .person-info{transform:translateY(-5px);}
   .person-info h3{
-    font-family:'DM Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;
-    color:#fff;
+    font-family:'DM Sans',sans-serif;font-weight:500;font-size:22px;letter-spacing:-0.01em;
+    color:var(--black);
   }
   .person-info .role{
     font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-    color:#fff;
-    border:1px solid rgba(255,255,255,0.45);border-radius:999px;
+    color:var(--navy);
+    border:1px solid rgba(11,12,13,0.22);border-radius:999px;
     padding:6px 13px;
     width:fit-content;
-    margin-top:4px;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .avatar,.avatar-photo,.avatar::before{transition:none;}
   }
 
   /* ── CTA ────────────────────────────────────────────────────── */
@@ -139,6 +146,7 @@
   @media (max-width:760px){
     .cta-box{flex-direction:column;align-items:flex-start;}
     .team-grid{grid-template-columns:1fr;}
+    .team-grid > .person:nth-child(3n+2){margin-top:0;}
   }
 
   /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
@@ -250,122 +258,98 @@
            portrett ennþá fá staðgengil af Unsplash (leyfi án nafnbirtingar):
            kafari, riddari, geimfari, api í geimbúningi, koparhjálmur, hjálmgríma. -->
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-gudlaugur.jpg" alt="Gunnlaugur">
-          <div class="person-info">
-            <h3>Gunnlaugur</h3>
-            <div class="role">Framkvæmdastjóri</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-gudlaugur.jpg" alt="Gunnlaugur"></div>
+        <div class="person-info">
+          <h3>Gunnlaugur</h3>
+          <div class="role">Framkvæmdastjóri</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-jon-haukur.jpg" alt="Jón Haukur">
-          <div class="person-info">
-            <h3>Jón Haukur</h3>
-            <div class="role">Verkefnastjóri</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-jon-haukur.jpg" alt="Jón Haukur"></div>
+        <div class="person-info">
+          <h3>Jón Haukur</h3>
+          <div class="role">Verkefnastjóri</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-isak.jpg" alt="Ísak">
-          <div class="person-info">
-            <h3>Ísak</h3>
-            <div class="role">Hönnuður</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-isak.jpg" alt="Ísak"></div>
+        <div class="person-info">
+          <h3>Ísak</h3>
+          <div class="role">Hönnuður</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-petur.jpg" alt="Pétur">
-          <div class="person-info">
-            <h3>Pétur</h3>
-            <div class="role">Hönnuður</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-petur.jpg" alt="Pétur"></div>
+        <div class="person-info">
+          <h3>Pétur</h3>
+          <div class="role">Hönnuður</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-mikk.jpg" alt="Mikk">
-          <div class="person-info">
-            <h3>Mikk</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-mikk.jpg" alt="Mikk"></div>
+        <div class="person-info">
+          <h3>Mikk</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-daniel.jpg" alt="Daníel">
-          <div class="person-info">
-            <h3>Daníel</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-daniel.jpg" alt="Daníel"></div>
+        <div class="person-info">
+          <h3>Daníel</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-einar.jpg" alt="Einar">
-          <div class="person-info">
-            <h3>Einar</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-einar.jpg" alt="Einar"></div>
+        <div class="person-info">
+          <h3>Einar</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-dmitri.jpg" alt="Dmitri">
-          <div class="person-info">
-            <h3>Dmitri</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-dmitri.jpg" alt="Dmitri"></div>
+        <div class="person-info">
+          <h3>Dmitri</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-ivan.jpg" alt="Ivan">
-          <div class="person-info">
-            <h3>Ivan</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-ivan.jpg" alt="Ivan"></div>
+        <div class="person-info">
+          <h3>Ivan</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-aleksei.jpg" alt="Aleksei">
-          <div class="person-info">
-            <h3>Aleksei</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-aleksei.jpg" alt="Aleksei"></div>
+        <div class="person-info">
+          <h3>Aleksei</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-hannes.jpg" alt="Hannes">
-          <div class="person-info">
-            <h3>Hannes</h3>
-            <div class="role">Forritari</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-hannes.jpg" alt="Hannes"></div>
+        <div class="person-info">
+          <h3>Hannes</h3>
+          <div class="role">Forritari</div>
         </div>
       </article>
 
       <article class="person">
-        <div class="avatar">
-          <img class="avatar-photo" src="teymi-david.jpg" alt="Davíð">
-          <div class="person-info">
-            <h3>Davíð</h3>
-            <div class="role">Kerfisstjóri</div>
-          </div>
+        <div class="avatar"><img class="avatar-photo" src="teymi-david.jpg" alt="Davíð"></div>
+        <div class="person-info">
+          <h3>Davíð</h3>
+          <div class="role">Kerfisstjóri</div>
         </div>
       </article>
     </div>
