@@ -660,6 +660,18 @@
      elementin (reytal-ui.css). Stóri hringurinn snýst og bíður með "?",
      flokkarnir og niðurstöðurnar eru tómar - það er þín tala sem vantar.
      Enginn texti, svo spjaldið keppir ekki við textann vinstra megin. */
+  /* lítill hlekkur á Íslenska vefinn undir forminu, talan lifandi úr Wisdom */
+  .engine-iv{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:7px 18px 7px 7px;
+    border:1px solid rgba(243,240,234,0.22);border-radius:999px;color:var(--cream);text-decoration:none;
+    font-size:15px;line-height:1.3;background:rgba(243,240,234,0.04);
+    transition:background .35s ease,border-color .35s ease;}
+  .engine-iv:hover{background:rgba(243,240,234,0.10);border-color:rgba(243,240,234,0.45);}
+  .engine-iv .nytt{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:5px 10px;border-radius:999px;background:var(--sage);color:var(--navy);}
+  .engine-iv b{font-weight:600;font-variant-numeric:tabular-nums;}
+  .engine-iv svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;transition:transform .4s cubic-bezier(.2,.7,.2,1);}
+  .engine-iv:hover svg{transform:translateX(4px);}
+  @media (prefers-reduced-motion:reduce){.engine-iv,.engine-iv svg{transition:none;}}
   .engine-visual{display:flex;align-items:center;justify-content:center;justify-self:end;width:100%;perspective:1200px;}
   .eng-card{width:min(360px,100%);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,0.28);}
   .eng-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:16px;}
@@ -1665,6 +1677,7 @@
             <label><span class="sr">Vefslóð</span><input type="text" name="domain" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="url" placeholder="mittfyrirtaeki.is" required></label>
             <button type="submit" class="btn-primary"><span class="btn-label">Skoða vefinn</span></button>
           </form>
+          <a class="engine-iv" href="/islenski-vefurinn"><span class="nytt">Nýtt</span><span>Staðan á <b id="engIvTala">35.720</b> íslenskum vefjum</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
         </div>
         <div class="engine-visual" aria-hidden="true">
           <div class="eng-card u-plate u-tilt">
@@ -2736,5 +2749,23 @@
 </script>
 <script src="reytal-ui.js?v=2"></script>
 <script src="samband.js?v=9" defer></script>
+<script>
+// Íslenski vefurinn: heildartalan í hlekknum, beint úr Wisdom (35.720 ef vélin svarar ekki)
+(function () {
+  var el = document.getElementById("engIvTala");
+  if (!el) return;
+  var API = "https://wisdom.reytal.is", KEY = "reytal-iv-v1:" + API;
+  function setja(j) { if (j && j.sites && j.sites.total) el.textContent = String(j.sites.total).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  try { var g = JSON.parse(localStorage.getItem(KEY) || "null"); if (g && Date.now() - g.t < 30 * 60000) { setja(g.d); return; } } catch (e) {}
+  fetch(API + "/api/public/market?market=is", { credentials: "omit" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (!j || !j.ok) return;
+      setja(j);
+      try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: j })); } catch (e) {}
+    })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>
