@@ -91,6 +91,12 @@
     font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);}
   .svid figcaption i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--navy);margin-right:7px;vertical-align:1px;}
   .svid figcaption i.dauf{background:rgba(13,70,89,.18);}
+  /* sími: skýringin brotnar á milli atriða, aldrei inni í þeim */
+  @media (max-width:620px){
+    .svid{margin-bottom:46px;}
+    .svid figcaption{top:calc(100% + 12px);bottom:auto;flex-wrap:wrap;justify-content:flex-start;gap:6px 18px;font-size:10.5px;}
+    .svid figcaption span{white-space:nowrap;}
+  }
 
   /* ── LYKILTÖLUR ── */
   .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,2.4vw,32px);}
@@ -123,6 +129,17 @@
   .skref h3{font-size:clamp(22px,2.2vw,30px);font-weight:600;letter-spacing:-.01em;margin-top:14px;text-transform:none;}
   .skref p{font-size:17px;line-height:1.6;color:#333;margin-top:10px;max-width:42ch;}
   .skref ul{list-style:none;margin-top:16px;display:grid;gap:8px;max-width:340px;}
+  /* sími: minni vafla fyrir miðju efst, textinn í neðri helmingnum svo hann
+     lendi aldrei undir vöfflunni; mjúk skil undir vöfflunni */
+  @media (max-width:900px){
+    .saga-mynd .vaffla{max-width:min(240px,62vw);margin:0 auto;gap:4px;}
+    .saga-mynd .vaffla-skyring{text-align:center;margin-top:12px;}
+    .saga-mynd::after{content:'';position:absolute;left:0;right:0;top:100%;height:36px;pointer-events:none;
+      background:linear-gradient(var(--cream),rgba(243,240,234,0));}
+    .saga-skref .skref{min-height:82vh;justify-content:flex-end;padding-bottom:9vh;}
+    .saga-skref .skref:first-child{min-height:62vh;justify-content:flex-start;padding:40px 0 0;}
+    .skref .stor{font-size:clamp(56px,16vw,84px);}
+  }
   .skref li{display:flex;justify-content:space-between;border-bottom:1px solid rgba(11,12,13,.12);padding-bottom:8px;font-size:16px;}
   .skref li span{font-family:'DM Mono',monospace;font-size:13px;color:#555;}
 
@@ -745,9 +762,11 @@
     var vaffla = document.getElementById('vaffla');
     var skref = [].slice.call(document.querySelectorAll('#skref .skref'));
     function saga(){
-      var midja = innerHeight * 0.5, best = skref[0], minst = 1e9;
+      // í síma er vaflan efst, svo textinn er lesinn í neðri hlutanum
+      var midja = innerHeight * (innerWidth <= 900 ? 0.68 : 0.5), best = skref[0], minst = 1e9;
       skref.forEach(function(s){
-        var b = s.getBoundingClientRect(), d = Math.abs(b.top + b.height / 2 - midja);
+        var a = s.firstElementChild.getBoundingClientRect(), z = s.lastElementChild.getBoundingClientRect();
+        var d = Math.abs((a.top + z.bottom) / 2 - midja);
         if (d < minst){ minst = d; best = s; }
       });
       skref.forEach(function(s){ s.classList.toggle('virkt', s === best); });
