@@ -84,8 +84,20 @@
   .team-grid{
     display:grid;grid-template-columns:repeat(3,1fr);
     gap:clamp(32px,4vw,44px);
+    --p:0;
+    padding-bottom:clamp(90px,11vw,170px);
   }
   .person{position:relative;}
+  /* Dálkarnir standa í þremur hæðum svo röðin brotni upp, og þegar skrollað
+     er renna þeir á mismunandi hraða: miðdálkurinn hraðast, sá vinstri hægast.
+     --p fer frá -1 (teymið neðst á skjá) upp í 1 (efst), stillt í skriftunni. */
+  .team-grid > .person{
+    transform:translate3d(0,calc(var(--ofs,0px) + var(--p) * var(--rek,0px)),0);
+    will-change:transform;
+  }
+  .team-grid > .person:nth-child(3n+1){--ofs:0px;               --rek:-14px;}
+  .team-grid > .person:nth-child(3n+2){--ofs:clamp(70px,10vw,150px);--rek:-70px;}
+  .team-grid > .person:nth-child(3n+3){--ofs:clamp(30px,4.5vw,70px); --rek:-36px;}
   .avatar{
     position:relative;
     width:100%;aspect-ratio:4/5;border-radius:6px;
@@ -103,6 +115,29 @@
     background:linear-gradient(to top, rgba(0,0,0,0.66), rgba(0,0,0,0.22) 55%, transparent);
     pointer-events:none;
   }
+  /* Rammi sem snýst: liggur á brún myndarinnar, ekki utan við hana. Á hover
+     kviknar daufur hvítur hringur og ljós rák hleypur hring eftir hring,
+     hvít í oddinn og með lit í löngum hala. Hvert spjald fær sinn lit úr
+     brandpallettunni af handahófi (--rak), stillt í skriftunni neðst.
+     Hornið er sérskilgreind CSS-breyta (@property) svo hægt sé að hreyfa það. */
+  @property --hornid{syntax:'<angle>';inherits:false;initial-value:0deg;}
+  .avatar::before{
+    content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:2px;
+    background:
+      conic-gradient(from var(--hornid),
+        transparent 0deg, transparent 130deg,
+        color-mix(in srgb, var(--rak,#6E9FB8) 35%, transparent) 210deg,
+        var(--rak,#6E9FB8) 300deg, var(--rak,#6E9FB8) 340deg,
+        #fff 356deg, transparent 360deg),
+      linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.16));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .45s ease;pointer-events:none;
+    animation:rammiSnyst 6.5s linear infinite;animation-play-state:paused;
+  }
+  .person:hover .avatar::before{opacity:1;animation-play-state:running;}
+  @keyframes rammiSnyst{to{--hornid:360deg;}}
+  @media (prefers-reduced-motion:reduce){ .avatar::before{animation:none;} }
   .person-info{
     position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
     display:flex;flex-direction:column;gap:3px;
@@ -138,7 +173,11 @@
 
   @media (max-width:760px){
     .cta-box{flex-direction:column;align-items:flex-start;}
-    .team-grid{grid-template-columns:1fr;}
+    .team-grid{grid-template-columns:1fr;padding-bottom:0;}
+    .team-grid > .person{transform:none !important;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .team-grid{--p:0 !important;}
   }
 
   /* ── SPLASH: síðuskipta-skjár (sami og B á forsíðunni) ────────── */
@@ -407,5 +446,33 @@
 
 
 <script src="samband.js?v=9" defer></script>
+<script>
+  // Rammalitir: hvert spjald fær sinn lit úr pallettunni við hverja hleðslu
+  (function(){
+    // sömu tónar og litaskýin á síðunum (rós, raf, appelsína, grænn) auk brand-slate
+    var litir = ['#C46A78', '#D9A04A', '#E07A45', '#8FA36A', '#6E9FB8', '#BEBFA6'];
+    var fyrri = '';
+    document.querySelectorAll('.team-grid .person').forEach(function(p){
+      var val = litir.filter(function(l){ return l !== fyrri; });
+      fyrri = val[Math.floor(Math.random() * val.length)];
+      p.style.setProperty('--rak', fyrri);
+    });
+  })();
+  // Teymið: dálkarnir renna á mismunandi hraða á meðan skrollað er framhjá
+  (function(){
+    var g = document.querySelector('.team-grid');
+    if (!g || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var bidur = false;
+    function teikna(){
+      bidur = false;
+      var r = g.getBoundingClientRect(), h = innerHeight;
+      var p = ((h / 2) - (r.top + r.height / 2)) / ((h + r.height) / 2);   // -1..1
+      g.style.setProperty('--p', Math.max(-1, Math.min(1, p)).toFixed(3));
+    }
+    addEventListener('scroll', function(){ if (!bidur){ bidur = true; requestAnimationFrame(teikna); } }, {passive:true});
+    addEventListener('resize', teikna);
+    teikna();
+  })();
+</script>
 </body>
 </html>
