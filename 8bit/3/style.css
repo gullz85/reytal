@@ -109,7 +109,8 @@ html[data-r8-heimur="?-?"] #r8.r8 { --r8-bak: #101010; }
 .r8-valmynd a small { font-size: 10px; color: var(--grasL); }
 .r8-valmynd a:hover, .r8-valmynd a[aria-current] { background: var(--hvitt); color: #000 !important; text-decoration: none !important; }
 .r8-valmynd a[aria-current] small { color: var(--mold); }
-.r8-bitar { display: flex; gap: 3px; padding: 4px; background: #111; box-shadow: 0 0 0 2px var(--moldL); }
+.r8-bitar { display: flex; gap: 3px; padding: 4px; border: 0; background: #111; box-shadow: 0 0 0 2px var(--moldL); cursor: pointer; font: inherit; }
+.r8-bitar:hover { box-shadow: 0 0 0 2px var(--gull); }
 .r8-bitar i { display: grid; place-items: center; width: 14px; height: 20px; font-style: normal; font-size: 13px; font-weight: 700; color: #555; background: #000; }
 .r8-bitar i.fundinn { color: #000; background: var(--gull); }
 .r8-bitar i.blikk { animation: r8-blikk .7s steps(2) 3; }

@@ -164,7 +164,7 @@ function smida() {
       <nav class="r8-valmynd" id="r8-valmynd" aria-label="Aðalvalmynd">
         <ul>${VALMYND.map(([t, s, nr]) => `<li><a href="${s}"${heimurFyrir(location.pathname).href === s || (s !== "/" && location.pathname.startsWith(s)) ? ' aria-current="page"' : ""}><small>${nr}</small>${t}</a></li>`).join("")}</ul>
       </nav>
-      <div class="r8-bitar" role="img" aria-label="Bitar">${bitaHolf}</div>
+      <button type="button" class="r8-bitar" title="Bitar: hvað er þetta?" aria-label="Bitar">${bitaHolf}</button>
       <button type="button" class="r8-tak r8-hljod" aria-pressed="false" title="Hljóð"><span class="kveikt">♪</span><span class="slokkt">♪̸</span><span class="sr">Hljóð</span></button>
       <button type="button" class="r8-tak r8-matsedill" aria-expanded="false" aria-controls="r8-valmynd"><span aria-hidden="true">≡</span><span class="sr">Valmynd</span></button>
       <button type="button" class="r8-tak r8-ut" title="Aftur í nútímann (Esc í valmynd)"><span aria-hidden="true">◄ 2026</span><span class="sr">Hætta í 8-bita ham</span></button>
@@ -178,6 +178,7 @@ function smida() {
   hljodStada();
   hl.addEventListener("click", () => { setjaThogn(!thogn()); hljodStada(); spila("velja"); });
   skel.querySelector(".r8-ut").addEventListener("click", slokkva);
+  skel.querySelector(".r8-bitar").addEventListener("click", bitaGluggi);
   const ms = skel.querySelector(".r8-matsedill"), vm = skel.querySelector(".r8-valmynd");
   ms.addEventListener("click", () => { const o = ms.getAttribute("aria-expanded") !== "true"; ms.setAttribute("aria-expanded", String(o)); vm.classList.toggle("opin", o); spila(o ? "opna" : "loka"); });
 
@@ -232,6 +233,25 @@ function vidBita(e) {
   if (e.detail.alls === 8) setTimeout(baetiFullt, 700);
   else skilabod(`Biti fundinn! ${e.detail.alls} af 8`);
 }
+// Smellur á bitamælinn: hvað hann er og vísbendingar um þá sem vantar
+const VISBENDINGAR = [
+  "R-kubbur í Reykjavík. Stökktu undir hann.", "Annar R-kubbur í Reykjavík.", "Á múrsteinspalli í Reykjavík.",
+  "Hátt uppi á palli handan við kirkjuturninn.", "Eitthvað er falið neðst á forsíðunni. Bankaðu á múrsteininn.",
+  "R-kubbur í gamla bænum í Tallinn.", "Efst á steinþrepunum við turninn í Tallinn.", "Hylki sem enginn hefur spilað. Aftast í hylkjasafninu.",
+];
+function bitaGluggi() {
+  const a = bitar();
+  if (a.length === 8) return baetiFullt();
+  const vantar = BAETI.map((_, n) => n).filter((n) => !a.includes(n));
+  gluggi({
+    yfirskrift: `Bitar · ${a.length} af 8`,
+    titill: "Átta bitar = eitt bæti",
+    html: `<p>Átta bitar eru faldir í 8-bita heimunum. Hver þeirra er 0 eða 1, og saman mynda þeir eitt bæti. Hvaða staf skyldi það stafa?</p>
+      <p>${vantar.length === 8 ? "Þú hefur ekki fundið neinn enn." : `Þú átt ${vantar.length} eftir.`} Vísbendingar:</p>
+      <ul class="r8-listi">${vantar.map((n) => `<li>▸ ${VISBENDINGAR[n]}</li>`).join("")}</ul>`,
+  });
+}
+
 function baetiFullt() {
   spila("baeti");
   gluggi({
