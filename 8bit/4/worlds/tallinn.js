@@ -108,28 +108,11 @@ export async function smida(main, api) {
     },
   });
 
-  const safn = api.kassi(main, { id: "hylkjasafn", tegund: "r8-safn", yfirskrift: "Hylkjasafnið", titill: "Veldu borð", html: '<div class="r8-sia" role="toolbar" aria-label="Sía eftir tegund"></div><div class="r8-hylkjarod stor" aria-live="polite"></div>' });
+  const safn = api.kassi(main, { id: "hylkjasafn", tegund: "r8-safn", yfirskrift: "Hylkjasafnið", titill: "Veldu borð", html: '<div class="r8-hylkjarod stor"></div>' });
   const verk = await saekjaVerkefni();
-  const rod = safn.querySelector(".r8-hylkjarod"), sia = safn.querySelector(".r8-sia");
-  const fjoldi = {};
-  verk.forEach((v) => v.merki.forEach((m) => (fjoldi[m] = (fjoldi[m] || 0) + 1)));
-  // síur aðeins fyrir flokka með fleiri en einu verkefni
-  const flokkar = [["Allt", verk.length], ...Object.entries(fjoldi).filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1])];
-
-  function syna(flokkur) {
-    rod.textContent = "";
-    verk.filter((v) => flokkur === "Allt" || v.merki.includes(flokkur)).forEach((v) => rod.appendChild(api.hylkiEl(v)));
-    if (flokkur === "Allt") rod.appendChild(leyniHylki(verk.length + 1));
-    sia.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === flokkur)));
-  }
-  flokkar.forEach(([f, n]) => {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "r8-siuhnappur"; b.dataset.f = f;
-    b.innerHTML = `${f} <small>${n}</small>`;
-    b.addEventListener("click", () => { spila("velja"); syna(f); });
-    sia.appendChild(b);
-  });
-  syna("Allt");
+  const rod = safn.querySelector(".r8-hylkjarod");
+  verk.forEach((v) => rod.appendChild(api.hylkiEl(v)));
+  rod.appendChild(leyniHylki(verk.length + 1));
 
   // Leynihylkið: síðasti bitinn og boð um að bæta þínu verkefni við
   function leyniHylki(nr) {
