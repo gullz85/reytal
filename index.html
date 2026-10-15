@@ -490,43 +490,72 @@
   /* ── CLIENTS: rúllandi ræma (upprunalega útgáfan) ──────────── */
   .clients-section{padding-bottom:clamp(72px,10vh,120px);}
 
-  /* ── FÓTUR: stórt netfang, staðsetningar-pillur og botnlína ─────── */
-  html,body{overscroll-behavior-y:none;}
-  .footer{
-    position:relative;z-index:1;
-    padding:clamp(56px,9vh,96px) 0 36px;
-  }
+  /* ── VALIN VERKEFNI (TILLAGA): stór spjöld sem renna sjálf frá hægri til
+     vinstri í endalausri lykkju; til skiptis ofar og neðar. Stoppar við hover ── */
+  .fv{position:relative;overflow:hidden;padding:clamp(110px,18vh,220px) 0 clamp(48px,9vh,110px);}   /* efri spjöldin standa 6vh upp, svo meira loft ofan við */
+  .fv-rod{display:flex;align-items:center;width:max-content;will-change:transform;
+    animation:fvRenna var(--fv-t,60s) linear infinite;}
+  .fv:hover .fv-rod,.fv:focus-within .fv-rod{animation-play-state:paused;}
+  @keyframes fvRenna{to{transform:translate3d(-50%,0,0);}}
+  .fv-kort{position:relative;flex:0 0 auto;height:min(60vh,580px);margin-right:clamp(24px,3vw,56px);display:block;overflow:hidden;border-radius:18px;
+    background:var(--black);color:#fff;text-decoration:none;isolation:isolate;}
+  .fv-kort.upp{translate:0 -6vh;}
+  .fv-kort.nidur{translate:0 6vh;}
+  .fv-midill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1);}
+  .fv-kort:hover .fv-midill{transform:scale(1.04);}
+  .fv-kort::after{content:"";position:absolute;inset:auto 0 0 0;height:50%;background:linear-gradient(to top,rgba(11,12,13,.8),rgba(11,12,13,0));pointer-events:none;}
+  .fv-texti{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:clamp(18px,2vw,30px);}
+  .fv-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
+  .fv-verdlaun{background:var(--sage);color:var(--black);border-radius:999px;padding:3px 9px;}
+  .fv-texti h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:clamp(26px,2.6vw,42px);letter-spacing:-.02em;line-height:1.05;margin:8px 0 14px;}
+  .fv-pillur{display:flex;flex-wrap:wrap;gap:6px;}
+  .fv-pilla{border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;}
   @media (max-width:760px){
-    .footer{padding:clamp(40px,7vh,64px) 0 28px;}
-    .footer-top{flex-direction:column;align-items:flex-start;gap:20px;}
-    .footer-bottom{margin-top:clamp(28px,5vh,48px);}
+    .fv{padding:10vh 0 6vh;}
+    .fv-kort{height:auto;width:72vw;aspect-ratio:4/5 !important;margin-right:16px;}
+    .fv-kort.upp{translate:0 -3vh;} .fv-kort.nidur{translate:0 3vh;}
   }
-  .footer-top{
-    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:32px;
+  /* minnkuð hreyfing: kyrr röð sem strokið er til hliðar */
+  @media (prefers-reduced-motion:reduce){
+    .fv-rod{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x mandatory;padding:6vh 20px;}
+    .fv-kort{scroll-snap-align:center;}
+    .fv-kort[aria-hidden]{display:none;}
   }
-  /* netfang + heimilisfang í einum dálki, heimilisfangið lágstemmt undir */
-  .footer-contact{display:flex;flex-direction:column;gap:clamp(10px,1.6vh,16px);}
-  .footer-addr{
-    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--slate);font-style:normal;   /* <address> er skáletrað sjálfgefið */
+  /* ── FÓTUR (TILLAGA): litlar upplýsingar efst, risastórt REY TAL neðst ── */
+  html,body{overscroll-behavior-y:none;}
+  .footer{position:relative;z-index:1;padding:clamp(48px,8vh,88px) 0 clamp(28px,5vh,56px);overflow:hidden;}
+  .f2-rod{
+    display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:24px;align-items:start;
+    font-family:'DM Mono',monospace;font-size:12px;line-height:1.7;letter-spacing:0.04em;
+    color:var(--black);
   }
-  .footer-mail{
-    font-family:'DM Sans',sans-serif;font-weight:500;
-    font-size:clamp(32px,5.6vw,76px);line-height:1;letter-spacing:-0.03em;
-    color:var(--black);text-decoration:none;
-    transition:color .3s ease;
+  .f2-rod address{font-style:normal;}
+  .f2-rod a{color:inherit;text-decoration:none;transition:color .3s ease;}
+  .f2-rod a:hover{color:var(--navy);}
+  .f2-rod .f2-lag{color:var(--slate);}
+  .f2-takki{
+    justify-self:end;border:1px solid var(--black);border-radius:999px;padding:9px 16px;
+    font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1;white-space:nowrap;
+    transition:background .3s ease,color .3s ease !important;
   }
-  .footer-mail:hover{color:var(--navy);}
-  .footer-pills{display:flex;flex-wrap:wrap;gap:10px;}
-  .footer-pills .tag{margin:0;}
-  .footer-bottom{
-    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;
-    margin-top:clamp(48px,8vh,80px);
-    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--slate);
+  .f2-takki:hover{background:var(--black);color:var(--cream) !important;}
+  /* merkið: REY og TAL hlið við hlið, TAL á hvolfi eins og í merkinu.
+     Það nær út að brúnum og neðsti hlutinn hverfur niður fyrir síðuna */
+  .f2-merki{display:block;width:100%;margin-top:clamp(56px,10vh,120px);padding:0 clamp(12px,2vw,28px);overflow:hidden;}
+  /* merkið lyftist upp frá botninum eftir því sem skrollað er niður að fætinum (sjá skriftu) */
+  .f2-merki svg{will-change:transform;}
+  /* merkið er innan efnisbreiddarinnar eins og restin af síðunni, ekki út að brúnum */
+  .f2-merki{max-width:1240px;margin-left:auto;margin-right:auto;padding:0 32px;}
+  @media (max-width:760px){ .f2-merki{padding:0 20px;} }
+  .f2-merki svg{display:block;width:100%;height:auto;fill:var(--black);}
+  .f2-stafli{display:none !important;}
+  @media (max-width:760px){
+    /* í síma: staflað eins og merkið sjálft, REY yfir TAL, og fyllir breiddina */
+    .f2-lina{display:none !important;}
+    .f2-stafli{display:block !important;}
+    .f2-rod{grid-template-columns:1fr 1fr;row-gap:20px;}
+    .f2-takki{justify-self:start;grid-column:1 / -1;}
   }
-  .footer-bottom a{color:var(--slate);text-decoration:none;transition:color .3s ease;}
-  .footer-bottom a:hover{color:var(--navy);}
   .clients{
     margin-top:0;
     border-top:1px solid rgba(11,12,13,0.1);
@@ -1703,204 +1732,60 @@
 </section>
 
 <!-- GREININGARVÉLIN: CTA sem vísar á vefúttektina -->
-<section class="engine-cta">
-  <div class="wrap">
-    <div class="engine-panel" id="enginePanel">
-      <div class="engine-grid">
-        <div class="engine-copy">
-          <div class="eyebrow">Greiningarvélin okkar</div>
-          <h2>Hvernig stendur vefurinn þinn sig?</h2>
-          <p>Sláðu inn lénið þitt og fáðu ókeypis úttekt á tækni, hraða, öryggi og sýnileika, innan við mínútu. Ekkert kreditkort, engin skráning, bara svör.</p>
-          <form class="engine-form" action="/vefuttekt" method="get">
-            <label><span class="sr">Vefslóð</span><input type="text" name="domain" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="url" placeholder="mittfyrirtaeki.is" required></label>
-            <button type="submit" class="btn-primary"><span class="btn-label">Skoða vefinn</span></button>
-          </form>
-          <a class="engine-iv" href="/islenski-vefurinn"><span class="nytt">Nýtt</span><span>Staðan á <b id="engIvTala">35.720</b> íslenskum vefjum</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-        </div>
-        <div class="engine-visual" aria-hidden="true">
-          <div class="eng-card u-plate u-tilt">
-            <div class="u-bar"><i></i><i></i><i></i><span class="url"></span></div>
-            <div class="eng-body">
-              <div class="eng-score"><div class="eng-ring"><span>?</span></div><div class="eng-lines"><s></s><s></s><s></s></div></div>
-              <div class="eng-cats"><div><i style="--k:0"></i><s></s></div><div><i style="--k:1"></i><s></s></div><div><i style="--k:2"></i><s></s></div><div><i style="--k:3"></i><s></s></div></div>
-              <div class="eng-finds"><b style="--w:62%"></b><b style="--w:48%"></b><b style="--w:70%"></b></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="work-head">
-  <div class="wrap">
-    <h2><span class="accent">Valin</span><span class="flip-word">Verkefni</span></h2>
-  </div>
-</section>
 
-<section class="showcase" id="work">
-  <div class="show-sticky" id="showSticky">
-   <div class="show-stage" id="showStage">
-    <div class="show-bg" id="showBg"></div>
-    <div class="show-ticks" id="showTicks" aria-hidden="true"></div>
 
-    <div class="show-slide" data-color="#481E35">
-      <div class="slide-lottie" id="lottieCross"></div>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Þjóðkirkja Íslands</span></div>
-          <h3>Þjóðkirkjan</h3>
-        </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">UX</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://kirkjan.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Þjóðkirkjan">Skoða verkefni ↗︎</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="show-slide" data-color="#2E1A47">
-      <div class="slide-life" data-name="TAKK">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <img class="slide-media" src="takk-hero.avif" alt="">
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Hagar</span></div>
-          <h3>Takk</h3>
-        </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
-          <a class="show-link" href="https://www.takkkronur.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Takk">Skoða verkefni ↗︎</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="show-slide" data-color="#22372B">
-      <div class="slide-life" data-name="ORKUREITURINN">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <video class="slide-media" muted loop playsinline preload="metadata"
-             src="orkureiturinn-web.mp4"></video>
-      <div class="show-panel">
-        <div class="slide-trophy">
-          <div class="trophy-inner">
-            <img src="svef-trofea.png" alt="Verðlaunagripurinn Söluvefur ársins 2025 hjá SVEF" loading="lazy">
-            <div class="trophy-flare"></div>
-          </div>
-        </div>
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Safír</span><span class="panel-award">Söluvefur ársins 2025</span></div>
+<section class="fv" id="work">
+    <div class="fv-rod" id="fvRod">
+      <a class="fv-kort upp" href="https://orkureiturinn.is" target="_blank" rel="noopener" style="aspect-ratio:4/5" aria-label="Skoða verkefni: Orkureiturinn">
+        <video class="fv-midill" src="orkureiturinn-web.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="fv-texti">
+          <div class="fv-meta"><span>Safír</span><span class="fv-verdlaun">Söluvefur ársins 2025</span></div>
           <h3>Orkureiturinn</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span><span class="fv-pilla">SEO</span></div>
         </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://orkureiturinn.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Orkureiturinn">Skoða verkefni ↗︎</a>
+      </a>
+      <a class="fv-kort nidur" href="https://www.takkkronur.is" target="_blank" rel="noopener" style="aspect-ratio:5/4" aria-label="Skoða verkefni: Takk">
+        <img class="fv-midill" src="verk-takk.jpg" alt="" loading="lazy">
+        <div class="fv-texti">
+          <div class="fv-meta"><span>Hagar</span></div>
+          <h3>Takk</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span></div>
         </div>
-      </div>
-    </div>
-    <div class="show-slide" data-color="#B5121B">
-      <div class="slide-life" data-name="VERKÍS">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <video class="slide-media" muted loop playsinline preload="metadata"
-             src="verkis-web.mp4"></video>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Verkís</span></div>
+      </a>
+      <a class="fv-kort upp" href="https://www.verkis.is" target="_blank" rel="noopener" style="aspect-ratio:4/5" aria-label="Skoða verkefni: Verkís">
+        <video class="fv-midill" src="verkis-web.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="fv-texti">
+          <div class="fv-meta"><span>Verkís</span></div>
           <h3>Verkís</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span><span class="fv-pilla">SEO</span></div>
         </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://verkis.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Verkís">Skoða verkefni ↗︎</a>
+      </a>
+      <a class="fv-kort nidur" href="https://kirkjan.is" target="_blank" rel="noopener" style="aspect-ratio:5/4" aria-label="Skoða verkefni: Þjóðkirkjan">
+        <img class="fv-midill" src="verk-kirkjan.jpg" alt="" loading="lazy">
+        <div class="fv-texti">
+          <div class="fv-meta"><span>Þjóðkirkja Íslands</span></div>
+          <h3>Þjóðkirkjan</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span><span class="fv-pilla">UX</span><span class="fv-pilla">SEO</span></div>
         </div>
-      </div>
-    </div>
-    <!-- FALIÐ Í BILI (Sigur Rós): fjarlægðu þetta comment til að sýna aftur
-    <div class="show-slide" data-color="#101014">
-      <div class="slide-life">
-        <div class="aurora x1"></div>
-        <div class="aurora x2"></div>
-        <div class="aurora x3"></div>
-      </div>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Sigur Rós</span></div>
-          <h3>Sigur Rós</h3>
-        </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span></div>
-          <a class="show-link" href="https://sigurros.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: Sigur Rós">Skoða verkefni ↗︎</a>
-        </div>
-      </div>
-    </div>
-    -->
-    <div class="show-slide" data-color="#E4572E">
-      <div class="slide-life" data-name="LÍTTUPP">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <video class="slide-media" muted loop playsinline preload="metadata"
-             src="littupp-web.mp4"></video>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Netöryggismiðstöð Íslands</span></div>
+      </a>
+      <a class="fv-kort upp" href="https://littupp.is" target="_blank" rel="noopener" style="aspect-ratio:4/5" aria-label="Skoða verkefni: Líttupp">
+        <video class="fv-midill" src="littupp-web.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="fv-texti">
+          <div class="fv-meta"><span>Netöryggismiðstöð Íslands</span></div>
           <h3>Líttupp</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span><span class="fv-pilla">SEO</span></div>
         </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://littupp.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Líttupp">Skoða verkefni ↗︎</a>
+      </a>
+      <a class="fv-kort nidur" href="https://marchforward2025.com" target="_blank" rel="noopener" style="aspect-ratio:4/5" aria-label="Skoða verkefni: March Forward 2025">
+        <video class="fv-midill" src="march-forward-web.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="fv-texti">
+          <div class="fv-meta"><span>UN Women</span><span class="fv-verdlaun">PHNX tilnefning</span></div>
+          <h3>March Forward 2025</h3>
+          <div class="fv-pillur"><span class="fv-pilla">Vefþróun</span></div>
         </div>
-      </div>
+      </a>
     </div>
-    <div class="show-slide" data-color="#0B4F7A">
-      <div class="slide-life" data-name="SKJÁHÆTTA">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <video class="slide-media" muted loop playsinline preload="metadata"
-             src="skjahaetta-web.mp4"></video>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">Sjóvá og Samgöngustofa</span></div>
-          <h3>Skjáhætta</h3>
-        </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Vefþróun</span><span class="show-tag">SEO</span></div>
-          <a class="show-link" href="https://skjahaetta.is" target="_blank" rel="noopener" aria-label="Skoða verkefni: Skjáhætta">Skoða verkefni ↗︎</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="show-slide" data-color="#6B1140">
-      <div class="slide-life" data-name="MARCH FORWARD">
-        <div class="life-glow a"></div>
-        <div class="life-glow b"></div>
-        <div class="life-rows"></div>
-      </div>
-      <video class="slide-media" muted loop playsinline preload="metadata"
-             src="march-forward-web.mp4"></video>
-      <div class="show-panel">
-        <div class="panel-info">
-          <div class="panel-meta"><span class="panel-client">UN Women · með Pipar\TBWA</span><span class="panel-award">PHNX tilnefning</span></div>
-          <h3 class="long">March Forward 2025</h3>
-        </div>
-        <div class="panel-side">
-          <div class="show-tags"><span class="show-tag">Herferð</span></div>
-          <a class="show-link" href="https://marchforward2025.com" target="_blank" rel="noopener" aria-label="Skoða verkefni: March Forward 2025">Skoða verkefni ↗︎</a>
-        </div>
-      </div>
-    </div>
-
-   </div><!-- /.show-stage -->
-  </div>
 </section>
 
 <section class="work-more">
@@ -1912,24 +1797,81 @@
 
 
 <!-- FÓTUR -->
+<script>
+// Valin verkefni: spjöldin eru afrituð einu sinni svo lykkjan verði samfelld
+// (röðin færist um helming sinnar breiddar og byrjar upp á nýtt án skila).
+// Videoin spilast aðeins á meðan þau sjást.
+(function(){
+  var fv = document.querySelector('.fv'), rod = document.getElementById('fvRod');
+  if (!fv || !rod) return;
+  var frum = [].slice.call(rod.children);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) frum.forEach(function(k){
+    var c = k.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1;
+    rod.appendChild(c);
+  });
+  // jafn hraði óháð skjástærð: um 70 px á sekúndu
+  function hradi(){ rod.style.setProperty('--fv-t', Math.round(rod.scrollWidth / 2 / 70) + 's'); }
+  addEventListener('load', hradi); addEventListener('resize', hradi); hradi();
+  var vid = [].slice.call(rod.querySelectorAll('video'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(f){ f.forEach(function(x){
+      if (x.isIntersecting) { var p = x.target.play(); if (p && p.catch) p.catch(function(){}); } else x.target.pause();
+    }); }, { rootMargin: '0px 100px' });
+    vid.forEach(function(v){ io.observe(v); });
+  }
+})();
+</script>
 <footer class="footer">
   <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-contact">
-        <a class="footer-mail" href="mailto:hallo@reytal.is">hallo@reytal.is</a>
-        <address class="footer-addr">Guðrúnartún 8, 105 Reykjavík</address>
-      </div>
-      <div class="footer-pills">
-        <span class="tag">Reykjavík</span>
-        <span class="tag">Tallinn</span>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>REYTAL © 2026</span>
-      <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef">Hafa samband ↗︎</a>
+    <div class="f2-rod">
+      <div>RVK DGT ehf.<br><span class="f2-lag">© 2026</span></div>
+      <address>Guðrúnartún 8<br>105 Reykjavík<br><span class="f2-lag">og Tallinn</span></address>
+      <div><a href="mailto:hallo@reytal.is">hallo@reytal.is</a><br><a href="tel:+3545109000">510 9000</a></div>
+      <a class="f2-takki" href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" data-samband="">Hafa samband</a>
     </div>
   </div>
+  <a class="f2-merki" href="/" aria-label="REYTAL, aftur efst">
+    <svg class="f2-lina" viewBox="0 0 48.4 8.54" aria-hidden="true">
+      <g class="f2-rey">
+        <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/>
+        <path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/>
+        <path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/>
+        <path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      </g>
+      <g transform="translate(25.2 -10.35)"><g>
+        <path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/>
+        <path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/>
+        <path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/>
+      </g></g>
+    </svg>
+    <svg class="f2-stafli" viewBox="0 0 23.19 18.89" aria-hidden="true">
+      <path d="M7.03,7.62c0,.38.09.69.24.92h-2.09c-.13-.24-.2-.55-.2-.94l-.04-.96c-.02-.47-.12-.8-.32-.98-.2-.18-.51-.27-.94-.27h-1.66v3.14H0V0h4.04c1,0,1.77.22,2.3.67s.8,1.05.8,1.8c0,.98-.46,1.66-1.38,2.03.44.14.75.36.92.66.17.3.27.72.29,1.26l.06,1.2ZM2.03,3.87h1.79c.39,0,.7-.1.91-.29.22-.2.32-.48.32-.85,0-.74-.42-1.12-1.27-1.12h-1.75v2.25Z"/><path d="M14.25,1.81h-4.1v1.55h3.38v1.7h-3.38v1.67h4.09v1.81h-6.11V0h6.13v1.81Z"/><path d="M20.96,0h2.23l-3.17,5.22v3.32h-2.03v-3.32L14.8,0h2.29l1.97,3.36,1.91-3.36Z"/><path d="M16.65,7.31c.15.14.22.31.22.52s-.07.37-.22.51c-.15.14-.33.21-.53.21s-.39-.07-.54-.21c-.15-.14-.22-.31-.22-.51s.07-.38.22-.52c.15-.14.33-.21.54-.21s.39.07.53.21ZM16.53,8.23c.11-.11.16-.24.16-.4s-.05-.3-.16-.41c-.11-.11-.25-.16-.41-.16s-.3.05-.41.16c-.11.11-.17.24-.17.41s.06.3.17.4c.11.11.25.16.41.16s.3-.05.41-.16ZM16.44,8.1s.01.07.03.09h-.21s-.02-.06-.02-.09v-.08s-.01-.06-.03-.07c-.01-.01-.04-.02-.07-.02h-.12v.26h-.2v-.74h.35c.09,0,.15.02.2.06s.07.09.07.16c0,.08-.03.13-.1.17.06.03.09.08.09.16v.1ZM16.02,7.78h.13c.06,0,.09-.03.09-.08s-.03-.08-.09-.08h-.13v.16Z"/>
+      <g><path d="M14.83,18.89v-1.81h3.17s0-6.73,0-6.73h2.03v6.73s3.17,0,3.17,0v1.81h-8.36Z"/><path d="M9.37,10.35l.5,1.49h3.55l.49-1.49h2.07l-3.14,8.54h-2.41l-3.21-8.54h2.15ZM12.86,13.53h-2.41l.49,1.46c.15.43.39,1.15.72,2.16.42-1.3.66-2.02.71-2.16l.49-1.46Z"/><path d="M3.91,12.16H0v-1.81h5.94v8.54h-2.03v-6.73Z"/></g>
+    </svg>
+  </a>
 </footer>
+<script>
+// REYTAL lyftist upp frá botninum: er alveg niðri þegar fóturinn birtist og
+// situr fullt þegar komið er neðst á síðuna
+(function(){
+  var m = document.querySelector('.f2-merki');
+  if (!m || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var bidur = false;
+  function lyfta(){
+    bidur = false;
+    var r = m.getBoundingClientRect(), vh = window.innerHeight;
+    // 0 þegar efri brún merkisins kemur inn neðst, 1 þegar neðri brúnin er komin að botni gluggans
+    var p = Math.min(1, Math.max(0, (vh - r.top) / Math.max(1, r.height)));
+    p = 1 - Math.pow(1 - p, 2);
+    [].forEach.call(m.querySelectorAll('svg'), function(x){ x.style.transform = 'translate3d(0,' + ((1 - p) * 100).toFixed(2) + '%,0)'; });
+  }
+  addEventListener('scroll', function(){ if (!bidur) { bidur = true; requestAnimationFrame(lyfta); } }, { passive: true });
+  addEventListener('resize', lyfta); addEventListener('load', lyfta); lyfta();
+})();
+</script>
+
+
 
 </div><!-- /.site -->
 
@@ -2224,7 +2166,7 @@
   var flipWords = [].slice.call(document.querySelectorAll('.flip-word')).filter(function(el){
     return !el.closest('.showcase');
   }).map(function(el){
-    return { el: el, top0: null, dir: -1 };
+    return { el: el, dir: -1 };
   });
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var introFlipDir = -1;
@@ -2251,6 +2193,8 @@
   });
 
   function mix(a, b, f){ return Math.round(a + (b - a) * f); }
+  // staða efst á síðunni (við skroll 0), óháð transform
+  function sidustada(el){ var y = 0; while (el){ y += el.offsetTop; el = el.offsetParent; } return y; }
 
   function update(){
     var scrollY = window.scrollY;
@@ -2260,18 +2204,22 @@
     if (mainNav) mainNav.classList.toggle('pill', scrollY > 60);
 
     if (!reduceMotion){
-      // hvert orð geymir sína upprunalegu stöðu (top0), en viðmiðunin er
+      // viðmiðunin er staða orðsins efst á síðunni (top0), en
       // aldrei lengra niðri en rétt fyrir neðan gluggann - annars myndi
       // orð sem er langt niðri á síðunni klára að réttast úr sér áður en
       // notandinn er yfir höfuð búinn að skrolla því í sjónmál. Þannig
       // byrjar hreyfingin ekki fyrr en orðið er raunverulega að birtast,
       // og tekur svo drjúgan spöl af skrolli að klárast.
+      //
+      // Staðan er lesin úr offsetTop-keðjunni, ekki getBoundingClientRect:
+      // rect-ið tekur skölunina sjálfa með (orðið kremst um miðjuna) og
+      // fasta upphafsstaðan úreltist þegar útlitið hliðrast eftir intro eða
+      // leturhleðslu. Þá endaði orðið kramið þegar skrollað var aftur upp.
       var flipRange = vh * 0.15;
       flipWords.forEach(function(fw){
-        var hf = fw.el.getBoundingClientRect();
-        if (fw.top0 === null) fw.top0 = hf.top;
-        var ref = Math.min(fw.top0, vh * 0.92);
-        var fp = Math.min(1, Math.max(0, (ref - hf.top) / flipRange));
+        var top0 = sidustada(fw.el), top = top0 - scrollY;
+        var ref = Math.min(top0, vh * 0.92);
+        var fp = Math.min(1, Math.max(0, (ref - top) / flipRange));
         // þröskuldur með dauðu belti í kringum miðjuna (0.5) svo örsmáar
         // fram/til-baka hreyfingar frá inertial trackpad-skrolli ýti ekki
         // scaleX endalaust fram og til baka (sá "flökt" sem sást á Mac) -
@@ -2448,19 +2396,10 @@
   // þungur útreikningur (getBoundingClientRect á öllum flip-orðum + öll
   // glæru-uppfærslan) margfalt á ramma, sem er stór hluti af hökti í mobile.
   // Nú fer resize gegnum sama rAF-hlið og skrollið.
-  //
-  // Flip-orðin geyma upphafsstöðu sína (top0) sem verður ógild þegar
-  // útlitið hliðrast, svo hún er hreinsuð við raunverulega breidd-breytingu.
-  // Bara breidd: hæðarbreyting ein og sér er nær alltaf address-barið, og
-  // að núllstilla þá myndi láta orðin hoppa til við venjulegt skroll.
-  var lastW = window.innerWidth;
-  window.addEventListener('resize', function(){
-    if (window.innerWidth !== lastW){
-      lastW = window.innerWidth;
-      flipWords.forEach(function(fw){ fw.top0 = null; });
-    }
-    requestUpdate();
-  });
+  window.addEventListener('resize', requestUpdate);
+  // letrið og introið hliðra útlitinu eftir fyrstu teikningu
+  window.addEventListener('load', requestUpdate);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(requestUpdate);
 
   update();
 })();
