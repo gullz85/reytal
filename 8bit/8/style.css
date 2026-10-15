@@ -1,0 +1,345 @@
+/* ══════════════════════════════════════════════════════════════════════
+   REYTAL 8-BIT · hönnunarkerfið
+   Hlaðið fyrst þegar leynileiðin finnst. Allt er undir #r8 / .r8-* svo
+   ekkert lekur yfir á venjulega vefinn.
+   Rammar eru „pixlarammar“: box-shadow í fjórar áttir með skornum hornum,
+   eins og textagluggar í NES-leikjum.
+   ══════════════════════════════════════════════════════════════════════ */
+.r8, .r8-yfir {
+  --px: 4px;
+  --svart: #000; --blek: #0B0C0D; --hvitt: #FCFCFC; --krem: #F3F0EA;
+  --navy: #0D4659; --navyL: #3d8aa6; --himinn: #5C94FC; --gras: #00A844; --grasL: #58D854;
+  --mold: #C84C0C; --moldD: #7C2C00; --moldL: #FC9838; --gull: #F8B800; --gullL: #FCE0A8; --rautt: #D82800;
+  --nott: #0B1B33; --nott3: #1C3D63;
+  --leikur: "Silkscreen", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --texti: "Pixelify Sans", "Silkscreen", ui-monospace, monospace;
+  --r8-bak: #2a1406;
+  --r8-flis-bak: none;
+}
+
+/* ── Venjulegi vefurinn á meðan á umbreytingu stendur ─────────────────── */
+html.r8-glitch body > *:not(.r8-yfir):not(#r8) { animation: r8-glitch .14s steps(2) infinite; }
+@keyframes r8-glitch {
+  0% { transform: translate(0, 0); filter: none; }
+  25% { transform: translate(-6px, 2px) skewX(-2deg); filter: hue-rotate(40deg) saturate(2.2) contrast(1.4); }
+  50% { transform: translate(5px, -3px); filter: invert(.08) saturate(3); }
+  75% { transform: translate(-3px, 0) skewX(3deg); filter: hue-rotate(-60deg) contrast(1.8); }
+  100% { transform: translate(0, 0); filter: none; }
+}
+html.r8-a, html.r8-a body { overflow: hidden !important; }
+html.r8-skipti * { cursor: progress; }
+
+/* ── Yfirlagið: flísar og borðspjald ───────────────────────────────────── */
+.r8-yfir { position: fixed; inset: 0; z-index: 2147483646; pointer-events: auto; }
+.r8-yfir canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.r8-spjald {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 20px; padding: 24px; color: var(--hvitt); font-family: var(--leikur); text-align: center; background: #000;
+}
+.r8-spjald[hidden] { display: none; }
+.r8-spjald p { margin: 0; text-transform: uppercase; letter-spacing: .06em; }
+.r8-spjald-merki { width: 132px; image-rendering: pixelated; margin-bottom: 18px; }
+.r8-spjald-heimur { font-size: clamp(16px, 2.6vw, 24px); }
+.r8-spjald-nafn { font-size: clamp(28px, 6vw, 52px); font-weight: 700; color: var(--gull); }
+.r8-spjald-lif { display: flex; align-items: center; gap: 14px; font-size: 20px; margin-top: 12px !important; }
+.r8-spjald-lif img { width: 48px; image-rendering: pixelated; }
+.r8-sigling { position: relative; width: min(560px, 88vw); height: 96px; margin-top: 18px; display: flex; justify-content: space-between; align-items: flex-end;
+  background: linear-gradient(transparent 70%, #2038EC 70%); }
+.r8-sigling img { position: absolute; bottom: 10px; left: 0; width: 144px; image-rendering: pixelated; animation: r8-sigla 1.4s steps(28) forwards; }
+.r8-hofn { font-size: 13px; color: var(--grasL); position: relative; top: 26px; }
+@keyframes r8-sigla { from { left: 0; } to { left: calc(100% - 144px); } }
+
+/* ── Grunnurinn ────────────────────────────────────────────────────────── */
+#r8.r8 {
+  position: fixed; inset: 0; z-index: 2147483600; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  background: var(--r8-bak); background-image: var(--r8-flis-bak); background-size: 64px 64px;
+  color: var(--hvitt); font-family: var(--texti); font-size: 19px; line-height: 1.5;
+  -webkit-font-smoothing: none; font-smooth: never; text-rendering: optimizeSpeed;
+  scroll-behavior: smooth; -webkit-tap-highlight-color: transparent;
+}
+html[data-r8-heimur="1-2"] #r8.r8 { --r8-bak: #0E1626; }
+html[data-r8-heimur="?-?"] #r8.r8 { --r8-bak: #101010; }
+#r8 *, #r8 *::before, #r8 *::after { box-sizing: border-box; }
+#r8 img { image-rendering: pixelated; image-rendering: crisp-edges; max-width: 100%; }
+#r8 a { color: var(--gull); text-decoration: none; }
+#r8 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+#r8 :focus-visible { outline: 4px dashed var(--gull); outline-offset: 4px; }
+#r8 h1, #r8 h2, #r8 h3 { font-family: var(--leikur); font-weight: 700; text-transform: uppercase; line-height: 1.45; margin: 0; text-wrap: balance; letter-spacing: .02em; }
+#r8 p { margin: 0 0 .7em; }
+#r8 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#r8 main { outline: none; }
+.r8-hoppa { position: absolute; left: 8px; top: -60px; z-index: 5; padding: 10px 14px; background: var(--gull); color: #000 !important; font-family: var(--leikur); font-size: 14px; }
+.r8-hoppa:focus { top: 8px; }
+
+.r8-yfirskrift { font-family: var(--leikur); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gull); margin: 0 0 14px !important; }
+
+/* ── Pixlarammi ───────────────────────────────────────────────────────── */
+.r8-kassi, .r8-gluggi, .r8-stadur, .r8-tilkynning {
+  --rammi: var(--hvitt);
+  box-shadow: 0 calc(var(--px) * -1) 0 0 var(--rammi), 0 var(--px) 0 0 var(--rammi), calc(var(--px) * -1) 0 0 0 var(--rammi), var(--px) 0 0 0 var(--rammi);
+}
+
+/* ── Takkar ───────────────────────────────────────────────────────────── */
+#r8 .r8-takki {
+  --c: var(--gull); --d: var(--moldD); --l: var(--gullL);
+  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 18px; margin: var(--px);
+  font-family: var(--leikur); font-weight: 700; font-size: 15px; line-height: 1.3; letter-spacing: .04em; text-transform: uppercase; color: #000;
+  background: var(--c); border: 0; cursor: pointer; text-decoration: none;
+  box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000, inset -4px -4px 0 0 var(--d), inset 4px 4px 0 0 var(--l);
+  transition: transform .06s steps(1);
+}
+#r8 .r8-takki.aukalegur { --c: var(--krem); --d: #9a958a; --l: #fff; }
+#r8 .r8-takki:hover { transform: translateY(-2px); text-decoration: none; }
+#r8 .r8-takki:active { transform: translate(2px, 2px); box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000, inset 4px 4px 0 0 var(--d); }
+.r8-takkar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+/* ── Stjórnborðið efst ─────────────────────────────────────────────────── */
+.r8-bord {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+  padding: 10px max(16px, env(safe-area-inset-left)); padding-top: calc(10px + env(safe-area-inset-top));
+  background: #000; border-bottom: 4px solid var(--hvitt); font-family: var(--leikur); font-size: 13px; text-transform: uppercase;
+}
+.r8-bord-merki { display: block; line-height: 0; }
+.r8-bord-merki img { height: 34px; width: auto; }
+.r8-bord-heimur { display: flex; flex-direction: column; gap: 4px; color: var(--hvitt); opacity: .8; letter-spacing: .1em; }
+.r8-bord-heimur b { color: var(--gull); font-weight: 700; font-size: 15px; }
+.r8-valmynd { margin-left: auto; }
+.r8-valmynd ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.r8-valmynd a { display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; color: var(--hvitt) !important; letter-spacing: .05em; }
+.r8-valmynd a small { font-size: 10px; color: var(--grasL); }
+.r8-valmynd a:hover, .r8-valmynd a[aria-current] { background: var(--hvitt); color: #000 !important; text-decoration: none !important; }
+.r8-valmynd a[aria-current] small { color: var(--mold); }
+.r8-bitar { display: flex; gap: 3px; padding: 4px; border: 0; background: #111; box-shadow: 0 0 0 2px var(--moldL); cursor: pointer; font: inherit; }
+.r8-bitar:hover { box-shadow: 0 0 0 2px var(--gull); }
+.r8-bitar i { display: grid; place-items: center; width: 14px; height: 20px; font-style: normal; font-size: 13px; font-weight: 700; color: #555; background: #000; }
+.r8-bitar i.fundinn { color: #000; background: var(--gull); }
+.r8-bitar i.blikk { animation: r8-blikk .7s steps(2) 3; }
+@keyframes r8-blikk { 50% { background: var(--hvitt); } }
+.r8-tak { min-width: 44px; min-height: 44px; padding: 0 10px; border: 2px solid var(--hvitt); background: #000; color: var(--hvitt); font: inherit; cursor: pointer; }
+.r8-tak:hover { background: var(--hvitt); color: #000; }
+.r8-hljod .slokkt, .r8-hljod.af .kveikt { display: none; }
+.r8-hljod.af .slokkt { display: inline; }
+.r8-hljod.af { color: #777; border-color: #777; }
+.r8-ut { background: var(--rautt); border-color: var(--hvitt); }
+.r8-matsedill { display: none; }
+
+/* ── Leikvöllurinn ────────────────────────────────────────────────────── */
+.r8-svid { position: relative; height: clamp(440px, 76vh, 660px); overflow: hidden; background: var(--himinn); border-bottom: 4px solid #000; outline: none; touch-action: manipulation; }
+html[data-r8-heimur="1-2"] .r8-svid { background: var(--nott); }
+.r8-leikur-cv { position: absolute; left: 0; bottom: 0; image-rendering: pixelated; display: block; }
+.r8-hetja { position: relative; z-index: 2; max-width: 640px; padding: clamp(20px, 4vw, 44px) clamp(16px, 4vw, 48px); pointer-events: none; }
+.r8-hetja > * { pointer-events: auto; }
+.r8-hetja h1 { font-size: clamp(22px, 4.2vw, 46px); color: var(--hvitt); text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; margin-bottom: 14px !important; }
+.r8-hetja .r8-yfirskrift { color: var(--hvitt); text-shadow: 2px 2px 0 #000; }
+.r8-inngangur { max-width: 46ch; font-size: clamp(16px, 1.6vw, 20px); color: var(--hvitt); text-shadow: 2px 2px 0 #000, -1px -1px 0 #000; }
+.r8-hetja-takkar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 8px; }
+.r8-leidbeining { margin: 0 !important; font-family: var(--leikur); font-size: 11px; line-height: 1.8; color: var(--hvitt); text-shadow: 2px 2px 0 #000; text-transform: uppercase; }
+.r8-leidbeining .snert { display: none; }
+@media (pointer: coarse) { .r8-leidbeining .lykla { display: none; } .r8-leidbeining .snert { display: inline; } }
+.r8-svid.virkur .r8-hetja { opacity: .35; transition: opacity .2s steps(3); }
+.r8-svid.virkur .r8-start { opacity: 1; }
+
+.r8-snerting { position: absolute; z-index: 3; left: 0; right: 0; bottom: 12px; display: none; align-items: flex-end; gap: 10px; padding: 0 12px; pointer-events: none; }
+.r8-snerting span { flex: 1; }
+.r8-snerting button {
+  pointer-events: auto; width: 60px; height: 60px; border: 0; background: rgba(0, 0, 0, .55); color: var(--hvitt); font-family: var(--leikur); font-size: 22px; font-weight: 700;
+  box-shadow: 0 -4px 0 0 var(--hvitt), 0 4px 0 0 var(--hvitt), -4px 0 0 0 var(--hvitt), 4px 0 0 0 var(--hvitt); touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.r8-snerting button:active { background: var(--hvitt); color: #000; }
+.r8-snerting .r8-a { width: 72px; height: 72px; border-radius: 0; background: var(--rautt); }
+.r8-snerting .r8-inn { font-size: 14px; font-weight: 700; background: var(--gull); color: #000; }
+.r8-snerting button[hidden] { display: none; }
+@media (pointer: coarse) { .r8-svid.virkur .r8-snerting { display: flex; } }
+
+/* ── Staðir (flýtileið fyrir þá sem spila ekki) ───────────────────────── */
+.r8-stadir { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; max-width: 1120px; margin: 36px auto 0; padding: 0 20px; }
+.r8-stadur { display: flex; align-items: center; gap: 14px; margin: var(--px); padding: 14px; background: #000; color: var(--hvitt); border: 0; text-align: left; cursor: pointer; font: inherit; }
+.r8-stadur img { width: 36px; flex: none; }
+.r8-stadur b { display: block; font-family: var(--leikur); font-weight: 700; font-size: 14px; text-transform: uppercase; color: var(--gull); margin-bottom: 6px; }
+.r8-stadur small { font-size: 16px; line-height: 1.25; }
+.r8-stadur:hover { --rammi: var(--gull); transform: translateY(-2px); }
+
+/* ── Kaflar ───────────────────────────────────────────────────────────── */
+.r8-kafli { max-width: 1120px; margin: 44px auto; padding: 0 20px; }
+.r8-kassi { margin: var(--px); padding: clamp(20px, 3.4vw, 36px); background: #000; }
+#r8 .r8-kassi h2 { font-size: clamp(16px, 2.4vw, 24px); margin-bottom: 32px; }   /* #r8 svo það vinni á grunnreglunni */
+.r8-meira { margin: 22px 0 0 !important; }
+
+.r8-afrek .r8-kassi { --rammi: var(--gull); background: linear-gradient(#000, #1a1000); }
+.r8-afrek-innan { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; }
+.r8-bikar { width: 96px; animation: r8-bob 1.6s steps(4) infinite; }
+@keyframes r8-bob { 50% { transform: translateY(-6px); } }
+
+.r8-bunadur { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); gap: 14px; }
+.r8-bunadur li { display: grid; grid-template-columns: 36px 1fr; gap: 4px 14px; align-items: start; padding: 14px; background: #111; box-shadow: inset 0 0 0 2px #333; }
+.r8-bunadur li:hover { box-shadow: inset 0 0 0 2px var(--gull); }
+.r8-bunadur img { width: 36px; grid-row: span 2; }
+.r8-bunadur b { font-family: var(--leikur); font-weight: 700; font-size: 13px; line-height: 1.5; text-transform: uppercase; color: var(--gull); }
+.r8-bunadur span { font-size: 16px; line-height: 1.35; color: #ddd; }
+
+.r8-uttekt .r8-kassi { --rammi: var(--grasL); }
+
+/* ── Leikjahylki ──────────────────────────────────────────────────────── */
+.r8-hylkjarod { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 28px 20px; }
+.r8-hylkjarod.stor { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.r8-hylki { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0; background: none; border: 0; color: var(--hvitt); cursor: pointer; font: inherit; }
+.r8-hylki-skel {
+  position: relative; width: 100%; padding: 18% 10% 12%;
+  background: repeating-linear-gradient(#8f8f8f 0 4px, #a8a8a8 4px 8px) top / 100% 16% no-repeat, #a8a8a8;
+  clip-path: polygon(0 8px, 8px 8px, 8px 0, calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px, 100% 100%, 0 100%);
+  box-shadow: inset -6px -6px 0 0 #6c6c6c, inset 6px 6px 0 0 #d0d0d0;
+  transition: transform .08s steps(2);
+}
+.r8-hylki-skel::after { content: ""; position: absolute; left: 30%; right: 30%; bottom: 0; height: 6px; background: #555; }
+.r8-hylki-midi { display: flex; flex-direction: column; height: 100%; background: var(--krem); box-shadow: 0 0 0 3px #222; overflow: hidden; }
+.r8-hylki-midi img { width: 100%; aspect-ratio: 48 / 30; object-fit: cover; display: block; background: #222; }
+.r8-hylki-nafn { flex: 1; display: grid; place-items: center; min-height: 4.6em; padding: 6px; font-family: var(--leikur); font-weight: 700; font-size: 12px; line-height: 1.4; text-transform: uppercase; color: #000; text-align: center; word-break: break-word; }
+.r8-hylki-nr { font-family: var(--leikur); font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: .1em; }
+.r8-hylki:hover .r8-hylki-skel, .r8-hylki:focus-visible .r8-hylki-skel { transform: translateY(-6px); }
+.r8-hylki:hover .r8-hylki-nr { color: var(--gull); }
+.r8-hylki.leynd .r8-hylki-midi { background: #111; }
+.r8-hylki.leynd .r8-hylki-midi img { visibility: hidden; }
+.r8-hylki.leynd .r8-hylki-nafn { color: var(--gull); font-size: 18px; animation: r8-blikk2 1.2s steps(2) infinite; }
+.r8-hylki.leynd.opnad .r8-hylki-nafn { animation: none; }
+@keyframes r8-blikk2 { 50% { opacity: .25; } }
+
+.r8-sia { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 36px; }
+.r8-siuhnappur { min-height: 40px; padding: 8px 12px; border: 2px solid #555; background: #000; color: var(--hvitt); font-family: var(--leikur); font-size: 12px; text-transform: uppercase; cursor: pointer; }
+.r8-siuhnappur small { color: #888; margin-left: 6px; font-size: 11px; }
+.r8-siuhnappur[aria-pressed="true"] { background: var(--gull); border-color: var(--gull); color: #000; }
+.r8-siuhnappur[aria-pressed="true"] small { color: #000; }
+.r8-siuhnappur:hover { border-color: var(--gull); }
+
+/* ── Gluggar ──────────────────────────────────────────────────────────── */
+.r8-gluggi-bak {
+  position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px;
+  background: rgba(0, 0, 0, .6); background-image: radial-gradient(rgba(0, 0, 0, .5) 1px, transparent 1.5px); background-size: 4px 4px;
+  animation: r8-inn .16s steps(3);
+}
+.r8-gluggi-bak.fer { animation: r8-ut .16s steps(3) forwards; }
+@keyframes r8-inn { from { opacity: 0; } }
+@keyframes r8-ut { to { opacity: 0; } }
+.r8-gluggi { position: relative; width: min(620px, 100%); max-height: calc(100dvh - 48px); overflow-y: auto; margin: var(--px); padding: 34px clamp(20px, 4vw, 38px) 30px; background: #000; animation: r8-poppa .2s steps(4); }
+@keyframes r8-poppa { from { transform: scale(.6); } }
+.r8-gluggi h2 { font-size: clamp(16px, 3vw, 22px); color: var(--hvitt); margin-bottom: 18px !important; }
+.r8-gluggi-efni p b { color: var(--gull); font-weight: 400; }
+.r8-loka { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; color: var(--hvitt); font-family: var(--leikur); font-size: 20px; cursor: pointer; }
+.r8-loka:hover { color: var(--gull); }
+.r8-listi { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 10px; }
+.r8-listi li { display: flex; align-items: center; gap: 12px; }
+.r8-listi img { width: 24px; }
+.r8-vidskipta { font-family: var(--leikur); font-size: 12px; line-height: 1.7; text-transform: uppercase; color: var(--grasL); }
+.r8-krafter { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 0; padding: 0; }
+.r8-krafter li { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #111; box-shadow: inset 0 0 0 2px #333; font-family: var(--leikur); font-size: 12px; text-transform: uppercase; }
+.r8-krafter img { width: 24px; }
+.r8-tolva { position: relative; height: 112px; margin: 0 0 18px; background: #222; box-shadow: inset 0 0 0 4px #444, inset 0 -18px 0 0 #333; overflow: hidden; }
+.r8-tolva-rauf { position: absolute; left: 50%; top: 22px; width: 170px; height: 8px; transform: translateX(-50%); background: #000; }
+.r8-tolva-hylki { position: absolute; left: 50%; width: 144px; transform: translateX(-50%); top: -110px; box-shadow: 0 0 0 6px #a8a8a8, 0 0 0 9px #555; animation: r8-stinga .5s steps(8) .05s forwards; }
+@keyframes r8-stinga { to { top: 30px; } }
+.r8-gluggi-hylki h2 { color: var(--gull); }
+
+/* ── Tilkynning ───────────────────────────────────────────────────────── */
+.r8-tilkynning {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 45; max-width: calc(100vw - 40px); padding: 14px 18px;
+  transform: translate(-50%, 160%); background: #000; font-family: var(--leikur); font-weight: 700; font-size: 13px; line-height: 1.6; text-transform: uppercase; color: var(--gull);
+  transition: transform .2s steps(4); pointer-events: none;
+}
+.r8-tilkynning.synd { transform: translate(-50%, 0); }
+
+/* ── Fóturinn: jörð úr kubbum ─────────────────────────────────────────── */
+.r8-fotur { margin-top: 72px; background: var(--r8-undir) repeat left top / 64px 64px; box-shadow: inset 0 0 0 4000px rgba(0, 0, 0, .72); }
+.r8-fotur-jord { position: relative; height: 64px; background: var(--r8-flis) repeat-x left top / 64px 64px; }
+.r8-fotur-innan { display: grid; grid-template-columns: 1fr auto; gap: 18px 28px; align-items: end; max-width: 1120px; margin: 0 auto; padding: 36px 20px calc(36px + env(safe-area-inset-bottom));
+}
+.r8-fotur .r8-stort { font-family: var(--leikur); font-size: clamp(14px, 2.6vw, 24px); margin: 0 0 10px !important; }
+.r8-fotur-borgir { display: flex; gap: 14px; font-family: var(--leikur); font-size: 13px; text-transform: uppercase; }
+.r8-fotur-borgir span { padding: 8px 10px; box-shadow: inset 0 0 0 2px var(--hvitt); }
+.r8-fotur-smatt { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; margin: 0 !important; font-size: 15px; color: #aaa; }
+.r8-falinn-kubbur { width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: default; line-height: 0; opacity: .9; }
+.r8-falinn-kubbur img { width: 32px; }
+.r8-falinn-kubbur.hopp { animation: r8-hopp .2s steps(3); }
+.r8-falinn-kubbur.notadur { filter: saturate(.3) brightness(.7); }
+@keyframes r8-hopp { 50% { transform: translateY(-8px); } }
+
+/* ── Í smíðum ─────────────────────────────────────────────────────────── */
+.r8-smidi { margin-top: 64px; }
+.r8-smidi-innan { display: flex; align-items: center; gap: 24px; }
+.r8-snyst { width: 72px; animation: r8-snua 2s steps(8) infinite; }
+@keyframes r8-snua { to { transform: rotate(360deg); } }
+
+/* ── Efnissíður (enginn leikur) ───────────────────────────────────────── */
+html[data-r8-heimur^="2-"] #r8.r8, html[data-r8-heimur^="3-"] #r8.r8, html[data-r8-heimur^="4-"] #r8.r8 { --r8-bak: #101820; }
+.r8-efnishaus { background: #000; }
+.r8-bordi { display: flex; justify-content: center; background: var(--himinn); overflow: hidden; border-bottom: 4px solid #000; }
+.r8-bordi img { width: 1920px; max-width: none; height: auto; flex: none; }
+@media (max-width: 960px) { .r8-bordi img { width: 1280px; } }
+.r8-efnishaus-texti { max-width: 1120px; margin: 0 auto; padding: 36px 20px 44px; }
+.r8-efnishaus-texti h1 { font-size: clamp(26px, 4.6vw, 52px); margin-bottom: 18px !important; }
+.r8-efnishaus-texti .r8-inngangur { color: #ddd; text-shadow: none; max-width: 52ch; }
+.r8-efnishaus-texti p a { font-family: var(--leikur); font-size: 13px; text-transform: uppercase; }
+
+.r8-kort { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 16px; }
+.r8-kort li > a, .r8-kort li > div {
+  display: grid; grid-template-columns: 36px 1fr; gap: 6px 16px; height: 100%; padding: 18px; color: var(--hvitt) !important;
+  background: #111; box-shadow: inset 0 0 0 2px #333; text-decoration: none !important;
+}
+.r8-kort li > a:hover { box-shadow: inset 0 0 0 2px var(--gull); transform: translateY(-2px); }
+.r8-kort img { width: 36px; grid-row: span 3; }
+.r8-kort b { font-family: var(--leikur); font-weight: 700; font-size: 15px; line-height: 1.4; text-transform: uppercase; color: var(--gull); }
+.r8-kort span { font-size: 17px; line-height: 1.4; color: #ddd; }
+.r8-kort small { font-family: var(--leikur); font-size: 11px; text-transform: uppercase; color: var(--grasL); letter-spacing: .04em; }
+
+.r8-teymi { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 28px 18px; }
+.r8-teymi li { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.r8-mynd { display: block; width: 112px; height: 112px; margin-bottom: 8px; background: var(--navy); box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--hvitt); }
+.r8-mynd img { width: 100%; height: 100%; object-fit: cover; }
+.r8-teymi b { font-family: var(--leikur); font-weight: 700; font-size: 15px; text-transform: uppercase; }
+.r8-teymi small { font-size: 15px; color: var(--gull); }
+
+.r8-almennt h3 { font-size: 15px; color: var(--gull); margin: 18px 0 8px !important; }
+.r8-almennt h3:first-child { margin-top: 0 !important; }
+.r8-punktur { padding-left: 4px; }
+.r8-cta .r8-kassi { --rammi: var(--gull); text-align: left; }
+
+.r8-uttektarform { margin-top: 26px; }
+.r8-uttektarform label { display: block; font-family: var(--leikur); font-size: 13px; text-transform: uppercase; color: var(--gull); margin-bottom: 10px; }
+.r8-uttektarform div { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.r8-uttektarform input {
+  flex: 1 1 260px; min-height: 52px; padding: 10px 16px; margin: 4px; border: 0; border-radius: 0; background: #000; color: var(--hvitt);
+  font-family: var(--leikur); font-size: 18px; box-shadow: 0 0 0 4px var(--hvitt); caret-color: var(--gull);
+}
+.r8-uttektarform input::placeholder { color: #666; }
+.r8-uttektarform input:focus { outline: none; box-shadow: 0 0 0 4px var(--gull); }
+.r8-smatt { margin-top: 12px !important; font-size: 15px; color: #aaa; }
+
+/* ── Sími og spjaldtölva ──────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .r8-matsedill { display: block; }
+  .r8-bord { flex-wrap: wrap; gap: 10px; }
+  .r8-bord-heimur { display: none; }
+  .r8-bitar { margin-left: auto; }
+  .r8-valmynd { order: 10; width: 100%; margin: 0; display: none; }
+  .r8-valmynd.opin { display: block; }
+  .r8-valmynd ul { flex-direction: column; padding: 8px 0 4px; }
+  .r8-valmynd a { flex-direction: row; justify-content: space-between; padding: 14px 10px; font-size: 15px; }
+  .r8-stadir { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  #r8.r8 { font-size: 17px; }
+  .r8-bord { padding-left: 12px; padding-right: 12px; }
+  .r8-bord-merki img { height: 28px; }
+  .r8-bitar i { width: 11px; height: 17px; font-size: 11px; }
+  .r8-tak { min-width: 40px; padding: 0 6px; }
+  .r8-ut span[aria-hidden] { font-size: 12px; }
+  .r8-svid { height: clamp(520px, 82vh, 640px); }
+  .r8-stadir { grid-template-columns: 1fr; gap: 14px; }
+  .r8-afrek-innan { grid-template-columns: 1fr; justify-items: start; }
+  .r8-hylkjarod, .r8-hylkjarod.stor { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+  .r8-fotur-innan { grid-template-columns: 1fr; }
+  .r8-smidi-innan { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #r8 *, .r8-yfir * { animation: none !important; transition: none !important; }
+  #r8.r8 { scroll-behavior: auto; }
+}
