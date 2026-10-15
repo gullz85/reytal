@@ -493,10 +493,12 @@
   /* ── VALIN VERKEFNI (TILLAGA): stór spjöld sem renna sjálf frá hægri til
      vinstri í endalausri lykkju; til skiptis ofar og neðar. Stoppar við hover ── */
   .fv{position:relative;overflow:hidden;padding:clamp(110px,18vh,220px) 0 clamp(48px,9vh,110px);}   /* efri spjöldin standa 6vh upp, svo meira loft ofan við */
-  .fv-rod{display:flex;align-items:center;width:max-content;will-change:transform;
-    animation:fvRenna var(--fv-t,60s) linear infinite;}
-  .fv:hover .fv-rod,.fv:focus-within .fv-rod{animation-play-state:paused;}
-  @keyframes fvRenna{to{transform:translate3d(-50%,0,0);}}
+  /* röðin er hreyfð með skriftu: rennur sjálf og má toga fram og til baka */
+  .fv{touch-action:pan-y;}
+  .fv-rod{display:flex;align-items:center;width:max-content;will-change:transform;cursor:grab;user-select:none;-webkit-user-select:none;}
+  .fv-rod.dregur{cursor:grabbing;}
+  .fv-rod.dregur .fv-kort{pointer-events:none;}
+  .fv-rod img,.fv-rod video{-webkit-user-drag:none;}
   .fv-kort{position:relative;flex:0 0 auto;height:min(60vh,580px);margin-right:clamp(24px,3vw,56px);display:block;overflow:hidden;border-radius:18px;
     background:var(--black);color:#fff;text-decoration:none;isolation:isolate;}
   .fv-kort.upp{translate:0 -6vh;}
@@ -514,12 +516,6 @@
     .fv{padding:10vh 0 6vh;}
     .fv-kort{height:auto;width:72vw;aspect-ratio:4/5 !important;margin-right:16px;}
     .fv-kort.upp{translate:0 -3vh;} .fv-kort.nidur{translate:0 3vh;}
-  }
-  /* minnkuð hreyfing: kyrr röð sem strokið er til hliðar */
-  @media (prefers-reduced-motion:reduce){
-    .fv-rod{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x mandatory;padding:6vh 20px;}
-    .fv-kort{scroll-snap-align:center;}
-    .fv-kort[aria-hidden]{display:none;}
   }
   /* ── FÓTUR (TILLAGA): litlar upplýsingar efst, risastórt REY TAL neðst ── */
   html,body{overscroll-behavior-y:none;}
@@ -1722,7 +1718,7 @@
       <div class="award-copy">
         <div class="eyebrow">Verðlaun</div>
         <h2><span class="accent">Söluvefur ársins</span><span class="flip-word">2025</span></h2>
-        <p>Orkureiturinn.is, sem við hönnuðum og forrituðum, var valinn söluvefur ársins 2025 á Íslensku vefverðlaununum hjá SVEF. Viðurkenning sem staðfestir að vandaður vefur skilar árangri.</p>
+        <p>Orkureiturinn.is, sem við forrituðum, var valinn söluvefur ársins 2025 á Íslensku vefverðlaununum hjá SVEF. Viðurkenning sem staðfestir að vandaður vefur skilar árangri.</p>
       </div>
       <div class="award-photo">
         <img src="svef-2025-b.jpg" alt="Verðlaunaskjalið Söluvefur ársins 2025 frá SVEF fyrir Orkureitinn" loading="lazy">
@@ -1798,21 +1794,17 @@
 
 <!-- FÓTUR -->
 <script>
-// Valin verkefni: spjöldin eru afrituð einu sinni svo lykkjan verði samfelld
-// (röðin færist um helming sinnar breiddar og byrjar upp á nýtt án skila).
-// Videoin spilast aðeins á meðan þau sjást.
+// Valin verkefni: röðin rennur sjálf frá hægri til vinstri og má toga fram og
+// til baka (mús og fingur). Spjöldin eru afrituð einu sinni svo lykkjan verði
+// samfelld. Videoin spilast aðeins á meðan þau sjást.
 (function(){
   var fv = document.querySelector('.fv'), rod = document.getElementById('fvRod');
   if (!fv || !rod) return;
-  var frum = [].slice.call(rod.children);
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) frum.forEach(function(k){
+  [].slice.call(rod.children).forEach(function(k){
     var c = k.cloneNode(true);
     c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1;
     rod.appendChild(c);
   });
-  // jafn hraði óháð skjástærð: um 70 px á sekúndu
-  function hradi(){ rod.style.setProperty('--fv-t', Math.round(rod.scrollWidth / 2 / 70) + 's'); }
-  addEventListener('load', hradi); addEventListener('resize', hradi); hradi();
   var vid = [].slice.call(rod.querySelectorAll('video'));
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(f){ f.forEach(function(x){
@@ -1820,6 +1812,56 @@
     }); }, { rootMargin: '0px 100px' });
     vid.forEach(function(v){ io.observe(v); });
   }
+
+  var HRADI = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 70;   // px á sekúndu
+  var x = 0, half = 0, v = 0, tog = null, yfir = false, sidast = performance.now();
+  function maela(){ half = rod.scrollWidth / 2; }
+  addEventListener('load', maela); addEventListener('resize', maela); maela();
+
+  function lykkja(t){
+    var dt = Math.min(0.05, (t - sidast) / 1000); sidast = t;
+    if (!tog) {
+      if (Math.abs(v) > 8) { x += v * dt; v *= Math.pow(0.04, dt); }      // skriðþungi eftir tog
+      else { v = 0; if (!yfir) x -= HRADI * dt; }
+    }
+    if (half) x = ((x % half) + half) % half - half;                       // alltaf á bilinu [-helmingur, 0)
+    rod.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+    requestAnimationFrame(lykkja);
+  }
+  requestAnimationFrame(lykkja);
+
+  // músin stoppar röðina svo hægt sé að skoða og smella
+  fv.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') yfir = true; });
+  fv.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') yfir = false; });
+
+  rod.addEventListener('dragstart', function(e){ e.preventDefault(); });
+  rod.addEventListener('pointerdown', function(e){
+    if (e.button) return;
+    tog = { x0: e.clientX, y0: e.clientY, byrjun: x, dregid: false, id: e.pointerId, sx: e.clientX, st: e.timeStamp };
+    v = 0;
+  });
+  addEventListener('pointermove', function(e){
+    if (!tog || e.pointerId !== tog.id) return;
+    var dx = e.clientX - tog.x0, dy = e.clientY - tog.y0;
+    if (!tog.dregid) {
+      if (Math.abs(dx) < 6) return;
+      if (e.pointerType !== 'mouse' && Math.abs(dy) > Math.abs(dx)) { tog = null; return; }   // fingurinn er að skrolla síðunni
+      tog.dregid = true; rod.classList.add('dregur');
+    }
+    x = tog.byrjun + dx;
+    var dt = (e.timeStamp - tog.st) / 1000;
+    if (dt > 0) v = Math.max(-3000, Math.min(3000, (e.clientX - tog.sx) / dt));
+    tog.sx = e.clientX; tog.st = e.timeStamp;
+  });
+  function sleppa(){
+    if (!tog) return;
+    var dregid = tog.dregid; tog = null;
+    rod.classList.remove('dregur');
+    // tog er ekki smellur: næsti smellur á spjald er gleyptur svo hlekkurinn opnist ekki
+    if (dregid) rod.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true });
+    else v = 0;
+  }
+  addEventListener('pointerup', sleppa); addEventListener('pointercancel', sleppa);
 })();
 </script>
 <footer class="footer">
