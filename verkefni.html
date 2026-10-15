@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="is">
 <head>
-<script>/* REYTAL 8-bit: ræsing */try{if(localStorage.getItem("r8-hamur")==="8bit"&&!/[?&]r8=af/.test(location.search))document.documentElement.classList.add("r8-raesing")}catch(e){}</script>
+<script>/* REYTAL 8-bit: ræsing */try{if(localStorage.getItem("r8-hamur")==="8bit"&&!/[?&]r8=af/.test(location.search)&&!(matchMedia("(pointer:coarse)").matches&&Math.min(screen.width,screen.height)<600))document.documentElement.classList.add("r8-raesing")}catch(e){}</script>
 <style>html.r8-raesing body{visibility:hidden}html.r8-raesing{background:#000}</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -488,9 +488,9 @@
         <div class="work-main">
           <h3>March Forward 2025 <span class="arrow">↗︎</span></h3>
           <span class="work-client">UN Women · marchforward2025.com</span>
-          <p>Alþjóðleg herferð UN Women gegn afturför í réttindum kvenna, leidd af UN Women á Íslandi og fylgt eftir í yfir tíu löndum, unnin í samstarfi við Pipar\TBWA. Tilnefnd til PHNX-verðlaunanna.</p>
+          <p>Vefur fyrir alþjóðlegt átak UN Women gegn afturför í réttindum kvenna, leitt af UN Women á Íslandi og fylgt eftir í yfir tíu löndum. Tilnefndur til PHNX-verðlaunanna.</p>
         </div>
-        <div class="work-tags"><span class="work-tag">Herferð</span><span class="work-tag">Pipar\TBWA</span><span class="work-tag">PHNX tilnefning</span></div>
+        <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">PHNX tilnefning</span></div>
       </a>
 
       <a class="work-row" href="https://sigurros.com" target="_blank" rel="noopener">
@@ -506,7 +506,7 @@
         <div class="work-main">
           <h3>Líttupp <span class="arrow">↗︎</span></h3>
           <span class="work-client">Netöryggismiðstöð Íslands · littupp.is</span>
-          <p>Vitundarvakning um skjánotkun. Uppsetning, forritun, sýnileikabestun og tækniráðgjöf í samstarfi við Pipar\TBWA og Skot.</p>
+          <p>Vitundarvakning um skjánotkun. Uppsetning, forritun, sýnileikabestun og tækniráðgjöf.</p>
         </div>
         <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span></div>
       </a>
@@ -779,7 +779,7 @@
   var MYND = {"Orkureiturinn":"orkureiturinn-web.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
     "March Forward 2025":"march-forward-web.mp4","Kirkjan":"verk-kirkjan.jpg","Klasi":"verk-klasi.jpg","LBHÍ":"verk-lbhi.jpg",
     "Óskaskrín":"verk-oskaskrin.jpg","Sigur Rós":"verk-sigurros.jpg","Takk":"verk-takk.jpg","Kjarkur endurhæfing":"verk-kjarkur.jpg",
-    "Regla":"verk-regla.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4","Colas":"verk-colas.jpg"};
+    "Regla":"verk-regla.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg"};
   // [nafn, hlutfall, tegund]: m = mynd/myndband, s = svart lógóspjald, k = kremað, b = navy (blátt)
   // [nafn, hlutfall, tegund]: m = myndband sem fyllir spjaldið, s/k/b = svart/kremað/navy lógóspjald.
   // Lógóspjöld með skjáskoti sýna vefinn í litlum vafraglugga við hover.
@@ -798,11 +798,11 @@
     "Regla":"Bókhaldskerfi í skýinu, með reiknivél og á tveimur tungumálum.",
     "Sigur Rós":"Forritun og tæknileg uppsetning.",
     "Kirkjan":"Miðlægur vefur Þjóðkirkjunnar, frá veftré til forritunar.",
-    "Líttupp":"Vitundarvakning um skjánotkun, með Pipar\\TBWA og Skot.",
+    "Líttupp":"Vitundarvakning um skjánotkun. Vefþróun og leitarvélabestun.",
     "Nox Health":"Svefnheilbrigðislausnir á heimsvísu. Hönnun og forritun.",
     "Skjáhætta":"Fræðsluvefur um skjánotkun undir stýri.",
     "Klasi":"Fasteignaþróun. Hönnun og forritun.",
-    "March Forward 2025":"Alþjóðleg herferð UN Women. Tilnefnd til PHNX-verðlaunanna.",
+    "March Forward 2025":"Vefur fyrir alþjóðlegt átak UN Women. Tilnefndur til PHNX-verðlaunanna.",
     "Stólpi Gámar":"Gámaþjónusta. Hönnun, þróun og leitarvélabestun.",
     "LBHÍ":"Vefur Landbúnaðarháskóla Íslands. Við forrituðum vefinn.",
     "Kjarkur endurhæfing":"Endurhæfing fyrir hreyfihamlaða. Hönnun og forritun.",
@@ -836,7 +836,7 @@
     a.style.setProperty("--rak", x); a.style.setProperty("--rak2", y); a.style.setProperty("--hlutfall", v[1]);
     var midillHtml = !midill ? "" : erSkot
       ? '<div class="vg-vafri" aria-hidden="true"><div class="vg-vafri-bar"><i></i><i></i><i></i><span>' + lenid + '</span></div><img src="' + midill + '" alt="" loading="lazy"></div>'
-      : /\.mp4$/.test(midill) ? '<video class="vg-midill" src="' + midill + '" muted loop playsinline preload="metadata"></video>'
+      : /\.mp4(\?|$)/.test(midill) ? '<video class="vg-midill" src="' + midill + '" muted loop playsinline preload="metadata"></video>'
       : '<img class="vg-midill" src="' + midill + '" alt="" loading="lazy">';
     var merkid = teg === "m" ? "" : logo
       ? '<span class="vg-merkjahopur"><img class="vg-logo' + (LITAD[nafn] ? ' litad' : '') + '" src="' + logo + '" alt="">' + (UNDIR[nafn] ? '<span class="vg-undir">' + UNDIR[nafn] + '</span>' : '') + '</span>'
@@ -905,6 +905,6 @@
 <script src="samband.js?v=9" defer></script>
 <!-- Spyrðu REYTAL: Dropi, spjallið (~/Developer/reytal-spjall) -->
 <script src="https://reytal-spjall-n8uzv.sevalla.app/widget.js" defer></script>
-<script type="module" src="/8bit/5/trigger.js"></script>
+<script type="module" src="/8bit/6/trigger.js"></script>
 </body>
 </html>
