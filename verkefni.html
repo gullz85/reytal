@@ -191,6 +191,116 @@
     .logo-win.build .lw-lines s,.logo-win.build .lw-cols b,.logo-win .lw-chip i{animation:none;}
     .logo-win .lw-brand img{transition:none;}
   }
+
+  /* ── VERKEFNIN: fljótandi spjöld í þremur dálkum, í sama stíl og
+     teymið á /um-okkur (hliðraðir dálkar, hraði við skrun, snúningsrammi) ───── */
+  .vg{padding:clamp(24px,6vh,64px) 0 clamp(64px,10vh,120px);}
+  .vg-dalkar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(32px,4vw,44px);align-items:start;
+    --p:0;padding-bottom:clamp(90px,11vw,170px);}
+  .vg-dalkur{display:flex;flex-direction:column;gap:clamp(32px,4vw,44px);
+    transform:translate3d(0,calc(var(--ofs,0px) + var(--p) * var(--rek,0px)),0);will-change:transform;}
+  .vg-dalkur:nth-child(1){--ofs:0px;--rek:-14px;}
+  .vg-dalkur:nth-child(2){--ofs:clamp(70px,10vw,150px);--rek:-70px;}
+  .vg-dalkur:nth-child(3){--ofs:clamp(30px,4.5vw,70px);--rek:-36px;}
+  .vg-kort{position:relative;display:block;color:#fff;text-decoration:none;}
+  .vg-flotur{position:relative;width:100%;aspect-ratio:var(--hlutfall,4/5);border-radius:6px;overflow:hidden;background:var(--navy);}
+  .vg-flotur img.vg-midill,.vg-flotur video.vg-midill{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;
+    transition:transform .8s cubic-bezier(.25,.6,.25,1);}
+  .vg-kort:hover .vg-midill{transform:scale(1.045);}
+  .vg-flotur::after{content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
+    background:linear-gradient(to top,rgba(0,0,0,0.62),rgba(0,0,0,0.2) 55%,transparent);pointer-events:none;}
+  /* lógóspjöld í þremur litum: svart, kremað og navy */
+  .vg-kort.logo .vg-flotur{display:grid;place-items:center;}
+  .vg-kort.logo .vg-flotur > *{grid-area:1/1;}
+  .vg-kort.svart .vg-flotur{background:var(--black);}
+  .vg-kort.krem .vg-flotur{background:#E9E5DC;}
+  .vg-kort.blar .vg-flotur{background:var(--navy);}
+  .vg-kort.logo .vg-flotur::after{opacity:0;transition:opacity .5s ease;}
+  .vg-logo{position:relative;z-index:1;width:56%;max-height:30%;object-fit:contain;transition:transform .8s cubic-bezier(.25,.6,.25,1),opacity .45s ease;}
+  .vg-kort.krem .vg-logo{filter:brightness(0);}
+  .vg-kort.svart .vg-logo,.vg-kort.blar .vg-logo{filter:brightness(0) invert(1);}
+  .vg-kort.logo:hover .vg-logo{transform:scale(1.06);}
+  .vg-kort.krem .vg-info h3,.vg-kort.krem .vg-pilla,.vg-kort.krem .vg-or{color:var(--black);border-color:rgba(11,12,13,.3);}
+  /* lógóspjald sem á myndefni: vefurinn kemur í ljós við hover */
+  .vg-kort.logo .vg-midill{position:absolute;inset:0;opacity:0;transition:opacity .5s ease,transform .8s cubic-bezier(.25,.6,.25,1);}
+  .vg-kort.logo.medmynd:hover .vg-midill{opacity:1;}
+  .vg-kort.logo.medmynd:hover .vg-logo{opacity:0;}
+  .vg-kort.logo.medmynd:hover .vg-flotur::after{opacity:1;}
+  .vg-kort.krem.medmynd:hover .vg-info h3,.vg-kort.krem.medmynd:hover .vg-pilla,.vg-kort.krem.medmynd:hover .vg-or{color:#fff;border-color:rgba(255,255,255,.45);}
+  /* snúningsramminn, sami og á teymismyndunum */
+  @property --hornid{syntax:'<angle>';inherits:false;initial-value:0deg;}
+  .vg-flotur::before{content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:1.5px;
+    background:conic-gradient(from var(--hornid),rgba(255,255,255,.95) 0deg,var(--rak,#E07A45) 70deg,var(--rak,#E07A45) 150deg,
+      var(--rak2,#6E9FB8) 230deg,var(--rak2,#6E9FB8) 300deg,rgba(255,255,255,.95) 360deg);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .55s ease;pointer-events:none;animation:rammiSnyst 9s linear infinite;animation-play-state:paused;}
+  .vg-kort:hover .vg-flotur::before{opacity:.95;animation-play-state:running;}
+  @keyframes rammiSnyst{to{--hornid:360deg;}}
+  .vg-info{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;flex-direction:column;gap:3px;text-align:left;
+    transition:transform .5s cubic-bezier(.25,.6,.25,1);}
+  .vg-kort:hover .vg-info{transform:translateY(-5px);}
+  .vg-info h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:20px;letter-spacing:-0.01em;color:#fff;margin:0;}
+  .vg-pillur{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .vg-pilla{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;
+    border:1px solid rgba(255,255,255,0.45);border-radius:999px;padding:6px 13px;width:fit-content;}
+  .vg-or{position:absolute;top:14px;right:16px;z-index:2;color:#fff;font-size:18px;opacity:0;transform:translate(-6px,6px);
+    transition:opacity .3s ease,transform .45s cubic-bezier(.2,.8,.2,1);}
+  .vg-kort:hover .vg-or{opacity:1;transform:none;}
+
+  /* skjáskot í litlum vafraglugga: sést heilt, ekkert klippt */
+  .vg-vafri{position:absolute;left:12%;right:12%;top:8%;z-index:2;border-radius:8px;overflow:hidden;background:#fff;
+    box-shadow:0 28px 60px -22px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.06);
+    opacity:0;transform:translateY(18px) scale(.96);transition:opacity .45s ease,transform .7s cubic-bezier(.2,.8,.2,1);}
+  .vg-vafri-bar{display:flex;align-items:center;gap:5px;height:20px;padding:0 9px;background:#ECE9E2;}
+  .vg-vafri-bar i{width:7px;height:7px;border-radius:50%;background:rgba(11,12,13,.18);}
+  .vg-vafri-bar span{margin-left:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.04em;color:rgba(11,12,13,.5);white-space:nowrap;overflow:hidden;}
+  .vg-vafri img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center;}
+  .vg-kort.medskot:hover .vg-vafri,.vg-kort.medskot:focus-visible .vg-vafri{opacity:1;transform:none;}
+  .vg-kort.medskot:hover .vg-logo,.vg-kort.medskot:hover .vg-ord{opacity:0;transform:translateY(-10px) scale(.96);}
+  .vg-ord{position:relative;z-index:1;font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.015em;
+    text-align:center;padding:0 12%;font-size:clamp(26px,3vw,46px);transition:transform .8s cubic-bezier(.25,.6,.25,1),opacity .45s ease;}
+  .vg-kort.krem .vg-ord{color:var(--black);}
+  .vg-kort.svart .vg-ord,.vg-kort.blar .vg-ord{color:var(--cream);}
+  .vg-merkjahopur{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;
+    transition:transform .8s cubic-bezier(.25,.6,.25,1),opacity .45s ease;}
+  .vg-merkjahopur .vg-logo{transition:none;}
+  .vg-kort.logo:hover .vg-merkjahopur{transform:scale(1.06);}
+  .vg-kort.logo.medmynd:hover .vg-merkjahopur{opacity:0;}
+  .vg-logo.litad{filter:none !important;width:38%;max-height:none;}
+  .vg-undir{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;}
+  .vg-kort.krem .vg-undir{color:var(--black);}
+  .vg-kort.svart .vg-undir,.vg-kort.blar .vg-undir{color:var(--cream);}
+  /* nafn, lýsing og pillur eru falin í hvíld; lógóið stendur eitt og sér */
+  @media (hover:hover){
+    .vg-info{opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .5s cubic-bezier(.25,.6,.25,1);}
+    .vg-kort:hover .vg-info,.vg-kort:focus-visible .vg-info{opacity:1;transform:none;transition-delay:.08s;}
+  }
+  /* örstutt lýsing sem opnast undir nafninu við hover (grid 0fr → 1fr) */
+  .vg-lysing{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .45s cubic-bezier(.25,.6,.25,1),opacity .35s ease;}
+  .vg-lysing > span{overflow:hidden;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.4;color:rgba(255,255,255,.88);max-width:34ch;}
+  .vg-kort.krem .vg-lysing > span{color:rgba(11,12,13,.75);}
+  .vg-kort.krem.medmynd:hover .vg-lysing > span{color:rgba(255,255,255,.88);}
+  .vg-kort:hover .vg-lysing,.vg-kort:focus-visible .vg-lysing{grid-template-rows:1fr;opacity:1;}
+  .vg-kort:hover .vg-lysing > span{padding-top:2px;}
+  @media (hover:none){.vg-lysing{grid-template-rows:1fr;opacity:1;}
+    /* sími: textinn er alltaf sýnilegur, svo öll spjöld eru jafnhá og lógóið situr ofar */
+    .vg-flotur{aspect-ratio:4/5 !important;}
+    .vg-kort.logo .vg-flotur{padding-bottom:34%;}}
+  /* hin verkefnin: sömu línur og á verkefnasíðunni, bara minni og þéttari */
+  .vg-fleiri{margin-top:clamp(24px,5vh,56px);}
+  .vg-fleiri h2{font-family:'DM Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 18px;opacity:.7;}
+  .vg-litil .work-row{padding:clamp(16px,2.4vh,22px) 0;gap:clamp(16px,2vw,32px);}
+  .vg-litil .work-row h3{font-size:clamp(19px,1.9vw,26px);}
+  .vg-litil .work-client{font-size:10px;margin-top:6px;}
+  .vg-litil .work-row p{font-size:14px;line-height:1.55;margin-top:6px;max-width:560px;}
+  .vg-litil .work-tags{padding-top:4px;gap:6px;}
+  .vg-litil .work-tag{font-size:10px;padding:5px 11px;}
+  @media (max-width:760px){
+    .vg-dalkar{grid-template-columns:1fr;padding-bottom:0;}
+    .vg-dalkur{transform:none !important;}
+    .vg-fleiri{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){.vg-dalkar{--p:0 !important;}.vg-flotur::before{animation:none;}}
 </style>
 </head>
 <body class="tone-sage">
@@ -288,7 +398,16 @@
 </section>
 </div><!-- /.top -->
 
-<section class="work">
+<section class="vg">
+  <div class="wrap">
+    <div class="vg-dalkar" id="vgDalkar" aria-label="Valin verkefni"><div class="vg-dalkur"></div><div class="vg-dalkur"></div><div class="vg-dalkur"></div></div>
+    <div class="vg-fleiri" id="vgFleiri">
+      <div class="work-index vg-litil"></div>
+    </div>
+  </div>
+</section>
+
+<template id="vgGogn"><section class="work">
   <div class="blob2 blob2--a"></div>
   <div class="blob2 blob2--b"></div>
   <div class="wrap">
@@ -612,6 +731,7 @@
   </div>
 </section>
 
+</template>
 <section class="cta">
   <div class="wrap">
     <div class="cta-box">
@@ -643,6 +763,111 @@
 
 </div><!-- /.site -->
 
+<script>
+// VERKEFNIN: fljótandi spjöld. Efnið kemur úr gömlu línunum (template).
+(function(){
+  var gogn = document.getElementById("vgGogn"), dalkar = document.getElementById("vgDalkar");
+  if (!gogn || !dalkar) return;
+  var LOGO = {"Orkureiturinn":"logo-safir.svg","Regla":"logo-regla.svg","Kirkjan":"logo-thjodkirkjan.svg","LBHÍ":"logo-lbhi.svg","Verkís":"logo-verkis.svg",
+    "Klasi":"logo-klasi.svg","Stólpi Gámar":"logo-stolpi.svg","Kjarkur endurhæfing":"logo-kjarkur.svg","Nox Health":"logo-nox.svg",
+    "Takk":"logo-takk.svg","Sigur Rós":"logo-sigurros.svg","Óskaskrín":"logo-oskaskrin.svg","March Forward 2025":"logo-unwomen.svg",
+    "Skjáhætta":"logo-skjahaetta.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
+  // lógó sem halda eigin litum (merki í hring o.þ.h.) og undirtexti þar sem lógóið segir ekki nafn verkefnisins
+  var LITAD = {};
+  var UNDIR = {"Skjáhætta":"Skjáhætta","Orkureiturinn":"Orkureiturinn","Óskaskrín":"Óskaskrín","March Forward 2025":"March Forward 2025"};
+  // myndir af vefjum viðskiptavinanna sjálfra (aðalmyndin þeirra, ekki skjáskot) og myndböndin okkar
+  var MYND = {"Orkureiturinn":"orkureiturinn-web.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
+    "March Forward 2025":"march-forward-web.mp4","Kirkjan":"verk-kirkjan.jpg","Klasi":"verk-klasi.jpg","LBHÍ":"verk-lbhi.jpg",
+    "Óskaskrín":"verk-oskaskrin.jpg","Sigur Rós":"verk-sigurros.jpg","Takk":"verk-takk.jpg","Kjarkur endurhæfing":"verk-kjarkur.jpg",
+    "Regla":"verk-regla.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4","Colas":"verk-colas.jpg"};
+  // [nafn, hlutfall, tegund]: m = mynd/myndband, s = svart lógóspjald, k = kremað, b = navy (blátt)
+  // [nafn, hlutfall, tegund]: m = myndband sem fyllir spjaldið, s/k/b = svart/kremað/navy lógóspjald.
+  // Lógóspjöld með skjáskoti sýna vefinn í litlum vafraglugga við hover.
+  var VALIN = [
+    ["Orkureiturinn","4/5","s"], ["Takk","1/1","k"], ["Verkís","3/4","b"],
+    ["Regla","5/4","k"], ["Sigur Rós","4/5","s"], ["Kirkjan","1/1","b"],
+    ["Líttupp","3/4","b"], ["Nox Health","1/1","s"], ["Skjáhætta","4/5","k"],
+    ["Klasi","1/1","k"], ["March Forward 2025","4/5","s"], ["Arnarlax","5/4","b"],
+    ["LBHÍ","4/5","s"], ["Colas","1/1","k"], ["Óskaskrín","4/5","b"]
+  ];
+  // örstutt: hvað við gerðum, stytt úr lýsingunum á verkefnasíðunni
+  var STUTT = {
+    "Orkureiturinn":"Söluvefur ársins 2025. Vefþróun og leitarvélabestun.",
+    "Takk":"Vildarsamfélag Bónus, Hagkaups og Eldum rétt. Við forrituðum vefinn.",
+    "Verkís":"Full vefþróun og leitarvélabestun fyrir eina stærstu verkfræðistofu landsins.",
+    "Regla":"Bókhaldskerfi í skýinu, með reiknivél og á tveimur tungumálum.",
+    "Sigur Rós":"Forritun og tæknileg uppsetning.",
+    "Kirkjan":"Miðlægur vefur Þjóðkirkjunnar, frá veftré til forritunar.",
+    "Líttupp":"Vitundarvakning um skjánotkun, með Pipar\\TBWA og Skot.",
+    "Nox Health":"Svefnheilbrigðislausnir á heimsvísu. Hönnun og forritun.",
+    "Skjáhætta":"Fræðsluvefur um skjánotkun undir stýri.",
+    "Klasi":"Fasteignaþróun. Hönnun og forritun.",
+    "March Forward 2025":"Alþjóðleg herferð UN Women. Tilnefnd til PHNX-verðlaunanna.",
+    "Stólpi Gámar":"Gámaþjónusta. Hönnun, þróun og leitarvélabestun.",
+    "LBHÍ":"Vefur Landbúnaðarháskóla Íslands. Við forrituðum vefinn.",
+    "Kjarkur endurhæfing":"Endurhæfing fyrir hreyfihamlaða. Hönnun og forritun.",
+    "Óskaskrín":"Netverslun með gjafaöskjur og gjafakort beint í símann.",
+    "Arnarlax":"Sjálfbært laxeldi á Vestfjörðum. Vefþróun.",
+    "Colas":"Malbikun og vegagerð. Forritun og leitarvélabestun."
+  };
+  var litir = ['#C46A78','#D9A04A','#E07A45','#8FA36A','#6E9FB8','#BEBFA6'], fyrri = '', fyrri2 = '';
+  function einn(utan){ var v = litir.filter(function(l){ return utan.indexOf(l) < 0; }); return v[Math.floor(Math.random() * v.length)]; }
+  var radir = Array.prototype.slice.call(gogn.content.querySelectorAll(".work-row"));
+  // verkefni sem eru ekki (enn) á verkefnalistanum en eiga heima í ristinni
+  var AUKA = [["Arnarlax","https://arnarlax.is",["Vefþróun"]]];
+  AUKA.forEach(function(x){
+    var el = document.createElement("a"); el.className = "work-row"; el.setAttribute("href", x[1]);
+    el.innerHTML = "<h3>" + x[0] + "</h3>" + x[2].map(function(t){ return '<span class="work-tag">' + t + "</span>"; }).join("");
+    radir.push(el);
+  });
+  var nafnRadar = function(r){ return (r.querySelector("h3").childNodes[0].textContent || "").trim(); };
+  var valinNofn = VALIN.map(function(v){ return v[0]; });
+  var dalkur = dalkar.querySelectorAll(".vg-dalkur");
+  VALIN.forEach(function(v, i){
+    var r = radir.filter(function(x){ return nafnRadar(x) === v[0]; })[0];
+    if (!r) return;
+    var nafn = v[0], merki = Array.prototype.map.call(r.querySelectorAll(".work-tag"), function(t){ return t.textContent.trim(); });
+    var midill = MYND[nafn], logo = LOGO[nafn], teg = v[2], LITUR = {s:"svart", k:"krem", b:"blar"};
+    var erSkot = false, lenid = (r.getAttribute("href") || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
+    var a = document.createElement("a");
+    a.className = "vg-kort" + (teg === "m" ? "" : " logo " + LITUR[teg] + (erSkot ? " medskot" : midill ? " medmynd" : ""));
+    a.href = r.getAttribute("href"); a.target = "_blank"; a.rel = "noopener";
+    var x = einn([fyrri, fyrri2]), y = einn([x, fyrri, fyrri2]); fyrri = x; fyrri2 = y;
+    a.style.setProperty("--rak", x); a.style.setProperty("--rak2", y); a.style.setProperty("--hlutfall", v[1]);
+    var midillHtml = !midill ? "" : erSkot
+      ? '<div class="vg-vafri" aria-hidden="true"><div class="vg-vafri-bar"><i></i><i></i><i></i><span>' + lenid + '</span></div><img src="' + midill + '" alt="" loading="lazy"></div>'
+      : /\.mp4$/.test(midill) ? '<video class="vg-midill" src="' + midill + '" muted loop playsinline preload="metadata"></video>'
+      : '<img class="vg-midill" src="' + midill + '" alt="" loading="lazy">';
+    var merkid = teg === "m" ? "" : logo
+      ? '<span class="vg-merkjahopur"><img class="vg-logo' + (LITAD[nafn] ? ' litad' : '') + '" src="' + logo + '" alt="">' + (UNDIR[nafn] ? '<span class="vg-undir">' + UNDIR[nafn] + '</span>' : '') + '</span>'
+      : '<span class="vg-ord">' + nafn + '</span>';
+    a.innerHTML = '<div class="vg-flotur">' + midillHtml + merkid +
+      '<span class="vg-or" aria-hidden="true">↗</span>' +
+      '<div class="vg-info"><h3>' + nafn + '</h3>' + (STUTT[nafn] ? '<div class="vg-lysing"><span>' + STUTT[nafn] + '</span></div>' : '') +
+      '<div class="vg-pillur">' + merki.map(function(m){ return '<span class="vg-pilla">' + m + '</span>'; }).join("") + '</div></div></div>';
+    a.addEventListener("pointerenter", function(){ var vd = a.querySelector("video"); if (vd) vd.play().catch(function(){}); });
+    a.addEventListener("pointerleave", function(){ var vd = a.querySelector(".logo video"); if (a.classList.contains("logo") && vd) vd.pause(); });
+    dalkur[i % 3].appendChild(a);
+  });
+  // myndbönd á myndaspjöldum spilast hljóðlaust þegar þau sjást (fyrsti rammi er oft svartur)
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+    var io = new IntersectionObserver(function(f){ f.forEach(function(e){ if (e.isIntersecting) e.target.play().catch(function(){}); else e.target.pause(); }); }, { threshold: .2 });
+    dalkar.querySelectorAll(".vg-kort:not(.logo) video").forEach(function(v){ io.observe(v); });
+  }
+  // dálkarnir renna á mismunandi hraða við skrun, eins og teymið
+  if (!matchMedia("(prefers-reduced-motion:reduce)").matches) {
+    var bidur = false;
+    var teikna = function(){ bidur = false; var b = dalkar.getBoundingClientRect(), h = innerHeight;
+      var p = ((h / 2) - (b.top + b.height / 2)) / ((h + b.height) / 2); dalkar.style.setProperty("--p", Math.max(-1, Math.min(1, p)).toFixed(3)); };
+    addEventListener("scroll", function(){ if (!bidur){ bidur = true; requestAnimationFrame(teikna); } }, {passive:true});
+    addEventListener("resize", teikna); teikna();
+  }
+  // hin verkefnin: sömu línur og á verkefnasíðunni (afrit úr template), minni útgáfa
+  var fl = document.getElementById("vgFleiri"), adrir = radir.filter(function(r){ return valinNofn.indexOf(nafnRadar(r)) < 0 && r.parentNode; });
+  var listi = fl.querySelector(".vg-litil");
+  adrir.forEach(function(r){ listi.appendChild(document.importNode(r, true)); });
+})();
+</script>
 <script src="main.js?v=8"></script>
 
 <script src="reytal-ui.js?v=2"></script>
@@ -680,6 +905,6 @@
 <script src="samband.js?v=9" defer></script>
 <!-- Spyrðu REYTAL: Dropi, spjallið (~/Developer/reytal-spjall) -->
 <script src="https://reytal-spjall-n8uzv.sevalla.app/widget.js" defer></script>
-<script type="module" src="/8bit/4/trigger.js"></script>
+<script type="module" src="/8bit/5/trigger.js"></script>
 </body>
 </html>
