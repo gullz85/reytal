@@ -540,9 +540,12 @@
     background:linear-gradient(135deg,#ECE8DF 0%,#F6F3ED 55%,#E9E6DA 100%);
     border:1px solid rgba(13,70,89,.10);color:var(--black);text-decoration:none;overflow:hidden;isolation:isolate;
     transition:box-shadow .5s ease,transform .5s cubic-bezier(.2,.7,.2,1);}
-  .ivk::before{content:'';position:absolute;inset:-40%;z-index:-1;pointer-events:none;
-    background:radial-gradient(420px 320px at var(--mx,70%) var(--my,40%),rgba(76,124,147,.16),transparent 70%);
-    transition:opacity .4s ease;}
+  /* ljóminn sem fylgir músinni: fastur 840×640 flötur sem er FÆRÐUR (transform), ekki
+     málaður upp á nýtt. Áður var hallinn 180% af kortinu og málaður aftur við hverja
+     hreyfingu, sem hægði á skrollinu yfir kaflanum */
+  .ivk::before{content:'';position:absolute;left:0;top:0;width:840px;height:640px;z-index:-1;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(76,124,147,.16),transparent 70%);
+    transform:translate3d(calc(var(--mx,860px) - 420px),calc(var(--my,160px) - 320px),0);will-change:transform;}
   .ivk:hover{box-shadow:0 30px 70px -40px rgba(13,70,89,.45);transform:translateY(-3px);}
   .ivk .eyebrow{display:flex;align-items:center;gap:10px;}
   .ivk .nytt{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
@@ -558,11 +561,14 @@
   .ivk:hover .ivk-hlekkur i{background:var(--navy);border-color:var(--navy);color:var(--cream);}
   .ivk:hover .ivk-hlekkur svg{transform:translateX(3px);}
   .ivk-mynd{position:relative;}
-  .ivk-vaffla{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(4px,.55vw,7px);max-width:360px;margin-left:auto;}
+  /* vafflan birtist sem EIN heild (gegnsæi og hliðrun á eigin lagi, sem skjákortið
+     sér um). Áður hreyfðust 100 reitir hver um sig og það hökti í skrollinu */
+  .ivk-vaffla{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(4px,.55vw,7px);max-width:360px;margin-left:auto;
+    opacity:0;transform:translate3d(0,18px,0);will-change:transform,opacity;
+    transition:opacity .9s ease,transform 1.1s cubic-bezier(.2,.7,.2,1);}
+  .ivk.inn .ivk-vaffla{opacity:1;transform:none;}
   .ivk-vaffla i{aspect-ratio:1;border-radius:clamp(3px,.45vw,5px);background:#D9D4C7;
-    opacity:0;transform:scale(.4);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1.2),background .6s ease;
-    transition-delay:calc(var(--i) * 9ms);}
-  .ivk.inn .ivk-vaffla i{opacity:1;transform:none;}
+    transition:transform .6s cubic-bezier(.2,.8,.2,1.2);}
   .ivk.inn .ivk-vaffla i[data-k="wp"]{background:var(--navy);}
   .ivk.inn .ivk-vaffla i[data-k="sersmidad"]{background:var(--slate);}
   .ivk.inn .ivk-vaffla i[data-k="litil"]{background:var(--sage);}
@@ -576,7 +582,8 @@
     .ivk-vaffla,.ivk-skyring{margin-left:0;justify-content:flex-start;}
   }
   @media (prefers-reduced-motion:reduce){
-    .ivk,.ivk-vaffla i,.ivk-hlekkur svg{transition:none !important;}
+    .ivk,.ivk-vaffla,.ivk-vaffla i,.ivk-hlekkur svg{transition:none !important;}
+    .ivk-vaffla{opacity:1;transform:none;}
   }
 </style>
 
@@ -1366,11 +1373,15 @@
   }
   addEventListener("scroll", athuga, { passive: true });
   athuga();
-  // ljóminn fylgir músinni
+  // ljóminn fylgir músinni (í px, svo hann færist sem lag en málist ekki aftur)
+  function ljomi(x, y) { kort.style.setProperty("--mx", x.toFixed(0) + "px"); kort.style.setProperty("--my", y.toFixed(0) + "px"); }
+  if (kort) {
+    var upphaf = function () { var r = kort.getBoundingClientRect(); ljomi(r.width * .86, r.height * .32); };
+    upphaf(); addEventListener("resize", upphaf);
+  }
   if (kort && !rolegt) kort.addEventListener("pointermove", function (e) {
     var r = kort.getBoundingClientRect();
-    kort.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
-    kort.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+    ljomi(e.clientX - r.left, e.clientY - r.top);
   });
 })();
 </script>
