@@ -1910,9 +1910,8 @@ async function byrja() {
   const snu = new THREE.Group(); snu.add(st); svid.add(snu);
   const kassi = new THREE.Box3().setFromObject(snu), staerd = kassi.getSize(new THREE.Vector3()), midja = kassi.getCenter(new THREE.Vector3());
   st.position.sub(midja);
-  // víkingurinn er breiðari (öxin): fjær myndavél svo hann skerist ekki á hliðunum
-  const hm = Math.max(staerd.y, staerd.x / .5);
-  cam.position.set(0, staerd.y * .05, hm * 2.45); cam.lookAt(0, 0, 0);
+  // sama fjarlægð fyrir báðar styttur (jafnháar) svo þær birtist jafnstórar
+  cam.position.set(0, staerd.y * .05, staerd.y * 2.45); cam.lookAt(0, 0, 0);
   // á tölvu: staðsetja riddarann miðað við fyrirsögnina, ekki skjáinn
   function stadsetja() {
     const s = el.style;
