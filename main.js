@@ -34,24 +34,27 @@
   // flip-orðin: byrja á hvolfi/speglað og réttast úr sér við skroll
   // (sama hreyfing og á forsíðunni - hrein 2D-skölun, engin þrívídd)
   var flipWords = [].slice.call(document.querySelectorAll('.flip-word')).map(function(el){
-    return { el: el, top0: null, dir: -1 };
+    return { el: el, dir: -1 };
   });
+  // staða efst á síðunni (við skroll 0), óháð transform
+  function sidustada(el){ var y = 0; while (el){ y += el.offsetTop; el = el.offsetParent; } return y; }
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!mainNav && !flipWords.length) return;
   var ticking = false;
   function update(){
     if (mainNav) mainNav.classList.toggle('pill', window.scrollY > 60);
     if (!reduceMotion && flipWords.length){
-      // page-hero á undirsíðunum er mun styttri en heilskjás-hetjan á
-      // forsíðunni, svo fyrirsögnin skrollast fljótt upp úr glugganum -
-      // styttra flipRange svo hreyfingin klárist meðan hún er enn sýnileg
+      // Sama hreyfing og á forsíðunni. Staðan er lesin úr offsetTop-keðjunni,
+      // ekki getBoundingClientRect: rect-ið tekur skölunina sjálfa með (orðið
+      // kremst um miðjuna) og fasta upphafsstaðan úreltist þegar útlitið
+      // hliðrast, svo flippið varð hökktandi og endaði ekki alltaf rétt
       var vh = window.innerHeight;
-      var flipRange = vh * 0.10;
+      var flipRange = vh * 0.15;
+      var sy = window.scrollY;
       flipWords.forEach(function(fw){
-        var hf = fw.el.getBoundingClientRect();
-        if (fw.top0 === null) fw.top0 = hf.top;
-        var ref = Math.min(fw.top0, vh * 0.92);
-        var fp = Math.min(1, Math.max(0, (ref - hf.top) / flipRange));
+        var top0 = sidustada(fw.el), top = top0 - sy;
+        var ref = Math.min(top0, vh * 0.92);
+        var fp = Math.min(1, Math.max(0, (ref - top) / flipRange));
         // dautt belti um miðjuna svo örsmátt fram/til-baka trackpad-skroll
         // (inertial scroll á Mac) ýti ekki scaleX endalaust milli -1/1
         if (fp < 0.46) fw.dir = -1; else if (fp > 0.54) fw.dir = 1;
@@ -65,19 +68,10 @@
   }
   window.addEventListener('scroll', requestUpdate, {passive:true});
 
-  // Við breidd-breytingu (snúningur síma, gluggastærð) hliðrast útlitið og
-  // top0 - upphafsstaða orðsins - verður úrelt, sem lætur flippið byrja á
-  // röngum stað. Hæðarbreyting ein og sér er nær alltaf bara address-barið
-  // á síma, og að núllstilla þá myndi láta orðin hoppa til við venjulegt
-  // skroll, svo hún er hunsuð.
-  var lastW = window.innerWidth;
-  window.addEventListener('resize', function(){
-    if (window.innerWidth !== lastW){
-      lastW = window.innerWidth;
-      flipWords.forEach(function(fw){ fw.top0 = null; });
-    }
-    requestUpdate();
-  });
+  window.addEventListener('resize', requestUpdate);
+  // letrið hliðrar útlitinu eftir fyrstu teikningu
+  window.addEventListener('load', requestUpdate);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(requestUpdate);
 
   update();
 })();
