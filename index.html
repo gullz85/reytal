@@ -498,8 +498,6 @@
     aspect-ratio:11/20;pointer-events:none;opacity:0;transition:opacity 1.4s ease;}
   .riddari.tilbuinn{opacity:1;}
   .riddari canvas{position:relative;width:100%;height:100%;display:block;}
-  .riddari-skuggi{position:absolute;left:18%;right:18%;bottom:3.5%;height:5%;
-    background:radial-gradient(closest-side,rgba(11,12,13,.20),transparent);}
   @media (max-width:1024px){
     /* sími og spjaldtölva: á milli fyrirsagnar og texta, svo hann lendi ekki ofan á textanum */
     .riddari{position:relative;right:auto;top:auto;transform:none;height:clamp(300px,42vh,460px);margin:clamp(8px,2vh,24px) auto 0;}
@@ -1773,8 +1771,8 @@
     <div class="headline-wrap">
       <h1><span>Stafrænar</span><span id="heroFlip" class="flip-word">Lausnir</span></h1>
     </div>
-    <!-- riddarinn: þrívíddarstytta (3d/riddari.glb) sem hleðst inn á eftir síðunni -->
-    <div class="riddari" id="riddari" aria-hidden="true"><div class="riddari-skuggi"></div></div>
+    <!-- riddarinn eða víkingurinn: þrívíddarstytta (3d/*.glb) sem hleðst inn á eftir síðunni -->
+    <div class="riddari" id="riddari" aria-hidden="true"></div>
     <div class="hero-copy">
       <div class="hero-cta">
         <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
@@ -1877,7 +1875,11 @@
 // hallar sér aðeins í átt að músinni.
 const el = document.getElementById('riddari');
 const rolegt = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const val = 'litur', hvitur = false;   // litaði riddarinn (aðrar útgáfur eru ekki á vefnum)
+const hvitur = false;
+// riddarinn eða víkingurinn, af handahófi við hverja hleðslu
+// (?stytta=vikingur eða ?stytta=riddari velur ákveðna, t.d. til að bera saman)
+const bedin = new URLSearchParams(location.search).get('stytta');
+const stytta = bedin === 'vikingur' || bedin === 'riddari' ? (bedin === 'riddari' ? 'riddari-litur' : 'vikingur') : (Math.random() < .5 ? 'riddari-litur' : 'vikingur');
 function styddur() { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } }
 async function byrja() {
   if (!el || !styddur()) return;
@@ -1899,7 +1901,7 @@ async function byrja() {
   svid.add(new THREE.HemisphereLight(0xfffaf0, 0x8c8577, hvitur ? 1.5 : .6));
   const lykill = new THREE.DirectionalLight(0xffffff, hvitur ? 2.6 : 2.2); lykill.position.set(-40, 60, 70); svid.add(lykill);
   const brun = new THREE.DirectionalLight(0xbfd6e0, hvitur ? 1.8 : 2.4); brun.position.set(50, 30, -60); svid.add(brun);
-  const g = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(innerWidth <= 1024 ? '/3d/riddari-litur-litill.glb' : '/3d/riddari-litur.glb')   // minni áferð (1024 px) í síma og spjaldtölvu;
+  const g = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync('/3d/' + stytta + (innerWidth <= 1024 ? '-litill' : '') + '.glb')   // minni áferð (1024 px) í síma og spjaldtölvu;
   const st = g.scene;
   // skörp áferð líka á flötum sem halla frá myndavélinni
   const aniso = r.capabilities.getMaxAnisotropy();
@@ -1908,7 +1910,9 @@ async function byrja() {
   const snu = new THREE.Group(); snu.add(st); svid.add(snu);
   const kassi = new THREE.Box3().setFromObject(snu), staerd = kassi.getSize(new THREE.Vector3()), midja = kassi.getCenter(new THREE.Vector3());
   st.position.sub(midja);
-  cam.position.set(0, staerd.y * .05, staerd.y * 2.45); cam.lookAt(0, 0, 0);
+  // víkingurinn er breiðari (öxin): fjær myndavél svo hann skerist ekki á hliðunum
+  const hm = Math.max(staerd.y, staerd.x / .5);
+  cam.position.set(0, staerd.y * .05, hm * 2.45); cam.lookAt(0, 0, 0);
   // á tölvu: staðsetja riddarann miðað við fyrirsögnina, ekki skjáinn
   function stadsetja() {
     const s = el.style;
