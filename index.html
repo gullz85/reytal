@@ -1914,10 +1914,20 @@ async function byrja() {
     const s = el.style;
     // fartölvur (<= 1700 px) nota upphaflegu staðsetninguna úr CSS: stór, fyrir aftan fyrirsögnina.
     // Aðeins stórir skjáir fá staðsetningu miðað við fyrirsögnina, þar sem hann lenti annars of neðarlega
-    if (innerWidth <= 1700) { ['--rx', '--rr', '--ry', '--rt', '--rh'].forEach(k => s.removeProperty(k)); return; }
+    if (innerWidth <= 1024) { ['--rx', '--rr', '--ry', '--rt', '--rh'].forEach(k => s.removeProperty(k)); return; }
     const wrap = el.parentElement.getBoundingClientRect(), h1 = document.querySelector('.hero h1'), fyrsta = h1 && h1.firstElementChild;
     if (!fyrsta) return;
     const fr = fyrsta.getBoundingClientRect(), fs = parseFloat(getComputedStyle(h1).fontSize);
+    if (innerWidth <= 1700) {
+      // fartölvur: lárétt staða og stærð úr CSS (stór, hægra megin, fyrir aftan fyrirsögnina),
+      // en lóðrétt miðað við fyrirsögnina svo hjálmurinn lendi aldrei á bak við textann
+      // (í háum gluggum lenti hann áður á bak við "NAR")
+      const H = Math.min(innerHeight * .8, 780);
+      ['--rx', '--rr', '--rh'].forEach(k => s.removeProperty(k));
+      s.setProperty('--rt', 'none');
+      s.setProperty('--ry', (fr.top - wrap.top - H * .14) + 'px');
+      return;
+    }
     // minnkar ef lítið pláss er hægra megin, svo hún skarist mest um fjórðung við orðið
     const plass = innerWidth - 16 - fr.right;
     const H = Math.min(fs * 3.35, innerHeight * .88, plass / .75 * 20 / 11), W = H * 11 / 20;
@@ -1927,7 +1937,9 @@ async function byrja() {
     s.setProperty('--rr', 'auto'); s.setProperty('--rt', 'none');
     s.setProperty('--ry', (fr.top - wrap.top - H * .14) + 'px');           // hjálmurinn rétt ofan við fyrstu línuna
   }
-  function stilla() { stadsetja(); const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+  // stærðarbreyting tæmir teikniflötinn: teikna strax aftur, annars hvarf riddarinn þegar
+  // hreyfing er minnkuð (þá er hann bara teiknaður einu sinni) þar til síðan var endurhlaðin
+  function stilla() { stadsetja(); const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); r.render(svid, cam); }
   stilla(); addEventListener('resize', stilla);
   let musX = 0, hallaY = 0;
   addEventListener('pointermove', e => { if (e.pointerType === 'mouse') musX = e.clientX / innerWidth * 2 - 1; }, { passive: true });
