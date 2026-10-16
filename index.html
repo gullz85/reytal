@@ -490,6 +490,20 @@
   /* ── CLIENTS: rúllandi ræma (upprunalega útgáfan) ──────────── */
   .clients-section{padding-bottom:clamp(72px,10vh,120px);}
 
+  /* ── RIDDARINN í hetjunni: hægra megin, fyrir aftan fyrirsögnina ── */
+  /* á tölvu er stærð og staða reiknuð út frá fyrirsögninni (sjá skriftu): hjálmurinn rétt
+     ofan við STAFRÆNAR og styttan jafnstór miðað við letrið á öllum skjástærðum */
+  .riddari{position:absolute;z-index:0;left:var(--rx,auto);right:var(--rr,-1%);top:var(--ry,50%);
+    transform:var(--rt,translateY(-46%));height:var(--rh,min(80vh,780px));
+    aspect-ratio:11/20;pointer-events:none;opacity:0;transition:opacity 1.4s ease;}
+  .riddari.tilbuinn{opacity:1;}
+  .riddari canvas{position:relative;width:100%;height:100%;display:block;}
+  .riddari-skuggi{position:absolute;left:18%;right:18%;bottom:3.5%;height:5%;
+    background:radial-gradient(closest-side,rgba(11,12,13,.20),transparent);}
+  @media (max-width:1024px){
+    /* sími og spjaldtölva: á milli fyrirsagnar og texta, svo hann lendi ekki ofan á textanum */
+    .riddari{position:relative;right:auto;top:auto;transform:none;height:clamp(300px,42vh,460px);margin:clamp(8px,2vh,24px) auto 0;}
+  }
   /* ── VERÐLAUNIN (TILLAGA 2): dökkur borði, myndbandið spilast inni í 2025 ── */
   .award.v2{padding:0;margin:clamp(72px,10vh,120px) 0 0;}
   .v2-innan{position:relative;background:#000;color:var(--cream);border-radius:clamp(24px,3vw,40px);
@@ -1759,6 +1773,8 @@
     <div class="headline-wrap">
       <h1><span>Stafrænar</span><span id="heroFlip" class="flip-word">Lausnir</span></h1>
     </div>
+    <!-- riddarinn: þrívíddarstytta (3d/riddari.glb) sem hleðst inn á eftir síðunni -->
+    <div class="riddari" id="riddari" aria-hidden="true"><div class="riddari-skuggi"></div></div>
     <div class="hero-copy">
       <div class="hero-cta">
         <a href="mailto:hallo@reytal.is?subject=Fyrirspurn%20af%20vef" class="btn-primary"><span class="btn-label" data-label="Hafa samband">Hafa samband</span></a>
@@ -1855,6 +1871,82 @@
 
 
 <!-- FÓTUR -->
+<script type="module">
+// Riddarinn: hlaðið eftir að síðan er komin (tefur ekki fyrstu birtingu),
+// teiknaður aðeins á meðan hetjan sést. Snýr að gestinum, vaggar rólega og
+// hallar sér aðeins í átt að músinni.
+const el = document.getElementById('riddari');
+const rolegt = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const val = 'litur', hvitur = false;   // litaði riddarinn (aðrar útgáfur eru ekki á vefnum)
+function styddur() { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } }
+async function byrja() {
+  if (!el || !styddur()) return;
+  const THREE = await import('/3d/three.module.min.js');
+  const { GLTFLoader } = await import('/3d/jsm/loaders/GLTFLoader.js');
+  const { MeshoptDecoder } = await import('/3d/jsm/libs/meshopt_decoder.module.js');
+  const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
+  r.setPixelRatio(Math.min(devicePixelRatio, 2));
+  r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = hvitur ? 1.05 : 1.15;
+  el.prepend(r.domElement);
+  const svid = new THREE.Scene(), cam = new THREE.PerspectiveCamera(26, 1, .01, 1000);
+  if (!hvitur) {
+    // stálið þarf umhverfi til að spegla
+    const { RoomEnvironment } = await import('/3d/jsm/environments/RoomEnvironment.js');
+    const pm = new THREE.PMREMGenerator(r);
+    svid.environment = pm.fromScene(new RoomEnvironment(), .04).texture;
+    svid.environmentIntensity = .9;
+  }
+  svid.add(new THREE.HemisphereLight(0xfffaf0, 0x8c8577, hvitur ? 1.5 : .6));
+  const lykill = new THREE.DirectionalLight(0xffffff, hvitur ? 2.6 : 2.2); lykill.position.set(-40, 60, 70); svid.add(lykill);
+  const brun = new THREE.DirectionalLight(0xbfd6e0, hvitur ? 1.8 : 2.4); brun.position.set(50, 30, -60); svid.add(brun);
+  const g = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(innerWidth <= 1024 ? '/3d/riddari-litur-litill.glb' : '/3d/riddari-litur.glb')   // minni áferð (1024 px) í síma og spjaldtölvu;
+  const st = g.scene;
+  // skörp áferð líka á flötum sem halla frá myndavélinni
+  const aniso = r.capabilities.getMaxAnisotropy();
+  st.traverse(o => { if (o.isMesh) for (const k of ['map', 'metalnessMap', 'roughnessMap', 'normalMap']) if (o.material[k]) o.material[k].anisotropy = aniso; });
+  if (hvitur) { st.rotation.x = -Math.PI / 2; st.traverse(o => { if (o.isMesh) o.material = new THREE.MeshStandardMaterial({ color: 0xDDD6CA, roughness: .55, metalness: 0 }); }); }
+  const snu = new THREE.Group(); snu.add(st); svid.add(snu);
+  const kassi = new THREE.Box3().setFromObject(snu), staerd = kassi.getSize(new THREE.Vector3()), midja = kassi.getCenter(new THREE.Vector3());
+  st.position.sub(midja);
+  cam.position.set(0, staerd.y * .05, staerd.y * 2.45); cam.lookAt(0, 0, 0);
+  // á tölvu: staðsetja riddarann miðað við fyrirsögnina, ekki skjáinn
+  function stadsetja() {
+    const s = el.style;
+    // fartölvur (<= 1700 px) nota upphaflegu staðsetninguna úr CSS: stór, fyrir aftan fyrirsögnina.
+    // Aðeins stórir skjáir fá staðsetningu miðað við fyrirsögnina, þar sem hann lenti annars of neðarlega
+    if (innerWidth <= 1700) { ['--rx', '--rr', '--ry', '--rt', '--rh'].forEach(k => s.removeProperty(k)); return; }
+    const wrap = el.parentElement.getBoundingClientRect(), h1 = document.querySelector('.hero h1'), fyrsta = h1 && h1.firstElementChild;
+    if (!fyrsta) return;
+    const fr = fyrsta.getBoundingClientRect(), fs = parseFloat(getComputedStyle(h1).fontSize);
+    // minnkar ef lítið pláss er hægra megin, svo hún skarist mest um fjórðung við orðið
+    const plass = innerWidth - 16 - fr.right;
+    const H = Math.min(fs * 3.35, innerHeight * .88, plass / .75 * 20 / 11), W = H * 11 / 20;
+    const midja = fr.right - wrap.left + W * .3;                          // rétt hægra megin við orðið, skjöldurinn snertir R-ið
+    const left = Math.min(midja - W / 2, innerWidth - 16 - wrap.left - W); // aldrei út fyrir skjáinn
+    s.setProperty('--rh', H + 'px'); s.setProperty('--rx', left + 'px');
+    s.setProperty('--rr', 'auto'); s.setProperty('--rt', 'none');
+    s.setProperty('--ry', (fr.top - wrap.top - H * .14) + 'px');           // hjálmurinn rétt ofan við fyrstu línuna
+  }
+  function stilla() { stadsetja(); const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+  stilla(); addEventListener('resize', stilla);
+  let musX = 0, hallaY = 0;
+  addEventListener('pointermove', e => { if (e.pointerType === 'mouse') musX = e.clientX / innerWidth * 2 - 1; }, { passive: true });
+  let synilegur = true; const t0 = performance.now();
+  new IntersectionObserver(f => { synilegur = f[0].isIntersecting; if (synilegur) requestAnimationFrame(rammi); }).observe(el);
+  function rammi(nu) {
+    const t = (nu - t0) / 1000;
+    const mark = rolegt ? -0.35 : Math.sin(t * .2) * .3 + musX * .3;        // hægt vagg + mús (um 30 s fram og til baka)
+    hallaY += (mark - hallaY) * .02;
+    snu.rotation.y = hallaY;
+    r.render(svid, cam);
+    if (synilegur && !rolegt) requestAnimationFrame(rammi);
+  }
+  requestAnimationFrame(rammi);
+  el.classList.add('tilbuinn');
+}
+const seinna = () => ('requestIdleCallback' in window ? requestIdleCallback(byrja, { timeout: 2500 }) : setTimeout(byrja, 600));
+if (document.readyState === 'complete') seinna(); else addEventListener('load', seinna);
+</script>
 <script>
 // verðlaunin: birtingin fer af stað einu sinni þegar kaflinn kemur í sjónmál, og
 // myndbandið inni í 2025 spilast aðeins á meðan kaflinn sést
