@@ -422,6 +422,15 @@
         <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span><span class="work-tag">Verðlaun</span></div>
       </a>
 
+      <a class="work-row" href="https://vefold.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Veföld <span class="arrow">↗︎</span></h3>
+          <span class="work-client">Veföld · vefold.is</span>
+          <p>Vefur Vefaldar, sem sér um vefhýsingu, umsjón, öryggi og afritun fyrir vefi fyrirtækja, WordPress þar á meðal. Hönnun og forritun.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Vefþróun</span></div>
+      </a>
+
       <a class="work-row" href="https://elitecampiceland.is" target="_blank" rel="noopener">
         <div class="work-main">
           <h3>Elite Camp Iceland <span class="arrow">↗︎</span></h3>
@@ -801,7 +810,7 @@
   var LOGO = {"Orkureiturinn":"logo-safir.svg","Regla":"logo-regla.svg","Kirkjan":"logo-thjodkirkjan.svg","LBHÍ":"logo-lbhi.svg","Verkís":"logo-verkis.svg",
     "Klasi":"logo-klasi.svg","Stólpi Gámar":"logo-stolpi.svg","Kjarkur endurhæfing":"logo-kjarkur.svg","Nox Health":"logo-nox.svg",
     "Takk":"logo-takk.svg","Sigur Rós":"logo-sigurros.svg","Óskaskrín":"logo-oskaskrin.svg","March Forward 2025":"logo-unwomen.svg",
-    "Skjáhætta":"logo-skjahaetta.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
+    "Skjáhætta":"logo-skjahaetta.svg","Veföld":"logo-vefold.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
   // lógó sem halda eigin litum (merki í hring o.þ.h.) og undirtexti þar sem lógóið segir ekki nafn verkefnisins
   var LITAD = {};
   var UNDIR = {"Skjáhætta":"Skjáhætta","Orkureiturinn":"Orkureiturinn","Óskaskrín":"Óskaskrín","March Forward 2025":"March Forward 2025"};
@@ -818,7 +827,8 @@
     ["Regla","5/4","k"], ["Sigur Rós","4/5","s"], ["Takk","1/1","b"],
     ["Líttupp","3/4","b"], ["Nox Health","1/1","s"], ["Skjáhætta","4/5","k"],
     ["Klasi","1/1","k"], ["March Forward 2025","4/5","s"], ["Arnarlax","5/4","b"],
-    ["LBHÍ","4/5","s"], ["Colas","1/1","k"], ["Óskaskrín","4/5","b"]
+    ["LBHÍ","4/5","s"], ["Colas","1/1","k"], ["Óskaskrín","4/5","b"],
+    ["Veföld","1/1","b"]
   ];
   // örstutt: hvað við gerðum, stytt úr lýsingunum á verkefnasíðunni
   var STUTT = {
@@ -838,7 +848,8 @@
     "Kjarkur endurhæfing":"Endurhæfing fyrir hreyfihamlaða. Hönnun og forritun.",
     "Óskaskrín":"Netverslun með gjafaöskjur og gjafakort beint í símann.",
     "Arnarlax":"Sjálfbært laxeldi á Vestfjörðum. Vefþróun.",
-    "Colas":"Malbikun og vegagerð. Forritun og leitarvélabestun."
+    "Colas":"Malbikun og vegagerð. Forritun og leitarvélabestun.",
+    "Veföld":"Vefhýsing og umsjón fyrir vefi fyrirtækja. Hönnun og forritun."
   };
   var litir = ['#C46A78','#D9A04A','#E07A45','#8FA36A','#6E9FB8','#BEBFA6'], fyrri = '', fyrri2 = '';
   function einn(utan){ var v = litir.filter(function(l){ return utan.indexOf(l) < 0; }); return v[Math.floor(Math.random() * v.length)]; }
@@ -909,7 +920,7 @@
   var dots = document.getElementById('logoWinDots');
   if (!brand || !win) return;
   var LOGOS = ['arnarlax','verkis','olis','sjova','olgerdin','safir','klasi','nox','pipar',
-               'samgongustofa','stolpi','kjarkur','thjodkirkjan','lbhi','regla'];
+               'samgongustofa','stolpi','kjarkur','thjodkirkjan','lbhi','regla','vefold'];
   // röðin stokkast við hverja hleðslu, svo nýtt logo birtist fyrst í hvert sinn
   for (var i = LOGOS.length - 1; i > 0; i--){
     var j = Math.floor(Math.random() * (i + 1)), t = LOGOS[i]; LOGOS[i] = LOGOS[j]; LOGOS[j] = t;
