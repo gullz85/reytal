@@ -245,7 +245,9 @@
   .vg-kort:hover .vg-rist i.p::before{animation-play-state:running;}
   .vg-kort.logo.medrist:hover .vg-midill{opacity:1;transform:none;}
   .vg-kort.logo.medrist:hover .vg-flotur::after{opacity:1;}
-  .vg-kort.logo.medrist:hover .vg-logo{transform:translateY(-62%) scale(.92);}
+  /* lógóið rennur rólega upp (hópurinn, því lógóið sjálft er án hreyfingar innan hópsins) */
+  .vg-kort.logo.medrist .vg-merkjahopur{transition:transform 1.1s cubic-bezier(.22,.61,.24,1);}
+  .vg-kort.logo.medrist:hover .vg-merkjahopur{transform:translateY(-62%) scale(.94);}
   @media (hover:none){.vg-kort.medrist .vg-midill,.vg-kort.logo.medrist .vg-flotur::after{opacity:1;}.vg-rist i.p::before{animation-play-state:running;}}
   @media (prefers-reduced-motion:reduce){.vg-rist i.p::before{animation:none;opacity:.5;}}
   /* snúningsramminn, sami og á teymismyndunum */
