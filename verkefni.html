@@ -227,6 +227,27 @@
   .vg-kort.logo.medmynd:hover .vg-logo{opacity:0;}
   .vg-kort.logo.medmynd:hover .vg-flotur::after{opacity:1;}
   .vg-kort.krem.medmynd:hover .vg-info h3,.vg-kort.krem.medmynd:hover .vg-pilla,.vg-kort.krem.medmynd:hover .vg-or{color:#fff;border-color:rgba(255,255,255,.45);}
+  /* Veföld: rist af kössum eins og á vefold.is, púlsa og lýsast upp við músina */
+  .vg-rist{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;gap:2.4%;padding:5%;
+    background:radial-gradient(70% 55% at 22% 18%,rgba(28,116,217,.28),transparent 70%),linear-gradient(160deg,#191a26,#101119 55%,#08090d);}
+  .vg-rist i{position:relative;border-radius:18%;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.016);}
+  .vg-rist i::before,.vg-rist i::after{content:'';position:absolute;inset:-1px;border-radius:inherit;opacity:0;pointer-events:none;}
+  .vg-rist i.p::before{border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.07);
+    animation:vgRistPuls var(--pd,4s) ease-in-out var(--pt,0s) infinite;animation-play-state:paused;}
+  .vg-rist i::after{border:1px solid rgba(120,178,255,.75);
+    background:radial-gradient(120% 120% at 50% 0,rgba(28,116,217,.22),rgba(28,116,217,.06));
+    box-shadow:0 0 18px -4px rgba(28,116,217,.55),inset 0 1px 0 rgba(255,255,255,.12);
+    opacity:calc(var(--g,0) * .85);transition:opacity .9s ease;}
+  .vg-rist i.h::after{opacity:1;border-color:rgba(160,200,255,.95);
+    background:radial-gradient(120% 120% at 50% 0,rgba(43,131,232,.55),rgba(28,116,217,.22));
+    box-shadow:0 0 28px -2px rgba(28,116,217,.75),inset 0 1px 0 rgba(255,255,255,.25);transition-duration:.12s;}
+  @keyframes vgRistPuls{0%,100%{opacity:.08;}50%{opacity:1;}}
+  .vg-kort:hover .vg-rist i.p::before{animation-play-state:running;}
+  .vg-kort.logo.medrist:hover .vg-midill{opacity:1;transform:none;}
+  .vg-kort.logo.medrist:hover .vg-flotur::after{opacity:1;}
+  .vg-kort.logo.medrist:hover .vg-logo{transform:translateY(-62%) scale(.92);}
+  @media (hover:none){.vg-kort.medrist .vg-midill,.vg-kort.logo.medrist .vg-flotur::after{opacity:1;}.vg-rist i.p::before{animation-play-state:running;}}
+  @media (prefers-reduced-motion:reduce){.vg-rist i.p::before{animation:none;opacity:.5;}}
   /* snúningsramminn, sami og á teymismyndunum */
   @property --hornid{syntax:'<angle>';inherits:false;initial-value:0deg;}
   .vg-flotur::before{content:'';position:absolute;inset:0;z-index:3;border-radius:inherit;padding:1.5px;
@@ -818,7 +839,7 @@
   var MYND = {"Orkureiturinn":"orkureiturinn-kort.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
     "March Forward 2025":"march-forward-web.mp4","Kirkjan":"verk-kirkjan.jpg","Klasi":"verk-klasi.jpg","LBHÍ":"verk-lbhi.jpg",
     "Óskaskrín":"verk-oskaskrin.jpg","Sigur Rós":"verk-sigurros.jpg","Takk":"verk-takk.jpg","Kjarkur endurhæfing":"verk-kjarkur.jpg",
-    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg"};
+    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg","Veföld":"#rist"};
   // [nafn, hlutfall, tegund]: m = mynd/myndband, s = svart lógóspjald, k = kremað, b = navy (blátt)
   // [nafn, hlutfall, tegund]: m = myndband sem fyllir spjaldið, s/k/b = svart/kremað/navy lógóspjald.
   // Lógóspjöld með skjáskoti sýna vefinn í litlum vafraglugga við hover.
@@ -871,11 +892,15 @@
     var midill = MYND[nafn], logo = LOGO[nafn], teg = v[2], LITUR = {s:"svart", k:"krem", b:"blar"};
     var erSkot = false, lenid = (r.getAttribute("href") || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
     var a = document.createElement("a");
-    a.className = "vg-kort" + (teg === "m" ? "" : " logo " + LITUR[teg] + (erSkot ? " medskot" : midill ? " medmynd" : ""));
+    a.className = "vg-kort" + (teg === "m" ? "" : " logo " + LITUR[teg] + (erSkot ? " medskot" : midill === "#rist" ? " medrist" : midill ? " medmynd" : ""));
     a.href = r.getAttribute("href"); a.target = "_blank"; a.rel = "noopener";
     var x = einn([fyrri, fyrri2]), y = einn([x, fyrri, fyrri2]); fyrri = x; fyrri2 = y;
     a.style.setProperty("--rak", x); a.style.setProperty("--rak2", y); a.style.setProperty("--hlutfall", v[1]);
-    var midillHtml = !midill ? "" : erSkot
+    var midillHtml = !midill ? "" : midill === "#rist"
+      ? '<div class="vg-midill vg-rist" aria-hidden="true">' + Array.apply(null, Array(49)).map(function(){
+          return Math.random() < .26 ? '<i class="p" style="--pd:' + (3 + Math.random() * 3).toFixed(1) + 's;--pt:-' + (Math.random() * 6).toFixed(1) + 's"></i>' : '<i></i>';
+        }).join("") + '</div>'
+      : erSkot
       ? '<div class="vg-vafri" aria-hidden="true"><div class="vg-vafri-bar"><i></i><i></i><i></i><span>' + lenid + '</span></div><img src="' + midill + '" alt="" loading="lazy"></div>'
       : /\.mp4(\?|$)/.test(midill) ? '<video class="vg-midill" src="' + midill + '" muted loop playsinline preload="metadata"></video>'
       : '<img class="vg-midill" src="' + midill + '" alt="" loading="lazy">';
@@ -886,6 +911,26 @@
       '<span class="vg-or" aria-hidden="true">↗</span>' +
       '<div class="vg-info"><h3>' + nafn + '</h3>' + (STUTT[nafn] ? '<div class="vg-lysing"><span>' + STUTT[nafn] + '</span></div>' : '') +
       '<div class="vg-pillur">' + merki.map(function(m){ return '<span class="vg-pilla">' + m + '</span>'; }).join("") + '</div></div></div>';
+    var rist = a.querySelector(".vg-rist");
+    if (rist) {
+      // kassarnir næst músinni lýsast upp og sá undir henni logar, eins og á vefold.is
+      var kassar = Array.prototype.slice.call(rist.children), heitur = null;
+      a.addEventListener("pointermove", function(e){
+        if (e.pointerType !== "mouse") return;
+        var naestur = null;
+        kassar.forEach(function(k){
+          var r = k.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+          var d = Math.sqrt(dx * dx + dy * dy) / r.width;
+          k.style.setProperty("--g", Math.max(0, 1 - d / 2.2).toFixed(2));
+          if (d < .55) naestur = k;
+        });
+        if (naestur !== heitur) { if (heitur) heitur.classList.remove("h"); heitur = naestur; if (heitur) heitur.classList.add("h"); }
+      });
+      a.addEventListener("pointerleave", function(){
+        kassar.forEach(function(k){ k.style.removeProperty("--g"); });
+        if (heitur) { heitur.classList.remove("h"); heitur = null; }
+      });
+    }
     a.addEventListener("pointerenter", function(){ var vd = a.querySelector("video"); if (vd) vd.play().catch(function(){}); });
     a.addEventListener("pointerleave", function(){ var vd = a.querySelector(".logo video"); if (a.classList.contains("logo") && vd) vd.pause(); });
     dalkur[i % 3].appendChild(a);
