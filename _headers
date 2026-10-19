@@ -1,0 +1,13 @@
+# Öryggishausar fyrir allan vefinn (Sevalla les þessa skrá, sama snið og Netlify)
+# CSP leyfir aðeins það sem vefurinn notar:
+#   letur frá Google Fonts, Google Analytics, spjallið á Sevalla,
+#   greiningarvélina (wisdom.reytal.is), three.js með meshopt (WebAssembly)
+#   og 8-bita hamurinn (myndir úr canvas sem data:/blob:).
+# 'unsafe-inline' þarf því síðurnar eru með innbyggðar skriftur og stíla.
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://reytal-spjall-n8uzv.sevalla.app https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' blob: data: https://wisdom.reytal.is https://reytal-spjall-n8uzv.sevalla.app https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
