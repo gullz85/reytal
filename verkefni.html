@@ -842,7 +842,7 @@
   var LOGO = {"Orkureiturinn":"logo-safir.svg","Regla":"logo-regla.svg","Kirkjan":"logo-thjodkirkjan.svg","LBHÍ":"logo-lbhi.svg","Verkís":"logo-verkis.svg",
     "Klasi":"logo-klasi.svg","Stólpi Gámar":"logo-stolpi.svg","Kjarkur endurhæfing":"logo-kjarkur.svg","Nox Health":"logo-nox.svg",
     "Takk":"logo-takk.svg","Sigur Rós":"logo-sigurros.svg","Óskaskrín":"logo-oskaskrin.svg","March Forward 2025":"logo-unwomen.svg",
-    "Skjáhætta":"logo-skjahaetta.svg","Veföld":"logo-vefold.svg","Mótum framtíðina saman":"logo-ki.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
+    "Skjáhætta":"logo-skjahaetta.svg","Veföld":"logo-vefold.svg","Mótum framtíðina saman":"logo-ki.svg","Viking Heliskiing":"logo-vikingheli.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
   // lógó sem halda eigin litum (merki í hring o.þ.h.) og undirtexti þar sem lógóið segir ekki nafn verkefnisins
   var LITAD = {};
   var UNDIR = {"Skjáhætta":"Skjáhætta","Orkureiturinn":"Orkureiturinn","Óskaskrín":"Óskaskrín","March Forward 2025":"March Forward 2025","Mótum framtíðina saman":"Mótum framtíðina saman"};
@@ -850,7 +850,7 @@
   var MYND = {"Orkureiturinn":"orkureiturinn-kort.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
     "March Forward 2025":"march-forward-web.mp4","Kirkjan":"verk-kirkjan.jpg","Klasi":"verk-klasi.jpg","LBHÍ":"verk-lbhi.jpg",
     "Óskaskrín":"verk-oskaskrin.jpg","Sigur Rós":"verk-sigurros.jpg","Takk":"verk-takk.jpg","Kjarkur endurhæfing":"verk-kjarkur.jpg",
-    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg","Veföld":"#rist","Mótum framtíðina saman":"verk-ki.jpg"};
+    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg","Veföld":"#rist","Mótum framtíðina saman":"verk-ki.jpg","Viking Heliskiing":"viking-heli-web.mp4"};
   // [nafn, hlutfall, tegund]: m = mynd/myndband, s = svart lógóspjald, k = kremað, b = navy (blátt)
   // [nafn, hlutfall, tegund]: m = myndband sem fyllir spjaldið, s/k/b = svart/kremað/navy lógóspjald.
   // Lógóspjöld með skjáskoti sýna vefinn í litlum vafraglugga við hover.
@@ -860,7 +860,7 @@
     ["Líttupp","3/4","b"], ["Nox Health","1/1","s"], ["Skjáhætta","4/5","k"],
     ["Klasi","1/1","k"], ["March Forward 2025","4/5","s"], ["Arnarlax","5/4","b"],
     ["LBHÍ","4/5","s"], ["Colas","1/1","k"], ["Óskaskrín","4/5","b"],
-    ["Veföld","1/1","b"], ["Mótum framtíðina saman","4/5","k"]
+    ["Veföld","1/1","b"], ["Mótum framtíðina saman","4/5","k"], ["Viking Heliskiing","5/4","s"]
   ];
   // örstutt: hvað við gerðum, stytt úr lýsingunum á verkefnasíðunni
   var STUTT = {
@@ -882,7 +882,8 @@
     "Arnarlax":"Sjálfbært laxeldi á Vestfjörðum. Vefþróun.",
     "Colas":"Malbikun og vegagerð. Forritun og leitarvélabestun.",
     "Veföld":"Vefhýsing og umsjón fyrir vefi fyrirtækja. Hönnun og forritun.",
-    "Mótum framtíðina saman":"Tillögur Kennarasambands Íslands í menntamálum. Hönnun og forritun."
+    "Mótum framtíðina saman":"Tillögur Kennarasambands Íslands í menntamálum. Hönnun og forritun.",
+    "Viking Heliskiing":"Þyrluskíðaferðir á Íslandi. Hönnun og vefþróun."
   };
   var litir = ['#C46A78','#D9A04A','#E07A45','#8FA36A','#6E9FB8','#BEBFA6'], fyrri = '', fyrri2 = '';
   function einn(utan){ var v = litir.filter(function(l){ return utan.indexOf(l) < 0; }); return v[Math.floor(Math.random() * v.length)]; }
@@ -977,7 +978,7 @@
   var dots = document.getElementById('logoWinDots');
   if (!brand || !win) return;
   var LOGOS = ['arnarlax','verkis','olis','sjova','olgerdin','safir','klasi','nox','pipar',
-               'samgongustofa','stolpi','kjarkur','thjodkirkjan','lbhi','regla','vefold','ki'];
+               'samgongustofa','stolpi','kjarkur','thjodkirkjan','lbhi','regla','vefold','ki','vikingheli'];
   // röðin stokkast við hverja hleðslu, svo nýtt logo birtist fyrst í hvert sinn
   for (var i = LOGOS.length - 1; i > 0; i--){
     var j = Math.floor(Math.random() * (i + 1)), t = LOGOS[i]; LOGOS[i] = LOGOS[j]; LOGOS[j] = t;
