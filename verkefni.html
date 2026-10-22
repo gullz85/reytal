@@ -223,6 +223,12 @@
   /* lyfta: lógóið hverfur ekki við hover heldur rennur upp ofan á myndbandið */
   .vg-kort.logo.medmynd.lyfta:hover .vg-merkjahopur{opacity:1;transform:translateY(-62%) scale(.94);transition:transform 1.1s cubic-bezier(.22,.61,.24,1),opacity .45s ease;}
   .vg-kort.logo.medmynd.lyfta:hover .vg-logo{opacity:1;}
+  /* hreyfð lógó (Lottie): orðmerkið sem mynd og hreyfimyndin ofan á henni */
+  .vg-lottie{display:block;height:auto;max-height:none;}
+  .vg-lottie img{display:block;width:100%;height:100%;}
+  .vg-lottie img.laust{position:absolute;inset:0;margin:auto;width:70%;height:70%;object-fit:contain;}
+  .vg-lottie-svid{position:absolute;top:0;bottom:0;}
+  .vg-lottie-svid svg{display:block;width:100% !important;height:100% !important;}
   /* mjög breitt og grannt lógó: fær meira pláss svo það lesist */
   .vg-logo[src*="logo-aurora"]{width:80%;}
   .vg-kort.krem .vg-info h3,.vg-kort.krem .vg-pilla,.vg-kort.krem .vg-or{color:var(--black);border-color:rgba(11,12,13,.3);}
@@ -879,6 +885,12 @@
   var LITAD = {};
   // lógó sem haldast við hover og lyftast upp ofan á myndefninu (eins og í haus viðskiptavinarins)
   var LYFTA = {"Aurora Seafood":1};
+  // hreyfð lógó (Lottie af vefjum viðskiptavinanna). ord = lógóið án þess hluta sem hreyfist,
+  // hreyfing = hvar hreyfimyndin situr ofan á því (í % af breidd lógósins)
+  var LOTTIE = {
+    "Kirkjan": { skra: "lottie/kross.json", ord: "logo-thjodkirkjan-ord.svg", hlutfall: "283/56", hreyfing: "left:0;width:14.84%" },
+    "Líttupp": { skra: "lottie/littupp.json", hlutfall: "758/660", breidd: "42%" }
+  };
   var UNDIR = {"Skjáhætta":"Skjáhætta","Orkureiturinn":"Orkureiturinn","Óskaskrín":"Óskaskrín","March Forward 2025":"March Forward 2025","Mótum framtíðina saman":"Mótum framtíðina saman"};
   // myndir af vefjum viðskiptavinanna sjálfra (aðalmyndin þeirra, ekki skjáskot) og myndböndin okkar
   var MYND = {"Orkureiturinn":"orkureiturinn-kort.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
@@ -954,7 +966,14 @@
       ? '<div class="vg-vafri" aria-hidden="true"><div class="vg-vafri-bar"><i></i><i></i><i></i><span>' + lenid + '</span></div><img src="' + midill + '" alt="" loading="lazy"></div>'
       : /\.mp4(\?|$)/.test(midill) ? '<video class="vg-midill" src="' + midill + '" muted loop playsinline preload="metadata"></video>'
       : '<img class="vg-midill" src="' + midill + '" alt="" loading="lazy">';
-    var merkid = teg === "m" ? "" : logo
+    var lt = LOTTIE[nafn];
+    var merkid = teg === "m" ? "" : lt
+      ? '<span class="vg-merkjahopur"><span class="vg-logo vg-lottie" style="aspect-ratio:' + lt.hlutfall + (lt.breidd ? ';width:' + lt.breidd : '') + '">' +
+          // kyrra lógóið sést þar til hreyfimyndin er tilbúin; svo tekur orðmerkið við (eða það hverfur)
+          '<img class="vg-lottie-grunnur' + (lt.ord ? '' : ' laust') + '" src="' + logo + '" alt=""' + (lt.ord ? ' data-ord="' + lt.ord + '"' : '') + '>' +
+          '<span class="vg-lottie-svid" data-lottie="' + lt.skra + '" style="' + (lt.hreyfing || 'left:0;width:100%') + '"></span></span>' +
+          (UNDIR[nafn] ? '<span class="vg-undir">' + UNDIR[nafn] + '</span>' : '') + '</span>'
+      : logo
       ? '<span class="vg-merkjahopur"><img class="vg-logo' + (LITAD[nafn] ? ' litad' : '') + '" src="' + logo + '" alt="">' + (UNDIR[nafn] ? '<span class="vg-undir">' + UNDIR[nafn] + '</span>' : '') + '</span>'
       : '<span class="vg-ord">' + nafn + '</span>';
     a.innerHTML = '<div class="vg-flotur">' + midillHtml + merkid +
@@ -998,6 +1017,42 @@
     addEventListener("scroll", function(){ if (!bidur){ bidur = true; requestAnimationFrame(teikna); } }, {passive:true});
     addEventListener("resize", teikna); teikna();
   }
+  // hreyfðu lógóin: lottie.min.js er sótt fyrst þegar slíkt spjald nálgast skjáinn,
+  // og hver hreyfimynd spilar aðeins á meðan hún sést (kyrr í lokastöðu ef hreyfing er minnkuð)
+  (function(){
+    var svid = [].slice.call(document.querySelectorAll(".vg-lottie-svid"));
+    if (!svid.length || !("IntersectionObserver" in window)) return;
+    var rolegt = matchMedia("(prefers-reduced-motion: reduce)").matches, saekir = null;
+    function saekjaLottie(){
+      return saekir || (saekir = new Promise(function(ok, villa){
+        if (window.lottie) return ok(window.lottie);
+        var sk = document.createElement("script"); sk.src = "lottie.min.js?v=1";
+        sk.onload = function(){ ok(window.lottie); }; sk.onerror = villa; document.head.appendChild(sk);
+      }));
+    }
+    var io = new IntersectionObserver(function(faersl){
+      faersl.forEach(function(f){
+        var el = f.target;
+        if (!el._anim && f.isIntersecting) {
+          el._anim = true;
+          saekjaLottie().then(function(L){
+            var an = L.loadAnimation({ container: el, renderer: "svg", loop: true, autoplay: false, path: el.getAttribute("data-lottie"),
+              rendererSettings: { preserveAspectRatio: "xMidYMid meet" } });
+            el._anim = an;
+            an.addEventListener("DOMLoaded", function(){
+              var g = el.parentNode.querySelector(".vg-lottie-grunnur");
+              if (g) { if (g.getAttribute("data-ord")) g.src = g.getAttribute("data-ord"); else g.style.visibility = "hidden"; }
+              if (rolegt) an.goToAndStop(an.totalFrames - 1, true); else if (el._synilegt) an.play();
+            });
+          }).catch(function(){});
+        }
+        el._synilegt = f.isIntersecting;
+        if (el._anim && el._anim.play && !rolegt) { if (f.isIntersecting) el._anim.play(); else el._anim.pause(); }
+      });
+    }, { rootMargin: "200px 0px" });
+    svid.forEach(function(el){ io.observe(el); });
+  })();
+
   // hin verkefnin: sömu línur og á verkefnasíðunni (afrit úr template), minni útgáfa
   var fl = document.getElementById("vgFleiri"), adrir = radir.filter(function(r){ return valinNofn.indexOf(nafnRadar(r)) < 0 && r.parentNode; });
   var listi = fl.querySelector(".vg-litil");
