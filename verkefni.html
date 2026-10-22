@@ -220,6 +220,9 @@
   .vg-kort.krem .vg-logo{filter:brightness(0);}
   .vg-kort.svart .vg-logo,.vg-kort.blar .vg-logo{filter:brightness(0) invert(1);}
   .vg-kort.logo:hover .vg-logo{transform:scale(1.06);}
+  /* lyfta: lógóið hverfur ekki við hover heldur rennur upp ofan á myndbandið */
+  .vg-kort.logo.medmynd.lyfta:hover .vg-merkjahopur{opacity:1;transform:translateY(-62%) scale(.94);transition:transform 1.1s cubic-bezier(.22,.61,.24,1),opacity .45s ease;}
+  .vg-kort.logo.medmynd.lyfta:hover .vg-logo{opacity:1;}
   /* mjög breitt og grannt lógó: fær meira pláss svo það lesist */
   .vg-logo[src*="logo-aurora"]{width:80%;}
   .vg-kort.krem .vg-info h3,.vg-kort.krem .vg-pilla,.vg-kort.krem .vg-or{color:var(--black);border-color:rgba(11,12,13,.3);}
@@ -445,6 +448,15 @@
           <p>Vefþróun og leitarvélabestun fyrir nýtt íbúðahverfi við Laugardalinn. Valinn söluvefur ársins 2025.</p>
         </div>
         <div class="work-tags"><span class="work-tag">Vefþróun</span><span class="work-tag">SEO</span><span class="work-tag">Verðlaun</span></div>
+      </a>
+
+      <a class="work-row" href="https://kaospartners.is" target="_blank" rel="noopener">
+        <div class="work-main">
+          <h3>Kaos Partners <span class="arrow">↗︎</span></h3>
+          <span class="work-client">Kaos Partners · kaospartners.is</span>
+          <p>Vefur óháðrar ráðgjafar í fyrirtækjafjármálum, í höndum fyrrum meðeigenda hjá stóru fjórum. Hönnun og forritun.</p>
+        </div>
+        <div class="work-tags"><span class="work-tag">Hönnun</span><span class="work-tag">Forritun</span></div>
       </a>
 
       <a class="work-row" href="https://vefold.is" target="_blank" rel="noopener">
@@ -862,15 +874,17 @@
   var LOGO = {"Orkureiturinn":"logo-safir.svg","Regla":"logo-regla.svg","Kirkjan":"logo-thjodkirkjan.svg","LBHÍ":"logo-lbhi.svg","Verkís":"logo-verkis.svg",
     "Klasi":"logo-klasi.svg","Stólpi Gámar":"logo-stolpi.svg","Kjarkur endurhæfing":"logo-kjarkur.svg","Nox Health":"logo-nox.svg",
     "Takk":"logo-takk.svg","Sigur Rós":"logo-sigurros.svg","Óskaskrín":"logo-oskaskrin.svg","March Forward 2025":"logo-unwomen.svg",
-    "Skjáhætta":"logo-skjahaetta.svg","Veföld":"logo-vefold.svg","Mótum framtíðina saman":"logo-ki.svg","Viking Heliskiing":"logo-vikingheli.svg","Aurora Seafood":"logo-aurora.png","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
+    "Skjáhætta":"logo-skjahaetta.svg","Veföld":"logo-vefold.svg","Mótum framtíðina saman":"logo-ki.svg","Viking Heliskiing":"logo-vikingheli.svg","Aurora Seafood":"logo-aurora-hreyfdur.svg","Líttupp":"logo-littupp.png","Arnarlax":"logo-arnarlax.svg","Colas":"logo-colas.svg"};
   // lógó sem halda eigin litum (merki í hring o.þ.h.) og undirtexti þar sem lógóið segir ekki nafn verkefnisins
   var LITAD = {};
+  // lógó sem haldast við hover og lyftast upp ofan á myndefninu (eins og í haus viðskiptavinarins)
+  var LYFTA = {"Aurora Seafood":1};
   var UNDIR = {"Skjáhætta":"Skjáhætta","Orkureiturinn":"Orkureiturinn","Óskaskrín":"Óskaskrín","March Forward 2025":"March Forward 2025","Mótum framtíðina saman":"Mótum framtíðina saman"};
   // myndir af vefjum viðskiptavinanna sjálfra (aðalmyndin þeirra, ekki skjáskot) og myndböndin okkar
   var MYND = {"Orkureiturinn":"orkureiturinn-kort.mp4","Verkís":"verkis-web.mp4","Líttupp":"littupp-web.mp4","Skjáhætta":"skjahaetta-web.mp4",
     "March Forward 2025":"march-forward-web.mp4","Kirkjan":"verk-kirkjan.jpg","Klasi":"verk-klasi.jpg","LBHÍ":"verk-lbhi.jpg",
     "Óskaskrín":"verk-oskaskrin.jpg","Sigur Rós":"verk-sigurros.jpg","Takk":"verk-takk.jpg","Kjarkur endurhæfing":"verk-kjarkur.jpg",
-    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg","Veföld":"#rist","Mótum framtíðina saman":"verk-ki.jpg","Viking Heliskiing":"viking-heli-web.mp4","Aurora Seafood":"verk-aurora.jpg"};
+    "Regla":"verk-regla-pos.jpg","Stólpi Gámar":"verk-stolpi.jpg","Arnarlax":"arnarlax-web.mp4?v=2","Colas":"verk-colas.jpg","Veföld":"#rist","Mótum framtíðina saman":"verk-ki.jpg","Viking Heliskiing":"viking-heli-web.mp4","Aurora Seafood":"aurora-web.mp4"};
   // [nafn, hlutfall, tegund]: m = mynd/myndband, s = svart lógóspjald, k = kremað, b = navy (blátt)
   // [nafn, hlutfall, tegund]: m = myndband sem fyllir spjaldið, s/k/b = svart/kremað/navy lógóspjald.
   // Lógóspjöld með skjáskoti sýna vefinn í litlum vafraglugga við hover.
@@ -928,6 +942,7 @@
     var erSkot = false, lenid = (r.getAttribute("href") || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
     var a = document.createElement("a");
     a.className = "vg-kort" + (teg === "m" ? "" : " logo " + LITUR[teg] + (erSkot ? " medskot" : midill === "#rist" ? " medrist" : midill ? " medmynd" : ""));
+    if (LYFTA[nafn]) a.className += " lyfta";
     a.href = r.getAttribute("href"); a.target = "_blank"; a.rel = "noopener";
     var x = einn([fyrri, fyrri2]), y = einn([x, fyrri, fyrri2]); fyrri = x; fyrri2 = y;
     a.style.setProperty("--rak", x); a.style.setProperty("--rak2", y); a.style.setProperty("--hlutfall", v[1]);
